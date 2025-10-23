@@ -78,7 +78,6 @@ class _MyPickScreenState extends State<MyPickScreen> with SingleTickerProviderSt
                 ],
               ),
             ),
-          ),
           // 탭 뷰
           Expanded(
             child: TabBarView(
