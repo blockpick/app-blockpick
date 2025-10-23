@@ -135,39 +135,38 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
               ),
             ],
           ),
-          child: CustomScrollView(
-            controller: scrollController,
-            slivers: [
-              // 드래그 핸들 (옵션)
-              if (widget.showHandle)
-                SliverToBoxAdapter(
-                  child: _buildDragHandle(),
-                ),
+          child: Column(
+            children: [
+              // 드래그 핸들 (상단 고정)
+              if (widget.showHandle) _buildDragHandle(),
 
-              // 헤더 (옵션, 고정)
-              if (widget.header != null)
-                SliverToBoxAdapter(
-                  child: widget.header!,
-                ),
+              // 헤더 (상단 고정)
+              if (widget.header != null) widget.header!,
 
-              // 스크롤 가능한 내용
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) => widget.children[index],
-                    childCount: widget.children.length,
-                  ),
+              // 스크롤 가능한 내용 (중간 영역)
+              Expanded(
+                child: ListView.builder(
+                  controller: scrollController,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  itemCount: widget.children.length,
+                  itemBuilder: (context, index) => widget.children[index],
                 ),
               ),
 
-              // 하단 고정 위젯 (옵션)
+              // 하단 고정 버튼
               if (widget.footer != null)
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: widget.footer!,
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    border: Border(
+                      top: BorderSide(
+                        color: AppColors.buleGray.withOpacity(0.2),
+                        width: 1,
+                      ),
+                    ),
                   ),
+                  child: widget.footer!,
                 ),
             ],
           ),

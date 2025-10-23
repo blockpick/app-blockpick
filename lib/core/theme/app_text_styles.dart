@@ -63,6 +63,14 @@ class AppTextStyles {
     color: AppColors.light,
   );
 
+  // ========== Alias Styles (다른 파일 호환용) ==========
+
+  /// XLarge - display와 동일
+  static const TextStyle xlarge = display;
+
+  /// Small - bodySmall과 동일
+  static const TextStyle small = bodySmall;
+
   // ========== Specific Use Cases ==========
 
   /// Button Text - 14px semibold

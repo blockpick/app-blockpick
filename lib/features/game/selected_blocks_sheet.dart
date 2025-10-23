@@ -7,15 +7,24 @@ import '../../providers/grid_state_provider.dart';
 import '../../components/sheets/draggable_bottom_sheet.dart';
 import '../../components/cards/block_item_card.dart';
 import '../../components/buttons/gradient_button.dart';
+import '../../core/auth/domain/providers/auth_provider.dart';
+import '../auth/presentation/dialogs/auth_dialogs.dart';
 
 /// 선택된 블록 목록을 보여주는 바텀시트
 class SelectedBlocksSheet extends ConsumerWidget {
-  const SelectedBlocksSheet({super.key});
+  final String gameId;
+
+  const SelectedBlocksSheet({
+    super.key,
+    required this.gameId,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedBlocks = ref.watch(gridStateProvider).selectedBlocks;
-    final gridNotifier = ref.read(gridStateProvider.notifier);
+    final selectedBlocks = ref.watch(gridStateProvider(gameId)).selectedBlocks;
+    final gridNotifier = ref.read(gridStateProvider(gameId).notifier);
+    final screenSize = MediaQuery.of(context).size;
+    final isAuthenticated = ref.watch(isAuthenticatedProvider);
 
     if (selectedBlocks.isEmpty) {
       return const SizedBox.shrink();
@@ -68,6 +77,15 @@ class SelectedBlocksSheet extends ConsumerWidget {
                 child: BlockItemCard(
                   block: block,
                   onRemove: () => gridNotifier.toggleBlock(block),
+                  isFocused: ref.watch(gridStateProvider(gameId)).focusedBlockId == block.id,
+                  onTap: () {
+                    // 블록 위치로 이동 (토글)
+                    gridNotifier.navigateToBlock(
+                      block,
+                      screenWidth: screenSize.width,
+                      screenHeight: screenSize.height,
+                    );
+                  },
                 ),
               ))
           .toList(),
@@ -76,8 +94,15 @@ class SelectedBlocksSheet extends ConsumerWidget {
       footer: GradientButton(
         label: 'Select blocks (${selectedBlocks.length}/pick)',
         icon: Icons.bolt,
-        onPressed: () {
-          // TODO: 블록 선택 제출
+        onPressed: () async {
+          // 로그인 체크
+          if (!isAuthenticated) {
+            // 다이얼로그로 로그인 표시
+            await showLoginDialog(context);
+            return;
+          }
+
+          // TODO: 블록 선택 제출 (실제 참가 로직)
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('${selectedBlocks.length} blocks submitted!'),

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/theme/app_theme.dart';
-import 'features/home/home_screen.dart';
-import 'features/game/game_screen.dart';
+import 'core/router/router.dart';
 
 void main() {
   runApp(
@@ -14,26 +13,18 @@ void main() {
 }
 
 /// BlockPick 앱
-class BlockPickApp extends StatelessWidget {
+class BlockPickApp extends ConsumerWidget {
   const BlockPickApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
+
+    return MaterialApp.router(
       title: 'BlockPick',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const HomeScreen(),
-      onGenerateRoute: (settings) {
-        // 라우트 처리
-        if (settings.name == '/game-detail') {
-          final gameId = settings.arguments as String;
-          return MaterialPageRoute(
-            builder: (context) => GameScreen(gameId: gameId),
-          );
-        }
-        return null;
-      },
+      routerConfig: router,
     );
   }
 }

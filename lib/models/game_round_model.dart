@@ -29,7 +29,9 @@ class GameRound {
   final GameType type;
   final GameStatus status;
   final String category; // Digital, Fashion, Gift, Coupon, Food
-  final int? gridSize; // Vibe의 경우 그리드 크기
+  final int? gridSize; // 레거시: 정사각형 그리드 크기 (Vibe)
+  final int? gridWidth; // 그리드 가로 크기
+  final int? gridHeight; // 그리드 세로 크기
   final String? vibeImageUrl; // Vibe의 경우 배경 이미지
 
   const GameRound({
@@ -49,11 +51,29 @@ class GameRound {
     required this.status,
     this.category = 'Digital',
     this.gridSize,
+    this.gridWidth,
+    this.gridHeight,
     this.vibeImageUrl,
   });
 
+  /// 실제 그리드 가로 크기 반환
+  int get actualGridWidth => gridWidth ?? gridSize ?? 10000;
+
+  /// 실제 그리드 세로 크기 반환
+  int get actualGridHeight => gridHeight ?? gridSize ?? 10000;
+
   /// JSON으로부터 생성
   factory GameRound.fromJson(Map<String, dynamic> json) {
+    // grid_dimensions 파싱 (예: "50x50", "100x200")
+    int? gridWidth;
+    int? gridHeight;
+
+    if (json['grid_dimensions'] != null) {
+      final dimensions = _parseGridDimensions(json['grid_dimensions']);
+      gridWidth = dimensions.$1;
+      gridHeight = dimensions.$2;
+    }
+
     return GameRound(
       id: json['id'] as String,
       title: json['title'] as String,
@@ -71,8 +91,25 @@ class GameRound {
       status: _parseGameStatus(json['status'] as String?),
       category: json['category'] as String? ?? 'Digital',
       gridSize: json['grid_size'] as int?,
+      gridWidth: gridWidth ?? (json['grid_width'] as int?),
+      gridHeight: gridHeight ?? (json['grid_height'] as int?),
       vibeImageUrl: json['vibe_image_url'] as String?,
     );
+  }
+
+  /// 그리드 크기 문자열 파싱 (예: "50x50" -> (50, 50))
+  static (int, int) _parseGridDimensions(dynamic dimensions) {
+    if (dimensions is String) {
+      final parts = dimensions.split('x');
+      if (parts.length == 2) {
+        final width = int.tryParse(parts[0].trim());
+        final height = int.tryParse(parts[1].trim());
+        if (width != null && height != null) {
+          return (width, height);
+        }
+      }
+    }
+    return (10000, 10000); // 기본값
   }
 
   /// JSON으로 변환
@@ -94,6 +131,10 @@ class GameRound {
       'status': status.name,
       'category': category,
       'grid_size': gridSize,
+      'grid_width': gridWidth,
+      'grid_height': gridHeight,
+      if (gridWidth != null && gridHeight != null)
+        'grid_dimensions': '${gridWidth}x$gridHeight',
       'vibe_image_url': vibeImageUrl,
     };
   }
@@ -145,6 +186,8 @@ class GameRound {
     GameStatus? status,
     String? category,
     int? gridSize,
+    int? gridWidth,
+    int? gridHeight,
     String? vibeImageUrl,
   }) {
     return GameRound(
@@ -164,6 +207,8 @@ class GameRound {
       status: status ?? this.status,
       category: category ?? this.category,
       gridSize: gridSize ?? this.gridSize,
+      gridWidth: gridWidth ?? this.gridWidth,
+      gridHeight: gridHeight ?? this.gridHeight,
       vibeImageUrl: vibeImageUrl ?? this.vibeImageUrl,
     );
   }

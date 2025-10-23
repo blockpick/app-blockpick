@@ -10,47 +10,58 @@ import '../../core/theme/app_text_styles.dart';
 class BlockItemCard extends StatelessWidget {
   final BlockModel block;
   final VoidCallback onRemove;
+  final VoidCallback? onTap;
+  final bool isFocused;
 
   const BlockItemCard({
     super.key,
     required this.block,
     required this.onRemove,
+    this.onTap,
+    this.isFocused = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: AppColors.blueWhite,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.buleGray),
-      ),
-      child: Row(
-        children: [
-          // 블록 아이콘 (상태별)
-          _buildBlockIcon(block.state),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            color: AppColors.blueWhite,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColors.buleGray),
+          ),
+          child: Row(
+            children: [
+              // 블록 아이콘 (상태별)
+              _buildBlockIcon(block.state),
 
-          const SizedBox(width: 12),
+              const SizedBox(width: 12),
 
-          // 블록 위치 정보
-          Expanded(
-            child: Text(
-              '${block.row} Row, ${block.col} Column',
-              style: AppTextStyles.body.copyWith(
-                color: AppColors.darkBlue,
-                fontWeight: FontWeight.w500,
+              // 블록 위치 정보
+              Expanded(
+                child: Text(
+                  '${block.row} Row, ${block.col} Column',
+                  style: AppTextStyles.body.copyWith(
+                    color: AppColors.darkBlue,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
-            ),
-          ),
 
-          // 삭제 버튼
-          IconButton(
-            icon: const Icon(Icons.close, size: 20),
-            color: AppColors.medium,
-            onPressed: onRemove,
+              // 삭제 버튼
+              IconButton(
+                icon: const Icon(Icons.close, size: 20),
+                color: AppColors.medium,
+                onPressed: onRemove,
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -59,15 +70,20 @@ class BlockItemCard extends StatelessWidget {
   Widget _buildBlockIcon(BlockState state) {
     String iconPath;
 
-    switch (state) {
-      case BlockState.selected:
-        iconPath = 'assets/icons/pick/selected.svg';
-        break;
-      case BlockState.past:
-        iconPath = 'assets/icons/pick/past.svg';
-        break;
-      default:
-        iconPath = 'assets/icons/pick/selected.svg';
+    // 🎯 포커스된 블록이면 list-selected.svg 사용
+    if (isFocused) {
+      iconPath = 'assets/icons/pick/list-selected.svg';
+    } else {
+      switch (state) {
+        case BlockState.selected:
+          iconPath = 'assets/icons/pick/selected.svg';
+          break;
+        case BlockState.past:
+          iconPath = 'assets/icons/pick/past.svg';
+          break;
+        default:
+          iconPath = 'assets/icons/pick/selected.svg';
+      }
     }
 
     return SizedBox(

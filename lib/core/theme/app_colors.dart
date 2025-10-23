@@ -73,6 +73,23 @@ class AppColors {
   /// Dark
   static const Color dark = Color(0xFF333333);
 
+  /// Darker (마이페이지용 어두운 배경)
+  static const Color darker = Color(0xFF1A1A1A);
+
+  // ========== Alias Colors (마이페이지용) ==========
+
+  /// Primary - blue와 동일
+  static const Color primary = blue;
+
+  /// Success - green과 동일
+  static const Color success = green;
+
+  /// Error - red와 동일
+  static const Color error = red;
+
+  /// Background - white와 동일 (다른 파일 호환용)
+  static const Color background = white;
+
   // ========== Stroke Colors ==========
 
   /// Bule Gray - 기본 border

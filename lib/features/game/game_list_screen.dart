@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../models/game_round_model.dart';
@@ -245,12 +246,8 @@ class _GameListScreenState extends State<GameListScreen> {
         return GameCard(
           game: game,
           onTap: () {
-            // TODO: Navigate to game detail
-            Navigator.pushNamed(
-              context,
-              '/game-detail',
-              arguments: game.id,
-            );
+            // GoRouter로 게임 상세 페이지 이동
+            context.go('/game/${game.id}');
           },
         );
       },

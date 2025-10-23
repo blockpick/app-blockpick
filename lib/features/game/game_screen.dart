@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../grid/game_grid_widget.dart';
 import 'selected_blocks_sheet.dart';
@@ -9,6 +10,7 @@ import '../../core/constants/app_constants.dart';
 import '../../providers/grid_state_provider.dart';
 import '../../data/mock_game_data.dart';
 import '../../models/game_round_model.dart';
+import '../../components/minimap/grid_minimap.dart';
 
 /// 게임 메인 화면
 class GameScreen extends ConsumerStatefulWidget {
@@ -26,23 +28,73 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
   // 그리드 크기
   int _gridSize = 100;
+  int _gridWidth = 100;
+  int _gridHeight = 100;
 
   @override
   void initState() {
     super.initState();
     if (widget.gameId != null) {
       _game = MockGameData.getGameById(widget.gameId!);
-      if (_game != null && _game!.gridSize != null) {
-        _gridSize = _game!.gridSize!;
+      if (_game != null) {
+        _gridWidth = _game!.actualGridWidth;
+        _gridHeight = _game!.actualGridHeight;
+        // 레거시 지원을 위한 gridSize (정사각형인 경우)
+        _gridSize = _gridWidth == _gridHeight ? _gridWidth : _gridWidth;
+
+        // 초기 줌 레벨 계산 (화면에 그리드가 꽉 차도록)
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _setInitialZoom();
+        });
       }
     }
   }
 
+  /// 초기 줌 레벨을 그리드 크기에 맞게 설정하고 화면 중앙에 배치
+  void _setInitialZoom() {
+    final gameId = widget.gameId ?? 'unknown';
+    final gridNotifier = ref.read(gridStateProvider(gameId).notifier);
+    final screenSize = MediaQuery.of(context).size;
+
+    // 그리드 전체가 화면에 들어가도록 줌 계산
+    // cellSize(30) * gridWidth * zoom = screenWidth
+    const cellSize = 30.0; // AppConstants.cellSize
+    final zoomToFitWidth = screenSize.width / (cellSize * _gridWidth);
+    final zoomToFitHeight = screenSize.height / (cellSize * _gridHeight);
+
+    // 작은 값 선택 (양쪽 다 화면에 들어가도록)
+    final initialZoom = (zoomToFitWidth < zoomToFitHeight ? zoomToFitWidth : zoomToFitHeight) * 0.9; // 90%로 여유
+
+    // 그리드를 화면 중앙에 배치하기 위한 pan 계산
+    // 그리드 중심 좌표
+    final gridCenterX = (_gridWidth * cellSize) / 2;
+    final gridCenterY = (_gridHeight * cellSize) / 2;
+
+    // 화면 중심 좌표
+    final screenCenterX = screenSize.width / 2;
+    final screenCenterY = screenSize.height / 2;
+
+    // pan 계산: screenCenter = gridCenter * zoom + pan
+    // => pan = screenCenter - gridCenter * zoom
+    final initialPanX = screenCenterX - gridCenterX * initialZoom;
+    final initialPanY = screenCenterY - gridCenterY * initialZoom;
+
+    // 줌과 pan 동시 설정
+    gridNotifier.setZoom(initialZoom);
+    gridNotifier.setPan(initialPanX, initialPanY);
+
+    debugPrint('📐 Grid: ${_gridWidth}x$_gridHeight, Initial Zoom: ${initialZoom.toStringAsFixed(4)}');
+    debugPrint('📍 Initial Pan: (${initialPanX.toStringAsFixed(2)}, ${initialPanY.toStringAsFixed(2)})');
+  }
+
   @override
   Widget build(BuildContext context) {
-    final gridState = ref.watch(gridStateProvider);
-    final gridNotifier = ref.read(gridStateProvider.notifier);
-    final selectedCount = ref.watch(selectedBlockCountProvider);
+    // gameId가 없으면 임시 ID 사용
+    final gameId = widget.gameId ?? 'unknown';
+
+    final gridState = ref.watch(gridStateProvider(gameId));
+    final gridNotifier = ref.read(gridStateProvider(gameId).notifier);
+    final selectedCount = ref.watch(selectedBlockCountProvider(gameId));
 
     // SafeArea 패딩 가져오기
     final bottomPadding = MediaQuery.of(context).padding.bottom;
@@ -54,7 +106,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         children: [
           // 게임 그리드 (배경 그라데이션 제거 - 이미지가 배경 역할)
           GameGridWidget(
-            gridSize: _gridSize,
+            gameId: gameId,
+            gridWidth: _gridWidth,
+            gridHeight: _gridHeight,
             backgroundImagePath: _game?.imageUrl,
             onBlockTap: (block) {
               debugPrint('Block tapped: ${block.row}, ${block.col}');
@@ -65,7 +119,23 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
           // 바텀시트 (선택된 블록이 있고 showBottomSheet가 true일 때 표시)
           if (selectedCount > 0 && gridState.showBottomSheet)
-            const SelectedBlocksSheet(),
+            SelectedBlocksSheet(gameId: gameId),
+
+          // 좌하단 미니맵
+          Positioned(
+            bottom: selectedCount > 0 && gridState.showBottomSheet
+                ? 350 + bottomPadding + 16
+                : 100 + bottomPadding + 16,
+            left: 16,
+            child: GridMinimap(
+              gridWidth: _gridWidth,
+              gridHeight: _gridHeight,
+              zoom: gridState.zoom,
+              panX: gridState.panX,
+              panY: gridState.panY,
+              screenSize: MediaQuery.of(context).size,
+            ),
+          ),
 
           // 우측 줌 컨트롤 (SafeArea 적용)
           Positioned(
@@ -88,7 +158,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       elevation: 0,
       leading: IconButton(
         icon: const Icon(LucideIcons.chevronLeft, color: AppColors.darkBlue),
-        onPressed: () => Navigator.pop(context),
+        onPressed: () => context.go('/'),
       ),
       actions: [
         // 공유 버튼
@@ -127,7 +197,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               const Icon(LucideIcons.grid, size: 16, color: AppColors.blue),
               const SizedBox(width: 8),
               Text(
-                'Grid: $_gridSize × $_gridSize',
+                'Grid: $_gridWidth × $_gridHeight',
                 style: AppTextStyles.bodySmall.copyWith(
                   color: AppColors.darkBlue,
                   fontWeight: FontWeight.w600,
@@ -211,6 +281,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     GridStateNotifier gridNotifier,
     GridState gridState,
   ) {
+    // 화면 크기 가져오기
+    final screenSize = MediaQuery.of(context).size;
+
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white.withOpacity(0.9),
@@ -227,10 +300,13 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Zoom In
+          // Zoom In (화면 중앙 기준)
           IconButton(
             icon: const Icon(LucideIcons.plus, size: 20),
-            onPressed: gridNotifier.zoomIn,
+            onPressed: () => gridNotifier.zoomIn(
+              screenWidth: screenSize.width,
+              screenHeight: screenSize.height,
+            ),
             color: AppColors.blue,
           ),
 
@@ -246,10 +322,13 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             ),
           ),
 
-          // Zoom Out
+          // Zoom Out (화면 중앙 기준)
           IconButton(
             icon: const Icon(LucideIcons.minus, size: 20),
-            onPressed: gridNotifier.zoomOut,
+            onPressed: () => gridNotifier.zoomOut(
+              screenWidth: screenSize.width,
+              screenHeight: screenSize.height,
+            ),
             color: AppColors.blue,
           ),
         ],

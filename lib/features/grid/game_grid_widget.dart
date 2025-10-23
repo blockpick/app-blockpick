@@ -15,8 +15,14 @@ import '../../core/constants/app_constants.dart';
 /// CustomPaint를 사용하여 대형 그리드를 렌더링하고
 /// 제스처를 처리합니다.
 class GameGridWidget extends ConsumerStatefulWidget {
-  /// 그리드 크기 (N x N)
-  final int gridSize;
+  /// 게임 ID (라운드별 상태 분리)
+  final String gameId;
+
+  /// 그리드 가로 크기
+  final int gridWidth;
+
+  /// 그리드 세로 크기
+  final int gridHeight;
 
   /// 블록 클릭 콜백
   final Function(BlockModel)? onBlockTap;
@@ -26,7 +32,9 @@ class GameGridWidget extends ConsumerStatefulWidget {
 
   const GameGridWidget({
     super.key,
-    required this.gridSize,
+    required this.gameId,
+    required this.gridWidth,
+    required this.gridHeight,
     this.onBlockTap,
     this.backgroundImagePath,
   });
@@ -136,8 +144,8 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
 
   @override
   Widget build(BuildContext context) {
-    final gridState = ref.watch(gridStateProvider);
-    final gridNotifier = ref.read(gridStateProvider.notifier);
+    final gridState = ref.watch(gridStateProvider(widget.gameId));
+    final gridNotifier = ref.read(gridStateProvider(widget.gameId).notifier);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -161,7 +169,8 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
               // 그리드 렌더링
               CustomPaint(
                 painter: GridPainter(
-                  gridSize: widget.gridSize,
+                  gridWidth: widget.gridWidth,
+                  gridHeight: widget.gridHeight,
                   zoom: gridState.zoom,
                   pan: Offset(gridState.panX, gridState.panY),
                   selectedBlocks: gridState.selectedBlocks,
@@ -180,36 +189,47 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
     );
   }
 
-  /// 선택된 블록 위에 SVG 아이콘 렌더링
+  /// 선택된 블록 위에 SVG 아이콘 렌더링 (성능 최적화)
   List<Widget> _buildBlockIcons(GridState gridState, Size size) {
     final icons = <Widget>[];
     final cellSize = AppConstants.cellSize * gridState.zoom;
+
+    // 🚀 성능 최적화: 셀이 너무 작으면 아이콘 렌더링 생략 (4px 이하)
+    if (cellSize < 4.0) {
+      return icons;
+    }
 
     for (final block in gridState.selectedBlocks) {
       final x = (block.col - 1) * cellSize + gridState.panX;
       final y = (block.row - 1) * cellSize + gridState.panY;
 
-      // 화면 밖 블록은 렌더링하지 않음
+      // 화면 밖 블록은 렌더링하지 않음 (viewport culling)
       if (x + cellSize < 0 || x > size.width || y + cellSize < 0 || y > size.height) {
         continue;
       }
 
       // 블록 상태에 따른 SVG 경로 결정
       String iconPath;
-      switch (block.state) {
-        case BlockState.selected:
-          iconPath = 'assets/icons/pick/selected.svg';
-          break;
-        case BlockState.past:
-          iconPath = 'assets/icons/pick/past.svg';
-          break;
-        case BlockState.winner:
-        case BlockState.unique:
-        case BlockState.duplicate:
-          iconPath = 'assets/icons/pick/selected.svg'; // 기본값
-          break;
-        default:
-          iconPath = 'assets/icons/pick/selected.svg';
+
+      // 🎯 포커스된 블록이면 list-selected.svg 사용
+      if (gridState.focusedBlockId == block.id) {
+        iconPath = 'assets/icons/pick/list-selected.svg';
+      } else {
+        switch (block.state) {
+          case BlockState.selected:
+            iconPath = 'assets/icons/pick/selected.svg';
+            break;
+          case BlockState.past:
+            iconPath = 'assets/icons/pick/past.svg';
+            break;
+          case BlockState.winner:
+          case BlockState.unique:
+          case BlockState.duplicate:
+            iconPath = 'assets/icons/pick/selected.svg'; // 기본값
+            break;
+          default:
+            iconPath = 'assets/icons/pick/selected.svg';
+        }
       }
 
       icons.add(
@@ -248,30 +268,15 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
     final row = (gridY + 1).floor();
 
     // 그리드 범위 확인
-    if (row >= 1 && row <= widget.gridSize && col >= 1 && col <= widget.gridSize) {
-      // 줌 레벨이 충분한지 확인 (셀 선택 임계값)
-      final threshold = _getCellSelectionThreshold(widget.gridSize);
-      if (gridState.zoom >= threshold) {
-        final block = BlockModel.fromPosition(row, col, state: BlockState.selected);
+    if (row >= 1 && row <= widget.gridHeight && col >= 1 && col <= widget.gridWidth) {
+      final block = BlockModel.fromPosition(row, col, state: BlockState.selected);
 
-        // 블록 토글
-        gridNotifier.toggleBlock(block);
+      // 블록 토글 (자동 줌인 제거 - 사용자가 원하는 줌 레벨에서 선택)
+      gridNotifier.toggleBlock(block);
 
-        // 콜백 호출
-        widget.onBlockTap?.call(block);
-      } else {
-        // 줌이 충분하지 않으면 해당 영역으로 줌 인
-        _zoomToCell(row, col, gridState, gridNotifier);
-      }
+      // 콜백 호출
+      widget.onBlockTap?.call(block);
     }
-  }
-
-  /// 셀 선택 임계값 계산
-  double _getCellSelectionThreshold(int gridSize) {
-    if (gridSize <= 100) return 0.3;
-    if (gridSize <= 500) return 0.6;
-    if (gridSize <= 2000) return 1.0;
-    return 1.4;
   }
 
   /// 특정 셀로 줌 인
@@ -307,7 +312,7 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
     _initialFocalPoint = details.focalPoint;
     _initialZoom = gridState.zoom;
     _isDragging = false;
-    ref.read(gridStateProvider.notifier).setDragging(false);
+    ref.read(gridStateProvider(widget.gameId).notifier).setDragging(false);
   }
 
   /// 스케일 업데이트

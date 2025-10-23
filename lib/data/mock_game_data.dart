@@ -8,7 +8,7 @@ class MockGameData {
       id: 'daily-001',
       title: 'iPhone 16 Pro Max 256GB',
       description: '최신 아이폰 16 Pro Max를 획득하세요!',
-      imageUrl: 'assets/images/products/iphone-16-pro.jpeg',
+      imageUrl: 'assets/images/products/iphone-16-pro.webp',
       participants: 1234,
       maxParticipants: 5000,
       totalBlocks: 100000000, // 10000x10000
@@ -20,6 +20,8 @@ class MockGameData {
       type: GameType.daily,
       status: GameStatus.active,
       category: 'Digital',
+      gridWidth: 10000,
+      gridHeight: 10000,
     ),
     GameRound(
       id: 'daily-002',
@@ -28,7 +30,7 @@ class MockGameData {
       imageUrl: 'assets/images/products/airpods-pro-2.jpeg',
       participants: 567,
       maxParticipants: 2000,
-      totalBlocks: 100000000,
+      totalBlocks: 1000000, // 1000x1000
       requiredPicks: 1,
       winners: 1,
       originalPrice: 359000,
@@ -37,6 +39,8 @@ class MockGameData {
       type: GameType.daily,
       status: GameStatus.active,
       category: 'Digital',
+      gridWidth: 1000,
+      gridHeight: 1000,
     ),
     GameRound(
       id: 'daily-003',
@@ -45,7 +49,7 @@ class MockGameData {
       imageUrl: 'assets/images/products/macbook-air-m4.jpeg',
       participants: 890,
       maxParticipants: 3000,
-      totalBlocks: 100000000,
+      totalBlocks: 40000, // 200x200
       requiredPicks: 1,
       winners: 1,
       originalPrice: 1690000,
@@ -54,6 +58,8 @@ class MockGameData {
       type: GameType.daily,
       status: GameStatus.active,
       category: 'Digital',
+      gridWidth: 10000,
+      gridHeight: 10000,
     ),
     GameRound(
       id: 'daily-004',
@@ -62,7 +68,7 @@ class MockGameData {
       imageUrl: 'assets/images/products/starbucks-giftcard.jpeg',
       participants: 2345,
       maxParticipants: 10000,
-      totalBlocks: 100000000,
+      totalBlocks: 2500, // 50x50
       requiredPicks: 1,
       winners: 5,
       originalPrice: 100000,
@@ -71,6 +77,8 @@ class MockGameData {
       type: GameType.daily,
       status: GameStatus.active,
       category: 'Gift',
+      gridWidth: 10000,
+      gridHeight: 10000,
     ),
   ];
 
@@ -83,7 +91,7 @@ class MockGameData {
       imageUrl: 'assets/images/products/chanel-bag.webp',
       participants: 456,
       maxParticipants: 1000,
-      totalBlocks: 100000000,
+      totalBlocks: 100000000, // 10000x10000
       requiredPicks: 3,
       winners: 1,
       originalPrice: 5000000,
@@ -92,6 +100,8 @@ class MockGameData {
       type: GameType.select,
       status: GameStatus.active,
       category: 'Fashion',
+      gridWidth: 10000,
+      gridHeight: 10000,
     ),
     GameRound(
       id: 'select-002',
@@ -100,7 +110,7 @@ class MockGameData {
       imageUrl: 'assets/images/products/louis-vuitton-bag.jpeg',
       participants: 678,
       maxParticipants: 2000,
-      totalBlocks: 100000000,
+      totalBlocks: 25000000, // 5000x5000
       requiredPicks: 5,
       winners: 2,
       originalPrice: 3500000,
@@ -109,6 +119,8 @@ class MockGameData {
       type: GameType.select,
       status: GameStatus.active,
       category: 'Fashion',
+      gridWidth: 5000,
+      gridHeight: 5000,
     ),
     GameRound(
       id: 'select-003',
@@ -117,7 +129,7 @@ class MockGameData {
       imageUrl: 'assets/images/products/ipad-air.webp',
       participants: 1890,
       maxParticipants: 5000,
-      totalBlocks: 100000000,
+      totalBlocks: 4000000, // 2000x2000
       requiredPicks: 10,
       winners: 3,
       originalPrice: 2000000,
@@ -126,6 +138,8 @@ class MockGameData {
       type: GameType.select,
       status: GameStatus.active,
       category: 'Digital',
+      gridWidth: 2000,
+      gridHeight: 2000,
     ),
   ];
 
@@ -147,7 +161,8 @@ class MockGameData {
       type: GameType.vibe,
       status: GameStatus.active,
       category: 'Fashion',
-      gridSize: 100,
+      gridWidth: 100,
+      gridHeight: 100,
       vibeImageUrl: 'assets/images/vibe/01/test.png',
     ),
     GameRound(
@@ -166,7 +181,8 @@ class MockGameData {
       type: GameType.vibe,
       status: GameStatus.active,
       category: 'Digital',
-      gridSize: 200,
+      gridWidth: 200,
+      gridHeight: 200,
       vibeImageUrl: 'assets/images/vibe/02/test.png',
     ),
     GameRound(
@@ -185,7 +201,8 @@ class MockGameData {
       type: GameType.vibe,
       status: GameStatus.active,
       category: 'Food',
-      gridSize: 50,
+      gridWidth: 50,
+      gridHeight: 50,
       vibeImageUrl: 'assets/images/vibe/03/test.png',
     ),
   ];

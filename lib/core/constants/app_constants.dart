@@ -62,14 +62,14 @@ class AppConstants {
   /// 셀 크기 (픽셀)
   static const double cellSize = 30.0;
 
-  /// 최소 줌 레벨
-  static const double minZoom = 0.1;
+  /// 최소 줌 레벨 (큰 그리드를 위해 매우 작게)
+  static const double minZoom = 0.0001;
 
   /// 최대 줌 레벨
   static const double maxZoom = 10.0;
 
-  /// 기본 줌 레벨
-  static const double defaultZoom = 1.0;
+  /// 기본 줌 레벨 (자동 계산되므로 사용 안 함)
+  static const double defaultZoom = 0.01;
 
   /// 드래그 임계값 (픽셀)
   static const double dragThreshold = 5.0;
