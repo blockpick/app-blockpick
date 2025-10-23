@@ -155,18 +155,21 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
 
               // 하단 고정 버튼
               if (widget.footer != null)
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                    border: Border(
-                      top: BorderSide(
-                        color: AppColors.buleGray.withOpacity(0.2),
-                        width: 1,
+                SafeArea(
+                  top: false,
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppColors.white,
+                      border: Border(
+                        top: BorderSide(
+                          color: AppColors.buleGray.withOpacity(0.2),
+                          width: 1,
+                        ),
                       ),
                     ),
+                    child: widget.footer!,
                   ),
-                  child: widget.footer!,
                 ),
             ],
           ),

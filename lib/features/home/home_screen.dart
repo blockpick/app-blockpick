@@ -35,10 +35,11 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // 탭 바
-        Container(
+    return SafeArea(
+      child: Column(
+        children: [
+          // 탭 바
+          Container(
           decoration: const BoxDecoration(
             color: AppColors.white,
             border: Border(
@@ -71,6 +72,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           ),
         ),
       ],
+      ),
     );
   }
 }

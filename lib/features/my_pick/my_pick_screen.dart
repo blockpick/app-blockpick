@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-
-import '../../components/cards/my_pick_card.dart';
-import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
-import '../../data/mock_game_data.dart';
-import '../../models/block_model.dart';
+import '../../core/constants/app_constants.dart';
 import '../../models/game_round_model.dart';
+import '../../models/block_model.dart';
+import '../../data/mock_game_data.dart';
+import '../../components/cards/my_pick_card.dart';
 
 /// My Pick 화면 (참여한 게임 이력)
 class MyPickScreen extends StatefulWidget {
@@ -16,8 +15,7 @@ class MyPickScreen extends StatefulWidget {
   State<MyPickScreen> createState() => _MyPickScreenState();
 }
 
-class _MyPickScreenState extends State<MyPickScreen>
-    with SingleTickerProviderStateMixin {
+class _MyPickScreenState extends State<MyPickScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   GameType? _selectedFilter;
 
@@ -55,42 +53,46 @@ class _MyPickScreenState extends State<MyPickScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.white,
-        elevation: 0,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(48),
-          child: Container(
-            color: AppColors.white,
-            child: TabBar(
-              controller: _tabController,
-              isScrollable: false,
-              indicatorColor: AppColors.blue,
-              indicatorWeight: 3,
-              labelColor: AppColors.blue,
-              unselectedLabelColor: AppColors.medium,
-              labelStyle: AppTextStyles.button.copyWith(
-                fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // 탭 바
+            Container(
+              color: AppColors.white,
+              child: TabBar(
+                controller: _tabController,
+                isScrollable: false,
+                indicatorColor: AppColors.blue,
+                indicatorWeight: 3,
+                labelColor: AppColors.blue,
+                unselectedLabelColor: AppColors.medium,
+                labelStyle: AppTextStyles.button.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+                unselectedLabelStyle: AppTextStyles.button,
+                tabs: const [
+                  Tab(text: 'ALL'),
+                  Tab(text: 'DAILY'),
+                  Tab(text: 'SELECT'),
+                  Tab(text: 'VIBE'),
+                ],
               ),
-              unselectedLabelStyle: AppTextStyles.button,
-              tabs: const [
-                Tab(text: 'ALL'),
-                Tab(text: 'DAILY'),
-                Tab(text: 'SELECT'),
-                Tab(text: 'VIBE'),
+            ),
+          ),
+          // 탭 뷰
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                _buildGameList(null), // ALL
+                _buildGameList(GameType.daily),
+                _buildGameList(GameType.select),
+                _buildGameList(GameType.vibe),
               ],
             ),
           ),
-        ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          _buildGameList(null), // ALL
-          _buildGameList(GameType.daily),
-          _buildGameList(GameType.select),
-          _buildGameList(GameType.vibe),
         ],
+        ),
       ),
     );
   }
@@ -153,7 +155,9 @@ class _MyPickScreenState extends State<MyPickScreen>
           const SizedBox(height: 8),
           Text(
             'Start playing to see your picks here',
-            style: AppTextStyles.body.copyWith(color: AppColors.medium),
+            style: AppTextStyles.body.copyWith(
+              color: AppColors.medium,
+            ),
           ),
         ],
       ),
@@ -176,11 +180,7 @@ class _MyPickScreenState extends State<MyPickScreen>
   }
 
   /// 게임 상세 정보 바텀시트
-  void _showGameDetails(
-    BuildContext context,
-    GameRound game,
-    List<BlockModel> myPicks,
-  ) {
+  void _showGameDetails(BuildContext context, GameRound game, List<BlockModel> myPicks) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -265,12 +265,8 @@ class _MyPickScreenState extends State<MyPickScreen>
                           ),
                           decoration: BoxDecoration(
                             color: AppColors.blue.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(
-                              AppConstants.radiusSm,
-                            ),
-                            border: Border.all(
-                              color: AppColors.blue.withOpacity(0.3),
-                            ),
+                            borderRadius: BorderRadius.circular(AppConstants.radiusSm),
+                            border: Border.all(color: AppColors.blue.withOpacity(0.3)),
                           ),
                           child: Text(
                             'X${block.col}-Y${block.row}',
@@ -303,9 +299,7 @@ class _MyPickScreenState extends State<MyPickScreen>
                           foregroundColor: AppColors.white,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              AppConstants.radiusMd,
-                            ),
+                            borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                           ),
                         ),
                         child: Text(
