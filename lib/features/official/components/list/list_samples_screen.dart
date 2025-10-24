@@ -1,0 +1,158 @@
+import 'package:flutter/material.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/constants/app_constants.dart';
+import 'widgets/list_sample_1.dart';
+import 'widgets/list_sample_2.dart';
+import 'widgets/list_sample_3.dart';
+
+/// 리스트 샘플 리스트 화면
+class ListSamplesScreen extends StatelessWidget {
+  const ListSamplesScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        backgroundColor: AppColors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.darkBlue),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          'List Samples',
+          style: AppTextStyles.large.copyWith(
+            fontWeight: FontWeight.bold,
+            color: AppColors.darkBlue,
+          ),
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(
+            height: 1,
+            color: AppColors.buleGray,
+          ),
+        ),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          _buildSampleCard(
+            context,
+            number: 1,
+            title: 'Card List',
+            description: '카드형 리스트 + 탭 애니메이션',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ListSample1(),
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 12),
+          _buildSampleCard(
+            context,
+            number: 2,
+            title: 'Timeline List',
+            description: '타임라인 스타일 + 슬라이드 애니메이션',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ListSample2(),
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 12),
+          _buildSampleCard(
+            context,
+            number: 3,
+            title: 'Grid Cards',
+            description: '그리드 카드 + 스케일 애니메이션',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ListSample3(),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSampleCard(
+    BuildContext context, {
+    required int number,
+    required String title,
+    required String description,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
+          border: Border.all(color: AppColors.buleGray),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppColors.purple,
+                borderRadius: BorderRadius.circular(AppConstants.radiusMd),
+              ),
+              child: Center(
+                child: Text(
+                  '#$number',
+                  style: AppTextStyles.body.copyWith(
+                    color: AppColors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: AppTextStyles.bodyLarge.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.darkBlue,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    description,
+                    style: AppTextStyles.body.copyWith(
+                      color: AppColors.medium,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: AppColors.medium,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

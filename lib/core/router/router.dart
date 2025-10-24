@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../features/main/main_screen.dart';
+import '../../features/blockpick/blockpick_screen.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/signup_page.dart';
 import '../../features/auth/presentation/pages/forgot_password_page.dart';
@@ -47,7 +47,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: '/',
-        builder: (context, state) => const MainScreen(),
+        builder: (context, state) => const BlockpickScreen(),
       ),
       GoRoute(
         path: '/login',

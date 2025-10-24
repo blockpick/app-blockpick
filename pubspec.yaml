@@ -41,6 +41,9 @@ dependencies:
 
   # UI & Animations
   flutter_animate: ^4.3.0
+  fl_chart: ^0.69.0
+  syncfusion_flutter_charts: ^27.1.48
+  syncfusion_flutter_treemap: ^27.1.48
 
   # Icons
   lucide_icons: ^0.257.0

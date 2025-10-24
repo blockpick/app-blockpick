@@ -37,35 +37,35 @@ class MainAppBar extends ConsumerWidget implements PreferredSizeWidget {
               onPressed: onMenuTap,
             )
           : null, // null이면 자동으로 drawer 아이콘 표시
-      title: GestureDetector(
-        onTap: () => showPlatformSelector(context, ref),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color: const Color(0xFFDCDCDC),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                platformMode.displayName,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.dark,
-                ),
-              ),
-              const SizedBox(width: 4),
-              const Icon(
-                LucideIcons.chevronDown,
-                size: 16,
-                color: AppColors.dark,
-              ),
-            ],
-          ),
-        ),
-      ),
+      // title: GestureDetector(
+      //   onTap: () => showPlatformSelector(context, ref),
+      //   child: Container(
+      //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      //     decoration: BoxDecoration(
+      //       color: const Color(0xFFDCDCDC),
+      //       borderRadius: BorderRadius.circular(20),
+      //     ),
+      //     child: Row(
+      //       mainAxisSize: MainAxisSize.min,
+      //       children: [
+      //         Text(
+      //           platformMode.displayName,
+      //           style: const TextStyle(
+      //             fontSize: 16,
+      //             fontWeight: FontWeight.w600,
+      //             color: AppColors.dark,
+      //           ),
+      //         ),
+      //         const SizedBox(width: 4),
+      //         const Icon(
+      //           LucideIcons.chevronDown,
+      //           size: 16,
+      //           color: AppColors.dark,
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
       centerTitle: true,
       actions: [
         IconButton(

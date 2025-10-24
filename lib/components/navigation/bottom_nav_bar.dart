@@ -32,33 +32,33 @@ class BottomNavBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _NavItem(
-                icon: LucideIcons.grid,
-                label: 'PICK',
+                icon: LucideIcons.home,
+                label: 'HOME',
                 isSelected: currentIndex == 0,
                 onTap: () => onTap(0),
               ),
               _NavItem(
-                icon: LucideIcons.trophy,
+                icon: LucideIcons.target,
                 label: 'My Pick',
                 isSelected: currentIndex == 1,
                 onTap: () => onTap(1),
               ),
-              // 중앙 PLAY 버튼 (다른 것보다 크게)
+              // 중앙 PICK 버튼 (게임 목록 - 다른 것보다 크게)
               _CenterNavItem(
-                icon: LucideIcons.gamepad2,
-                label: 'PLAY',
+                icon: LucideIcons.grid,
+                label: 'PICK',
                 isSelected: currentIndex == 2,
                 onTap: () => onTap(2),
               ),
               _NavItem(
-                icon: LucideIcons.history,
-                label: 'History',
+                icon: LucideIcons.trophy,
+                label: 'Winners',
                 isSelected: currentIndex == 3,
                 onTap: () => onTap(3),
               ),
               _NavItem(
-                icon: LucideIcons.user,
-                label: 'MY',
+                icon: LucideIcons.shoppingBag,
+                label: 'MALL',
                 isSelected: currentIndex == 4,
                 onTap: () => onTap(4),
               ),
