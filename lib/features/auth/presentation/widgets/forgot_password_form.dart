@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/auth/domain/providers/auth_provider.dart';
+import '../../../../core/auth/domain/exceptions/auth_exception.dart';
 
 enum PasswordResetStep {
   email, // 1단계: 이메일 입력 및 인증 코드 발송
@@ -83,7 +84,9 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'Email not found or is a social account';
+        _errorMessage = e is AuthException
+          ? e.message
+          : 'Email not found or is a social account';
         _isLoading = false;
       });
     }
@@ -131,7 +134,9 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'Verification failed. Please try again.';
+        _errorMessage = e is AuthException
+          ? e.message
+          : 'Verification failed. Please try again.';
         _isLoading = false;
       });
     }
@@ -172,7 +177,9 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'Password reset failed. Please try again.';
+        _errorMessage = e is AuthException
+          ? e.message
+          : 'Password reset failed. Please try again.';
         _isLoading = false;
       });
     }

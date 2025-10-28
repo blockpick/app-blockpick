@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/auth/domain/providers/auth_provider.dart';
+import '../../../../core/auth/domain/exceptions/auth_exception.dart';
 
 enum SignUpStep {
   email, // 1단계: 이메일 입력 및 인증 코드 발송
@@ -84,7 +85,9 @@ class _SignupFormState extends ConsumerState<SignupForm> {
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'Email already exists or invalid';
+        _errorMessage = e is AuthException
+          ? e.message
+          : 'Email already exists or invalid';
         _isLoading = false;
       });
     }
@@ -132,7 +135,9 @@ class _SignupFormState extends ConsumerState<SignupForm> {
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'Verification failed. Please try again.';
+        _errorMessage = e is AuthException
+          ? e.message
+          : 'Verification failed. Please try again.';
         _isLoading = false;
       });
     }
@@ -172,7 +177,9 @@ class _SignupFormState extends ConsumerState<SignupForm> {
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'Signup failed. Please try again.';
+        _errorMessage = e is AuthException
+          ? e.message
+          : 'Signup failed. Please try again.';
         _isLoading = false;
       });
     }

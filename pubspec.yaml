@@ -52,6 +52,8 @@ dependencies:
   # HTTP & GraphQL
   dio: ^5.4.0
   graphql_flutter: ^5.1.2
+  gql: ^1.0.0
+  http: ^1.1.0
 
   # Local Storage
   shared_preferences: ^2.2.2

@@ -23,7 +23,15 @@ User _$UserFromJson(Map<String, dynamic> json) {
 mixin _$User {
   String? get id => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
-  String? get nickname => throw _privateConstructorUsedError;
+  String? get nickname => throw _privateConstructorUsedError; // 새 스키마 필드
+  String? get avatar => throw _privateConstructorUsedError;
+  double? get balance => throw _privateConstructorUsedError;
+  int? get totalGamesPlayed => throw _privateConstructorUsedError;
+  int? get totalWins => throw _privateConstructorUsedError;
+  double? get winRate => throw _privateConstructorUsedError;
+  String? get createdAt => throw _privateConstructorUsedError;
+  String? get updatedAt =>
+      throw _privateConstructorUsedError; // 레거시 필드 (하위 호환성)
   String? get profileImageUrl => throw _privateConstructorUsedError;
   int get point => throw _privateConstructorUsedError;
   int get cash => throw _privateConstructorUsedError;
@@ -33,8 +41,7 @@ mixin _$User {
   String get userRole => throw _privateConstructorUsedError;
   bool get isSocialAccount => throw _privateConstructorUsedError;
   String? get socialProvider => throw _privateConstructorUsedError;
-  String? get socialName =>
-      throw _privateConstructorUsedError; // 레거시 필드 (하위 호환성)
+  String? get socialName => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   String? get role => throw _privateConstructorUsedError;
 
@@ -56,6 +63,13 @@ abstract class $UserCopyWith<$Res> {
     String? id,
     String email,
     String? nickname,
+    String? avatar,
+    double? balance,
+    int? totalGamesPlayed,
+    int? totalWins,
+    double? winRate,
+    String? createdAt,
+    String? updatedAt,
     String? profileImageUrl,
     int point,
     int cash,
@@ -89,6 +103,13 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
     Object? id = freezed,
     Object? email = null,
     Object? nickname = freezed,
+    Object? avatar = freezed,
+    Object? balance = freezed,
+    Object? totalGamesPlayed = freezed,
+    Object? totalWins = freezed,
+    Object? winRate = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
     Object? profileImageUrl = freezed,
     Object? point = null,
     Object? cash = null,
@@ -115,6 +136,34 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
             nickname: freezed == nickname
                 ? _value.nickname
                 : nickname // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            avatar: freezed == avatar
+                ? _value.avatar
+                : avatar // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            balance: freezed == balance
+                ? _value.balance
+                : balance // ignore: cast_nullable_to_non_nullable
+                      as double?,
+            totalGamesPlayed: freezed == totalGamesPlayed
+                ? _value.totalGamesPlayed
+                : totalGamesPlayed // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            totalWins: freezed == totalWins
+                ? _value.totalWins
+                : totalWins // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            winRate: freezed == winRate
+                ? _value.winRate
+                : winRate // ignore: cast_nullable_to_non_nullable
+                      as double?,
+            createdAt: freezed == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            updatedAt: freezed == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
                       as String?,
             profileImageUrl: freezed == profileImageUrl
                 ? _value.profileImageUrl
@@ -182,6 +231,13 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
     String? id,
     String email,
     String? nickname,
+    String? avatar,
+    double? balance,
+    int? totalGamesPlayed,
+    int? totalWins,
+    double? winRate,
+    String? createdAt,
+    String? updatedAt,
     String? profileImageUrl,
     int point,
     int cash,
@@ -212,6 +268,13 @@ class __$$UserImplCopyWithImpl<$Res>
     Object? id = freezed,
     Object? email = null,
     Object? nickname = freezed,
+    Object? avatar = freezed,
+    Object? balance = freezed,
+    Object? totalGamesPlayed = freezed,
+    Object? totalWins = freezed,
+    Object? winRate = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
     Object? profileImageUrl = freezed,
     Object? point = null,
     Object? cash = null,
@@ -238,6 +301,34 @@ class __$$UserImplCopyWithImpl<$Res>
         nickname: freezed == nickname
             ? _value.nickname
             : nickname // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        avatar: freezed == avatar
+            ? _value.avatar
+            : avatar // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        balance: freezed == balance
+            ? _value.balance
+            : balance // ignore: cast_nullable_to_non_nullable
+                  as double?,
+        totalGamesPlayed: freezed == totalGamesPlayed
+            ? _value.totalGamesPlayed
+            : totalGamesPlayed // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        totalWins: freezed == totalWins
+            ? _value.totalWins
+            : totalWins // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        winRate: freezed == winRate
+            ? _value.winRate
+            : winRate // ignore: cast_nullable_to_non_nullable
+                  as double?,
+        createdAt: freezed == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        updatedAt: freezed == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
                   as String?,
         profileImageUrl: freezed == profileImageUrl
             ? _value.profileImageUrl
@@ -299,6 +390,13 @@ class _$UserImpl implements _User {
     this.id,
     required this.email,
     this.nickname,
+    this.avatar,
+    this.balance,
+    this.totalGamesPlayed,
+    this.totalWins,
+    this.winRate,
+    this.createdAt,
+    this.updatedAt,
     this.profileImageUrl,
     this.point = 0,
     this.cash = 0,
@@ -322,6 +420,22 @@ class _$UserImpl implements _User {
   final String email;
   @override
   final String? nickname;
+  // 새 스키마 필드
+  @override
+  final String? avatar;
+  @override
+  final double? balance;
+  @override
+  final int? totalGamesPlayed;
+  @override
+  final int? totalWins;
+  @override
+  final double? winRate;
+  @override
+  final String? createdAt;
+  @override
+  final String? updatedAt;
+  // 레거시 필드 (하위 호환성)
   @override
   final String? profileImageUrl;
   @override
@@ -349,7 +463,6 @@ class _$UserImpl implements _User {
   final String? socialProvider;
   @override
   final String? socialName;
-  // 레거시 필드 (하위 호환성)
   @override
   final String? name;
   @override
@@ -357,7 +470,7 @@ class _$UserImpl implements _User {
 
   @override
   String toString() {
-    return 'User(id: $id, email: $email, nickname: $nickname, profileImageUrl: $profileImageUrl, point: $point, cash: $cash, isPushNotification: $isPushNotification, isMarketingNotification: $isMarketingNotification, isBan: $isBan, userRole: $userRole, isSocialAccount: $isSocialAccount, socialProvider: $socialProvider, socialName: $socialName, name: $name, role: $role)';
+    return 'User(id: $id, email: $email, nickname: $nickname, avatar: $avatar, balance: $balance, totalGamesPlayed: $totalGamesPlayed, totalWins: $totalWins, winRate: $winRate, createdAt: $createdAt, updatedAt: $updatedAt, profileImageUrl: $profileImageUrl, point: $point, cash: $cash, isPushNotification: $isPushNotification, isMarketingNotification: $isMarketingNotification, isBan: $isBan, userRole: $userRole, isSocialAccount: $isSocialAccount, socialProvider: $socialProvider, socialName: $socialName, name: $name, role: $role)';
   }
 
   @override
@@ -369,6 +482,17 @@ class _$UserImpl implements _User {
             (identical(other.email, email) || other.email == email) &&
             (identical(other.nickname, nickname) ||
                 other.nickname == nickname) &&
+            (identical(other.avatar, avatar) || other.avatar == avatar) &&
+            (identical(other.balance, balance) || other.balance == balance) &&
+            (identical(other.totalGamesPlayed, totalGamesPlayed) ||
+                other.totalGamesPlayed == totalGamesPlayed) &&
+            (identical(other.totalWins, totalWins) ||
+                other.totalWins == totalWins) &&
+            (identical(other.winRate, winRate) || other.winRate == winRate) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
             (identical(other.profileImageUrl, profileImageUrl) ||
                 other.profileImageUrl == profileImageUrl) &&
             (identical(other.point, point) || other.point == point) &&
@@ -395,11 +519,18 @@ class _$UserImpl implements _User {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
+  int get hashCode => Object.hashAll([
     runtimeType,
     id,
     email,
     nickname,
+    avatar,
+    balance,
+    totalGamesPlayed,
+    totalWins,
+    winRate,
+    createdAt,
+    updatedAt,
     profileImageUrl,
     point,
     cash,
@@ -412,7 +543,7 @@ class _$UserImpl implements _User {
     socialName,
     name,
     role,
-  );
+  ]);
 
   /// Create a copy of User
   /// with the given fields replaced by the non-null parameter values.
@@ -433,6 +564,13 @@ abstract class _User implements User {
     final String? id,
     required final String email,
     final String? nickname,
+    final String? avatar,
+    final double? balance,
+    final int? totalGamesPlayed,
+    final int? totalWins,
+    final double? winRate,
+    final String? createdAt,
+    final String? updatedAt,
     final String? profileImageUrl,
     final int point,
     final int cash,
@@ -454,7 +592,21 @@ abstract class _User implements User {
   @override
   String get email;
   @override
-  String? get nickname;
+  String? get nickname; // 새 스키마 필드
+  @override
+  String? get avatar;
+  @override
+  double? get balance;
+  @override
+  int? get totalGamesPlayed;
+  @override
+  int? get totalWins;
+  @override
+  double? get winRate;
+  @override
+  String? get createdAt;
+  @override
+  String? get updatedAt; // 레거시 필드 (하위 호환성)
   @override
   String? get profileImageUrl;
   @override
@@ -474,7 +626,7 @@ abstract class _User implements User {
   @override
   String? get socialProvider;
   @override
-  String? get socialName; // 레거시 필드 (하위 호환성)
+  String? get socialName;
   @override
   String? get name;
   @override

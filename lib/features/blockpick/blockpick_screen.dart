@@ -36,6 +36,7 @@ class _BlockpickScreenState extends ConsumerState<BlockpickScreen> {
     HomeScreen(),             // 2: PICK (가운데 큰 버튼 - 게임 목록)
     WinnersScreen(),          // 3: Winners (기획 중)
     MallScreen(),             // 4: MALL (쇼핑몰)
+    MyScreen(),               // 5: MY (마이페이지)
   ];
 
   @override
@@ -100,11 +101,10 @@ class _BlockpickScreenState extends ConsumerState<BlockpickScreen> {
         onUserTap: () {
           final isAuthenticated = ref.read(isAuthenticatedProvider);
           if (isAuthenticated) {
-            // MY 페이지로 네비게이션 (모달 또는 새 페이지)
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const MyScreen()),
-            );
+            // MY 페이지로 이동 (인덱스 5)
+            setState(() {
+              _currentIndex = 5;
+            });
           } else {
             showLoginDialog(context);
           }
@@ -113,7 +113,7 @@ class _BlockpickScreenState extends ConsumerState<BlockpickScreen> {
     }
 
     // 서브 페이지 - 일반 제목만 표시 (BlockPick의 다른 탭들)
-    final titles = ['HOME', 'My Pick', 'PICK', 'Winners', 'MALL'];
+    final titles = ['HOME', 'My Pick', 'PICK', 'Winners', 'MALL', 'MY'];
     final title = titles[_currentIndex];
 
     return SubAppBar(

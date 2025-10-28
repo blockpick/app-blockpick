@@ -23,184 +23,87 @@ class MyScreen extends ConsumerWidget {
       );
     }
 
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            // 헤더
-            SliverToBoxAdapter(
-              child: _buildHeader(context, profile),
-            ),
-
-            // 총 자산 영역
-            SliverToBoxAdapter(
-              child: _buildTotalAssets(context, wallet),
-            ),
-
-            // 주요 액션 버튼
-            SliverToBoxAdapter(
-              child: _buildActionButtons(context),
-            ),
-
-            // 캐시 배분 섹션
-            SliverToBoxAdapter(
-              child: _buildCashAllocation(context, wallet),
-            ),
-
-            // 활동 내역 섹션 (게임/쇼핑)
-            SliverToBoxAdapter(
-              child: _buildActivitySection(context),
-            ),
-
-            // 최근 거래 내역
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppConstants.spacingLg,
-                  AppConstants.spacingXl,
-                  AppConstants.spacingLg,
-                  AppConstants.spacingSm,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      '최근 거래 내역',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.darkBlue,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        // TODO: 전체 거래 내역 페이지로 이동
-                      },
-                      child: const Text(
-                        '전체보기',
-                        style: TextStyle(
-                          color: AppColors.grayBlue,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            // 거래 내역 리스트
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppConstants.spacingLg,
-              ),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return TransactionListItem(
-                      transaction: recentTransactions[index],
-                    );
-                  },
-                  childCount: recentTransactions.length,
-                ),
-              ),
-            ),
-
-            // 하단 여백
-            const SliverToBoxAdapter(
-              child: SizedBox(height: AppConstants.spacing2Xl),
-            ),
-          ],
+    return CustomScrollView(
+      slivers: [
+        // 총 자산 영역
+        SliverToBoxAdapter(
+          child: _buildTotalAssets(context, wallet),
         ),
-      ),
-    );
-  }
 
-  Widget _buildHeader(BuildContext context, dynamic profile) {
-    return Padding(
-      padding: const EdgeInsets.all(AppConstants.spacingLg),
-      child: Row(
-        children: [
-          // 프로필 이미지
-          Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: AppColors.bgWhite,
-              borderRadius: BorderRadius.circular(AppConstants.radiusFull),
-              border: Border.all(
-                color: AppColors.disable,
-                width: 2,
-              ),
-            ),
-            child: const Icon(
-              Icons.person,
-              size: 32,
-              color: AppColors.grayBlue,
-            ),
-          ),
-          const SizedBox(width: AppConstants.spacingMd),
+        // 주요 액션 버튼
+        SliverToBoxAdapter(
+          child: _buildActionButtons(context),
+        ),
 
-          // 사용자 정보
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        // 캐시 배분 섹션
+        SliverToBoxAdapter(
+          child: _buildCashAllocation(context, wallet),
+        ),
+
+        // 활동 내역 섹션 (게임/쇼핑)
+        SliverToBoxAdapter(
+          child: _buildActivitySection(context),
+        ),
+
+        // 최근 거래 내역
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppConstants.spacingLg,
+              AppConstants.spacingXl,
+              AppConstants.spacingLg,
+              AppConstants.spacingSm,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  profile.nickname,
-                  style: const TextStyle(
+                const Text(
+                  '최근 거래 내역',
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                     color: AppColors.darkBlue,
                   ),
                 ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Text(
-                      profile.email,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: AppColors.navy,
-                      ),
+                TextButton(
+                  onPressed: () {
+                    // TODO: 전체 거래 내역 페이지로 이동
+                  },
+                  child: const Text(
+                    '전체보기',
+                    style: TextStyle(
+                      color: AppColors.grayBlue,
+                      fontSize: 14,
                     ),
-                    const SizedBox(width: 8),
-                    Text(
-                      '${profile.tier.emoji} ${profile.tier.displayName}',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),
           ),
+        ),
 
-          // 알림 & 설정 아이콘
-          IconButton(
-            onPressed: () {
-              // TODO: 알림 페이지
-            },
-            icon: const Icon(
-              Icons.notifications_outlined,
-              color: AppColors.grayBlue,
+        // 거래 내역 리스트
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppConstants.spacingLg,
+          ),
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return TransactionListItem(
+                  transaction: recentTransactions[index],
+                );
+              },
+              childCount: recentTransactions.length,
             ),
           ),
-          IconButton(
-            onPressed: () {
-              // TODO: 설정 페이지
-            },
-            icon: const Icon(
-              Icons.settings_outlined,
-              color: AppColors.grayBlue,
-            ),
-          ),
-        ],
-      ),
+        ),
+
+        // 하단 여백
+        const SliverToBoxAdapter(
+          child: SizedBox(height: AppConstants.spacing2Xl),
+        ),
+      ],
     );
   }
 

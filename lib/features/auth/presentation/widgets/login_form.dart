@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/auth/domain/providers/auth_provider.dart';
+import '../../../../core/auth/domain/exceptions/auth_exception.dart';
 
 /// 재사용 가능한 로그인 폼 위젯
 /// 페이지와 다이얼로그에서 모두 사용 가능
@@ -41,9 +42,26 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
     await ref.read(authProvider.notifier).signIn(email, password);
 
-    // 로그인 성공 시 다이얼로그 닫기
-    if (widget.isDialog && mounted) {
-      Navigator.of(context).pop();
+    // 로그인 성공 여부 확인
+    final authState = ref.read(authProvider);
+
+    if (mounted && authState.hasValue && authState.value?.isAuthenticated == true) {
+      // 로그인 성공
+      if (widget.isDialog) {
+        Navigator.of(context).pop();
+      } else {
+        // 홈으로 이동
+        context.go('/');
+      }
+
+      // 성공 메시지 표시
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('로그인되었습니다'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 2),
+        ),
+      );
     }
   }
 
@@ -254,7 +272,9 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'Login failed. Please check your credentials.',
+                      authState.error is AuthException
+                        ? (authState.error as AuthException).message
+                        : 'Login failed. Please check your credentials.',
                       style: TextStyle(
                         color: Colors.red.shade700,
                         fontSize: 13,

@@ -23,10 +23,11 @@ class AuthRepository {
     );
 
     // 토큰 저장
-    await _localDataSource.saveToken(result.token);
+    await _localDataSource.saveToken(result.accessToken);
+    await _localDataSource.saveRefreshToken(result.refreshToken);
 
-    // 기본 유저 정보 반환
-    return User(email: result.email);
+    // 유저 정보 반환
+    return result.user;
   }
 
   // 회원가입 1단계 - 이메일 인증 코드 발송
@@ -45,7 +46,7 @@ class AuthRepository {
     );
   }
 
-  // 회원가입 3단계 - 최종 회원가입 (토큰 없이 User 객체만 반환)
+  // 회원가입 3단계 - 최종 회원가입
   Future<User> signUp({
     required String email,
     required String password,
@@ -62,7 +63,8 @@ class AuthRepository {
       email: email,
       password: password,
     );
-    await _localDataSource.saveToken(loginResult.token);
+    await _localDataSource.saveToken(loginResult.accessToken);
+    await _localDataSource.saveRefreshToken(loginResult.refreshToken);
 
     return user;
   }
@@ -91,7 +93,7 @@ class AuthRepository {
   }) async {
     return await _remoteDataSource.resetPassword(
       email: email,
-      code: code,
+      verificationCode: code,
       newPassword: newPassword,
     );
   }
@@ -103,7 +105,7 @@ class AuthRepository {
 
   // 로그아웃
   Future<void> logout() async {
-    await _localDataSource.deleteToken();
+    await _localDataSource.deleteAllTokens();
   }
 
   // 토큰 확인
@@ -114,6 +116,43 @@ class AuthRepository {
   // 저장된 토큰 가져오기
   Future<String?> getToken() async {
     return await _localDataSource.getToken();
+  }
+
+  // 토큰 갱신
+  Future<User> refreshToken(String refreshToken) async {
+    final result = await _remoteDataSource.refreshToken(refreshToken);
+    await _localDataSource.saveToken(result.accessToken);
+    await _localDataSource.saveRefreshToken(result.refreshToken);
+    return result.user;
+  }
+
+  // 비밀번호 변경
+  Future<bool> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    return await _remoteDataSource.changePassword(
+      currentPassword: currentPassword,
+      newPassword: newPassword,
+    );
+  }
+
+  // 회원 탈퇴
+  Future<bool> withdrawUser({
+    required String password,
+    String? reason,
+  }) async {
+    final success = await _remoteDataSource.withdrawUser(
+      password: password,
+      reason: reason,
+    );
+
+    if (success) {
+      // 탈퇴 성공 시 모든 토큰 삭제
+      await _localDataSource.deleteAllTokens();
+    }
+
+    return success;
   }
 }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/constants/app_constants.dart';
@@ -8,39 +9,20 @@ import '../../data/mock_game_data.dart';
 import '../../components/cards/my_pick_card.dart';
 
 /// My Pick 화면 (참여한 게임 이력)
-class MyPickScreen extends StatefulWidget {
+class MyPickScreen extends ConsumerStatefulWidget {
   const MyPickScreen({super.key});
 
   @override
-  State<MyPickScreen> createState() => _MyPickScreenState();
+  ConsumerState<MyPickScreen> createState() => _MyPickScreenState();
 }
 
-class _MyPickScreenState extends State<MyPickScreen> with SingleTickerProviderStateMixin {
+class _MyPickScreenState extends ConsumerState<MyPickScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  GameType? _selectedFilter;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
-    _tabController.addListener(() {
-      setState(() {
-        switch (_tabController.index) {
-          case 0:
-            _selectedFilter = null; // ALL
-            break;
-          case 1:
-            _selectedFilter = GameType.daily;
-            break;
-          case 2:
-            _selectedFilter = GameType.select;
-            break;
-          case 3:
-            _selectedFilter = GameType.vibe;
-            break;
-        }
-      });
-    });
   }
 
   @override
@@ -51,13 +33,11 @@ class _MyPickScreenState extends State<MyPickScreen> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // 탭 바
-            Container(
+    return SafeArea(
+      child: Column(
+        children: [
+          // 탭 바
+          Container(
               color: AppColors.white,
               child: TabBar(
                 controller: _tabController,
@@ -91,7 +71,6 @@ class _MyPickScreenState extends State<MyPickScreen> with SingleTickerProviderSt
             ),
           ),
         ],
-        ),
       ),
     );
   }
@@ -314,9 +293,9 @@ class _MyPickScreenState extends State<MyPickScreen> with SingleTickerProviderSt
                 ),
               ),
             ),
-          ],
-        ),
+        ],
       ),
+    ),
     );
   }
 }

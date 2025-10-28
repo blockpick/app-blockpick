@@ -31,6 +31,18 @@ class DioHttpClient extends http.BaseClient {
       String? body;
       if (request is http.Request) {
         body = request.body;
+
+        // __typename 제거
+        if (body != null && body.contains('__typename')) {
+          final decoded = jsonDecode(body);
+          if (decoded['query'] != null) {
+            decoded['query'] = (decoded['query'] as String)
+                .replaceAll(RegExp(r'\s*__typename\s*\n'), '\n')
+                .replaceAll(RegExp(r'\s*__typename\s*'), '');
+            body = jsonEncode(decoded);
+          }
+        }
+
         print('   - Body: $body');
       }
 
@@ -60,7 +72,10 @@ class DioHttpClient extends http.BaseClient {
 }
 
 class GraphQLClientService {
-  static const String _endpoint = 'https://api-dev.blockpick.net/api/graphql';
+  static const String _endpoint = 'https://api-dev.blockpick.net/graphql';
+  final TokenLocalDataSource? tokenDataSource;
+
+  GraphQLClientService({this.tokenDataSource});
 
   GraphQLClient createClient({String? token}) {
     print('🌐 GraphQL Client 생성 (Dio 사용)');
@@ -75,13 +90,21 @@ class GraphQLClientService {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'Accept-Encoding': 'gzip, deflate, br',
       },
     ));
 
-    // 인터셉터 추가 (로깅 및 토큰 추가)
+    // 인터셉터 추가 (로깅, 토큰 추가, 자동 갱신)
     dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        if (token != null) {
+      onRequest: (options, handler) async {
+        // 최신 토큰 가져오기
+        if (tokenDataSource != null) {
+          final currentToken = await tokenDataSource!.getToken();
+          if (currentToken != null) {
+            options.headers['Authorization'] = 'Bearer $currentToken';
+            print('🔑 Authorization 헤더 추가');
+          }
+        } else if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
           print('🔑 Authorization 헤더 추가');
         }
@@ -91,8 +114,60 @@ class GraphQLClientService {
         print('✅ Dio 응답 성공: ${response.statusCode}');
         return handler.next(response);
       },
-      onError: (error, handler) {
+      onError: (error, handler) async {
         print('❌ Dio 에러: ${error.message}');
+
+        // 401 Unauthorized 에러 처리
+        if (error.response?.statusCode == 401 && tokenDataSource != null) {
+          print('🔄 토큰 갱신 시도');
+
+          try {
+            // RefreshToken 가져오기
+            final refreshToken = await tokenDataSource!.getRefreshToken();
+
+            if (refreshToken != null) {
+              // 토큰 갱신 요청
+              final refreshResponse = await dio.post(
+                _endpoint,
+                data: {
+                  'query': r'''
+                    mutation RefreshToken($refreshToken: String!) {
+                      refreshToken(refreshToken: $refreshToken) {
+                        success
+                        accessToken
+                        refreshToken
+                      }
+                    }
+                  ''',
+                  'variables': {'refreshToken': refreshToken},
+                },
+              );
+
+              final data = refreshResponse.data?['data']?['refreshToken'];
+
+              if (data?['success'] == true) {
+                final newAccessToken = data['accessToken'];
+                final newRefreshToken = data['refreshToken'];
+
+                // 새 토큰 저장
+                await tokenDataSource!.saveToken(newAccessToken);
+                await tokenDataSource!.saveRefreshToken(newRefreshToken);
+
+                print('✅ 토큰 갱신 성공');
+
+                // 원래 요청 재시도
+                error.requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
+                final retryResponse = await dio.fetch(error.requestOptions);
+                return handler.resolve(retryResponse);
+              }
+            }
+          } catch (e) {
+            print('❌ 토큰 갱신 실패: $e');
+            // 갱신 실패 시 모든 토큰 삭제 (로그아웃 처리)
+            await tokenDataSource!.deleteAllTokens();
+          }
+        }
+
         return handler.next(error);
       },
     ));
@@ -120,14 +195,34 @@ class GraphQLClientService {
       });
     });
 
-    final Link link = Link.from([
+    // 에러를 무시하는 Link 추가
+    final errorIgnoringLink = Link.function((request, [forward]) {
+      return forward!(request).handleError((error) {
+        // UnexpectedResponseStructureException은 무시하고 데이터만 반환
+        print('⚠️  캐시 에러 무시: $error');
+      });
+    });
+
+    final Link linkWithErrorHandling = Link.from([
+      errorIgnoringLink,
       loggingLink,
       httpLink,
     ]);
 
     return GraphQLClient(
-      cache: GraphQLCache(store: InMemoryStore()),
-      link: link,
+      cache: GraphQLCache(
+        store: InMemoryStore(),
+        dataIdFromObject: (object) => null, // 캐시 정규화 비활성화
+      ),
+      link: linkWithErrorHandling,
+      defaultPolicies: DefaultPolicies(
+        query: Policies(
+          fetch: FetchPolicy.networkOnly,
+        ),
+        mutate: Policies(
+          fetch: FetchPolicy.networkOnly,
+        ),
+      ),
     );
   }
 }
@@ -138,5 +233,6 @@ Future<GraphQLClient> graphqlClient(GraphqlClientRef ref) async {
   final tokenDataSource = ref.watch(tokenLocalDataSourceProvider);
   final token = await tokenDataSource.getToken();
 
-  return GraphQLClientService().createClient(token: token);
+  return GraphQLClientService(tokenDataSource: tokenDataSource)
+      .createClient(token: token);
 }
