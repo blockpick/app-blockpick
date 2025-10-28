@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../core/theme/app_colors.dart';
 import '../../components/navigation/bottom_nav_bar.dart';
@@ -116,11 +117,17 @@ class _BlockpickScreenState extends ConsumerState<BlockpickScreen> {
     final titles = ['HOME', 'My Pick', 'PICK', 'Winners', 'MALL', 'MY'];
     final title = titles[_currentIndex];
 
+    // MY 페이지인 경우 설정 아이콘 표시
+    final isMYPage = _currentIndex == 5;
+
     return SubAppBar(
       title: title,
-      onNotificationTap: () {
+      onNotificationTap: isMYPage ? null : () {
         // TODO: 알림 기능
       },
+      onSettingsTap: isMYPage ? () {
+        context.push('/settings');
+      } : null,
     );
   }
 

@@ -2,36 +2,49 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/user_wallet_model.dart';
 import '../models/user_profile_model.dart';
 import '../models/transaction_model.dart';
+import '../core/auth/domain/providers/auth_provider.dart';
 
-/// 사용자 프로필 Provider
-final userProfileProvider = StateProvider<UserProfile?>((ref) {
-  // TODO: 실제로는 GraphQL로 데이터 가져오기
-  // 임시 Mock 데이터
+/// 사용자 프로필 Provider (실제 인증 데이터 기반)
+final userProfileProvider = Provider<UserProfile?>((ref) {
+  final authState = ref.watch(authProvider);
+  final user = authState.valueOrNull?.user;
+
+  if (user == null) return null;
+
   return UserProfile(
-    userId: 'user-001',
-    nickname: '홍길동',
-    email: 'user@blockpick.com',
-    profileImageUrl: null,
-    tier: UserTier.gold,
-    createdAt: DateTime.now().subtract(const Duration(days: 30)),
+    userId: user.id ?? '',
+    nickname: user.nickname ?? '사용자',
+    email: user.email,
+    profileImageUrl: user.avatar,
+    tier: UserTier.bronze, // TODO: 백엔드에서 tier 정보 추가 필요
+    createdAt: DateTime.now(), // TODO: createdAt 백엔드에서 제공 필요
     updatedAt: DateTime.now(),
   );
 });
 
-/// 사용자 지갑 Provider
-final userWalletProvider = StateProvider<UserWallet?>((ref) {
-  // TODO: 실제로는 GraphQL로 데이터 가져오기
-  // 임시 Mock 데이터
+/// 사용자 지갑 Provider (실제 사용자 balance 기반)
+final userWalletProvider = Provider<UserWallet?>((ref) {
+  final authState = ref.watch(authProvider);
+  final user = authState.valueOrNull?.user;
+
+  if (user == null) return null;
+
+  final totalBalance = (user.balance ?? 0.0).toInt();
+  // TODO: 백엔드에서 캐시 타입별 분리 데이터 제공 필요
+  // 현재는 총 balance를 이벤트 캐시와 쇼핑 캐시로 임의 분할
+  final eventCash = (totalBalance * 0.6).toInt();
+  final shoppingCash = (totalBalance * 0.4).toInt();
+
   return UserWallet(
-    userId: 'user-001',
-    fundingCash: 10000,
-    eventCash: 8000,
-    shoppingCash: 10000,
-    totalEventCashUsed: 0,
-    totalShoppingCashUsed: 0,
-    totalDeposit: 20000,
-    totalRefund: 0,
-    totalGameReward: 5000,
+    userId: user.id ?? '',
+    fundingCash: 0, // 충전캐시는 제거되었으므로 0
+    eventCash: eventCash,
+    shoppingCash: shoppingCash,
+    totalEventCashUsed: 0, // TODO: 백엔드 데이터 필요
+    totalShoppingCashUsed: 0, // TODO: 백엔드 데이터 필요
+    totalDeposit: totalBalance, // TODO: 실제 총 입금액 백엔드 데이터 필요
+    totalRefund: 0, // TODO: 백엔드 데이터 필요
+    totalGameReward: 0, // TODO: 백엔드 데이터 필요
     updatedAt: DateTime.now(),
   );
 });

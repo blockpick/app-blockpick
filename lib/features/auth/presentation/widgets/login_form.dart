@@ -332,10 +332,13 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 onPressed: () {
                   if (widget.isDialog) {
                     Navigator.of(context).pop();
-                    // TODO: 회원가입 다이얼로그 열기
-                  } else {
-                    context.go('/signup');
                   }
+                  // 다이얼로그 닫은 후 회원가입 페이지로 이동
+                  Future.microtask(() {
+                    if (mounted) {
+                      context.push('/signup');
+                    }
+                  });
                 },
                 child: const Text(
                   'Sign Up',
@@ -355,10 +358,13 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 onPressed: () {
                   if (widget.isDialog) {
                     Navigator.of(context).pop();
-                    // TODO: 비밀번호 찾기 다이얼로그 열기
-                  } else {
-                    context.go('/forgot-password');
                   }
+                  // 다이얼로그 닫은 후 비밀번호 찾기 페이지로 이동
+                  Future.microtask(() {
+                    if (mounted) {
+                      context.push('/forgot-password');
+                    }
+                  });
                 },
                 child: const Text(
                   'Forgot password?',

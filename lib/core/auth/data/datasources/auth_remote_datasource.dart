@@ -25,8 +25,6 @@ class AuthRemoteDataSource {
           totalGamesPlayed
           totalWins
           winRate
-          createdAt
-          updatedAt
         }
       }
     }
@@ -66,8 +64,6 @@ class AuthRemoteDataSource {
           email
           nickname
           avatar
-          createdAt
-          updatedAt
         }
       }
     }
@@ -141,8 +137,6 @@ class AuthRemoteDataSource {
           totalGamesPlayed
           totalWins
           winRate
-          createdAt
-          updatedAt
         }
       }
     }
@@ -202,11 +196,14 @@ class AuthRemoteDataSource {
       ),
     );
 
-    if (result.hasException) {
+    // 데이터가 있으면 캐시 에러를 무시하고 계속 진행
+    final data = result.data?['sendVerificationCode'];
+
+    // 데이터가 없고 예외가 있으면 throw
+    if (data == null && result.hasException) {
       throw result.exception!;
     }
 
-    final data = result.data?['sendVerificationCode'];
     if (data == null || data['success'] != true) {
       throw AuthException(
         message: data?['message'] ?? 'Failed to send verification code',
@@ -236,11 +233,14 @@ class AuthRemoteDataSource {
       ),
     );
 
-    if (result.hasException) {
+    // 데이터가 있으면 캐시 에러를 무시하고 계속 진행
+    final data = result.data?['verifyCode'];
+
+    // 데이터가 없고 예외가 있으면 throw
+    if (data == null && result.hasException) {
       throw result.exception!;
     }
 
-    final data = result.data?['verifyCode'];
     if (data == null || data['success'] != true) {
       throw AuthException(
         message: data?['message'] ?? 'Code verification failed',
@@ -290,11 +290,14 @@ class AuthRemoteDataSource {
       ),
     );
 
-    if (result.hasException) {
+    // 데이터가 있으면 캐시 에러를 무시하고 계속 진행
+    final data = result.data?['signUp'];
+
+    // 데이터가 없고 예외가 있으면 throw
+    if (data == null && result.hasException) {
       throw result.exception!;
     }
 
-    final data = result.data?['signUp'];
     if (data == null || data['success'] != true) {
       throw AuthException(
         message: data?['message'] ?? 'SignUp failed',
@@ -324,11 +327,14 @@ class AuthRemoteDataSource {
       ),
     );
 
-    if (result.hasException) {
+    // 데이터가 있으면 캐시 에러를 무시하고 계속 진행
+    final data = result.data?['resetPassword'];
+
+    // 데이터가 없고 예외가 있으면 throw
+    if (data == null && result.hasException) {
       throw result.exception!;
     }
 
-    final data = result.data?['resetPassword'];
     if (data == null || data['success'] != true) {
       throw AuthException(
         message: data?['message'] ?? 'Password reset failed',
@@ -350,11 +356,14 @@ class AuthRemoteDataSource {
       ),
     );
 
-    if (result.hasException) {
+    // 데이터가 있으면 캐시 에러를 무시하고 계속 진행
+    final data = result.data?['refreshToken'];
+
+    // 데이터가 없고 예외가 있으면 throw
+    if (data == null && result.hasException) {
       throw result.exception!;
     }
 
-    final data = result.data?['refreshToken'];
     if (data == null || data['success'] != true) {
       throw AuthException(
         message: data?['message'] ?? 'Token refresh failed',
@@ -386,11 +395,14 @@ class AuthRemoteDataSource {
       ),
     );
 
-    if (result.hasException) {
+    // 데이터가 있으면 캐시 에러를 무시하고 계속 진행
+    final data = result.data?['changePassword'];
+
+    // 데이터가 없고 예외가 있으면 throw
+    if (data == null && result.hasException) {
       throw result.exception!;
     }
 
-    final data = result.data?['changePassword'];
     if (data == null || data['success'] != true) {
       throw AuthException(
         message: data?['message'] ?? 'Password change failed',
@@ -418,11 +430,14 @@ class AuthRemoteDataSource {
       ),
     );
 
-    if (result.hasException) {
+    // 데이터가 있으면 캐시 에러를 무시하고 계속 진행
+    final data = result.data?['withdrawUser'];
+
+    // 데이터가 없고 예외가 있으면 throw
+    if (data == null && result.hasException) {
       throw result.exception!;
     }
 
-    final data = result.data?['withdrawUser'];
     if (data == null || data['success'] != true) {
       throw AuthException(
         message: data?['message'] ?? 'User withdrawal failed',
@@ -435,6 +450,7 @@ class AuthRemoteDataSource {
 
   // 현재 사용자 정보 가져오기
   Future<User?> fetchCurrentUser() async {
+    print('🔍 fetchCurrentUser 시작');
     final result = await _client.query(
       QueryOptions(
         document: gql(meQuery),
@@ -442,19 +458,32 @@ class AuthRemoteDataSource {
       ),
     );
 
-    if (result.hasException || result.data == null) {
+    print('   - hasException: ${result.hasException}');
+    print('   - data: ${result.data}');
+
+    // 데이터가 있으면 캐시 에러를 무시하고 계속 진행
+    if (result.data == null) {
+      print('❌ fetchCurrentUser: data null');
       return null;
     }
 
     final data = result.data?['me'];
+    print('   - me data: $data');
     if (data == null || data['success'] != true) {
+      print('❌ fetchCurrentUser: me data null 또는 success false');
       return null;
     }
 
     final userData = data['user'];
-    if (userData == null) return null;
+    print('   - user data: $userData');
+    if (userData == null) {
+      print('❌ fetchCurrentUser: user data null');
+      return null;
+    }
 
-    return User.fromJson(userData as Map<String, dynamic>);
+    final user = User.fromJson(userData as Map<String, dynamic>);
+    print('✅ fetchCurrentUser 성공: ${user.email}');
+    return user;
   }
 
   // 레거시 메서드 (하위 호환성)

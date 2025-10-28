@@ -7,6 +7,7 @@ class SubAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final VoidCallback? onBackTap;
   final VoidCallback? onNotificationTap;
+  final VoidCallback? onSettingsTap;
   final List<Widget>? actions;
 
   const SubAppBar({
@@ -14,6 +15,7 @@ class SubAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.title,
     this.onBackTap,
     this.onNotificationTap,
+    this.onSettingsTap,
     this.actions,
   });
 
@@ -42,10 +44,16 @@ class SubAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       actions: actions ??
           [
-            IconButton(
-              icon: const Icon(LucideIcons.bell, color: AppColors.dark),
-              onPressed: onNotificationTap ?? () {},
-            ),
+            if (onNotificationTap != null)
+              IconButton(
+                icon: const Icon(LucideIcons.bell, color: AppColors.dark),
+                onPressed: onNotificationTap,
+              ),
+            if (onSettingsTap != null)
+              IconButton(
+                icon: const Icon(LucideIcons.settings, color: AppColors.dark),
+                onPressed: onSettingsTap,
+              ),
           ],
     );
   }

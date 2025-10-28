@@ -21,31 +21,38 @@ class AuthState {
   }
 }
 
-@riverpod
+@Riverpod(keepAlive: false)
 class Auth extends _$Auth {
   @override
   Future<AuthState> build() async {
+    print('🚀 Auth Provider build() 시작');
     // 앱 시작 시 저장된 토큰 확인
     final repository = await ref.watch(authRepositoryProvider.future);
+    print('   - repository 획득');
 
     final token = await repository.getToken();
+    print('   - token: ${token != null ? "있음" : "없음"}');
     if (token == null) {
+      print('   - token 없음, 빈 AuthState 반환');
       return const AuthState();
     }
 
-    // 토큰이 있으면 초기 상태 설정
-    // Next.js의 localStorage 복원 로직과 동일
-
-    // 백그라운드에서 실제 유저 정보 가져오기
-    repository.getCurrentUser().then((user) {
+    // 토큰이 있으면 유저 정보 가져오기
+    print('   - getCurrentUser() 호출 시작');
+    try {
+      final user = await repository.getCurrentUser();
+      print('   - getCurrentUser() 결과: ${user != null ? user.email : "null"}');
       if (user != null) {
-        state = AsyncData(AuthState(user: user, token: token));
+        print('✅ 사용자 정보 로드 성공: ${user.email}');
+        return AuthState(user: user, token: token);
       }
-    }).catchError((_) {
+    } catch (e) {
+      print('⚠️ 사용자 정보 로드 실패: $e');
+      print('   - 스택 트레이스: ${StackTrace.current}');
       // me 쿼리 실패해도 JWT 토큰으로 인증 유지
-      print('JWT 토큰으로 인증 유지');
-    });
+    }
 
+    print('   - user null, token만 있는 AuthState 반환');
     return AuthState(token: token);
   }
 

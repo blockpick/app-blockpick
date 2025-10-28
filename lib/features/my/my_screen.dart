@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import '../../core/theme/app_colors.dart';
+
+import '../../core/auth/domain/providers/auth_provider.dart';
 import '../../core/constants/app_constants.dart';
+import '../../core/theme/app_colors.dart';
 import '../../providers/wallet_provider.dart';
 import 'widgets/cash_allocation_card.dart';
 import 'widgets/transaction_list_item.dart';
@@ -13,37 +15,38 @@ class MyScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final profile = ref.watch(userProfileProvider);
+    final authState = ref.watch(authProvider);
+    final user = authState.valueOrNull?.user;
     final wallet = ref.watch(userWalletProvider);
     final recentTransactions = ref.watch(recentTransactionsProvider);
 
-    if (profile == null || wallet == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
+    print('🔍 MY 화면 빌드:');
+    print('   - authState.isLoading: ${authState.isLoading}');
+    print('   - user: ${user?.email ?? "null"}');
+    print('   - wallet: ${wallet != null ? "있음" : "null"}');
+
+    // if (user == null) {
+    //   print('⏳ user가 null이라서 로딩 표시');
+    //   return const Center(
+    //     child: CircularProgressIndicator(),
+    //   );
+    // }
+
+    print('✅ MY 화면 콘텐츠 표시');
 
     return CustomScrollView(
       slivers: [
         // 총 자산 영역
-        SliverToBoxAdapter(
-          child: _buildTotalAssets(context, wallet),
-        ),
+        SliverToBoxAdapter(child: _buildTotalAssets(context, user)),
 
         // 주요 액션 버튼
-        SliverToBoxAdapter(
-          child: _buildActionButtons(context),
-        ),
+        SliverToBoxAdapter(child: _buildActionButtons(context)),
 
         // 캐시 배분 섹션
-        SliverToBoxAdapter(
-          child: _buildCashAllocation(context, wallet),
-        ),
+        SliverToBoxAdapter(child: _buildCashAllocation(context, wallet)),
 
         // 활동 내역 섹션 (게임/쇼핑)
-        SliverToBoxAdapter(
-          child: _buildActivitySection(context),
-        ),
+        SliverToBoxAdapter(child: _buildActivitySection(context)),
 
         // 최근 거래 내역
         SliverToBoxAdapter(
@@ -71,10 +74,7 @@ class MyScreen extends ConsumerWidget {
                   },
                   child: const Text(
                     '전체보기',
-                    style: TextStyle(
-                      color: AppColors.grayBlue,
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(color: AppColors.grayBlue, fontSize: 14),
                   ),
                 ),
               ],
@@ -88,14 +88,11 @@ class MyScreen extends ConsumerWidget {
             horizontal: AppConstants.spacingLg,
           ),
           sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return TransactionListItem(
-                  transaction: recentTransactions[index],
-                );
-              },
-              childCount: recentTransactions.length,
-            ),
+            delegate: SliverChildBuilderDelegate((context, index) {
+              return TransactionListItem(
+                transaction: recentTransactions[index],
+              );
+            }, childCount: recentTransactions.length),
           ),
         ),
 
@@ -107,12 +104,9 @@ class MyScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildTotalAssets(BuildContext context, dynamic wallet) {
+  Widget _buildTotalAssets(BuildContext context, dynamic user) {
     final formatter = NumberFormat('#,###');
-    final totalCash = wallet.totalCash;
-    final todayChange = wallet.todayChange;
-    final todayChangePercent = wallet.todayChangePercent;
-    final isPositive = todayChange >= 0;
+    final totalCash = user?.balance?.toInt() ?? 0;
 
     return Container(
       margin: const EdgeInsets.symmetric(
@@ -123,13 +117,10 @@ class MyScreen extends ConsumerWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppConstants.radiusLg),
-        border: Border.all(
-          color: AppColors.buleGray,
-          width: 1,
-        ),
+        border: Border.all(color: AppColors.buleGray, width: 1),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withOpacity(0.05),
+            color: AppColors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -140,10 +131,7 @@ class MyScreen extends ConsumerWidget {
         children: [
           const Text(
             '총 보유 캐시',
-            style: TextStyle(
-              fontSize: 14,
-              color: AppColors.grayBlue,
-            ),
+            style: TextStyle(fontSize: 14, color: AppColors.grayBlue),
           ),
           const SizedBox(height: AppConstants.spacingSm),
           Row(
@@ -155,41 +143,6 @@ class MyScreen extends ConsumerWidget {
                   fontWeight: FontWeight.bold,
                   color: AppColors.darkBlue,
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppConstants.spacingMd),
-          Row(
-            children: [
-              const Text(
-                '오늘의 변동: ',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: AppColors.navy,
-                ),
-              ),
-              Text(
-                '${isPositive ? '+' : ''}₩${formatter.format(todayChange)}',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: isPositive ? AppColors.success : AppColors.error,
-                ),
-              ),
-              const SizedBox(width: 4),
-              Text(
-                '(${isPositive ? '+' : ''}${todayChangePercent.toStringAsFixed(1)}%)',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: isPositive ? AppColors.success : AppColors.error,
-                ),
-              ),
-              const SizedBox(width: 4),
-              Icon(
-                isPositive ? Icons.arrow_upward : Icons.arrow_downward,
-                size: 16,
-                color: isPositive ? AppColors.success : AppColors.error,
               ),
             ],
           ),
@@ -241,6 +194,11 @@ class MyScreen extends ConsumerWidget {
   }
 
   Widget _buildCashAllocation(BuildContext context, dynamic wallet) {
+    // wallet이 null이면 빈 위젯 반환
+    if (wallet == null) {
+      return const SizedBox.shrink();
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppConstants.spacingLg,
@@ -260,16 +218,6 @@ class MyScreen extends ConsumerWidget {
           const SizedBox(height: AppConstants.spacingMd),
           Row(
             children: [
-              Expanded(
-                child: CashAllocationCard(
-                  icon: Icons.account_balance_wallet,
-                  title: '충전캐시',
-                  amount: wallet.fundingCash,
-                  status: wallet.isRefundable ? '환불 가능' : '환불 불가',
-                  isRefundable: wallet.isRefundable,
-                ),
-              ),
-              const SizedBox(width: AppConstants.spacingMd),
               Expanded(
                 child: CashAllocationCard(
                   icon: Icons.videogame_asset,
@@ -349,23 +297,14 @@ class _ActionButton extends StatelessWidget {
         onTap: onPressed,
         borderRadius: BorderRadius.circular(AppConstants.radiusMd),
         child: Container(
-          padding: const EdgeInsets.symmetric(
-            vertical: AppConstants.spacingLg,
-          ),
+          padding: const EdgeInsets.symmetric(vertical: AppConstants.spacingLg),
           decoration: BoxDecoration(
-            border: Border.all(
-              color: AppColors.buleGray,
-              width: 1,
-            ),
+            border: Border.all(color: AppColors.buleGray, width: 1),
             borderRadius: BorderRadius.circular(AppConstants.radiusMd),
           ),
           child: Column(
             children: [
-              Icon(
-                icon,
-                size: 28,
-                color: AppColors.primary,
-              ),
+              Icon(icon, size: 28, color: AppColors.primary),
               const SizedBox(height: AppConstants.spacingSm),
               Text(
                 label,
@@ -409,10 +348,7 @@ class _ActivityCard extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(AppConstants.spacingLg),
           decoration: BoxDecoration(
-            border: Border.all(
-              color: AppColors.buleGray,
-              width: 1,
-            ),
+            border: Border.all(color: AppColors.buleGray, width: 1),
             borderRadius: BorderRadius.circular(AppConstants.radiusMd),
           ),
           child: Row(
@@ -423,11 +359,7 @@ class _ActivityCard extends StatelessWidget {
                   color: AppColors.blueWhite,
                   borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                 ),
-                child: Icon(
-                  icon,
-                  size: 24,
-                  color: AppColors.primary,
-                ),
+                child: Icon(icon, size: 24, color: AppColors.primary),
               ),
               const SizedBox(width: AppConstants.spacingMd),
               Expanded(

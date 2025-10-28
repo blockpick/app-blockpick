@@ -7,6 +7,7 @@ import '../../features/auth/presentation/pages/signup_page.dart';
 import '../../features/auth/presentation/pages/forgot_password_page.dart';
 import '../../features/game/game_screen.dart';
 import '../../features/optimal/optimal_game_screen.dart';
+import '../../features/settings/settings_screen.dart';
 import '../auth/domain/providers/auth_provider.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -75,6 +76,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           final gameId = state.pathParameters['gameId']!;
           return OptimalGameScreen(gameId: gameId);
         },
+      ),
+      GoRoute(
+        path: '/settings',
+        builder: (context, state) => const SettingsScreen(),
       ),
       // TODO: 다른 경로들 추가
       // GoRoute(
