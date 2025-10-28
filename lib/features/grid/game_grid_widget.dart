@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart';
 import 'dart:io' show Platform;
 import 'dart:ui' as ui;
+import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'grid_painter.dart';
@@ -73,6 +74,12 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
   void initState() {
     super.initState();
 
+    debugPrint('🎮 GameGridWidget.initState():');
+    debugPrint('   - gameId: ${widget.gameId}');
+    debugPrint('   - backgroundImagePath: ${widget.backgroundImagePath}');
+    debugPrint('   - gridWidth: ${widget.gridWidth}');
+    debugPrint('   - gridHeight: ${widget.gridHeight}');
+
     _animationController = AnimationController(
       vsync: this,
       duration: AppConstants.animationZoom,
@@ -80,7 +87,10 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
 
     // 배경 이미지 로드
     if (widget.backgroundImagePath != null) {
+      debugPrint('   ➡️ 배경 이미지 로드 시작');
       _loadBackgroundImage();
+    } else {
+      debugPrint('   ⚠️ backgroundImagePath가 null - 이미지 로드 안함');
     }
   }
 
@@ -88,15 +98,24 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
   void didUpdateWidget(GameGridWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
 
+    debugPrint('🔄 GameGridWidget.didUpdateWidget():');
+    debugPrint('   - old backgroundImagePath: ${oldWidget.backgroundImagePath}');
+    debugPrint('   - new backgroundImagePath: ${widget.backgroundImagePath}');
+
     // 배경 이미지가 변경되면 다시 로드
     if (widget.backgroundImagePath != oldWidget.backgroundImagePath) {
+      debugPrint('   ⚡ 배경 이미지 변경 감지!');
       if (widget.backgroundImagePath != null) {
+        debugPrint('   ➡️ 새 이미지 로드 시작');
         _loadBackgroundImage();
       } else {
+        debugPrint('   ➡️ 이미지 제거');
         setState(() {
           _backgroundImage = null;
         });
       }
+    } else {
+      debugPrint('   ℹ️ 배경 이미지 변경 없음');
     }
   }
 
@@ -111,23 +130,59 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
     });
 
     try {
-      debugPrint('🖼️ Loading asset from rootBundle: ${widget.backgroundImagePath}');
-      final ByteData data = await rootBundle.load(widget.backgroundImagePath!);
-      debugPrint('🖼️ Asset loaded, size: ${data.lengthInBytes} bytes');
+      final imagePath = widget.backgroundImagePath!;
+      ByteData data;
 
-      final codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
-      final frame = await codec.getNextFrame();
-      debugPrint('🖼️ Image decoded: ${frame.image.width}x${frame.image.height}');
+      // URL인지 로컬 asset인지 확인
+      if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+        debugPrint('🖼️ Loading network image: $imagePath');
+        // 네트워크 이미지 로드
+        final NetworkImage networkImage = NetworkImage(imagePath);
+        final ImageStream stream = networkImage.resolve(const ImageConfiguration());
+        final completer = Completer<ui.Image>();
 
-      if (mounted) {
-        setState(() {
-          _backgroundImage = frame.image;
-          _imageLoading = false;
+        late ImageStreamListener listener;
+        listener = ImageStreamListener((ImageInfo info, bool synchronousCall) {
+          completer.complete(info.image);
+          stream.removeListener(listener);
+        }, onError: (dynamic exception, StackTrace? stackTrace) {
+          completer.completeError(exception);
+          stream.removeListener(listener);
         });
-        debugPrint('✅ Background image loaded successfully');
+
+        stream.addListener(listener);
+        final image = await completer.future;
+
+        debugPrint('🖼️ Network image loaded: ${image.width}x${image.height}');
+
+        if (mounted) {
+          setState(() {
+            _backgroundImage = image;
+            _imageLoading = false;
+          });
+          debugPrint('✅ Background image loaded successfully');
+        }
+        return;
+      } else {
+        debugPrint('🖼️ Loading asset from rootBundle: $imagePath');
+        data = await rootBundle.load(imagePath);
+        debugPrint('🖼️ Asset loaded, size: ${data.lengthInBytes} bytes');
+
+        final codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
+        final frame = await codec.getNextFrame();
+        debugPrint('🖼️ Image decoded: ${frame.image.width}x${frame.image.height}');
+
+        if (mounted) {
+          setState(() {
+            _backgroundImage = frame.image;
+            _imageLoading = false;
+          });
+          debugPrint('✅ Background image loaded successfully');
+        }
       }
     } catch (e) {
       debugPrint('❌ Failed to load background image: $e');
+      debugPrint('   Stack trace: ${StackTrace.current}');
       if (mounted) {
         setState(() {
           _imageLoading = false;

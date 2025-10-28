@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
-import '../../data/mock_game_data.dart';
+import '../../models/game_model.dart';
 import '../../models/game_round_model.dart';
+import '../../providers/game_provider.dart';
 import '../grid/game_grid_widget.dart';
 import '../../models/block_model.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 /// 게임 상세 화면
-class GameDetailScreen extends StatefulWidget {
+class GameDetailScreen extends ConsumerStatefulWidget {
   final String gameId;
 
   const GameDetailScreen({
@@ -17,52 +19,147 @@ class GameDetailScreen extends StatefulWidget {
   });
 
   @override
-  State<GameDetailScreen> createState() => _GameDetailScreenState();
+  ConsumerState<GameDetailScreen> createState() => _GameDetailScreenState();
 }
 
-class _GameDetailScreenState extends State<GameDetailScreen> {
-  GameRound? _game;
-  bool _loading = true;
-
+class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _loadGame();
-  }
-
-  Future<void> _loadGame() async {
-    setState(() {
-      _loading = true;
-    });
-
-    // 데이터 로드 시뮬레이션
-    await Future.delayed(const Duration(milliseconds: 500));
-
-    final game = MockGameData.getGameById(widget.gameId);
-
-    setState(() {
-      _game = game;
-      _loading = false;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_loading) {
-      return Scaffold(
+    final gameAsync = ref.watch(gameProvider(widget.gameId));
+
+    return gameAsync.when(
+      data: (game) {
+        debugPrint('📊 GameDetailScreen.build():');
+        debugPrint('   - game: ${game?.id}');
+        debugPrint('   - game != null: ${game != null}');
+
+        if (game == null) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Game Not Found'),
+            ),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    LucideIcons.alertCircle,
+                    size: 64,
+                    color: AppColors.red,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Game not found',
+                    style: AppTextStyles.large.copyWith(
+                      color: AppColors.darkBlue,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('Go Back'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
+        final gameRound = game.toGameRound();
+
+        debugPrint('🎯 GameDetailScreen - gameRound 생성 완료:');
+        debugPrint('   - gameRound.id: ${gameRound.id}');
+        debugPrint('   - gameRound.imageUrl: ${gameRound.imageUrl}');
+        debugPrint('   - gameRound.imageUrl.isEmpty: ${gameRound.imageUrl.isEmpty}');
+
+        return Scaffold(
+          backgroundColor: AppColors.deepWhite,
+          appBar: AppBar(
+            title: Text(gameRound.title),
+            backgroundColor: AppColors.white,
+            actions: [
+              IconButton(
+                icon: const Icon(LucideIcons.share2),
+                onPressed: () {
+                  // TODO: 공유 기능
+                },
+              ),
+            ],
+          ),
+          body: Stack(
+            children: [
+              // 배경 (Vibe의 경우 이미지 표시)
+              if (gameRound.type == GameType.vibe && gameRound.vibeImageUrl != null)
+                Positioned.fill(
+                  child: gameRound.vibeImageUrl!.isEmpty
+                      ? Container(color: AppColors.blueWhite)
+                      : Image.network(
+                          gameRound.vibeImageUrl!,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(color: AppColors.blueWhite);
+                          },
+                        ),
+                ),
+
+              // 게임 그리드
+              Builder(
+                builder: (context) {
+                  final imageUrl = gameRound.imageUrl.isEmpty ? null : gameRound.imageUrl;
+                  debugPrint('🎮 GameGrid 빌드:');
+                  debugPrint('   - gameRound.imageUrl: ${gameRound.imageUrl}');
+                  debugPrint('   - backgroundImagePath: $imageUrl');
+                  debugPrint('   - gridWidth: ${gameRound.gridWidth}');
+                  debugPrint('   - gridHeight: ${gameRound.gridHeight}');
+                  return GameGridWidget(
+                    gameId: widget.gameId,
+                    gridWidth: gameRound.gridWidth ?? 10,
+                    gridHeight: gameRound.gridHeight ?? 10,
+                    backgroundImagePath: imageUrl,
+                    onBlockTap: (block) {
+                      debugPrint('Block tapped: ${block.row}, ${block.col}');
+                    },
+                  );
+                },
+              ),
+
+              // 상단 정보 패널
+              Positioned(
+                top: 16,
+                left: 16,
+                right: 16,
+                child: _buildInfoPanel(gameRound),
+              ),
+
+              // 하단 참가 버튼
+              Positioned(
+                bottom: 24,
+                left: 16,
+                right: 16,
+                child: _buildParticipateButton(),
+              ),
+            ],
+          ),
+        );
+      },
+      loading: () => Scaffold(
         appBar: AppBar(
           title: const Text('Loading...'),
         ),
         body: const Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(AppColors.blue),
+          ),
         ),
-      );
-    }
-
-    if (_game == null) {
-      return Scaffold(
+      ),
+      error: (error, stack) => Scaffold(
         appBar: AppBar(
-          title: const Text('Game Not Found'),
+          title: const Text('Error'),
         ),
         body: Center(
           child: Column(
@@ -75,84 +172,39 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Game not found',
+                'Error loading game',
                 style: AppTextStyles.large.copyWith(
                   color: AppColors.darkBlue,
                 ),
               ),
+              const SizedBox(height: 8),
+              Text(
+                error.toString(),
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: AppColors.medium,
+                ),
+                textAlign: TextAlign.center,
+              ),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Go Back'),
+                onPressed: () {
+                  ref.invalidate(gameProvider(widget.gameId));
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.blue,
+                  foregroundColor: AppColors.white,
+                ),
+                child: const Text('Retry'),
               ),
             ],
           ),
         ),
-      );
-    }
-
-    // Vibe 게임인 경우 그리드 크기 사용
-    final gridSize = _game!.gridSize ?? 10000;
-
-    return Scaffold(
-      backgroundColor: AppColors.deepWhite,
-      appBar: AppBar(
-        title: Text(_game!.title),
-        backgroundColor: AppColors.white,
-        actions: [
-          IconButton(
-            icon: const Icon(LucideIcons.share2),
-            onPressed: () {
-              // TODO: 공유 기능
-            },
-          ),
-        ],
-      ),
-      body: Stack(
-        children: [
-          // 배경 (Vibe의 경우 이미지 표시)
-          if (_game!.type == GameType.vibe && _game!.vibeImageUrl != null)
-            Positioned.fill(
-              child: Image.asset(
-                _game!.vibeImageUrl!,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(color: AppColors.blueWhite);
-                },
-              ),
-            ),
-
-          // 게임 그리드
-          GameGridWidget(
-            gridSize: gridSize,
-            backgroundImagePath: _game!.imageUrl,
-            onBlockTap: (block) {
-              debugPrint('Block tapped: ${block.row}, ${block.col}');
-            },
-          ),
-
-          // 상단 정보 패널
-          Positioned(
-            top: 16,
-            left: 16,
-            right: 16,
-            child: _buildInfoPanel(),
-          ),
-
-          // 하단 참가 버튼
-          Positioned(
-            bottom: 24,
-            left: 16,
-            right: 16,
-            child: _buildParticipateButton(),
-          ),
-        ],
       ),
     );
   }
 
   /// 정보 패널
-  Widget _buildInfoPanel() {
+  Widget _buildInfoPanel(GameRound game) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -176,11 +228,11 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: _getTypeColor(),
+                  color: _getTypeColor(game.type),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
-                  _getTypeText(),
+                  _getTypeText(game.type),
                   style: AppTextStyles.caption.copyWith(
                     color: AppColors.white,
                     fontWeight: FontWeight.w600,
@@ -191,7 +243,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
               const Icon(LucideIcons.clock, size: 16, color: AppColors.red),
               const SizedBox(width: 4),
               Text(
-                _game!.timeLeft,
+                game.timeLeft,
                 style: AppTextStyles.bodySmall.copyWith(
                   color: AppColors.darkBlue,
                   fontWeight: FontWeight.w600,
@@ -201,7 +253,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
           ),
           const SizedBox(height: 12),
           Text(
-            _game!.title,
+            game.title,
             style: AppTextStyles.medium.copyWith(
               color: AppColors.darkBlue,
               fontWeight: FontWeight.w700,
@@ -211,19 +263,19 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
           _buildInfoRow(
             LucideIcons.users,
             'Participants',
-            '${_game!.participants} / ${_game!.maxParticipants}',
+            '${game.participants} / ${game.maxParticipants}',
           ),
           const SizedBox(height: 8),
           _buildInfoRow(
             LucideIcons.trophy,
             'Winners',
-            '${_game!.winners}명',
+            '${game.winners}명',
           ),
           const SizedBox(height: 8),
           _buildInfoRow(
             LucideIcons.coins,
             'Entry Fee',
-            '₩${_formatNumber(_game!.currentPrice)}',
+            '₩${_formatNumber(game.currentPrice)}',
           ),
         ],
       ),
@@ -305,8 +357,8 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   }
 
   /// 타입 색상
-  Color _getTypeColor() {
-    switch (_game!.type) {
+  Color _getTypeColor(GameType type) {
+    switch (type) {
       case GameType.daily:
         return AppColors.pink;
       case GameType.select:
@@ -317,8 +369,8 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   }
 
   /// 타입 텍스트
-  String _getTypeText() {
-    switch (_game!.type) {
+  String _getTypeText(GameType type) {
+    switch (type) {
       case GameType.daily:
         return 'DAILY';
       case GameType.select:

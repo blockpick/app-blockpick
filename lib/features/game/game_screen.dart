@@ -8,7 +8,8 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/constants/app_constants.dart';
 import '../../providers/grid_state_provider.dart';
-import '../../data/mock_game_data.dart';
+import '../../providers/game_provider.dart';
+import '../../models/game_model.dart';
 import '../../models/game_round_model.dart';
 import '../../components/minimap/grid_minimap.dart';
 
@@ -34,20 +35,12 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.gameId != null) {
-      _game = MockGameData.getGameById(widget.gameId!);
-      if (_game != null) {
-        _gridWidth = _game!.actualGridWidth;
-        _gridHeight = _game!.actualGridHeight;
-        // 레거시 지원을 위한 gridSize (정사각형인 경우)
-        _gridSize = _gridWidth == _gridHeight ? _gridWidth : _gridWidth;
-
-        // 초기 줌 레벨 계산 (화면에 그리드가 꽉 차도록)
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _setInitialZoom();
-        });
+    // 초기 줌 레벨은 데이터 로드 후 설정
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _setInitialZoom();
       }
-    }
+    });
   }
 
   /// 초기 줌 레벨을 그리드 크기에 맞게 설정하고 화면 중앙에 배치
@@ -92,6 +85,43 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     // gameId가 없으면 임시 ID 사용
     final gameId = widget.gameId ?? 'unknown';
 
+    // GraphQL에서 게임 데이터 가져오기
+    final gameAsync = ref.watch(gameProvider(gameId));
+
+    return gameAsync.when(
+      data: (game) {
+        if (game == null) {
+          return Scaffold(
+            appBar: AppBar(title: const Text('Game Not Found')),
+            body: const Center(child: Text('Game not found')),
+          );
+        }
+
+        // GameRound로 변환
+        final gameRound = game.toGameRound();
+        _game = gameRound;
+        _gridWidth = gameRound.actualGridWidth;
+        _gridHeight = gameRound.actualGridHeight;
+        _gridSize = _gridWidth == _gridHeight ? _gridWidth : _gridWidth;
+
+        return _buildGameScreen(context, gameId);
+      },
+      loading: () => Scaffold(
+        appBar: AppBar(title: const Text('Loading...')),
+        body: const Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(AppColors.blue),
+          ),
+        ),
+      ),
+      error: (error, stack) => Scaffold(
+        appBar: AppBar(title: const Text('Error')),
+        body: Center(child: Text('Error: $error')),
+      ),
+    );
+  }
+
+  Widget _buildGameScreen(BuildContext context, String gameId) {
     final gridState = ref.watch(gridStateProvider(gameId));
     final gridNotifier = ref.read(gridStateProvider(gameId).notifier);
     final selectedCount = ref.watch(selectedBlockCountProvider(gameId));

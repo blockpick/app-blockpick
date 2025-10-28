@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../models/game_round_model.dart';
-import '../../data/mock_game_data.dart';
+import '../../providers/game_provider.dart';
 import '../../widgets/game_card.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 /// 게임 리스트 화면
-class GameListScreen extends StatefulWidget {
+class GameListScreen extends ConsumerStatefulWidget {
   final GameType gameType;
 
   const GameListScreen({
@@ -17,10 +18,10 @@ class GameListScreen extends StatefulWidget {
   });
 
   @override
-  State<GameListScreen> createState() => _GameListScreenState();
+  ConsumerState<GameListScreen> createState() => _GameListScreenState();
 }
 
-class _GameListScreenState extends State<GameListScreen> {
+class _GameListScreenState extends ConsumerState<GameListScreen> {
   String _selectedCategory = 'ALL';
   String _selectedSort = 'popular';
 
@@ -165,11 +166,27 @@ class _GameListScreenState extends State<GameListScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                '${_getFilteredGames().length} games',
-                style: AppTextStyles.bodySmall.copyWith(
-                  color: AppColors.medium,
-                ),
+              Consumer(
+                builder: (context, ref, child) {
+                  final gamesAsync = ref.watch(gamesByTypeProvider(widget.gameType));
+                  final count = gamesAsync.when(
+                    data: (games) {
+                      if (_selectedCategory == 'ALL') {
+                        return games.length;
+                      }
+                      return games.where((g) => g.category == _selectedCategory).length;
+                    },
+                    loading: () => 0,
+                    error: (_, __) => 0,
+                  );
+
+                  return Text(
+                    '$count games',
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.medium,
+                    ),
+                  );
+                },
               ),
               PopupMenuButton<String>(
                 initialValue: _selectedSort,
@@ -221,13 +238,74 @@ class _GameListScreenState extends State<GameListScreen> {
 
   /// 콘텐츠
   Widget _buildContent() {
-    final games = _getFilteredGames();
+    final gamesAsync = ref.watch(gamesByTypeProvider(widget.gameType));
 
-    if (games.isEmpty) {
-      return _buildEmptyState();
-    }
+    return gamesAsync.when(
+      data: (games) {
+        var filteredGames = games;
 
-    return _buildGameGrid(games);
+        // 카테고리 필터
+        if (_selectedCategory != 'ALL') {
+          filteredGames = filteredGames
+              .where((game) => game.category == _selectedCategory)
+              .toList();
+        }
+
+        // 정렬
+        final sortedGames = ref.watch(
+          sortedGamesProvider(filteredGames, _selectedSort),
+        );
+
+        if (sortedGames.isEmpty) {
+          return _buildEmptyState();
+        }
+
+        return _buildGameGrid(sortedGames);
+      },
+      loading: () => const Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(AppColors.blue),
+        ),
+      ),
+      error: (error, stack) => Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              LucideIcons.alertCircle,
+              size: 64,
+              color: AppColors.red,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Error loading games',
+              style: AppTextStyles.medium.copyWith(
+                color: AppColors.red,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              error.toString(),
+              style: AppTextStyles.bodySmall.copyWith(
+                color: AppColors.medium,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                ref.invalidate(gamesByTypeProvider);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.blue,
+                foregroundColor: AppColors.white,
+              ),
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   /// 게임 그리드
@@ -246,6 +324,10 @@ class _GameListScreenState extends State<GameListScreen> {
         return GameCard(
           game: game,
           onTap: () {
+            debugPrint('🎯 게임 카드 탭:');
+            debugPrint('   - game.id: ${game.id}');
+            debugPrint('   - game.imageUrl: ${game.imageUrl}');
+            debugPrint('   - 이동: /game/${game.id}');
             // GoRouter로 게임 상세 페이지 이동
             context.go('/game/${game.id}');
           },
@@ -284,31 +366,4 @@ class _GameListScreenState extends State<GameListScreen> {
     );
   }
 
-  /// 필터링된 게임 가져오기
-  List<GameRound> _getFilteredGames() {
-    var games = MockGameData.getGamesByType(widget.gameType);
-
-    // 카테고리 필터
-    if (_selectedCategory != 'ALL') {
-      games = games.where((game) => game.category == _selectedCategory).toList();
-    }
-
-    // 정렬
-    switch (_selectedSort) {
-      case 'popular':
-        games.sort((a, b) => b.participants.compareTo(a.participants));
-        break;
-      case 'newest':
-        // TODO: 실제로는 created_at으로 정렬
-        break;
-      case 'ending_soon':
-        // TODO: 실제로는 end_time으로 정렬
-        break;
-      case 'price_low':
-        games.sort((a, b) => a.currentPrice.compareTo(b.currentPrice));
-        break;
-    }
-
-    return games;
-  }
 }

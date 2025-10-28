@@ -81,22 +81,52 @@ class GameCard extends StatelessWidget {
           borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
           child: AspectRatio(
             aspectRatio: 16 / 9,
-            child: Image.asset(
-              game.imageUrl,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  color: AppColors.blueWhite,
-                  child: const Center(
-                    child: Icon(
-                      LucideIcons.image,
-                      size: 48,
-                      color: AppColors.buleGray,
+            child: game.imageUrl.isEmpty
+                ? Container(
+                    color: AppColors.blueWhite,
+                    child: const Center(
+                      child: Icon(
+                        LucideIcons.image,
+                        size: 48,
+                        color: AppColors.buleGray,
+                      ),
                     ),
+                  )
+                : Image.network(
+                    game.imageUrl,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Container(
+                        color: AppColors.blueWhite,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                            valueColor: const AlwaysStoppedAnimation<Color>(
+                              AppColors.blue,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      print('❌ 이미지 로드 에러: $error');
+                      print('   이미지 URL: ${game.imageUrl}');
+                      return Container(
+                        color: AppColors.blueWhite,
+                        child: const Center(
+                          child: Icon(
+                            LucideIcons.image,
+                            size: 48,
+                            color: AppColors.buleGray,
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           ),
         ),
 

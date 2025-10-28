@@ -134,13 +134,9 @@ class GridPainter extends CustomPainter {
         totalGridHeight,
       );
 
-      // 이미지를 그리드에 맞춰 그리기 (약간 밝게)
+      // 이미지를 그리드에 맞춰 그리기
       final imagePaint = Paint()
-        ..filterQuality = FilterQuality.high
-        ..colorFilter = ColorFilter.mode(
-          Colors.white.withOpacity(0.3),
-          BlendMode.lighten,
-        );
+        ..filterQuality = FilterQuality.high;
 
       canvas.drawImageRect(
         backgroundImage!,
@@ -151,7 +147,7 @@ class GridPainter extends CustomPainter {
 
       // 약한 오버레이 (그리드 가시성을 위해)
       final overlayPaint = Paint()
-        ..color = Colors.black.withOpacity(0.05);
+        ..color = Colors.white.withOpacity(0.2);
 
       canvas.drawRect(dstRect, overlayPaint);
     } else {
