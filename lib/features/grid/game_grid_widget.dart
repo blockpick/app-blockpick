@@ -284,6 +284,50 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
       return icons;
     }
 
+    // 🐛 디버그: 선택된 블록들 확인
+    if (gridState.selectedBlocks.isNotEmpty) {
+      debugPrint('📌 선택된 블록 ${gridState.selectedBlocks.length}개:');
+      for (var block in gridState.selectedBlocks) {
+        debugPrint('   - ${block.id}: row=${block.row}, col=${block.col}');
+      }
+    }
+
+    // 🎯 튜토리얼 목표 블록 렌더링 (가장 먼저, 다른 아이콘보다 위에)
+    if (gridState.tutorialTargetBlock != null) {
+      final block = gridState.tutorialTargetBlock!;
+      final x = (block.col - 1) * cellSize + gridState.panX;
+      final y = (block.row - 1) * cellSize + gridState.panY;
+
+      // 화면 밖 블록은 렌더링하지 않음
+      if (x + cellSize >= 0 && x <= size.width && y + cellSize >= 0 && y <= size.height) {
+        // 튜토리얼 목표 블록은 깜빡이는 애니메이션 효과
+        icons.add(
+          Positioned(
+            left: x,
+            top: y,
+            width: cellSize,
+            height: cellSize,
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.yellow,
+                  width: 3.0,
+                ),
+                color: Colors.yellow.withOpacity(0.3),
+              ),
+              child: Center(
+                child: Icon(
+                  Icons.touch_app,
+                  size: cellSize * 0.6,
+                  color: Colors.yellow,
+                ),
+              ),
+            ),
+          ),
+        );
+      }
+    }
+
     // 🎯 적응형 아이콘 크기: 배율이 작을수록 아이콘을 상대적으로 크게 표시
     // zoom이 작을수록 iconScale이 커짐 (최소 1.0, 최대 2.5)
     double iconScale;

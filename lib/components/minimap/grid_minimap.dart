@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'dart:ui' as ui;
+import 'dart:async';
 import '../../core/theme/app_colors.dart';
 import '../../core/constants/app_constants.dart';
 
@@ -6,7 +9,7 @@ import '../../core/constants/app_constants.dart';
 ///
 /// 현재 뷰포트 위치를 미니맵으로 표시하여 사용자가
 /// 전체 그리드에서 어디에 있는지 알 수 있게 합니다.
-class GridMinimap extends StatelessWidget {
+class GridMinimap extends StatefulWidget {
   /// 그리드 가로 크기
   final int gridWidth;
 
@@ -28,6 +31,9 @@ class GridMinimap extends StatelessWidget {
   /// 미니맵 크기 (정사각형)
   final double minimapSize;
 
+  /// 배경 이미지 경로
+  final String? backgroundImagePath;
+
   const GridMinimap({
     super.key,
     required this.gridWidth,
@@ -37,13 +43,100 @@ class GridMinimap extends StatelessWidget {
     required this.panY,
     required this.screenSize,
     this.minimapSize = AppConstants.minimapSize,
+    this.backgroundImagePath,
   });
+
+  @override
+  State<GridMinimap> createState() => _GridMinimapState();
+}
+
+class _GridMinimapState extends State<GridMinimap> {
+  ui.Image? _backgroundImage;
+  bool _imageLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.backgroundImagePath != null) {
+      _loadBackgroundImage();
+    }
+  }
+
+  @override
+  void didUpdateWidget(GridMinimap oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.backgroundImagePath != oldWidget.backgroundImagePath) {
+      if (widget.backgroundImagePath != null) {
+        _loadBackgroundImage();
+      } else {
+        setState(() {
+          _backgroundImage = null;
+        });
+      }
+    }
+  }
+
+  Future<void> _loadBackgroundImage() async {
+    if (_imageLoading) return;
+
+    setState(() {
+      _imageLoading = true;
+    });
+
+    try {
+      final imagePath = widget.backgroundImagePath!;
+
+      if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+        final encodedPath = imagePath.replaceAll(' ', '%20');
+        final NetworkImage networkImage = NetworkImage(encodedPath);
+        final ImageStream stream = networkImage.resolve(const ImageConfiguration());
+        final completer = Completer<ui.Image>();
+
+        late ImageStreamListener listener;
+        listener = ImageStreamListener((ImageInfo info, bool synchronousCall) {
+          completer.complete(info.image);
+          stream.removeListener(listener);
+        }, onError: (dynamic exception, StackTrace? stackTrace) {
+          completer.completeError(exception);
+          stream.removeListener(listener);
+        });
+
+        stream.addListener(listener);
+        final image = await completer.future;
+
+        if (mounted) {
+          setState(() {
+            _backgroundImage = image;
+            _imageLoading = false;
+          });
+        }
+      } else {
+        final data = await rootBundle.load(imagePath);
+        final codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
+        final frame = await codec.getNextFrame();
+
+        if (mounted) {
+          setState(() {
+            _backgroundImage = frame.image;
+            _imageLoading = false;
+          });
+        }
+      }
+    } catch (e) {
+      debugPrint('❌ Failed to load minimap background image: $e');
+      if (mounted) {
+        setState(() {
+          _imageLoading = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: minimapSize,
-      height: minimapSize,
+      width: widget.minimapSize,
+      height: widget.minimapSize,
       decoration: BoxDecoration(
         color: AppColors.white.withOpacity(0.9),
         borderRadius: BorderRadius.circular(AppConstants.radiusMd),
@@ -60,12 +153,13 @@ class GridMinimap extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppConstants.radiusMd - 2),
         child: CustomPaint(
           painter: _MinimapPainter(
-            gridWidth: gridWidth,
-            gridHeight: gridHeight,
-            zoom: zoom,
-            panX: panX,
-            panY: panY,
-            screenSize: screenSize,
+            gridWidth: widget.gridWidth,
+            gridHeight: widget.gridHeight,
+            zoom: widget.zoom,
+            panX: widget.panX,
+            panY: widget.panY,
+            screenSize: widget.screenSize,
+            backgroundImage: _backgroundImage,
           ),
         ),
       ),
@@ -81,6 +175,7 @@ class _MinimapPainter extends CustomPainter {
   final double panX;
   final double panY;
   final Size screenSize;
+  final ui.Image? backgroundImage;
 
   _MinimapPainter({
     required this.gridWidth,
@@ -89,6 +184,7 @@ class _MinimapPainter extends CustomPainter {
     required this.panX,
     required this.panY,
     required this.screenSize,
+    this.backgroundImage,
   });
 
   @override
@@ -106,20 +202,45 @@ class _MinimapPainter extends CustomPainter {
     final minimapOffsetX = (size.width - gridTotalWidth * minimapScale) / 2;
     final minimapOffsetY = (size.height - gridTotalHeight * minimapScale) / 2;
 
-    // 1. 전체 그리드 영역 그리기
-    final gridPaint = Paint()
-      ..color = AppColors.blueWhite
-      ..style = PaintingStyle.fill;
-
-    canvas.drawRect(
-      Rect.fromLTWH(
-        minimapOffsetX,
-        minimapOffsetY,
-        gridTotalWidth * minimapScale,
-        gridTotalHeight * minimapScale,
-      ),
-      gridPaint,
+    final gridRect = Rect.fromLTWH(
+      minimapOffsetX,
+      minimapOffsetY,
+      gridTotalWidth * minimapScale,
+      gridTotalHeight * minimapScale,
     );
+
+    // 1. 배경 이미지 또는 그리드 영역 그리기
+    if (backgroundImage != null) {
+      // 배경 이미지가 있으면 이미지 렌더링
+      final srcRect = Rect.fromLTWH(
+        0,
+        0,
+        backgroundImage!.width.toDouble(),
+        backgroundImage!.height.toDouble(),
+      );
+
+      final imagePaint = Paint()
+        ..filterQuality = FilterQuality.medium;
+
+      canvas.drawImageRect(
+        backgroundImage!,
+        srcRect,
+        gridRect,
+        imagePaint,
+      );
+
+      // 약한 오버레이 (뷰포트 가시성 향상)
+      final overlayPaint = Paint()
+        ..color = AppColors.white.withOpacity(0.3);
+      canvas.drawRect(gridRect, overlayPaint);
+    } else {
+      // 배경 이미지가 없으면 기본 색상
+      final gridPaint = Paint()
+        ..color = AppColors.blueWhite
+        ..style = PaintingStyle.fill;
+
+      canvas.drawRect(gridRect, gridPaint);
+    }
 
     // 2. 현재 뷰포트 영역 계산
     final viewportWidth = screenSize.width / zoom;
@@ -218,6 +339,7 @@ class _MinimapPainter extends CustomPainter {
   bool shouldRepaint(_MinimapPainter oldDelegate) {
     return oldDelegate.zoom != zoom ||
         oldDelegate.panX != panX ||
-        oldDelegate.panY != panY;
+        oldDelegate.panY != panY ||
+        oldDelegate.backgroundImage != backgroundImage;
   }
 }

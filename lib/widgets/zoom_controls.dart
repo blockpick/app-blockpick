@@ -61,6 +61,20 @@ class ZoomControls extends StatelessWidget {
             padding: const EdgeInsets.all(12),
           ),
 
+          // 레벨 표시
+          if (currentLevel != null)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+              child: Text(
+                'L$currentLevel',
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.darkBlue,
+                ),
+              ),
+            ),
+
           // 구분선
           Container(
             width: 40,

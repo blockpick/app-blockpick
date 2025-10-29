@@ -4,6 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../core/graphql/graphql_client.dart';
 import '../models/game_model.dart';
 import '../models/game_round_model.dart';
+import '../data/mock_game_data.dart';
 
 part 'game_provider.g.dart';
 
@@ -20,13 +21,15 @@ const String _getGamesQuery = r'''
         description
         gameType
         status
-        maxPlayers
-        currentPlayers
+        maxEntries
+        minEntries
         entryFee
-        prizePool
+        rewardPoint
         startTime
         endTime
-        rules
+        customRules
+        gridRows
+        gridCols
         onchainTxHash
         onchainContractAddr
         createdAt
@@ -72,12 +75,14 @@ const String _getActiveGamesQuery = r'''
         description
         gameType
         status
-        maxPlayers
-        currentPlayers
+        maxEntries
+        minEntries
         entryFee
-        prizePool
+        rewardPoint
         startTime
         endTime
+        gridRows
+        gridCols
         onchainTxHash
         onchainContractAddr
         createdAt
@@ -113,13 +118,15 @@ const String _getGameQuery = r'''
         description
         gameType
         status
-        maxPlayers
-        currentPlayers
+        maxEntries
+        minEntries
         entryFee
-        prizePool
+        rewardPoint
         startTime
         endTime
-        rules
+        customRules
+        gridRows
+        gridCols
         onchainTxHash
         onchainContractAddr
         createdAt
@@ -312,23 +319,108 @@ Future<Game?> game(Ref ref, String gameId) async {
 
     if (result.hasException) {
       print('❌ 게임 상세 조회 에러: ${result.exception}');
-      if (result.data == null) return null;
+      print('🔄 Mock 데이터로 fallback (gameId: $gameId)');
+      final mockGameRound = MockGameData.getGameById(gameId);
+      if (mockGameRound != null) {
+        // GameRound를 Game 형식으로 변환
+        return _convertGameRoundToGame(mockGameRound);
+      }
+      // 기본 목 게임 반환 (첫 번째 daily 게임)
+      if (MockGameData.dailyGames.isNotEmpty) {
+        return _convertGameRoundToGame(MockGameData.dailyGames.first);
+      }
+      return null;
     }
 
     final data = result.data?['getGame'];
     if (data == null || data['success'] != true) {
       print('⚠️  게임 상세 조회 실패: ${data?['message']}');
+      print('🔄 Mock 데이터로 fallback (gameId: $gameId)');
+      final mockGameRound = MockGameData.getGameById(gameId);
+      if (mockGameRound != null) {
+        return _convertGameRoundToGame(mockGameRound);
+      }
+      if (MockGameData.dailyGames.isNotEmpty) {
+        return _convertGameRoundToGame(MockGameData.dailyGames.first);
+      }
       return null;
     }
 
     final gameData = data['game'];
-    if (gameData == null) return null;
+    if (gameData == null) {
+      print('🔄 Mock 데이터로 fallback (gameId: $gameId)');
+      final mockGameRound = MockGameData.getGameById(gameId);
+      if (mockGameRound != null) {
+        return _convertGameRoundToGame(mockGameRound);
+      }
+      if (MockGameData.dailyGames.isNotEmpty) {
+        return _convertGameRoundToGame(MockGameData.dailyGames.first);
+      }
+      return null;
+    }
 
     return Game.fromJson(gameData as Map<String, dynamic>);
   } catch (e) {
     print('❌ game provider 에러: $e');
+    print('🔄 Mock 데이터로 fallback (gameId: $gameId)');
+    final mockGameRound = MockGameData.getGameById(gameId);
+    if (mockGameRound != null) {
+      return _convertGameRoundToGame(mockGameRound);
+    }
+    if (MockGameData.dailyGames.isNotEmpty) {
+      return _convertGameRoundToGame(MockGameData.dailyGames.first);
+    }
     return null;
   }
+}
+
+/// GameRound를 Game으로 변환하는 헬퍼 함수
+Game _convertGameRoundToGame(GameRound gameRound) {
+  return Game(
+    id: gameRound.id,
+    title: gameRound.title,
+    description: gameRound.description,
+    gameType: gameRound.type.toString().split('.').last.toUpperCase(),
+    status: 'IN_PROGRESS',
+    maxEntries: gameRound.maxParticipants,
+    minEntries: 1,
+    entryFee: gameRound.currentPrice,
+    rewardPoint: 0,
+    gridRows: gameRound.gridHeight,
+    gridCols: gameRound.gridWidth,
+    startTime: DateTime.now().toIso8601String(),
+    endTime: DateTime.now().add(const Duration(hours: 24)).toIso8601String(),
+    customRules: null,
+    onchainTxHash: null,
+    onchainContractAddr: null,
+    createdAt: DateTime.now().toIso8601String(),
+    updatedAt: DateTime.now().toIso8601String(),
+    gameProducts: [
+      GameProduct(
+        id: 'product-1',
+        sequence: 1,
+        active: true,
+        isGrandPrize: true,
+        product: Product(
+          id: 'p-1',
+          name: gameRound.title,
+          description: gameRound.description,
+          brand: 'Mock Brand',
+          category: gameRound.category,
+          sku: 'MOCK-SKU',
+          defaultImage: gameRound.imageUrl,
+          imageUrl: gameRound.imageUrl,
+          thumbnailUrl: gameRound.imageUrl,
+          price: gameRound.currentPrice,
+          originalPrice: gameRound.originalPrice,
+          countryCode: 'KR',
+          active: true,
+        ),
+        createdAt: DateTime.now().toIso8601String(),
+        updatedAt: DateTime.now().toIso8601String(),
+      ),
+    ],
+  );
 }
 
 /// 카테고리별 게임 필터링 Provider

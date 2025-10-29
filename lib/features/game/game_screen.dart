@@ -14,6 +14,7 @@ import '../../providers/grid_state_provider.dart';
 import '../../providers/game_provider.dart';
 import '../../models/game_model.dart';
 import '../../models/game_round_model.dart';
+import '../../models/block_model.dart';
 import '../../components/minimap/grid_minimap.dart';
 import '../../utils/zoom_calculator.dart';
 import '../../utils/adaptive_zoom_system.dart';
@@ -241,6 +242,61 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     );
   }
 
+  /// 튜토리얼 자동 줌인 (중앙 블록으로 이동)
+  void _performTutorialZoomIn() {
+    if (_gridConfig == null || _zoomMapper == null || _zoomSpec == null) return;
+
+    final gridNotifier = ref.read(gridStateProvider(_gridConfig!).notifier);
+
+    // 그리드 중앙 근처의 블록을 목표로 설정 (예: 50행 50열)
+    final targetRow = (_gridHeight / 2).floor();
+    final targetCol = (_gridWidth / 2).floor();
+    final targetBlock = BlockModel.fromPosition(targetRow, targetCol, state: BlockState.selected);
+
+    debugPrint('🎯 Tutorial zoom-in to block: Row $targetRow, Col $targetCol');
+
+    // 튜토리얼 목표 블록 설정
+    gridNotifier.setTutorialTargetBlock(targetBlock);
+
+    // 그리드 위젯의 실제 렌더박스 가져오기
+    final RenderBox? gridBox = _gridKey.currentContext?.findRenderObject() as RenderBox?;
+
+    double screenWidth;
+    double screenHeight;
+
+    if (gridBox != null) {
+      screenWidth = gridBox.size.width;
+      screenHeight = gridBox.size.height;
+    } else {
+      final size = MediaQuery.of(context).size;
+      screenWidth = size.width;
+      screenHeight = size.height;
+    }
+
+    // 선택 가능한 줌 레벨로 이동하면서 블록 중앙에 배치
+    final targetZoomLevel = _zoomSpec!.selectLevel; // 선택 가능한 레벨
+    final targetZoom = _zoomMapper!.levelToScale(targetZoomLevel);
+
+    // 블록의 중심 좌표 계산 (그리드 좌표계)
+    final blockCenterX = (targetCol - 0.5) * AppConstants.cellSize;
+    final blockCenterY = (targetRow - 0.5) * AppConstants.cellSize;
+
+    // 블록이 화면 중앙에 오도록 pan 계산
+    final newPanX = screenWidth / 2 - blockCenterX * targetZoom;
+    final newPanY = screenHeight / 2 - blockCenterY * targetZoom;
+
+    // 애니메이션으로 이동
+    gridNotifier.setZoom(targetZoom);
+    gridNotifier.setPan(newPanX, newPanY);
+
+    // 줌 레벨도 업데이트
+    setState(() {
+      _currentZoomLevel = targetZoomLevel;
+    });
+
+    debugPrint('✅ Tutorial zoom-in complete: Level $_currentZoomLevel, Zoom ${targetZoom.toStringAsFixed(4)}');
+  }
+
   /// 튜토리얼 체크 및 표시
   Future<void> _checkAndShowTutorial() async {
     final prefs = await SharedPreferences.getInstance();
@@ -307,11 +363,11 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       );
     }
 
-    // 그리드
+    // 그리드 - 1단계: 줌 안내
     if (_gridKey.currentContext != null) {
       targets.add(
         TargetFocus(
-          identify: "grid",
+          identify: "grid_zoom",
           keyTarget: _gridKey,
           alignSkip: Alignment.topRight,
           shape: ShapeLightFocus.RRect,
@@ -320,9 +376,34 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               align: ContentAlign.bottom,
               builder: (context, controller) {
                 return _tutorialContent(
-                  '블록 선택',
-                  '셀을 탭하여 선택/해제하세요. 충분히 확대해야 선택할 수 있습니다',
-                  LucideIcons.grid,
+                  '줌 레벨 안내',
+                  '축소된 상태에서 블록을 선택하면 자동으로 해당 구역으로 확대됩니다\n\n다음 단계에서 직접 체험해보세요!',
+                  LucideIcons.zoomIn,
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
+    // 그리드 - 2단계: 블록 선택 실습
+    if (_gridKey.currentContext != null) {
+      targets.add(
+        TargetFocus(
+          identify: "grid_select",
+          keyTarget: _gridKey,
+          alignSkip: Alignment.topRight,
+          shape: ShapeLightFocus.RRect,
+          enableOverlayTab: true, // 오버레이를 통해 탭 가능하게
+          contents: [
+            TargetContent(
+              align: ContentAlign.bottom,
+              builder: (context, controller) {
+                return _tutorialContent(
+                  '블록 선택 실습',
+                  '화면 중앙에 노란색으로 표시된 셀을 탭해보세요!\n이 셀을 선택하면 다음 단계로 진행됩니다.',
+                  LucideIcons.target,
                 );
               },
             ),
@@ -363,14 +444,31 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       colorShadow: AppColors.darkBlue,
       paddingFocus: 10,
       opacityShadow: 0.8,
+      onClickTarget: (target) {
+        // "grid_zoom" 단계가 끝나고 다음으로 넘어갈 때 자동 줌인
+        if (target.identify == "grid_zoom") {
+          debugPrint('🎯 Tutorial: grid_zoom step completed, performing auto zoom-in');
+          Future.delayed(const Duration(milliseconds: 300), () {
+            _performTutorialZoomIn();
+          });
+        }
+      },
       onFinish: () async {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('game_tutorial_completed', true);
+        // 튜토리얼 완료 시 목표 블록 제거
+        if (_gridConfig != null) {
+          ref.read(gridStateProvider(_gridConfig!).notifier).setTutorialTargetBlock(null);
+        }
       },
       onSkip: () {
         SharedPreferences.getInstance().then((prefs) {
           prefs.setBool('game_tutorial_completed', true);
         });
+        // 스킵 시에도 목표 블록 제거
+        if (_gridConfig != null) {
+          ref.read(gridStateProvider(_gridConfig!).notifier).setTutorialTargetBlock(null);
+        }
         return true;
       },
     );
@@ -516,6 +614,17 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               backgroundImagePath: _game?.imageUrl,
               onBlockTap: (block) {
                 debugPrint('Block tapped: ${block.row}, ${block.col}');
+
+                // 튜토리얼 목표 블록을 탭했는지 확인
+                final gridState = ref.read(gridStateProvider(_gridConfig!));
+                if (gridState.tutorialTargetBlock != null &&
+                    gridState.tutorialTargetBlock!.id == block.id) {
+                  // 튜토리얼 목표 블록을 선택했으면 다음 단계로
+                  debugPrint('✅ Tutorial target block selected!');
+                  ref.read(gridStateProvider(_gridConfig!).notifier).setTutorialTargetBlock(null);
+                  _tutorialCoachMark?.next();
+                }
+
                 ref.read(gridStateProvider(_gridConfig!).notifier).showBottomSheet();
               },
             ),
@@ -564,6 +673,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               panX: gridState.panX,
               panY: gridState.panY,
               screenSize: MediaQuery.of(context).size,
+              backgroundImagePath: _game?.imageUrl,
             ),
           ),
 

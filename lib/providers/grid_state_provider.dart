@@ -45,6 +45,9 @@ class GridState {
   /// 포커스된 블록 ID (바텀시트에서 클릭한 블록)
   final String? focusedBlockId;
 
+  /// 튜토리얼 목표 블록 (튜토리얼에서 선택해야 할 블록)
+  final BlockModel? tutorialTargetBlock;
+
   const GridState({
     this.zoom = AppConstants.defaultZoom,
     this.baseZoom = AppConstants.defaultZoom,
@@ -59,6 +62,7 @@ class GridState {
     this.centerCell,
     this.showBottomSheet = true,
     this.focusedBlockId,
+    this.tutorialTargetBlock,
   });
 
   GridState copyWith({
@@ -77,6 +81,8 @@ class GridState {
     bool? showBottomSheet,
     String? focusedBlockId,
     bool clearFocusedBlock = false,
+    BlockModel? tutorialTargetBlock,
+    bool clearTutorialTarget = false,
   }) {
     return GridState(
       zoom: zoom ?? this.zoom,
@@ -92,6 +98,7 @@ class GridState {
       centerCell: clearCenterCell ? null : (centerCell ?? this.centerCell),
       showBottomSheet: showBottomSheet ?? this.showBottomSheet,
       focusedBlockId: clearFocusedBlock ? null : (focusedBlockId ?? this.focusedBlockId),
+      tutorialTargetBlock: clearTutorialTarget ? null : (tutorialTargetBlock ?? this.tutorialTargetBlock),
     );
   }
 
@@ -387,6 +394,14 @@ class GridStateNotifier extends StateNotifier<GridState> {
   /// 바텀시트 보이기
   void showBottomSheet() {
     state = state.copyWith(showBottomSheet: true);
+  }
+
+  /// 튜토리얼 목표 블록 설정
+  void setTutorialTargetBlock(BlockModel? block) {
+    state = state.copyWith(
+      tutorialTargetBlock: block,
+      clearTutorialTarget: block == null,
+    );
   }
 
   /// 특정 섹션으로 이동 (화면 중앙에 섹션 배치)

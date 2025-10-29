@@ -28,13 +28,15 @@ mixin _$Game {
       throw _privateConstructorUsedError; // DAILY, SELECT, VIBE
   String? get status =>
       throw _privateConstructorUsedError; // SCHEDULED, IN_PROGRESS, PAUSED, SETTLING, ENDED, FAILED
-  int? get maxPlayers => throw _privateConstructorUsedError;
-  int? get currentPlayers => throw _privateConstructorUsedError;
-  double? get entryFee => throw _privateConstructorUsedError;
-  double? get prizePool => throw _privateConstructorUsedError;
+  int? get maxEntries => throw _privateConstructorUsedError;
+  int? get minEntries => throw _privateConstructorUsedError;
+  int? get entryFee => throw _privateConstructorUsedError;
+  int? get rewardPoint => throw _privateConstructorUsedError;
+  int? get gridRows => throw _privateConstructorUsedError;
+  int? get gridCols => throw _privateConstructorUsedError;
   String? get startTime => throw _privateConstructorUsedError;
   String? get endTime => throw _privateConstructorUsedError;
-  String? get rules => throw _privateConstructorUsedError;
+  String? get customRules => throw _privateConstructorUsedError;
   String? get onchainTxHash => throw _privateConstructorUsedError;
   String? get onchainContractAddr => throw _privateConstructorUsedError;
   String? get createdAt => throw _privateConstructorUsedError;
@@ -61,13 +63,15 @@ abstract class $GameCopyWith<$Res> {
     String? description,
     String? gameType,
     String? status,
-    int? maxPlayers,
-    int? currentPlayers,
-    double? entryFee,
-    double? prizePool,
+    int? maxEntries,
+    int? minEntries,
+    int? entryFee,
+    int? rewardPoint,
+    int? gridRows,
+    int? gridCols,
     String? startTime,
     String? endTime,
-    String? rules,
+    String? customRules,
     String? onchainTxHash,
     String? onchainContractAddr,
     String? createdAt,
@@ -96,13 +100,15 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
     Object? description = freezed,
     Object? gameType = freezed,
     Object? status = freezed,
-    Object? maxPlayers = freezed,
-    Object? currentPlayers = freezed,
+    Object? maxEntries = freezed,
+    Object? minEntries = freezed,
     Object? entryFee = freezed,
-    Object? prizePool = freezed,
+    Object? rewardPoint = freezed,
+    Object? gridRows = freezed,
+    Object? gridCols = freezed,
     Object? startTime = freezed,
     Object? endTime = freezed,
-    Object? rules = freezed,
+    Object? customRules = freezed,
     Object? onchainTxHash = freezed,
     Object? onchainContractAddr = freezed,
     Object? createdAt = freezed,
@@ -131,22 +137,30 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
                 ? _value.status
                 : status // ignore: cast_nullable_to_non_nullable
                       as String?,
-            maxPlayers: freezed == maxPlayers
-                ? _value.maxPlayers
-                : maxPlayers // ignore: cast_nullable_to_non_nullable
+            maxEntries: freezed == maxEntries
+                ? _value.maxEntries
+                : maxEntries // ignore: cast_nullable_to_non_nullable
                       as int?,
-            currentPlayers: freezed == currentPlayers
-                ? _value.currentPlayers
-                : currentPlayers // ignore: cast_nullable_to_non_nullable
+            minEntries: freezed == minEntries
+                ? _value.minEntries
+                : minEntries // ignore: cast_nullable_to_non_nullable
                       as int?,
             entryFee: freezed == entryFee
                 ? _value.entryFee
                 : entryFee // ignore: cast_nullable_to_non_nullable
-                      as double?,
-            prizePool: freezed == prizePool
-                ? _value.prizePool
-                : prizePool // ignore: cast_nullable_to_non_nullable
-                      as double?,
+                      as int?,
+            rewardPoint: freezed == rewardPoint
+                ? _value.rewardPoint
+                : rewardPoint // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            gridRows: freezed == gridRows
+                ? _value.gridRows
+                : gridRows // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            gridCols: freezed == gridCols
+                ? _value.gridCols
+                : gridCols // ignore: cast_nullable_to_non_nullable
+                      as int?,
             startTime: freezed == startTime
                 ? _value.startTime
                 : startTime // ignore: cast_nullable_to_non_nullable
@@ -155,9 +169,9 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
                 ? _value.endTime
                 : endTime // ignore: cast_nullable_to_non_nullable
                       as String?,
-            rules: freezed == rules
-                ? _value.rules
-                : rules // ignore: cast_nullable_to_non_nullable
+            customRules: freezed == customRules
+                ? _value.customRules
+                : customRules // ignore: cast_nullable_to_non_nullable
                       as String?,
             onchainTxHash: freezed == onchainTxHash
                 ? _value.onchainTxHash
@@ -199,13 +213,15 @@ abstract class _$$GameImplCopyWith<$Res> implements $GameCopyWith<$Res> {
     String? description,
     String? gameType,
     String? status,
-    int? maxPlayers,
-    int? currentPlayers,
-    double? entryFee,
-    double? prizePool,
+    int? maxEntries,
+    int? minEntries,
+    int? entryFee,
+    int? rewardPoint,
+    int? gridRows,
+    int? gridCols,
     String? startTime,
     String? endTime,
-    String? rules,
+    String? customRules,
     String? onchainTxHash,
     String? onchainContractAddr,
     String? createdAt,
@@ -231,13 +247,15 @@ class __$$GameImplCopyWithImpl<$Res>
     Object? description = freezed,
     Object? gameType = freezed,
     Object? status = freezed,
-    Object? maxPlayers = freezed,
-    Object? currentPlayers = freezed,
+    Object? maxEntries = freezed,
+    Object? minEntries = freezed,
     Object? entryFee = freezed,
-    Object? prizePool = freezed,
+    Object? rewardPoint = freezed,
+    Object? gridRows = freezed,
+    Object? gridCols = freezed,
     Object? startTime = freezed,
     Object? endTime = freezed,
-    Object? rules = freezed,
+    Object? customRules = freezed,
     Object? onchainTxHash = freezed,
     Object? onchainContractAddr = freezed,
     Object? createdAt = freezed,
@@ -266,22 +284,30 @@ class __$$GameImplCopyWithImpl<$Res>
             ? _value.status
             : status // ignore: cast_nullable_to_non_nullable
                   as String?,
-        maxPlayers: freezed == maxPlayers
-            ? _value.maxPlayers
-            : maxPlayers // ignore: cast_nullable_to_non_nullable
+        maxEntries: freezed == maxEntries
+            ? _value.maxEntries
+            : maxEntries // ignore: cast_nullable_to_non_nullable
                   as int?,
-        currentPlayers: freezed == currentPlayers
-            ? _value.currentPlayers
-            : currentPlayers // ignore: cast_nullable_to_non_nullable
+        minEntries: freezed == minEntries
+            ? _value.minEntries
+            : minEntries // ignore: cast_nullable_to_non_nullable
                   as int?,
         entryFee: freezed == entryFee
             ? _value.entryFee
             : entryFee // ignore: cast_nullable_to_non_nullable
-                  as double?,
-        prizePool: freezed == prizePool
-            ? _value.prizePool
-            : prizePool // ignore: cast_nullable_to_non_nullable
-                  as double?,
+                  as int?,
+        rewardPoint: freezed == rewardPoint
+            ? _value.rewardPoint
+            : rewardPoint // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        gridRows: freezed == gridRows
+            ? _value.gridRows
+            : gridRows // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        gridCols: freezed == gridCols
+            ? _value.gridCols
+            : gridCols // ignore: cast_nullable_to_non_nullable
+                  as int?,
         startTime: freezed == startTime
             ? _value.startTime
             : startTime // ignore: cast_nullable_to_non_nullable
@@ -290,9 +316,9 @@ class __$$GameImplCopyWithImpl<$Res>
             ? _value.endTime
             : endTime // ignore: cast_nullable_to_non_nullable
                   as String?,
-        rules: freezed == rules
-            ? _value.rules
-            : rules // ignore: cast_nullable_to_non_nullable
+        customRules: freezed == customRules
+            ? _value.customRules
+            : customRules // ignore: cast_nullable_to_non_nullable
                   as String?,
         onchainTxHash: freezed == onchainTxHash
             ? _value.onchainTxHash
@@ -328,13 +354,15 @@ class _$GameImpl implements _Game {
     this.description,
     this.gameType,
     this.status,
-    this.maxPlayers,
-    this.currentPlayers,
+    this.maxEntries,
+    this.minEntries,
     this.entryFee,
-    this.prizePool,
+    this.rewardPoint,
+    this.gridRows,
+    this.gridCols,
     this.startTime,
     this.endTime,
-    this.rules,
+    this.customRules,
     this.onchainTxHash,
     this.onchainContractAddr,
     this.createdAt,
@@ -358,19 +386,23 @@ class _$GameImpl implements _Game {
   final String? status;
   // SCHEDULED, IN_PROGRESS, PAUSED, SETTLING, ENDED, FAILED
   @override
-  final int? maxPlayers;
+  final int? maxEntries;
   @override
-  final int? currentPlayers;
+  final int? minEntries;
   @override
-  final double? entryFee;
+  final int? entryFee;
   @override
-  final double? prizePool;
+  final int? rewardPoint;
+  @override
+  final int? gridRows;
+  @override
+  final int? gridCols;
   @override
   final String? startTime;
   @override
   final String? endTime;
   @override
-  final String? rules;
+  final String? customRules;
   @override
   final String? onchainTxHash;
   @override
@@ -392,7 +424,7 @@ class _$GameImpl implements _Game {
 
   @override
   String toString() {
-    return 'Game(id: $id, title: $title, description: $description, gameType: $gameType, status: $status, maxPlayers: $maxPlayers, currentPlayers: $currentPlayers, entryFee: $entryFee, prizePool: $prizePool, startTime: $startTime, endTime: $endTime, rules: $rules, onchainTxHash: $onchainTxHash, onchainContractAddr: $onchainContractAddr, createdAt: $createdAt, updatedAt: $updatedAt, gameProducts: $gameProducts)';
+    return 'Game(id: $id, title: $title, description: $description, gameType: $gameType, status: $status, maxEntries: $maxEntries, minEntries: $minEntries, entryFee: $entryFee, rewardPoint: $rewardPoint, gridRows: $gridRows, gridCols: $gridCols, startTime: $startTime, endTime: $endTime, customRules: $customRules, onchainTxHash: $onchainTxHash, onchainContractAddr: $onchainContractAddr, createdAt: $createdAt, updatedAt: $updatedAt, gameProducts: $gameProducts)';
   }
 
   @override
@@ -407,18 +439,23 @@ class _$GameImpl implements _Game {
             (identical(other.gameType, gameType) ||
                 other.gameType == gameType) &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.maxPlayers, maxPlayers) ||
-                other.maxPlayers == maxPlayers) &&
-            (identical(other.currentPlayers, currentPlayers) ||
-                other.currentPlayers == currentPlayers) &&
+            (identical(other.maxEntries, maxEntries) ||
+                other.maxEntries == maxEntries) &&
+            (identical(other.minEntries, minEntries) ||
+                other.minEntries == minEntries) &&
             (identical(other.entryFee, entryFee) ||
                 other.entryFee == entryFee) &&
-            (identical(other.prizePool, prizePool) ||
-                other.prizePool == prizePool) &&
+            (identical(other.rewardPoint, rewardPoint) ||
+                other.rewardPoint == rewardPoint) &&
+            (identical(other.gridRows, gridRows) ||
+                other.gridRows == gridRows) &&
+            (identical(other.gridCols, gridCols) ||
+                other.gridCols == gridCols) &&
             (identical(other.startTime, startTime) ||
                 other.startTime == startTime) &&
             (identical(other.endTime, endTime) || other.endTime == endTime) &&
-            (identical(other.rules, rules) || other.rules == rules) &&
+            (identical(other.customRules, customRules) ||
+                other.customRules == customRules) &&
             (identical(other.onchainTxHash, onchainTxHash) ||
                 other.onchainTxHash == onchainTxHash) &&
             (identical(other.onchainContractAddr, onchainContractAddr) ||
@@ -435,26 +472,28 @@ class _$GameImpl implements _Game {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
+  int get hashCode => Object.hashAll([
     runtimeType,
     id,
     title,
     description,
     gameType,
     status,
-    maxPlayers,
-    currentPlayers,
+    maxEntries,
+    minEntries,
     entryFee,
-    prizePool,
+    rewardPoint,
+    gridRows,
+    gridCols,
     startTime,
     endTime,
-    rules,
+    customRules,
     onchainTxHash,
     onchainContractAddr,
     createdAt,
     updatedAt,
     const DeepCollectionEquality().hash(_gameProducts),
-  );
+  ]);
 
   /// Create a copy of Game
   /// with the given fields replaced by the non-null parameter values.
@@ -477,13 +516,15 @@ abstract class _Game implements Game {
     final String? description,
     final String? gameType,
     final String? status,
-    final int? maxPlayers,
-    final int? currentPlayers,
-    final double? entryFee,
-    final double? prizePool,
+    final int? maxEntries,
+    final int? minEntries,
+    final int? entryFee,
+    final int? rewardPoint,
+    final int? gridRows,
+    final int? gridCols,
     final String? startTime,
     final String? endTime,
-    final String? rules,
+    final String? customRules,
     final String? onchainTxHash,
     final String? onchainContractAddr,
     final String? createdAt,
@@ -504,19 +545,23 @@ abstract class _Game implements Game {
   @override
   String? get status; // SCHEDULED, IN_PROGRESS, PAUSED, SETTLING, ENDED, FAILED
   @override
-  int? get maxPlayers;
+  int? get maxEntries;
   @override
-  int? get currentPlayers;
+  int? get minEntries;
   @override
-  double? get entryFee;
+  int? get entryFee;
   @override
-  double? get prizePool;
+  int? get rewardPoint;
+  @override
+  int? get gridRows;
+  @override
+  int? get gridCols;
   @override
   String? get startTime;
   @override
   String? get endTime;
   @override
-  String? get rules;
+  String? get customRules;
   @override
   String? get onchainTxHash;
   @override

@@ -13,13 +13,15 @@ class Game with _$Game {
     String? description,
     String? gameType, // DAILY, SELECT, VIBE
     String? status, // SCHEDULED, IN_PROGRESS, PAUSED, SETTLING, ENDED, FAILED
-    int? maxPlayers,
-    int? currentPlayers,
-    double? entryFee,
-    double? prizePool,
+    int? maxEntries,
+    int? minEntries,
+    int? entryFee,
+    int? rewardPoint,
+    int? gridRows,
+    int? gridCols,
     String? startTime,
     String? endTime,
-    String? rules,
+    String? customRules,
     String? onchainTxHash,
     String? onchainContractAddr,
     String? createdAt,
@@ -113,20 +115,20 @@ extension GameX on Game {
       title: title,
       description: description ?? '',
       imageUrl: imageUrl,
-      participants: currentPlayers ?? 0,
-      maxParticipants: maxPlayers ?? 0,
-      totalBlocks: gameProducts?.length ?? 0,
+      participants: minEntries ?? 0, // 현재 참가자 수는 별도 API에서 가져와야 함
+      maxParticipants: maxEntries ?? 0,
+      totalBlocks: (gridRows ?? 0) * (gridCols ?? 0),
       requiredPicks: 1, // 기본값
       winners: 1, // 기본값
       originalPrice: originalPrice,
-      currentPrice: (entryFee ?? 0).toInt(),
+      currentPrice: entryFee ?? 0,
       timeLeft: timeLeft,
       type: type,
       status: gameStatus,
       category: category,
-      gridSize: null, // TODO: 서버에서 받아올 수 있으면 추가
-      gridWidth: null,
-      gridHeight: null,
+      gridSize: null, // 정사각형이 아니므로 null
+      gridWidth: gridCols,
+      gridHeight: gridRows,
       vibeImageUrl: null,
     );
   }
