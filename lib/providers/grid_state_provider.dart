@@ -9,6 +9,15 @@ class GridState {
   /// 줌 레벨
   final double zoom;
 
+  /// 기준 줌 레벨 (그리드 크기에 따라 계산됨)
+  final double baseZoom;
+
+  /// 그리드 가로 크기
+  final int gridWidth;
+
+  /// 그리드 세로 크기
+  final int gridHeight;
+
   /// 팬 오프셋 (X축)
   final double panX;
 
@@ -38,6 +47,9 @@ class GridState {
 
   const GridState({
     this.zoom = AppConstants.defaultZoom,
+    this.baseZoom = AppConstants.defaultZoom,
+    this.gridWidth = 100,
+    this.gridHeight = 100,
     this.panX = 0.0,
     this.panY = 0.0,
     this.isDragging = false,
@@ -51,6 +63,9 @@ class GridState {
 
   GridState copyWith({
     double? zoom,
+    double? baseZoom,
+    int? gridWidth,
+    int? gridHeight,
     double? panX,
     double? panY,
     bool? isDragging,
@@ -65,6 +80,9 @@ class GridState {
   }) {
     return GridState(
       zoom: zoom ?? this.zoom,
+      baseZoom: baseZoom ?? this.baseZoom,
+      gridWidth: gridWidth ?? this.gridWidth,
+      gridHeight: gridHeight ?? this.gridHeight,
       panX: panX ?? this.panX,
       panY: panY ?? this.panY,
       isDragging: isDragging ?? this.isDragging,
@@ -136,7 +154,16 @@ class GridState {
 
 /// 그리드 상태 노티파이어
 class GridStateNotifier extends StateNotifier<GridState> {
-  GridStateNotifier() : super(const GridState());
+  GridStateNotifier({
+    required int gridWidth,
+    required int gridHeight,
+    required double baseZoom,
+  }) : super(GridState(
+          gridWidth: gridWidth,
+          gridHeight: gridHeight,
+          baseZoom: baseZoom,
+          zoom: baseZoom, // 초기 줌을 baseZoom으로 설정
+        ));
 
   /// 줌 설정
   void setZoom(double zoom) {
@@ -361,24 +388,94 @@ class GridStateNotifier extends StateNotifier<GridState> {
   void showBottomSheet() {
     state = state.copyWith(showBottomSheet: true);
   }
+
+  /// 특정 섹션으로 이동 (화면 중앙에 섹션 배치)
+  void navigateToSection(
+    dynamic section, {
+    required double screenWidth,
+    required double screenHeight,
+    double? targetZoom,
+  }) {
+    // section의 중심 좌표 계산 (그리드 좌표계)
+    final centerRow = (section.startRow + section.endRow) / 2;
+    final centerCol = (section.startCol + section.endCol) / 2;
+
+    final sectionCenterX = (centerCol - 0.5) * AppConstants.cellSize;
+    final sectionCenterY = (centerRow - 0.5) * AppConstants.cellSize;
+
+    // 섹션이 화면에 잘 보이도록 적절한 줌 레벨 계산
+    final sectionWidth = (section.endCol - section.startCol + 1) * AppConstants.cellSize;
+    final sectionHeight = (section.endRow - section.startRow + 1) * AppConstants.cellSize;
+
+    final zoomToFitWidth = screenWidth / sectionWidth * 0.8; // 80% 여유
+    final zoomToFitHeight = screenHeight / sectionHeight * 0.8;
+
+    final newZoom = targetZoom ??
+        (zoomToFitWidth < zoomToFitHeight ? zoomToFitWidth : zoomToFitHeight)
+            .clamp(AppConstants.minZoom, AppConstants.maxZoom);
+
+    // 섹션이 화면 중앙에 오도록 pan 계산
+    final newPanX = screenWidth / 2 - sectionCenterX * newZoom;
+    final newPanY = screenHeight / 2 - sectionCenterY * newZoom;
+
+    state = state.copyWith(
+      zoom: newZoom,
+      panX: newPanX,
+      panY: newPanY,
+      clearFocusedBlock: true, // 섹션 이동 시 블록 포커스 해제
+    );
+  }
+}
+
+/// 그리드 설정 매개변수
+class GridConfig {
+  final String gameId;
+  final int gridWidth;
+  final int gridHeight;
+  final double baseZoom;
+
+  const GridConfig({
+    required this.gameId,
+    required this.gridWidth,
+    required this.gridHeight,
+    required this.baseZoom,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is GridConfig &&
+          runtimeType == other.runtimeType &&
+          gameId == other.gameId &&
+          gridWidth == other.gridWidth &&
+          gridHeight == other.gridHeight &&
+          baseZoom == other.baseZoom;
+
+  @override
+  int get hashCode =>
+      gameId.hashCode ^ gridWidth.hashCode ^ gridHeight.hashCode ^ baseZoom.hashCode;
 }
 
 /// 그리드 상태 프로바이더 (라운드별 분리)
-/// gameId를 받아서 각 게임별로 독립적인 상태를 관리
+/// GridConfig를 받아서 각 게임별로 독립적인 상태를 관리
 final gridStateProvider =
-    StateNotifierProvider.family<GridStateNotifier, GridState, String>((ref, gameId) {
-  return GridStateNotifier();
+    StateNotifierProvider.family<GridStateNotifier, GridState, GridConfig>((ref, config) {
+  return GridStateNotifier(
+    gridWidth: config.gridWidth,
+    gridHeight: config.gridHeight,
+    baseZoom: config.baseZoom,
+  );
 });
 
 /// 선택된 블록 수 프로바이더 (라운드별)
-final selectedBlockCountProvider = Provider.family<int, String>((ref, gameId) {
-  final gridState = ref.watch(gridStateProvider(gameId));
+final selectedBlockCountProvider = Provider.family<int, GridConfig>((ref, config) {
+  final gridState = ref.watch(gridStateProvider(config));
   return gridState.selectedBlocks.length;
 });
 
 /// 특정 블록이 선택되었는지 확인하는 프로바이더 (라운드별)
 final isBlockSelectedProvider =
-    Provider.family<bool, (String gameId, String blockId)>((ref, params) {
+    Provider.family<bool, (GridConfig config, String blockId)>((ref, params) {
   final gridState = ref.watch(gridStateProvider(params.$1));
   return gridState.isBlockSelected(params.$2);
 });

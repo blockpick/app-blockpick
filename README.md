@@ -61,30 +61,151 @@ lib/
 ### 1. 패키지 설치
 
 ```bash
+# 패키지 설치
 flutter pub get
+
+# 패키지 업데이트
+flutter pub upgrade
+
+# 특정 패키지 추가
+flutter pub add <package_name>
+
+# 개발용 패키지 추가
+flutter pub add --dev <package_name>
 ```
 
 ### 2. 앱 실행
 
 ```bash
-# 개발 모드
+# 사용 가능한 디바이스 확인
+flutter devices
+
+# 개발 모드 (디버그)
 flutter run
 
-# 릴리즈 모드
+# 릴리즈 모드 (최적화됨)
 flutter run --release
 
-# 특정 디바이스
-flutter run -d <device_id>
+# 프로필 모드 (성능 측정용)
+flutter run --profile
 ```
 
-### 3. 테스트
+#### 플랫폼별 실행
+
+```bash
+# Chrome 웹 브라우저
+flutter run -d chrome
+
+# macOS 데스크톱
+flutter run -d macos
+
+# Android 에뮬레이터
+flutter run -d emulator-5554
+
+# 특정 포트로 웹 실행
+flutter run -d chrome --web-port=8080
+
+# 웹 서버 모드 (자동 새로고침)
+flutter run -d web-server
+
+# 웹 렌더러 선택 (html/canvaskit)
+flutter run -d chrome --web-renderer canvaskit
+```
+
+### 3. 빌드
+
+```bash
+# 빌드 결과물 정리
+flutter clean
+
+# Android APK 빌드
+flutter build apk
+
+# Android App Bundle 빌드 (Google Play용)
+flutter build appbundle
+
+# iOS 빌드
+flutter build ios
+
+# macOS 빌드
+flutter build macos
+
+# 웹 빌드
+flutter build web
+
+# 웹 빌드 (렌더러 선택)
+flutter build web --web-renderer canvaskit
+```
+
+### 4. 테스트 & 분석
 
 ```bash
 # 모든 테스트 실행
 flutter test
 
-# 코드 분석
+# 특정 테스트 실행
+flutter test test/widget_test.dart
+
+# 코드 분석 (lint)
 flutter analyze
+
+# 코드 포맷팅
+flutter format .
+
+# 코드 포맷팅 체크만
+flutter format --set-exit-if-changed .
+```
+
+### 5. 코드 생성 (Riverpod, Freezed 등)
+
+```bash
+# build_runner로 코드 생성
+dart run build_runner build
+
+# watch 모드 (자동 재생성)
+dart run build_runner watch
+
+# 기존 생성 파일 삭제 후 재생성
+dart run build_runner build --delete-conflicting-outputs
+```
+
+### 6. 디버깅 & 개발 도구
+
+```bash
+# Flutter 환경 점검
+flutter doctor
+
+# 상세 환경 점검
+flutter doctor -v
+
+# 디바이스 로그 확인
+flutter logs
+
+# Flutter SDK 업그레이드
+flutter upgrade
+
+# Flutter 버전 확인
+flutter --version
+```
+
+#### 실행 중 단축키
+
+```
+r - 핫 리로드
+R - 핫 리스타트
+p - 성능 오버레이 토글
+i - 위젯 인스펙터 열기
+q - 종료
+```
+
+### 7. 에뮬레이터 관리
+
+```bash
+# 사용 가능한 에뮬레이터 목록
+flutter emulators
+
+# 에뮬레이터 실행
+flutter emulators --launch <emulator_id>
 ```
 
 ## 구현 완료 항목

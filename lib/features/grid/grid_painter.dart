@@ -55,6 +55,13 @@ class GridPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    debugPrint('🎨 GridPainter.paint() 호출');
+    debugPrint('   - size: $size');
+    debugPrint('   - zoom: $zoom');
+    debugPrint('   - pan: $pan');
+    debugPrint('   - gridSize: $gridWidth x $gridHeight');
+    debugPrint('   - backgroundImage: ${backgroundImage != null ? "있음" : "없음"}');
+
     // Canvas 저장 (변환 전 상태)
     canvas.save();
 

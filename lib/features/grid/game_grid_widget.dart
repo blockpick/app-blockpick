@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart';
-import 'dart:io' show Platform;
 import 'dart:ui' as ui;
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,6 +8,7 @@ import 'grid_painter.dart';
 import '../../providers/grid_state_provider.dart';
 import '../../models/block_model.dart';
 import '../../core/constants/app_constants.dart';
+import '../../utils/zoom_calculator.dart';
 
 /// 게임 그리드 위젯
 ///
@@ -47,28 +46,22 @@ class GameGridWidget extends ConsumerStatefulWidget {
 class _GameGridWidgetState extends ConsumerState<GameGridWidget>
     with SingleTickerProviderStateMixin {
   // 제스처 처리
-  Offset? _lastTouchPosition;
   Offset? _initialFocalPoint;
   double? _initialZoom;
   bool _isDragging = false;
 
   // 애니메이션
   late AnimationController _animationController;
-  Animation<double>? _zoomAnimation;
 
   // 배경 이미지
   ui.Image? _backgroundImage;
   bool _imageLoading = false;
 
-  /// 현재 플랫폼이 모바일인지 확인
-  bool get _isMobile {
-    if (kIsWeb) return false;
-    try {
-      return Platform.isAndroid || Platform.isIOS;
-    } catch (e) {
-      return false;
-    }
-  }
+  // GridConfig (동적 생성)
+  GridConfig? _gridConfig;
+
+  // 초기화 완료 플래그
+  bool _initialized = false;
 
   @override
   void initState() {
@@ -92,6 +85,33 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
     } else {
       debugPrint('   ⚠️ backgroundImagePath가 null - 이미지 로드 안함');
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // 이미 초기화되었으면 건너뛰기
+    if (_initialized) return;
+
+    // GridConfig 생성 (화면 크기 필요)
+    final size = MediaQuery.of(context).size;
+    final baseZoom = ZoomCalculator.calculateBaseZoom(
+      gridWidth: widget.gridWidth,
+      gridHeight: widget.gridHeight,
+      screenWidth: size.width,
+      screenHeight: size.height,
+    );
+
+    _gridConfig = GridConfig(
+      gameId: widget.gameId,
+      gridWidth: widget.gridWidth,
+      gridHeight: widget.gridHeight,
+      baseZoom: baseZoom,
+    );
+
+    _initialized = true;
+    debugPrint('   📐 baseZoom 계산됨: $baseZoom');
   }
 
   @override
@@ -203,8 +223,13 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
 
   @override
   Widget build(BuildContext context) {
-    final gridState = ref.watch(gridStateProvider(widget.gameId));
-    final gridNotifier = ref.read(gridStateProvider(widget.gameId).notifier);
+    // GridConfig가 초기화되지 않았으면 로딩
+    if (_gridConfig == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    final gridState = ref.watch(gridStateProvider(_gridConfig!));
+    final gridNotifier = ref.read(gridStateProvider(_gridConfig!).notifier);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -226,17 +251,18 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
           child: Stack(
             children: [
               // 그리드 렌더링
-              CustomPaint(
-                painter: GridPainter(
-                  gridWidth: widget.gridWidth,
-                  gridHeight: widget.gridHeight,
-                  zoom: gridState.zoom,
-                  pan: Offset(gridState.panX, gridState.panY),
-                  selectedBlocks: gridState.selectedBlocks,
-                  wireframeMode: gridState.wireframeMode,
-                  backgroundImage: _backgroundImage,
+              Positioned.fill(
+                child: CustomPaint(
+                  painter: GridPainter(
+                    gridWidth: widget.gridWidth,
+                    gridHeight: widget.gridHeight,
+                    zoom: gridState.zoom,
+                    pan: Offset(gridState.panX, gridState.panY),
+                    selectedBlocks: gridState.selectedBlocks,
+                    wireframeMode: gridState.wireframeMode,
+                    backgroundImage: _backgroundImage,
+                  ),
                 ),
-                size: constraints.biggest,
               ),
 
               // 선택된 블록 위에 SVG 아이콘 오버레이
@@ -363,30 +389,6 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
     }
   }
 
-  /// 특정 셀로 줌 인
-  void _zoomToCell(
-    int row,
-    int col,
-    GridState gridState,
-    GridStateNotifier gridNotifier,
-  ) {
-    final targetZoom = gridState.zoom * 2.0;
-    final block = BlockModel.fromPosition(row, col);
-
-    _zoomAnimation = Tween<double>(
-      begin: gridState.zoom,
-      end: targetZoom,
-    ).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeInOut,
-      ),
-    );
-
-    _animationController.forward(from: 0).then((_) {
-      gridNotifier.focusOnBlock(block, targetZoom: targetZoom);
-    });
-  }
 
   /// 스케일 시작 (핀치 투 줌 + 팬)
   void _handleScaleStart(
@@ -396,7 +398,9 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
     _initialFocalPoint = details.focalPoint;
     _initialZoom = gridState.zoom;
     _isDragging = false;
-    ref.read(gridStateProvider(widget.gameId).notifier).setDragging(false);
+    if (_gridConfig != null) {
+      ref.read(gridStateProvider(_gridConfig!).notifier).setDragging(false);
+    }
   }
 
   /// 스케일 업데이트

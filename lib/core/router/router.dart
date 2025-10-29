@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/blockpick/blockpick_screen.dart';
@@ -6,7 +5,6 @@ import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/signup_page.dart';
 import '../../features/auth/presentation/pages/forgot_password_page.dart';
 import '../../features/game/game_screen.dart';
-import '../../features/game/game_detail_screen.dart';
 import '../../features/optimal/optimal_game_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../auth/domain/providers/auth_provider.dart';

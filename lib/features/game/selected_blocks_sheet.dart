@@ -12,17 +12,17 @@ import '../auth/presentation/dialogs/auth_dialogs.dart';
 
 /// 선택된 블록 목록을 보여주는 바텀시트
 class SelectedBlocksSheet extends ConsumerWidget {
-  final String gameId;
+  final GridConfig gridConfig;
 
   const SelectedBlocksSheet({
     super.key,
-    required this.gameId,
+    required this.gridConfig,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedBlocks = ref.watch(gridStateProvider(gameId)).selectedBlocks;
-    final gridNotifier = ref.read(gridStateProvider(gameId).notifier);
+    final selectedBlocks = ref.watch(gridStateProvider(gridConfig)).selectedBlocks;
+    final gridNotifier = ref.read(gridStateProvider(gridConfig).notifier);
     final screenSize = MediaQuery.of(context).size;
     final isAuthenticated = ref.watch(isAuthenticatedProvider);
 
@@ -77,7 +77,7 @@ class SelectedBlocksSheet extends ConsumerWidget {
                 child: BlockItemCard(
                   block: block,
                   onRemove: () => gridNotifier.toggleBlock(block),
-                  isFocused: ref.watch(gridStateProvider(gameId)).focusedBlockId == block.id,
+                  isFocused: ref.watch(gridStateProvider(gridConfig)).focusedBlockId == block.id,
                   onTap: () {
                     // 블록 위치로 이동 (토글)
                     gridNotifier.navigateToBlock(

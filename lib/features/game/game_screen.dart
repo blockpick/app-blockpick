@@ -1,7 +1,10 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import '../grid/game_grid_widget.dart';
 import 'selected_blocks_sheet.dart';
 import '../../core/theme/app_colors.dart';
@@ -12,6 +15,13 @@ import '../../providers/game_provider.dart';
 import '../../models/game_model.dart';
 import '../../models/game_round_model.dart';
 import '../../components/minimap/grid_minimap.dart';
+import '../../utils/zoom_calculator.dart';
+import '../../utils/adaptive_zoom_system.dart';
+import '../../utils/debouncer.dart';
+import '../../widgets/pick_hud.dart';
+import '../../widgets/zoom_controls.dart';
+import '../../models/grid_section_model.dart';
+import '../../widgets/grid_section_overlay.dart';
 
 /// 게임 메인 화면
 class GameScreen extends ConsumerStatefulWidget {
@@ -28,56 +38,388 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   GameRound? _game;
 
   // 그리드 크기
-  int _gridSize = 100;
   int _gridWidth = 100;
   int _gridHeight = 100;
+
+  // GridConfig
+  GridConfig? _gridConfig;
+
+  // Zoom 시스템
+  ZoomSpec? _zoomSpec;
+  ZoomMapper? _zoomMapper;
+  int _currentZoomLevel = 1;
+  bool _isInitialized = false;
+
+  // Pick 최대치
+  int _pickMax = 5;
+
+  // 섹션 (3x3 구역)
+  List<GridSection> _sections = [];
+
+  // 디바운서
+  final _zoomDebouncer = Debouncer(500);
+  final _tapDebouncer = Debouncer(150);
+
+  // Tutorial
+  TutorialCoachMark? _tutorialCoachMark;
+  final GlobalKey _minimapKey = GlobalKey();
+  final GlobalKey _zoomControlKey = GlobalKey();
+  final GlobalKey _gridKey = GlobalKey();
+  final GlobalKey _hudKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
-    // 초기 줌 레벨은 데이터 로드 후 설정
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        _setInitialZoom();
-      }
-    });
   }
 
-  /// 초기 줌 레벨을 그리드 크기에 맞게 설정하고 화면 중앙에 배치
+  @override
+  void dispose() {
+    _tutorialCoachMark?.finish();
+    super.dispose();
+  }
+
+  /// 초기 줌 설정 및 섹션 생성
   void _setInitialZoom() {
-    final gameId = widget.gameId ?? 'unknown';
-    final gridNotifier = ref.read(gridStateProvider(gameId).notifier);
-    final screenSize = MediaQuery.of(context).size;
+    debugPrint('🔧 _setInitialZoom() 호출');
 
-    // 그리드 전체가 화면에 들어가도록 줌 계산
-    // cellSize(30) * gridWidth * zoom = screenWidth
-    const cellSize = 30.0; // AppConstants.cellSize
-    final zoomToFitWidth = screenSize.width / (cellSize * _gridWidth);
-    final zoomToFitHeight = screenSize.height / (cellSize * _gridHeight);
+    if (_gridConfig == null) {
+      debugPrint('⚠️ _setInitialZoom: _gridConfig is null');
+      return;
+    }
 
-    // 작은 값 선택 (양쪽 다 화면에 들어가도록)
-    final initialZoom = (zoomToFitWidth < zoomToFitHeight ? zoomToFitWidth : zoomToFitHeight) * 0.9; // 90%로 여유
+    try {
+      final gridNotifier = ref.read(gridStateProvider(_gridConfig!).notifier);
+      final screenSize = MediaQuery.of(context).size;
 
-    // 그리드를 화면 중앙에 배치하기 위한 pan 계산
-    // 그리드 중심 좌표
-    final gridCenterX = (_gridWidth * cellSize) / 2;
-    final gridCenterY = (_gridHeight * cellSize) / 2;
+      // Zoom Spec 계산
+      _zoomSpec = computeZoomSpec(
+        grid: GridSize(_gridWidth, _gridHeight),
+        viewportShortSidePx: screenSize.shortestSide,
+        cellSelectPx: 16.0,
+      );
 
-    // 화면 중심 좌표
-    final screenCenterX = screenSize.width / 2;
-    final screenCenterY = screenSize.height / 2;
+      _zoomMapper = ZoomMapper(
+        minLevel: _zoomSpec!.minLevel,
+        maxLevel: _zoomSpec!.maxLevel,
+        baseScale: _gridConfig!.baseZoom,
+      );
 
-    // pan 계산: screenCenter = gridCenter * zoom + pan
-    // => pan = screenCenter - gridCenter * zoom
-    final initialPanX = screenCenterX - gridCenterX * initialZoom;
-    final initialPanY = screenCenterY - gridCenterY * initialZoom;
+      // 초기 레벨은 선택 가능 레벨로 설정 (축소/확대 모두 가능하도록)
+      _currentZoomLevel = _zoomSpec!.selectLevel;
+      final initialZoom = _zoomMapper!.levelToScale(_currentZoomLevel);
 
-    // 줌과 pan 동시 설정
-    gridNotifier.setZoom(initialZoom);
-    gridNotifier.setPan(initialPanX, initialPanY);
+      // 섹션 생성 (3x3)
+      if (_sections.isEmpty) {
+        _sections = GridSectionManager.createSections(
+          gridWidth: _gridWidth,
+          gridHeight: _gridHeight,
+          sectionsPerSide: 3,
+        );
+        debugPrint('📍 Sections created: ${_sections.length}');
+      }
 
-    debugPrint('📐 Grid: ${_gridWidth}x$_gridHeight, Initial Zoom: ${initialZoom.toStringAsFixed(4)}');
-    debugPrint('📍 Initial Pan: (${initialPanX.toStringAsFixed(2)}, ${initialPanY.toStringAsFixed(2)})');
+      // 그리드 중앙 배치
+      final gridCenterX = (_gridWidth * AppConstants.cellSize) / 2;
+      final gridCenterY = (_gridHeight * AppConstants.cellSize) / 2;
+      final screenCenterX = screenSize.width / 2;
+      final screenCenterY = screenSize.height / 2;
+      final initialPanX = screenCenterX - gridCenterX * initialZoom;
+      final initialPanY = screenCenterY - gridCenterY * initialZoom;
+
+      gridNotifier.setZoom(initialZoom);
+      gridNotifier.setPan(initialPanX, initialPanY);
+
+      debugPrint('✅ _setInitialZoom 완료!');
+      debugPrint('   - Zoom Level: $_currentZoomLevel');
+      debugPrint('   - Zoom: ${initialZoom.toStringAsFixed(4)}');
+      debugPrint('   - Sections: ${_sections.length}');
+
+      // UI 업데이트를 위해 rebuild 트리거
+      if (mounted) {
+        setState(() {});
+      }
+    } catch (e, stackTrace) {
+      debugPrint('❌ _setInitialZoom error: $e');
+      debugPrint('Stack trace: $stackTrace');
+    }
+  }
+
+  /// Zoom In
+  void _handleZoomIn() {
+    if (!_zoomDebouncer.allow || _zoomSpec == null || _zoomMapper == null) return;
+    _zoomDebouncer.hit();
+
+    if (_currentZoomLevel >= _zoomSpec!.maxLevel) {
+      _showSnackBar('최대 확대입니다');
+      return;
+    }
+
+    setState(() {
+      _currentZoomLevel++;
+    });
+    _snapToLevel(_currentZoomLevel);
+  }
+
+  /// Zoom Out
+  void _handleZoomOut() {
+    if (!_zoomDebouncer.allow || _zoomSpec == null || _zoomMapper == null) return;
+    _zoomDebouncer.hit();
+
+    if (_currentZoomLevel <= _zoomSpec!.minLevel) {
+      _showSnackBar('최소 축소입니다');
+      return;
+    }
+
+    setState(() {
+      _currentZoomLevel--;
+    });
+    _snapToLevel(_currentZoomLevel);
+  }
+
+  /// 레벨로 스냅 (뷰포트 중심 기준 줌)
+  void _snapToLevel(int level) {
+    if (_gridConfig == null || _zoomMapper == null) return;
+
+    final gridNotifier = ref.read(gridStateProvider(_gridConfig!).notifier);
+    final gridState = ref.read(gridStateProvider(_gridConfig!));
+
+    // 그리드 위젯의 실제 렌더박스 가져오기
+    final RenderBox? gridBox = _gridKey.currentContext?.findRenderObject() as RenderBox?;
+
+    double viewportCenterX;
+    double viewportCenterY;
+
+    if (gridBox != null) {
+      // 그리드 위젯의 실제 크기
+      final gridSize = gridBox.size;
+      viewportCenterX = gridSize.width / 2;
+      viewportCenterY = gridSize.height / 2;
+
+      debugPrint('📐 Grid viewport size: ${gridSize.width.toStringAsFixed(1)} x ${gridSize.height.toStringAsFixed(1)}');
+    } else {
+      // fallback: 전체 화면 크기 사용
+      final screenSize = MediaQuery.of(context).size;
+      viewportCenterX = screenSize.width / 2;
+      viewportCenterY = screenSize.height / 2;
+
+      debugPrint('⚠️ Grid RenderBox not found, using screen size');
+    }
+
+    // 현재 줌과 새로운 줌
+    final oldZoom = gridState.zoom;
+    final newZoom = _zoomMapper!.levelToScale(level);
+
+    // 뷰포트 중심점의 그리드 좌표 계산 (줌 전)
+    final gridCenterX = (viewportCenterX - gridState.panX) / oldZoom;
+    final gridCenterY = (viewportCenterY - gridState.panY) / oldZoom;
+
+    // 새로운 pan 계산 (뷰포트 중심이 같은 그리드 좌표를 가리키도록)
+    final newPanX = viewportCenterX - gridCenterX * newZoom;
+    final newPanY = viewportCenterY - gridCenterY * newZoom;
+
+    // 줌과 pan을 동시에 업데이트
+    gridNotifier.setZoom(newZoom);
+    gridNotifier.setPan(newPanX, newPanY);
+
+    debugPrint('🔍 Snapped to Level $level (zoom: ${newZoom.toStringAsFixed(4)})');
+    debugPrint('   - Viewport center: (${viewportCenterX.toStringAsFixed(1)}, ${viewportCenterY.toStringAsFixed(1)})');
+    debugPrint('   - Grid center coord: (${gridCenterX.toStringAsFixed(1)}, ${gridCenterY.toStringAsFixed(1)})');
+    debugPrint('   - oldZoom: ${oldZoom.toStringAsFixed(4)}, newZoom: ${newZoom.toStringAsFixed(4)}');
+    debugPrint('   - oldPan: (${gridState.panX.toStringAsFixed(1)}, ${gridState.panY.toStringAsFixed(1)})');
+    debugPrint('   - newPan: (${newPanX.toStringAsFixed(1)}, ${newPanY.toStringAsFixed(1)})');
+  }
+
+  /// 스낵바 표시
+  void _showSnackBar(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  /// 튜토리얼 체크 및 표시
+  Future<void> _checkAndShowTutorial() async {
+    final prefs = await SharedPreferences.getInstance();
+    final hasSeenTutorial = prefs.getBool('game_tutorial_completed') ?? false;
+
+    if (!hasSeenTutorial && mounted) {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (mounted) _showTutorial();
+      });
+    }
+  }
+
+  /// 튜토리얼 표시
+  void _showTutorial() {
+    final targets = <TargetFocus>[];
+
+    // 미니맵
+    if (_minimapKey.currentContext != null) {
+      targets.add(
+        TargetFocus(
+          identify: "minimap",
+          keyTarget: _minimapKey,
+          alignSkip: Alignment.topRight,
+          shape: ShapeLightFocus.RRect,
+          radius: 12,
+          contents: [
+            TargetContent(
+              align: ContentAlign.top,
+              builder: (context, controller) {
+                return _tutorialContent(
+                  '미니맵',
+                  '현재 위치를 확인하고 드래그로 빠르게 이동할 수 있습니다',
+                  LucideIcons.map,
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Zoom 컨트롤
+    if (_zoomControlKey.currentContext != null) {
+      targets.add(
+        TargetFocus(
+          identify: "zoom",
+          keyTarget: _zoomControlKey,
+          alignSkip: Alignment.topRight,
+          shape: ShapeLightFocus.RRect,
+          radius: 12,
+          contents: [
+            TargetContent(
+              align: ContentAlign.left,
+              builder: (context, controller) {
+                return _tutorialContent(
+                  '줌 컨트롤',
+                  '핀치 제스처 또는 +/- 버튼으로 확대/축소할 수 있습니다',
+                  LucideIcons.zoomIn,
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
+    // 그리드
+    if (_gridKey.currentContext != null) {
+      targets.add(
+        TargetFocus(
+          identify: "grid",
+          keyTarget: _gridKey,
+          alignSkip: Alignment.topRight,
+          shape: ShapeLightFocus.RRect,
+          contents: [
+            TargetContent(
+              align: ContentAlign.bottom,
+              builder: (context, controller) {
+                return _tutorialContent(
+                  '블록 선택',
+                  '셀을 탭하여 선택/해제하세요. 충분히 확대해야 선택할 수 있습니다',
+                  LucideIcons.grid,
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
+    // HUD
+    if (_hudKey.currentContext != null) {
+      targets.add(
+        TargetFocus(
+          identify: "hud",
+          keyTarget: _hudKey,
+          alignSkip: Alignment.topRight,
+          shape: ShapeLightFocus.RRect,
+          radius: 12,
+          contents: [
+            TargetContent(
+              align: ContentAlign.bottom,
+              builder: (context, controller) {
+                return _tutorialContent(
+                  '선택 상태',
+                  '최대 $_pickMax개 선택 후 Submit 버튼을 눌러 제출하세요',
+                  LucideIcons.checkCircle,
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (targets.isEmpty) return;
+
+    _tutorialCoachMark = TutorialCoachMark(
+      targets: targets,
+      colorShadow: AppColors.darkBlue,
+      paddingFocus: 10,
+      opacityShadow: 0.8,
+      onFinish: () async {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('game_tutorial_completed', true);
+      },
+      onSkip: () {
+        SharedPreferences.getInstance().then((prefs) {
+          prefs.setBool('game_tutorial_completed', true);
+        });
+        return true;
+      },
+    );
+
+    _tutorialCoachMark!.show(context: context);
+  }
+
+  /// 튜토리얼 콘텐츠 위젯
+  Widget _tutorialContent(String title, String description, IconData icon) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withValues(alpha: 0.2),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: AppColors.blue, size: 24),
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style: AppTextStyles.large.copyWith(
+                  color: AppColors.darkBlue,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            description,
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.navy,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -102,7 +444,34 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         _game = gameRound;
         _gridWidth = gameRound.actualGridWidth;
         _gridHeight = gameRound.actualGridHeight;
-        _gridSize = _gridWidth == _gridHeight ? _gridWidth : _gridWidth;
+
+        // GridConfig 생성 (baseZoom 계산)
+        final screenSize = MediaQuery.of(context).size;
+        final baseZoom = ZoomCalculator.calculateBaseZoom(
+          gridWidth: _gridWidth,
+          gridHeight: _gridHeight,
+          screenWidth: screenSize.width,
+          screenHeight: screenSize.height,
+        );
+
+        _gridConfig = GridConfig(
+          gameId: gameId,
+          gridWidth: _gridWidth,
+          gridHeight: _gridHeight,
+          baseZoom: baseZoom,
+        );
+
+        // 초기 줌 설정 (한 번만)
+        if (!_isInitialized && _gridConfig != null) {
+          _isInitialized = true;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              debugPrint('🚀 PostFrameCallback 실행 - _setInitialZoom 호출');
+              _setInitialZoom();
+              _checkAndShowTutorial();
+            }
+          });
+        }
 
         return _buildGameScreen(context, gameId);
       },
@@ -122,11 +491,14 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   }
 
   Widget _buildGameScreen(BuildContext context, String gameId) {
-    final gridState = ref.watch(gridStateProvider(gameId));
-    final gridNotifier = ref.read(gridStateProvider(gameId).notifier);
-    final selectedCount = ref.watch(selectedBlockCountProvider(gameId));
+    if (_gridConfig == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
 
-    // SafeArea 패딩 가져오기
+    final gridState = ref.watch(gridStateProvider(_gridConfig!));
+    final selectedCount = ref.watch(selectedBlockCountProvider(_gridConfig!));
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
     return Scaffold(
@@ -134,30 +506,58 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       appBar: _buildAppBar(context),
       body: Stack(
         children: [
-          // 게임 그리드 (배경 그라데이션 제거 - 이미지가 배경 역할)
-          GameGridWidget(
-            gameId: gameId,
-            gridWidth: _gridWidth,
-            gridHeight: _gridHeight,
-            backgroundImagePath: _game?.imageUrl,
-            onBlockTap: (block) {
-              debugPrint('Block tapped: ${block.row}, ${block.col}');
-              // 블록 탭 시 바텀시트 표시
-              gridNotifier.showBottomSheet();
-            },
+          // 게임 그리드
+          Positioned.fill(
+            key: _gridKey,
+            child: GameGridWidget(
+              gameId: gameId,
+              gridWidth: _gridWidth,
+              gridHeight: _gridHeight,
+              backgroundImagePath: _game?.imageUrl,
+              onBlockTap: (block) {
+                debugPrint('Block tapped: ${block.row}, ${block.col}');
+                ref.read(gridStateProvider(_gridConfig!).notifier).showBottomSheet();
+              },
+            ),
           ),
 
-          // 바텀시트 (선택된 블록이 있고 showBottomSheet가 true일 때 표시)
-          if (selectedCount > 0 && gridState.showBottomSheet)
-            SelectedBlocksSheet(gameId: gameId),
+          // 섹션 오버레이 (항상 표시, 실시간 업데이트)
+          if (_sections.isNotEmpty)
+            Positioned.fill(
+              child: _buildSectionOverlay(gridState),
+            ),
 
-          // 좌하단 미니맵
+          // 바텀시트
+          if (selectedCount > 0 && gridState.showBottomSheet)
+            SelectedBlocksSheet(gridConfig: _gridConfig!),
+
+          // HUD (상단 중앙)
+          if (_zoomSpec != null)
+            Positioned(
+              top: 16,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: PickHud(
+                  key: _hudKey,
+                  selected: selectedCount,
+                  pickMax: _pickMax,
+                  zoomLevel: _currentZoomLevel,
+                  onSubmit: selectedCount >= _pickMax ? () {
+                    _showSnackBar('$selectedCount개 블록 제출됨!');
+                  } : null,
+                ),
+              ),
+            ),
+
+          // 미니맵 (좌하단)
           Positioned(
             bottom: selectedCount > 0 && gridState.showBottomSheet
                 ? 350 + bottomPadding + 16
                 : 100 + bottomPadding + 16,
             left: 16,
             child: GridMinimap(
+              key: _minimapKey,
               gridWidth: _gridWidth,
               gridHeight: _gridHeight,
               zoom: gridState.zoom,
@@ -167,16 +567,43 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             ),
           ),
 
-          // 우측 줌 컨트롤 (SafeArea 적용)
-          Positioned(
-            bottom: selectedCount > 0 && gridState.showBottomSheet
-                ? 350 + bottomPadding
-                : 100 + bottomPadding,
-            right: 16,
-            child: _buildZoomControls(gridNotifier, gridState),
-          ),
+          // Zoom Controls (우하단)
+          if (_zoomSpec != null)
+            Positioned(
+              bottom: selectedCount > 0 && gridState.showBottomSheet
+                  ? 350 + bottomPadding + 16
+                  : 100 + bottomPadding + 16,
+              right: 16,
+              child: ZoomControls(
+                key: _zoomControlKey,
+                onZoomIn: _handleZoomIn,
+                onZoomOut: _handleZoomOut,
+                currentLevel: _currentZoomLevel,
+                maxLevel: _zoomSpec!.maxLevel,
+                minLevel: _zoomSpec!.minLevel,
+              ),
+            ),
         ],
       ),
+    );
+  }
+
+  /// 섹션 오버레이 빌드 (항상 표시, 실시간 업데이트)
+  Widget _buildSectionOverlay(GridState gridState) {
+    // 픽을 섹션별로 그룹화 (실시간 업데이트)
+    final picksBySection = GridSectionManager.groupPicksBySection(
+      gridState.selectedBlocks,
+      _sections,
+    );
+
+    return GridSectionOverlay(
+      sections: _sections,
+      picksBySection: picksBySection,
+      zoom: gridState.zoom,
+      panX: gridState.panX,
+      panY: gridState.panY,
+      screenSize: MediaQuery.of(context).size,
+      show: true,
     );
   }
 
@@ -191,6 +618,14 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         onPressed: () => context.go('/'),
       ),
       actions: [
+        // 튜토리얼 다시 보기
+        IconButton(
+          icon: const Icon(LucideIcons.helpCircle, color: AppColors.blue),
+          onPressed: () {
+            _tutorialCoachMark?.finish();
+            _showTutorial();
+          },
+        ),
         // 공유 버튼
         IconButton(
           icon: const Icon(LucideIcons.share2, color: AppColors.darkBlue),
@@ -202,266 +637,4 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     );
   }
 
-  /// 정보 패널 (좌상단)
-  Widget _buildInfoPanel(GridState gridState) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.white.withOpacity(0.9),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.buleGray),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            children: [
-              const Icon(LucideIcons.grid, size: 16, color: AppColors.blue),
-              const SizedBox(width: 8),
-              Text(
-                'Grid: $_gridWidth × $_gridHeight',
-                style: AppTextStyles.bodySmall.copyWith(
-                  color: AppColors.darkBlue,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              const Icon(LucideIcons.zoomIn, size: 16, color: AppColors.purple),
-              const SizedBox(width: 8),
-              Text(
-                'Zoom: ${gridState.zoom.toStringAsFixed(2)}x',
-                style: AppTextStyles.bodySmall.copyWith(
-                  color: AppColors.navy,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              const Icon(LucideIcons.hash, size: 16, color: AppColors.green),
-              const SizedBox(width: 8),
-              Text(
-                'Selected: ${gridState.selectedBlocks.length}',
-                style: AppTextStyles.bodySmall.copyWith(
-                  color: AppColors.navy,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// 하단 컨트롤 버튼들
-  Widget _buildBottomControls(
-    GridStateNotifier gridNotifier,
-    int selectedCount,
-  ) {
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // 모두 지우기
-          if (selectedCount > 0)
-            _buildControlButton(
-              icon: LucideIcons.trash2,
-              label: 'Clear',
-              color: AppColors.red,
-              onPressed: () {
-                gridNotifier.clearBlocks();
-              },
-            ),
-
-          if (selectedCount > 0) const SizedBox(width: 12),
-
-          // 참가하기 버튼
-          _buildMainButton(
-            selectedCount: selectedCount,
-            onPressed: () {
-              // TODO: 게임 참가 로직
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('$selectedCount blocks selected!'),
-                  backgroundColor: AppColors.green,
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// 줌 컨트롤 (우측)
-  Widget _buildZoomControls(
-    GridStateNotifier gridNotifier,
-    GridState gridState,
-  ) {
-    // 화면 크기 가져오기
-    final screenSize = MediaQuery.of(context).size;
-
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.white.withOpacity(0.9),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.buleGray),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Zoom In (화면 중앙 기준)
-          IconButton(
-            icon: const Icon(LucideIcons.plus, size: 20),
-            onPressed: () => gridNotifier.zoomIn(
-              screenWidth: screenSize.width,
-              screenHeight: screenSize.height,
-            ),
-            color: AppColors.blue,
-          ),
-
-          // Zoom 레벨 표시
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-            child: Text(
-              '${(gridState.zoom * 100).toInt()}%',
-              style: AppTextStyles.caption.copyWith(
-                color: AppColors.navy,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-
-          // Zoom Out (화면 중앙 기준)
-          IconButton(
-            icon: const Icon(LucideIcons.minus, size: 20),
-            onPressed: () => gridNotifier.zoomOut(
-              screenWidth: screenSize.width,
-              screenHeight: screenSize.height,
-            ),
-            color: AppColors.blue,
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// 컨트롤 버튼
-  Widget _buildControlButton({
-    required IconData icon,
-    required String label,
-    required Color color,
-    required VoidCallback onPressed,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.white.withOpacity(0.9),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.buleGray),
-        boxShadow: [
-          BoxShadow(
-            color: color.withOpacity(0.2),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onPressed,
-          borderRadius: BorderRadius.circular(12),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(icon, size: 20, color: color),
-                const SizedBox(width: 8),
-                Text(
-                  label,
-                  style: AppTextStyles.button.copyWith(color: color),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  /// 메인 버튼 (참가하기)
-  Widget _buildMainButton({
-    required int selectedCount,
-    required VoidCallback onPressed,
-  }) {
-    final isDisabled = selectedCount == 0;
-
-    return Container(
-      decoration: BoxDecoration(
-        gradient: isDisabled
-            ? AppColors.gradientDisable
-            : AppColors.gradientBluePurplePink,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: isDisabled
-            ? []
-            : [
-                BoxShadow(
-                  color: AppColors.blue.withOpacity(0.3),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
-                ),
-              ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: isDisabled ? null : onPressed,
-          borderRadius: BorderRadius.circular(16),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  isDisabled ? LucideIcons.lock : LucideIcons.zap,
-                  size: 20,
-                  color: AppColors.white,
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  isDisabled
-                      ? 'Select blocks to play'
-                      : 'Play with $selectedCount blocks',
-                  style: AppTextStyles.buttonLarge.copyWith(
-                    color: AppColors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }
