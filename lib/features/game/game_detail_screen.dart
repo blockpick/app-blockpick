@@ -99,7 +99,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                   child: gameRound.vibeImageUrl!.isEmpty
                       ? Container(color: AppColors.blueWhite)
                       : Image.network(
-                          gameRound.vibeImageUrl!,
+                          gameRound.vibeImageUrl!.replaceAll(' ', '%20'),
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
                             return Container(color: AppColors.blueWhite);

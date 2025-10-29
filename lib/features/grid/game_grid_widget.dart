@@ -135,9 +135,13 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
 
       // URL인지 로컬 asset인지 확인
       if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+        // URL 인코딩 (공백 등 특수문자 처리)
+        // replaceAll을 사용하여 공백과 특수문자를 직접 인코딩
+        final encodedPath = imagePath.replaceAll(' ', '%20');
         debugPrint('🖼️ Loading network image: $imagePath');
+        debugPrint('🖼️ Encoded URL: $encodedPath');
         // 네트워크 이미지 로드
-        final NetworkImage networkImage = NetworkImage(imagePath);
+        final NetworkImage networkImage = NetworkImage(encodedPath);
         final ImageStream stream = networkImage.resolve(const ImageConfiguration());
         final completer = Completer<ui.Image>();
 
@@ -254,6 +258,26 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
       return icons;
     }
 
+    // 🎯 적응형 아이콘 크기: 배율이 작을수록 아이콘을 상대적으로 크게 표시
+    // zoom이 작을수록 iconScale이 커짐 (최소 1.0, 최대 2.5)
+    double iconScale;
+    if (cellSize < 8.0) {
+      // 매우 작은 셀 (4-8px): 250% 크기
+      iconScale = 2.5;
+    } else if (cellSize < 12.0) {
+      // 작은 셀 (8-12px): 200% 크기
+      iconScale = 2.0;
+    } else if (cellSize < 20.0) {
+      // 중간 셀 (12-20px): 150% 크기
+      iconScale = 1.5;
+    } else if (cellSize < 30.0) {
+      // 일반 셀 (20-30px): 120% 크기
+      iconScale = 1.2;
+    } else {
+      // 큰 셀 (30px+): 95% 크기 (기존)
+      iconScale = 0.95;
+    }
+
     for (final block in gridState.selectedBlocks) {
       final x = (block.col - 1) * cellSize + gridState.panX;
       final y = (block.row - 1) * cellSize + gridState.panY;
@@ -287,12 +311,17 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
         }
       }
 
+      // 아이콘 크기 계산 (적응형)
+      final iconSize = cellSize * iconScale;
+      // 아이콘을 셀 중앙에 배치하기 위한 오프셋 계산
+      final iconOffset = (cellSize - iconSize) / 2;
+
       icons.add(
         Positioned(
-          left: x,
-          top: y,
-          width: cellSize * 0.95,
-          height: cellSize * 0.95,
+          left: x + iconOffset,
+          top: y + iconOffset,
+          width: iconSize,
+          height: iconSize,
           child: SvgPicture.asset(
             iconPath,
             fit: BoxFit.contain,

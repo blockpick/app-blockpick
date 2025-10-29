@@ -267,7 +267,7 @@ class _WinnersScreenState extends State<WinnersScreen>
                     CircleAvatar(
                       radius: 16,
                       backgroundColor: AppColors.bgWhite,
-                      backgroundImage: NetworkImage(winner.userAvatar),
+                      backgroundImage: NetworkImage(winner.userAvatar.replaceAll(' ', '%20')),
                       onBackgroundImageError: (_, __) {},
                       child: const Icon(
                         Icons.person,

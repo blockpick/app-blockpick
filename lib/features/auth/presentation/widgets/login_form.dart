@@ -301,7 +301,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 );
               },
               icon: Image.network(
-                'https://www.google.com/favicon.ico',
+                'https://www.google.com/favicon.ico'.replaceAll(' ', '%20'),
                 width: 20,
                 height: 20,
               ),

@@ -93,7 +93,7 @@ class GameCard extends StatelessWidget {
                     ),
                   )
                 : Image.network(
-                    game.imageUrl,
+                    game.imageUrl.replaceAll(' ', '%20'),
                     fit: BoxFit.cover,
                     loadingBuilder: (context, child, loadingProgress) {
                       if (loadingProgress == null) return child;
