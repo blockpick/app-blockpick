@@ -236,3 +236,9 @@ Future<GraphQLClient> graphqlClient(GraphqlClientRef ref) async {
   return GraphQLClientService(tokenDataSource: tokenDataSource)
       .createClient(token: token);
 }
+
+/// 인증 없는 GraphQL 클라이언트 (공개 API용)
+@riverpod
+GraphQLClient publicGraphqlClient(PublicGraphqlClientRef ref) {
+  return GraphQLClientService().createClient();
+}

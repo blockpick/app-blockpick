@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:ui' as ui;
 import 'dart:async';
+import 'dart:math' as math;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'grid_painter.dart';
 import '../../providers/grid_state_provider.dart';
 import '../../models/block_model.dart';
 import '../../core/constants/app_constants.dart';
+import '../../core/theme/app_colors.dart';
 import '../../utils/zoom_calculator.dart';
 
 /// 게임 그리드 위젯
@@ -267,6 +269,9 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
 
               // 선택된 블록 위에 SVG 아이콘 오버레이
               ..._buildBlockIcons(gridState, constraints.biggest),
+
+              // 선택된 블록의 구역 라벨 오버레이
+              ..._buildRegionLabels(gridState, constraints.biggest),
             ],
           ),
         );
@@ -329,23 +334,23 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
     }
 
     // 🎯 적응형 아이콘 크기: 배율이 작을수록 아이콘을 상대적으로 크게 표시
-    // zoom이 작을수록 iconScale이 커짐 (최소 1.0, 최대 2.5)
+    // 하지만 인접 셀과 겹치지 않도록 최대 0.9 (90%)로 제한
     double iconScale;
     if (cellSize < 8.0) {
-      // 매우 작은 셀 (4-8px): 250% 크기
-      iconScale = 2.5;
+      // 매우 작은 셀 (4-8px): 90% 크기 (겹침 방지)
+      iconScale = 0.9;
     } else if (cellSize < 12.0) {
-      // 작은 셀 (8-12px): 200% 크기
-      iconScale = 2.0;
+      // 작은 셀 (8-12px): 90% 크기
+      iconScale = 0.9;
     } else if (cellSize < 20.0) {
-      // 중간 셀 (12-20px): 150% 크기
-      iconScale = 1.5;
+      // 중간 셀 (12-20px): 85% 크기
+      iconScale = 0.85;
     } else if (cellSize < 30.0) {
-      // 일반 셀 (20-30px): 120% 크기
-      iconScale = 1.2;
+      // 일반 셀 (20-30px): 80% 크기
+      iconScale = 0.8;
     } else {
-      // 큰 셀 (30px+): 95% 크기 (기존)
-      iconScale = 0.95;
+      // 큰 셀 (30px+): 75% 크기
+      iconScale = 0.75;
     }
 
     for (final block in gridState.selectedBlocks) {
@@ -401,6 +406,144 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
     }
 
     return icons;
+  }
+
+  /// LOD 레벨 계산 (동적, 줌에 따라 무한 증가)
+  int _getLODLevel(double zoom) {
+    if (zoom < 0.05) return 0;
+    if (zoom < 0.1) return 1;
+    if (zoom < 0.3) return 2;
+    if (zoom < 0.6) return 3;
+    if (zoom < 1.0) return 4;
+    if (zoom < 2.0) return 5;
+    if (zoom < 4.0) return 6;
+    if (zoom < 8.0) return 7;
+    if (zoom < 16.0) return 8;
+    // 줌이 계속 커지면 레벨도 계속 증가
+    return (math.log(zoom) / math.log(2)).floor() + 4;
+  }
+
+  /// 구역 분할 수 계산 (동적으로 증가)
+  int _getRegionDivisions(int lodLevel) {
+    switch (lodLevel) {
+      case 0:
+        return 3;  // 3x3 = 9
+      case 1:
+        return 3;  // 3x3 = 9
+      case 2:
+        return 4;  // 4x4 = 16
+      case 3:
+        return 6;  // 6x6 = 36
+      case 4:
+        return 8;  // 8x8 = 64
+      case 5:
+        return 12; // 12x12 = 144
+      case 6:
+        return 16; // 16x16 = 256
+      case 7:
+        return 24; // 24x24 = 576
+      case 8:
+        return 32; // 32x32 = 1024
+      default:
+        // L9+: 동적으로 계속 증가 (2의 지수로)
+        if (lodLevel > 8) {
+          return math.min(64, 32 + (lodLevel - 8) * 8);
+        }
+        return 0; // 구역 없음
+    }
+  }
+
+  /// 블록의 구역 ID 계산 (각 LOD 레벨마다 독립적인 명명)
+  String _getBlockRegionId(int row, int col, int lodLevel) {
+    final divisions = _getRegionDivisions(lodLevel);
+    if (divisions == 0) return '';
+
+    // 현재 LOD 레벨에서 블록이 속한 구역 계산
+    final regionWidth = widget.gridWidth / divisions;
+    final regionHeight = widget.gridHeight / divisions;
+
+    final regionRow = ((row - 1) / regionHeight).floor();
+    final regionCol = ((col - 1) / regionWidth).floor();
+
+    // 숫자 기반 명명 체계: R행C열
+    // 예: R1C1, R1C2, R2C1, R2C2, ...
+    return 'R${regionRow + 1}C${regionCol + 1}';
+  }
+
+  /// 선택된 블록의 구역 라벨 렌더링
+  List<Widget> _buildRegionLabels(GridState gridState, Size size) {
+    final labels = <Widget>[];
+    final cellSize = AppConstants.cellSize * gridState.zoom;
+    final lodLevel = _getLODLevel(gridState.zoom);
+
+    final divisions = _getRegionDivisions(lodLevel);
+
+    // 디버깅: 줌/LOD/구역 출력
+    debugPrint('🎯 Region Labels: zoom=${gridState.zoom.toStringAsFixed(3)}, LOD=$lodLevel, divisions=$divisions');
+
+    if (divisions == 0) return labels;
+
+    // 각 선택된 블록마다 구역 라벨 표시
+    final Map<String, List<BlockModel>> regionGroups = {};
+
+    for (final block in gridState.selectedBlocks) {
+      final regionId = _getBlockRegionId(block.row, block.col, lodLevel);
+      debugPrint('   Block(${block.row},${block.col}) → Region: $regionId');
+
+      if (regionId.isEmpty) continue;
+
+      if (!regionGroups.containsKey(regionId)) {
+        regionGroups[regionId] = [];
+      }
+      regionGroups[regionId]!.add(block);
+    }
+
+    // 구역 크기 계산
+    final regionWidthInCells = widget.gridWidth / divisions;
+    final regionHeightInCells = widget.gridHeight / divisions;
+
+    // 각 구역의 좌상단 모서리에 라벨 표시
+    for (final entry in regionGroups.entries) {
+      final regionId = entry.key;
+      final blocks = entry.value;
+
+      // 첫 번째 블록을 기준으로 구역 인덱스 계산
+      final firstBlock = blocks.first;
+      final regionRow = ((firstBlock.row - 1) / regionHeightInCells).floor();
+      final regionCol = ((firstBlock.col - 1) / regionWidthInCells).floor();
+
+      // 구역의 좌상단 좌표
+      final regionX = regionCol * regionWidthInCells * cellSize + gridState.panX;
+      final regionY = regionRow * regionHeightInCells * cellSize + gridState.panY;
+
+      // 라벨 크기 계산
+      final fontSize = (cellSize * regionWidthInCells * 0.1).clamp(14.0, 24.0);
+
+      labels.add(
+        Positioned(
+          left: regionX + 12,
+          top: regionY + 12,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: AppColors.green.withOpacity(0.9),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: AppColors.white, width: 2),
+            ),
+            child: Text(
+              regionId,
+              style: TextStyle(
+                color: AppColors.white,
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return labels;
   }
 
   /// 탭 처리 (블록 선택)

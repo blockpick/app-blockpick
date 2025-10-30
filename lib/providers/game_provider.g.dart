@@ -6,7 +6,7 @@ part of 'game_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$gamesHash() => r'06d9d52d362de40a27880652d68923deeb8d60d5';
+String _$gamesHash() => r'0eb57c58310189aeaa3dc9f24fd7f471d8e80836';
 
 /// 모든 게임 목록 Provider
 ///
@@ -196,7 +196,7 @@ class _GamesByTypeProviderElement
   GameType get gameType => (origin as GamesByTypeProvider).gameType;
 }
 
-String _$gameHash() => r'30c300347b87d668de658141959e1162de22e65f';
+String _$gameHash() => r'0d45ff37252a2bd0d3be7f118f8e38728102884c';
 
 /// 특정 게임 상세 조회 Provider
 ///

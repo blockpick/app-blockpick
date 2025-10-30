@@ -77,6 +77,9 @@ class GridPainter extends CustomPainter {
     // 배경 이미지 그리기 (0, 0부터 그리드 크기만큼)
     _drawBackgroundTransformed(canvas, size);
 
+    // 구역 배경색 그리기
+    _drawRegionBackgrounds(canvas, size);
+
     // 그리드 선 그리기
     _drawGridLinesTransformed(canvas, size);
 
@@ -109,14 +112,19 @@ class GridPainter extends CustomPainter {
     );
   }
 
-  /// LOD (Level of Detail) 레벨 계산
+  /// LOD (Level of Detail) 레벨 계산 (동적, 줌에 따라 무한 증가)
   int _getLODLevel(double zoom) {
-    if (zoom < AppConstants.lodThresholds['ultraLow']!) return 0;
-    if (zoom < AppConstants.lodThresholds['veryLow']!) return 1;
-    if (zoom < AppConstants.lodThresholds['low']!) return 2;
-    if (zoom < AppConstants.lodThresholds['medium']!) return 3;
-    if (zoom < AppConstants.lodThresholds['high']!) return 4;
-    return 5;
+    if (zoom < 0.05) return 0;
+    if (zoom < 0.1) return 1;
+    if (zoom < 0.3) return 2;
+    if (zoom < 0.6) return 3;
+    if (zoom < 1.0) return 4;
+    if (zoom < 2.0) return 5;
+    if (zoom < 4.0) return 6;
+    if (zoom < 8.0) return 7;
+    if (zoom < 16.0) return 8;
+    // 줌이 계속 커지면 레벨도 계속 증가
+    return (math.log(zoom) / math.log(2)).floor() + 4;
   }
 
   /// 배경 그리기 (변환된 좌표계)
@@ -178,6 +186,120 @@ class GridPainter extends CustomPainter {
         Rect.fromLTWH(0, 0, totalGridWidth, totalGridHeight),
         paint,
       );
+    }
+  }
+
+  /// 줌 레벨에 따른 구역 분할 수 계산 (동적으로 증가)
+  int _getRegionDivisions(int lodLevel) {
+    switch (lodLevel) {
+      case 0:
+        return 3;  // 3x3 = 9
+      case 1:
+        return 3;  // 3x3 = 9
+      case 2:
+        return 4;  // 4x4 = 16
+      case 3:
+        return 6;  // 6x6 = 36
+      case 4:
+        return 8;  // 8x8 = 64
+      case 5:
+        return 12; // 12x12 = 144
+      case 6:
+        return 16; // 16x16 = 256
+      case 7:
+        return 24; // 24x24 = 576
+      case 8:
+        return 32; // 32x32 = 1024
+      default:
+        // L9+: 동적으로 계속 증가
+        if (lodLevel > 8) {
+          return math.min(64, 32 + (lodLevel - 8) * 8);
+        }
+        return 0; // 구역 없음
+    }
+  }
+
+  /// 블록의 구역 ID 계산 (각 LOD 레벨마다 독립적인 명명)
+  String _getBlockRegionId(int row, int col, int lodLevel) {
+    final divisions = _getRegionDivisions(lodLevel);
+    if (divisions == 0) return '';
+
+    // 현재 LOD 레벨에서 블록이 속한 구역 계산
+    final regionWidth = gridWidth / divisions;
+    final regionHeight = gridHeight / divisions;
+
+    final regionRow = ((row - 1) / regionHeight).floor();
+    final regionCol = ((col - 1) / regionWidth).floor();
+
+    // 숫자 기반 명명 체계: R행C열
+    // 예: R1C1, R1C2, R2C1, R2C2, ...
+    return 'R${regionRow + 1}C${regionCol + 1}';
+  }
+
+  /// 구역별 배경색 가져오기
+  Color _getRegionColor(int regionRow, int regionCol) {
+    // 9개 색상 팔레트 (파스텔 톤)
+    final colors = [
+      const Color(0xFFE8F4F8), // 연한 파랑
+      const Color(0xFFF0E8F4), // 연한 보라
+      const Color(0xFFFFF0F0), // 연한 분홍
+      const Color(0xFFFFF8E8), // 연한 노랑
+      const Color(0xFFE8F8E8), // 연한 초록
+      const Color(0xFFF8F0E8), // 연한 주황
+      const Color(0xFFE8F0FF), // 연한 하늘색
+      const Color(0xFFF8E8FF), // 연한 라벤더
+      const Color(0xFFFFE8F0), // 연한 핑크
+    ];
+
+    // 체스판 패턴으로 색상 배치
+    final index = (regionRow + regionCol) % colors.length;
+    return colors[index];
+  }
+
+  /// 구역 배경색 그리기 (선택된 블록이 있는 구역만)
+  void _drawRegionBackgrounds(Canvas canvas, Size size) {
+    final lodLevel = _getLODLevel(zoom);
+    final divisions = _getRegionDivisions(lodLevel);
+
+    if (divisions == 0 || selectedBlocks.isEmpty) return;
+
+    final totalGridWidth = gridWidth * cellSize;
+    final totalGridHeight = gridHeight * cellSize;
+
+    final regionWidth = totalGridWidth / divisions;
+    final regionHeight = totalGridHeight / divisions;
+
+    // 선택된 블록이 속한 구역들만 표시
+    final Set<String> drawnRegions = {};
+
+    for (final block in selectedBlocks) {
+      // 블록이 속한 구역 계산
+      final regionRow = ((block.row - 1) / (gridHeight / divisions)).floor();
+      final regionCol = ((block.col - 1) / (gridWidth / divisions)).floor();
+
+      final regionKey = '$regionRow-$regionCol';
+      if (drawnRegions.contains(regionKey)) continue;
+      drawnRegions.add(regionKey);
+
+      final x = regionCol * regionWidth;
+      final y = regionRow * regionHeight;
+
+      final regionRect = Rect.fromLTWH(x, y, regionWidth, regionHeight);
+
+      // 구역 배경색
+      final bgPaint = Paint()
+        ..color = _getRegionColor(regionRow, regionCol).withOpacity(0.2)
+        ..style = PaintingStyle.fill;
+
+      canvas.drawRect(regionRect, bgPaint);
+
+      // 구역 테두리 (빨간색)
+      final borderPaint = Paint()
+        ..color = AppColors.red.withOpacity(0.8)
+        ..strokeWidth = 4.0 / zoom
+        ..style = PaintingStyle.stroke;
+
+      canvas.drawRect(regionRect, borderPaint);
     }
   }
 

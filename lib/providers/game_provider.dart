@@ -163,7 +163,8 @@ const String _getGameQuery = r'''
 @riverpod
 Future<List<Game>> games(Ref ref) async {
   try {
-    final client = await ref.watch(graphqlClientProvider.future);
+    // 게임 목록은 공개 API이므로 인증 없는 클라이언트 사용
+    final client = ref.watch(publicGraphqlClientProvider);
 
     final result = await client.query(
       QueryOptions(

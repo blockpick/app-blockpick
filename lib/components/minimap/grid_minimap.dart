@@ -34,6 +34,9 @@ class GridMinimap extends StatefulWidget {
   /// 배경 이미지 경로
   final String? backgroundImagePath;
 
+  /// 현재 줌 레벨 (선택적, 구역 분할에 사용)
+  final int? currentZoomLevel;
+
   const GridMinimap({
     super.key,
     required this.gridWidth,
@@ -44,6 +47,7 @@ class GridMinimap extends StatefulWidget {
     required this.screenSize,
     this.minimapSize = AppConstants.minimapSize,
     this.backgroundImagePath,
+    this.currentZoomLevel,
   });
 
   @override
@@ -160,6 +164,7 @@ class _GridMinimapState extends State<GridMinimap> {
             panY: widget.panY,
             screenSize: widget.screenSize,
             backgroundImage: _backgroundImage,
+            currentZoomLevel: widget.currentZoomLevel,
           ),
         ),
       ),
@@ -176,6 +181,7 @@ class _MinimapPainter extends CustomPainter {
   final double panY;
   final Size screenSize;
   final ui.Image? backgroundImage;
+  final int? currentZoomLevel;
 
   _MinimapPainter({
     required this.gridWidth,
@@ -185,6 +191,7 @@ class _MinimapPainter extends CustomPainter {
     required this.panY,
     required this.screenSize,
     this.backgroundImage,
+    this.currentZoomLevel,
   });
 
   @override
