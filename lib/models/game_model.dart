@@ -82,12 +82,12 @@ extension GameX on Game {
       originalPrice = product.originalPrice ?? product.price ?? 0;
 
       // 이미지 URL 디버깅
-      print('🖼️ Game.toGameRound():');
-      print('   - gameId: $id');
-      print('   - product.defaultImage: ${product.defaultImage}');
-      print('   - product.imageUrl: ${product.imageUrl}');
-      print('   - product.thumbnailUrl: ${product.thumbnailUrl}');
-      print('   - 최종 imageUrl: $imageUrl');
+      // print('🖼️ Game.toGameRound():');
+      // print('   - gameId: $id');
+      // print('   - product.defaultImage: ${product.defaultImage}');
+      // print('   - product.imageUrl: ${product.imageUrl}');
+      // print('   - product.thumbnailUrl: ${product.thumbnailUrl}');
+      // print('   - 최종 imageUrl: $imageUrl');
     }
 
     // 시간 계산

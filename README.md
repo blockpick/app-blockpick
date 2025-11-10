@@ -15,6 +15,9 @@ BlockPick은 대형 그리드(최대 1000x1000) 기반의 블록 선택 게임�
 - ✅ **플랫폼별 최적화**: 모바일에서는 팬 제스처 비활성화로 UX 개선
 - ✅ **상태 관리**: Riverpod 기반 안정적인 상태 관리
 - ✅ **디자인 시스템**: UI 명세서 기반 완전한 디자인 시스템
+- ✅ **블록체인 통합**: Polygon Amoy Testnet 기반 게임 참가 시스템
+- ✅ **익명성 보장**: 백엔드는 사용자 지갑 주소를 모름 (SHA-256 해시만 저장)
+- ✅ **암호화**: AES-256 기반 좌표 암호화
 
 ## 기술 스택
 
@@ -23,6 +26,10 @@ BlockPick은 대형 그리드(최대 1000x1000) 기반의 블록 선택 게임�
 - **상태 관리**: Riverpod 2.6.1
 - **아이콘**: Lucide Icons
 - **애니메이션**: Flutter Animate
+- **블록체인**: web3dart 2.7.3, Polygon Amoy Testnet
+- **암호화**: encrypt 5.0.3 (AES-256)
+- **보안 저장소**: flutter_secure_storage 9.0.0
+- **GraphQL**: graphql_flutter 5.1.2
 
 ## 프로젝트 구조
 
@@ -35,7 +42,13 @@ lib/
 │   │   └── app_theme.dart        # 전체 테마
 │   ├── constants/          # 상수
 │   │   └── app_constants.dart
+│   ├── graphql/            # GraphQL 설정
 │   └── utils/              # 유틸리티
+│
+├── services/              # 비즈니스 로직 서비스
+│   ├── blockchain_wallet_service.dart      # 블록체인 지갑 관리
+│   ├── smart_contract_service.dart         # 스마트 컨트랙트 연동
+│   └── coordinate_encryption_service.dart  # 좌표 암호화
 │
 ├── features/               # 기능별 모듈
 │   ├── grid/              # 그리드 렌더링
@@ -46,10 +59,13 @@ lib/
 │   └── ui/                # UI 컴포넌트
 │
 ├── models/                # 데이터 모델
-│   └── block_model.dart
+│   ├── block_model.dart
+│   └── game_model.dart
 │
 ├── providers/             # 상태 관리
-│   └── grid_state_provider.dart
+│   ├── grid_state_provider.dart
+│   ├── game_provider.dart
+│   └── game_participation_provider.dart  # 게임 참가 통합
 │
 ├── widgets/               # 공통 위젯
 │
@@ -104,7 +120,6 @@ flutter run -d emulator-5554
 
 # 특정 포트로 웹 실행
 flutter run -d chrome --web-port=8080
-
 # 웹 서버 모드 (자동 새로고침)
 flutter run -d web-server
 
@@ -234,28 +249,36 @@ flutter emulators --launch <emulator_id>
 - [x] 줌 컨트롤
 - [x] 하단 컨트롤
 
+### ✅ Phase 5: 블록체인 통합
+- [x] 블록체인 지갑 서비스 (생성, 저장, 로드)
+- [x] 스마트 컨트랙트 연동 (Polygon Amoy Testnet)
+- [x] 좌표 암호화 서비스 (AES-256)
+- [x] 게임 참가 Provider (전체 프로세스 통합)
+- [x] joinGame GraphQL Mutation
+- [x] 익명성 보장 (지갑 주소 해시화)
+
 ## 향후 개발 예정
 
-### 🚧 Phase 5: UI 컴포넌트
+### 🚧 Phase 6: UI 컴포넌트
 - [ ] 헤더 컴포넌트
 - [ ] 사이드바 (데스크톱)
 - [ ] 바텀시트 (모바일)
 - [ ] 미니맵
 - [ ] 플로팅 컨트롤
 
-### 🚧 Phase 6: 애니메이션
+### 🚧 Phase 7: 애니메이션
 - [ ] 슬라이드 애니메이션
 - [ ] 스케일 애니메이션
 - [ ] 진행률 바 애니메이션
 - [ ] 리스트 애니메이션
 
-### 🚧 Phase 7: 네트워크 & 데이터
-- [ ] API 연동
-- [ ] GraphQL 설정
-- [ ] 로컬 저장소 (Hive)
-- [ ] 게임 데이터 동기화
+### 🚧 Phase 8: 게임 참가 UI
+- [ ] 게임 참가 버튼 통합
+- [ ] 진행 상태 다이얼로그
+- [ ] 에러 처리 UI
+- [ ] 참가 완료 화면
 
-### 🚧 Phase 8: 최적화
+### 🚧 Phase 9: 최적화
 - [ ] 성능 프로파일링
 - [ ] 메모리 최적화
 - [ ] 배터리 최적화
@@ -304,10 +327,38 @@ AppTextStyles.caption     // 10px, normal
 
 프로젝트 문서는 `/docs` 폴더에 위치합니다:
 
+### UI/UX 문서
 - `UI_SPECIFICATION_INDEX.md`: 전체 UI 명세 인덱스
 - `BLOCKPICK_UI_UX_SPECIFICATION.md`: 상세 UI/UX 명세 (1,280 lines)
 - `UI_ANALYSIS_SUMMARY.md`: 분석 요약
 - `BLOCKPICK_UI_SPEC.md`: 한글 상세 기획서 (2,377 lines)
+
+### 블록체인 & 게임 참가
+- `게임_참가_프로세스.md`: 게임 참가 프로세스 상세 설명
+- `게임_참가_구현_가이드.md`: 구현 가이드 및 사용 예시
+
+### 빠른 시작
+
+게임 참가 기능을 사용하려면:
+
+```dart
+// 게임 참가하기
+final result = await ref
+    .read(gameParticipationProvider.notifier)
+    .joinGame(
+      gameId: 'game-123',
+      selectedGameProductId: 'product-456',
+      row: 100,
+      col: 200,
+      contractAddress: '0x...', // 게임의 스마트 컨트랙트 주소
+    );
+
+if (result.success) {
+  print('게임 참가 성공! Entry ID: ${result.entryId}');
+}
+```
+
+자세한 내용은 `docs/게임_참가_구현_가이드.md`를 참조하세요.
 
 ## 라이선스
 
@@ -321,4 +372,5 @@ AppTextStyles.caption     // 10px, normal
 
 **개발 시작일**: 2025-10-22
 **현재 버전**: 1.0.0
-**상태**: 개발 중 (Phase 4 완료)
+**상태**: 개발 중 (Phase 5 완료 - 블록체인 통합)
+**마지막 업데이트**: 2025-11-04

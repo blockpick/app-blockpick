@@ -37,6 +37,7 @@ class GameScreen extends ConsumerStatefulWidget {
 class _GameScreenState extends ConsumerState<GameScreen> {
   // 게임 데이터
   GameRound? _game;
+  Game? _fullGame; // 전체 게임 정보 (contract address 포함)
 
   // 그리드 크기
   int _gridWidth = 100;
@@ -537,6 +538,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           );
         }
 
+        // 전체 게임 정보 저장 (contract address, gameProducts 등)
+        _fullGame = game;
+
         // GameRound로 변환
         final gameRound = game.toGameRound();
         _game = gameRound;
@@ -638,7 +642,11 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
           // 바텀시트
           if (selectedCount > 0 && gridState.showBottomSheet)
-            SelectedBlocksSheet(gridConfig: _gridConfig!),
+            SelectedBlocksSheet(
+              gridConfig: _gridConfig!,
+              game: _game,
+              fullGame: _fullGame,
+            ),
 
           // HUD (상단 중앙)
           if (_zoomSpec != null)

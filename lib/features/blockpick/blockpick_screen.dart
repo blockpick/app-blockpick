@@ -10,7 +10,7 @@ import '../../components/app_bars/sub_app_bar.dart';
 import '../../models/platform_mode.dart';
 import '../../providers/platform_mode_provider.dart';
 import '../home/home_screen.dart';
-import '../home/home_placeholder_screen.dart';
+import '../home/new_home_screen.dart';
 import '../my_pick/my_pick_screen.dart';
 import '../winners/winners_screen.dart';
 import '../my/my_screen.dart';
@@ -32,7 +32,7 @@ class _BlockpickScreenState extends ConsumerState<BlockpickScreen> {
 
   // BlockPick 앱 화면들
   final List<Widget> _blockpickScreens = const [
-    HomePlaceholderScreen(),  // 0: HOME (기획 예정)
+    NewHomeScreen(),          // 0: HOME (새로운 디자인)
     MyPickScreen(),           // 1: My Pick (참여한 게임)
     HomeScreen(),             // 2: PICK (가운데 큰 버튼 - 게임 목록)
     WinnersScreen(),          // 3: Winners (기획 중)

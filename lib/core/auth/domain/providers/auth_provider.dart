@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../models/user.dart';
 import '../../data/repositories/auth_repository.dart';
+import '../../../../services/blockchain_wallet_service.dart';
 
 part 'auth_provider.g.dart';
 
@@ -56,7 +57,7 @@ class Auth extends _$Auth {
     return AuthState(token: token);
   }
 
-  // 로그인
+  // 로그인 + 지갑 확인/생성
   Future<void> signIn(String email, String password) async {
     print('🔐 로그인 시도: $email');
     state = const AsyncLoading();
@@ -70,6 +71,29 @@ class Auth extends _$Auth {
       print('   - 이메일: ${user.email}');
       print('   - 토큰: ${token?.substring(0, 20)}...');
       print('   - 사용자: ${user.nickname ?? "이름 없음"}');
+
+      // 🔑 로그인 후 블록체인 지갑 확인/생성 (사용자 모르게)
+      try {
+        final walletService = BlockchainWalletService();
+        final hasWallet = await walletService.hasWallet();
+
+        if (!hasWallet) {
+          print('');
+          print('┌─────────────────────────────────────────────────────────┐');
+          print('│ 🔑 블록체인 지갑 자동 생성 (백그라운드)                   │');
+          print('└─────────────────────────────────────────────────────────┘');
+
+          final credentials = await walletService.getOrCreateWallet();
+          final walletAddress = credentials.address.hex;
+
+          print('✅ 블록체인 지갑 생성 완료!');
+          print('   • 지갑 주소: $walletAddress');
+          print('   ⚠️  사용자는 지갑 생성을 알 필요 없음');
+          print('');
+        }
+      } catch (e) {
+        print('⚠️ 지갑 확인/생성 실패 (나중에 재시도 가능): $e');
+      }
 
       return AuthState(user: user, token: token);
     });
@@ -103,7 +127,7 @@ class Auth extends _$Auth {
     return result;
   }
 
-  // 회원가입 3단계 - 최종 회원가입
+  // 회원가입 3단계 - 최종 회원가입 + 지갑 자동 생성
   Future<void> signUp({
     required String email,
     required String password,
@@ -125,6 +149,41 @@ class Auth extends _$Auth {
       print('   - 이메일: ${user.email}');
       print('   - 닉네임: ${user.nickname}');
       print('   - 토큰: ${token?.substring(0, 20)}...');
+
+      // 🔑 회원가입 후 블록체인 지갑 자동 생성 (사용자 모르게)
+      print('');
+      print('┌─────────────────────────────────────────────────────────┐');
+      print('│ 🔑 블록체인 지갑 자동 생성 시작 (백그라운드)              │');
+      print('└─────────────────────────────────────────────────────────┘');
+
+      try {
+        final walletService = BlockchainWalletService();
+
+        // 기존 지갑 확인
+        final hasWallet = await walletService.hasWallet();
+
+        if (!hasWallet) {
+          print('→ 지갑이 없습니다. 새로 생성합니다...');
+          final credentials = await walletService.getOrCreateWallet();
+          final walletAddress = credentials.address.hex;
+
+          print('✅ 블록체인 지갑 생성 완료!');
+          print('   • 지갑 주소: $walletAddress');
+          print('   • 저장 위치: 디바이스 보안 저장소 (Keychain/EncryptedSharedPreferences)');
+          print('   ⚠️  사용자는 지갑 생성을 알 필요 없음 (자동 처리)');
+        } else {
+          print('✓ 기존 지갑이 이미 존재합니다.');
+          final walletAddress = await walletService.getWalletAddress();
+          print('   • 지갑 주소: $walletAddress');
+        }
+
+        print('└─────────────────────────────────────────────────────────┘');
+        print('');
+      } catch (e) {
+        // 지갑 생성 실패해도 회원가입은 성공으로 처리
+        print('⚠️ 지갑 생성 실패 (나중에 재시도 가능): $e');
+        print('   → 회원가입은 성공했으므로 계속 진행합니다.');
+      }
 
       return AuthState(user: user, token: token);
     });

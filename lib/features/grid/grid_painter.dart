@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
-import 'dart:ui' as ui;
-import '../../models/block_model.dart';
-import '../../core/theme/app_colors.dart';
-import '../../core/constants/app_constants.dart';
 import 'dart:math' as math;
+import 'dart:ui' as ui;
+
+import 'package:flutter/material.dart';
+
+import '../../core/constants/app_constants.dart';
+import '../../core/theme/app_colors.dart';
+import '../../models/block_model.dart';
 
 /// 그리드를 렌더링하는 CustomPainter
 ///
@@ -55,12 +57,12 @@ class GridPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    debugPrint('🎨 GridPainter.paint() 호출');
-    debugPrint('   - size: $size');
-    debugPrint('   - zoom: $zoom');
-    debugPrint('   - pan: $pan');
-    debugPrint('   - gridSize: $gridWidth x $gridHeight');
-    debugPrint('   - backgroundImage: ${backgroundImage != null ? "있음" : "없음"}');
+    // debugPrint('🎨 GridPainter.paint() 호출');
+    // debugPrint('   - size: $size');
+    // debugPrint('   - zoom: $zoom');
+    // debugPrint('   - pan: $pan');
+    // debugPrint('   - gridSize: $gridWidth x $gridHeight');
+    // debugPrint('   - backgroundImage: ${backgroundImage != null ? "있음" : "없음"}');
 
     // Canvas 저장 (변환 전 상태)
     canvas.save();
@@ -142,27 +144,15 @@ class GridPainter extends CustomPainter {
       );
 
       // 그리드 크기에 맞춰 이미지 렌더링 (0, 0부터 시작)
-      final dstRect = Rect.fromLTWH(
-        0,
-        0,
-        totalGridWidth,
-        totalGridHeight,
-      );
+      final dstRect = Rect.fromLTWH(0, 0, totalGridWidth, totalGridHeight);
 
       // 이미지를 그리드에 맞춰 그리기
-      final imagePaint = Paint()
-        ..filterQuality = FilterQuality.high;
+      final imagePaint = Paint()..filterQuality = FilterQuality.high;
 
-      canvas.drawImageRect(
-        backgroundImage!,
-        srcRect,
-        dstRect,
-        imagePaint,
-      );
+      canvas.drawImageRect(backgroundImage!, srcRect, dstRect, imagePaint);
 
       // 약한 오버레이 (그리드 가시성을 위해)
-      final overlayPaint = Paint()
-        ..color = Colors.white.withOpacity(0.2);
+      final overlayPaint = Paint()..color = Colors.white.withOpacity(0.2);
 
       canvas.drawRect(dstRect, overlayPaint);
     } else {
@@ -193,15 +183,15 @@ class GridPainter extends CustomPainter {
   int _getRegionDivisions(int lodLevel) {
     switch (lodLevel) {
       case 0:
-        return 3;  // 3x3 = 9
+        return 3; // 3x3 = 9
       case 1:
-        return 3;  // 3x3 = 9
+        return 3; // 3x3 = 9
       case 2:
-        return 4;  // 4x4 = 16
+        return 4; // 4x4 = 16
       case 3:
-        return 6;  // 6x6 = 36
+        return 6; // 6x6 = 36
       case 4:
-        return 8;  // 8x8 = 64
+        return 8; // 8x8 = 64
       case 5:
         return 12; // 12x12 = 144
       case 6:
@@ -304,17 +294,16 @@ class GridPainter extends CustomPainter {
   }
 
   /// 그리드 선 그리기 (변환된 좌표계 + Viewport Culling)
-  void _drawGridLinesTransformed(
-    Canvas canvas,
-    Size size,
-  ) {
+  void _drawGridLinesTransformed(Canvas canvas, Size size) {
     // 배경 이미지가 있을 때는 더 투명하게
     final opacity = backgroundImage != null ? 0.15 : 0.3;
 
     // 줌에 상관없이 일정한 선 두께 (Canvas가 이미 scale되었으므로)
     final paint = Paint()
-      ..color = Colors.black.withOpacity(opacity) // 검은색 그리드
-      ..strokeWidth = 1.0 // 고정된 선 두께 (canvas.scale이 이미 적용됨)
+      ..color = Colors.black
+          .withOpacity(opacity) // 검은색 그리드
+      ..strokeWidth =
+          1.0 // 고정된 선 두께 (canvas.scale이 이미 적용됨)
       ..style = PaintingStyle.stroke;
 
     // LOD에 따라 그리드 선 간격 조정
@@ -379,7 +368,11 @@ class GridPainter extends CustomPainter {
     final endRow = ((viewportBottom / cellSize).ceil() / step).ceil() * step;
 
     // 세로 선 (뷰포트에 보이는 것만)
-    for (int col = startCol.clamp(0, gridWidth); col <= endCol.clamp(0, gridWidth); col += step) {
+    for (
+      int col = startCol.clamp(0, gridWidth);
+      col <= endCol.clamp(0, gridWidth);
+      col += step
+    ) {
       final x = col * cellSize;
       canvas.drawLine(
         Offset(x, math.max(0, viewportTop)),
@@ -389,7 +382,11 @@ class GridPainter extends CustomPainter {
     }
 
     // 가로 선 (뷰포트에 보이는 것만)
-    for (int row = startRow.clamp(0, gridHeight); row <= endRow.clamp(0, gridHeight); row += step) {
+    for (
+      int row = startRow.clamp(0, gridHeight);
+      row <= endRow.clamp(0, gridHeight);
+      row += step
+    ) {
       final y = row * cellSize;
       canvas.drawLine(
         Offset(math.max(0, viewportLeft), y),
