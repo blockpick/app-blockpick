@@ -270,8 +270,8 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
               // 선택된 블록 위에 SVG 아이콘 오버레이
               ..._buildBlockIcons(gridState, constraints.biggest),
 
-              // 선택된 블록의 구역 라벨 오버레이
-              ..._buildRegionLabels(gridState, constraints.biggest),
+              // 구역 라벨 제거 (사용자 요청)
+              // ..._buildRegionLabels(gridState, constraints.biggest),
             ],
           ),
         );

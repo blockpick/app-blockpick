@@ -79,14 +79,11 @@ class GridPainter extends CustomPainter {
     // 배경 이미지 그리기 (0, 0부터 그리드 크기만큼)
     _drawBackgroundTransformed(canvas, size);
 
-    // 🎮 지뢰찾기 스타일: 전체 구역 체스판 패턴
-    _drawAllRegionGrid(canvas, size);
-
-    // 선택된 구역 하이라이트
-    _drawRegionBackgrounds(canvas, size);
-
-    // 그리드 선 그리기
+    // 그리드 선 그리기 (셀 경계)
     _drawGridLinesTransformed(canvas, size);
+
+    // 선택된 블록들을 폴리곤 영역으로 그리기 (땅따먹기 스타일)
+    _drawSelectedBlocksPolygon(canvas, size);
 
     // Canvas 복원
     canvas.restore();
@@ -154,8 +151,8 @@ class GridPainter extends CustomPainter {
 
       canvas.drawImageRect(backgroundImage!, srcRect, dstRect, imagePaint);
 
-      // 약한 오버레이 (그리드 가시성을 위해)
-      final overlayPaint = Paint()..color = Colors.white.withOpacity(0.2);
+      // 🎮 강한 오버레이 (구역 패턴 가시성을 위해)
+      final overlayPaint = Paint()..color = Colors.white.withOpacity(0.5);
 
       canvas.drawRect(dstRect, overlayPaint);
     } else {
@@ -249,8 +246,140 @@ class GridPainter extends CustomPainter {
     return colors[index];
   }
 
-  /// 구역 배경색 그리기 (선택된 블록이 있는 구역만)
-  void _drawRegionBackgrounds(Canvas canvas, Size size) {
+  /// 🎮 지뢰찾기 스타일: 전체 구역 체스판 패턴 그리기
+  void _drawAllRegionGrid(Canvas canvas, Size size) {
+    final lodLevel = _getLODLevel(zoom);
+    final divisions = _getRegionDivisions(lodLevel);
+
+    if (divisions == 0) return;
+
+    final totalGridWidth = gridWidth * cellSize;
+    final totalGridHeight = gridHeight * cellSize;
+
+    final regionWidth = totalGridWidth / divisions;
+    final regionHeight = totalGridHeight / divisions;
+
+    // Viewport Culling: 화면에 보이는 구역만 그리기
+    final viewportLeft = -pan.dx / zoom;
+    final viewportRight = (-pan.dx + size.width) / zoom;
+    final viewportTop = -pan.dy / zoom;
+    final viewportBottom = (-pan.dy + size.height) / zoom;
+
+    final startRegionCol = math.max(0, (viewportLeft / regionWidth).floor());
+    final endRegionCol = math.min(divisions - 1, (viewportRight / regionWidth).ceil());
+    final startRegionRow = math.max(0, (viewportTop / regionHeight).floor());
+    final endRegionRow = math.min(divisions - 1, (viewportBottom / regionHeight).ceil());
+
+    // LOD 레벨별 색상 강도 (더 진하게!)
+    double baseOpacity;
+    if (lodLevel <= 1) {
+      baseOpacity = 0.15; // L0-L1: 연함
+    } else if (lodLevel <= 3) {
+      baseOpacity = 0.18; // L2-L3: 보통
+    } else if (lodLevel <= 5) {
+      baseOpacity = 0.20; // L4-L5: 진함
+    } else {
+      baseOpacity = 0.22; // L6+: 더 진함
+    }
+
+    // 전체 구역에 체스판 패턴 그리기
+    for (int row = startRegionRow; row <= endRegionRow; row++) {
+      for (int col = startRegionCol; col <= endRegionCol; col++) {
+        final x = col * regionWidth;
+        final y = row * regionHeight;
+
+        final regionRect = Rect.fromLTWH(x, y, regionWidth, regionHeight);
+
+        // 체스판 패턴 (짝수/홀수로 색상 교차)
+        final isEven = (row + col) % 2 == 0;
+        final bgColor = isEven
+            ? _getRegionColor(row, col).withOpacity(baseOpacity)
+            : _getRegionColor(row, col).withOpacity(baseOpacity * 0.5);
+
+        final bgPaint = Paint()
+          ..color = bgColor
+          ..style = PaintingStyle.fill;
+
+        canvas.drawRect(regionRect, bgPaint);
+
+        // 🎮 LOD별 구역 테두리 색상 (지뢰찾기 스타일)
+        Color borderColor;
+        double borderOpacity;
+
+        if (lodLevel <= 1) {
+          borderColor = AppColors.blue;
+          borderOpacity = 0.3;
+        } else if (lodLevel <= 3) {
+          borderColor = AppColors.green;
+          borderOpacity = 0.3;
+        } else if (lodLevel <= 5) {
+          borderColor = AppColors.yellow;
+          borderOpacity = 0.3;
+        } else {
+          borderColor = AppColors.red;
+          borderOpacity = 0.3;
+        }
+
+        final borderPaint = Paint()
+          ..color = borderColor.withOpacity(borderOpacity)
+          ..strokeWidth = math.max(1.0, 2.0 / zoom)
+          ..style = PaintingStyle.stroke;
+
+        canvas.drawRect(regionRect, borderPaint);
+      }
+    }
+  }
+
+  /// 🎮 지뢰찾기 스타일: 선택된 개별 셀만 하이라이트
+  void _drawSelectedCellsHighlight(Canvas canvas, Size size) {
+    if (selectedBlocks.isEmpty) return;
+
+    final lodLevel = _getLODLevel(zoom);
+
+    // LOD별 셀 하이라이트 색상
+    Color highlightColor;
+    double opacity;
+
+    if (lodLevel <= 1) {
+      highlightColor = AppColors.blue;
+      opacity = 0.4;
+    } else if (lodLevel <= 3) {
+      highlightColor = AppColors.green;
+      opacity = 0.45;
+    } else if (lodLevel <= 5) {
+      highlightColor = AppColors.yellow;
+      opacity = 0.5;
+    } else {
+      highlightColor = AppColors.red;
+      opacity = 0.55;
+    }
+
+    // 각 선택된 블록(셀)을 개별적으로 그리기
+    for (final block in selectedBlocks) {
+      final x = (block.col - 1) * cellSize;
+      final y = (block.row - 1) * cellSize;
+
+      final cellRect = Rect.fromLTWH(x, y, cellSize, cellSize);
+
+      // 셀 배경 (지뢰찾기 스타일)
+      final bgPaint = Paint()
+        ..color = highlightColor.withOpacity(opacity)
+        ..style = PaintingStyle.fill;
+
+      canvas.drawRect(cellRect, bgPaint);
+
+      // 셀 테두리 (진하게)
+      final borderPaint = Paint()
+        ..color = highlightColor.withOpacity(0.8)
+        ..strokeWidth = math.max(2.0, 3.0 / zoom)
+        ..style = PaintingStyle.stroke;
+
+      canvas.drawRect(cellRect, borderPaint);
+    }
+  }
+
+  /// [사용 안 함] 구역 강조 (개별 셀 하이라이트로 대체됨)
+  void _drawRegionBackgrounds_OLD(Canvas canvas, Size size) {
     final lodLevel = _getLODLevel(zoom);
     final divisions = _getRegionDivisions(lodLevel);
 
@@ -262,8 +391,35 @@ class GridPainter extends CustomPainter {
     final regionWidth = totalGridWidth / divisions;
     final regionHeight = totalGridHeight / divisions;
 
+    // LOD 레벨별 하이라이트 강도 (더 진하게!)
+    double highlightOpacity;
+    double borderWidth;
+    Color borderColor;
+
+    if (lodLevel <= 1) {
+      // L0-L1: 넓은 구역, 매우 진한 하이라이트
+      highlightOpacity = 0.6;
+      borderWidth = 10.0 / zoom;
+      borderColor = AppColors.blue; // 파란색
+    } else if (lodLevel <= 3) {
+      // L2-L3: 중간 구역, 진한 하이라이트
+      highlightOpacity = 0.55;
+      borderWidth = 8.0 / zoom;
+      borderColor = AppColors.green; // 초록색
+    } else if (lodLevel <= 5) {
+      // L4-L5: 좁은 구역, 보통 하이라이트
+      highlightOpacity = 0.5;
+      borderWidth = 6.0 / zoom;
+      borderColor = AppColors.yellow; // 노란색
+    } else {
+      // L6+: 매우 좁은 구역, 약한 하이라이트
+      highlightOpacity = 0.45;
+      borderWidth = 5.0 / zoom;
+      borderColor = AppColors.red; // 빨간색
+    }
+
     // 선택된 블록이 속한 구역들만 표시
-    final Set<String> drawnRegions = {};
+    final Map<String, int> regionBlockCounts = {}; // 구역별 블록 수
 
     for (final block in selectedBlocks) {
       // 블록이 속한 구역 계산
@@ -271,28 +427,75 @@ class GridPainter extends CustomPainter {
       final regionCol = ((block.col - 1) / (gridWidth / divisions)).floor();
 
       final regionKey = '$regionRow-$regionCol';
-      if (drawnRegions.contains(regionKey)) continue;
-      drawnRegions.add(regionKey);
+      regionBlockCounts[regionKey] = (regionBlockCounts[regionKey] ?? 0) + 1;
+    }
+
+    // 각 구역 그리기 (블록 수에 따라 강도 조절)
+    for (final entry in regionBlockCounts.entries) {
+      final parts = entry.key.split('-');
+      final regionRow = int.parse(parts[0]);
+      final regionCol = int.parse(parts[1]);
+      final blockCount = entry.value;
 
       final x = regionCol * regionWidth;
       final y = regionRow * regionHeight;
 
       final regionRect = Rect.fromLTWH(x, y, regionWidth, regionHeight);
 
-      // 구역 배경색
+      // 블록 수가 많을수록 진하게 (최대 2배)
+      final intensityMultiplier = math.min(2.0, 1.0 + (blockCount - 1) * 0.2);
+
+      // 구역 배경색 (지뢰찾기 스타일)
       final bgPaint = Paint()
-        ..color = _getRegionColor(regionRow, regionCol).withOpacity(0.2)
+        ..color = _getRegionColor(regionRow, regionCol)
+            .withOpacity(highlightOpacity * intensityMultiplier)
         ..style = PaintingStyle.fill;
 
       canvas.drawRect(regionRect, bgPaint);
 
-      // 구역 테두리 (빨간색)
+      // 구역 테두리 (LOD별 다른 색상)
       final borderPaint = Paint()
-        ..color = AppColors.red.withOpacity(0.8)
-        ..strokeWidth = 4.0 / zoom
+        ..color = borderColor.withOpacity(0.9)
+        ..strokeWidth = borderWidth
         ..style = PaintingStyle.stroke;
 
       canvas.drawRect(regionRect, borderPaint);
+
+      // 🎯 블록 개수 표시 (LOD 3 이상에서만)
+      if (lodLevel >= 3 && blockCount > 1) {
+        final textSpan = TextSpan(
+          text: '×$blockCount',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: (regionWidth * 0.15 / zoom).clamp(12.0, 24.0),
+            fontWeight: FontWeight.bold,
+            shadows: [
+              Shadow(
+                color: Colors.black.withOpacity(0.7),
+                offset: Offset(1.0 / zoom, 1.0 / zoom),
+                blurRadius: 2.0 / zoom,
+              ),
+            ],
+          ),
+        );
+
+        final textPainter = TextPainter(
+          text: textSpan,
+          textAlign: TextAlign.center,
+          textDirection: TextDirection.ltr,
+        );
+
+        textPainter.layout();
+
+        // 구역 우상단에 배치
+        textPainter.paint(
+          canvas,
+          Offset(
+            x + regionWidth - textPainter.width - 10 / zoom,
+            y + 10 / zoom,
+          ),
+        );
+      }
     }
   }
 
@@ -301,12 +504,13 @@ class GridPainter extends CustomPainter {
     // 배경 이미지가 있을 때는 더 투명하게
     final opacity = backgroundImage != null ? 0.15 : 0.3;
 
-    // 줌에 상관없이 일정한 선 두께 (Canvas가 이미 scale되었으므로)
+    // 줌에 상관없이 화면에서 1픽셀로 보이도록 선 두께 조정
+    // Canvas가 이미 scale(zoom)되었으므로, 1/zoom으로 보정
     final paint = Paint()
       ..color = Colors.black
           .withOpacity(opacity) // 검은색 그리드
       ..strokeWidth =
-          1.0 // 고정된 선 두께 (canvas.scale이 이미 적용됨)
+          1.0 / zoom // 줌 레벨에 따라 조정 (화면에서 항상 1px)
       ..style = PaintingStyle.stroke;
 
     // LOD에 따라 그리드 선 간격 조정
@@ -396,6 +600,74 @@ class GridPainter extends CustomPainter {
         Offset(math.min(totalGridWidth, viewportRight), y),
         paint,
       );
+    }
+  }
+
+  /// 선택된 블록들을 폴리곤 영역으로 그리기 (땅따먹기 스타일)
+  void _drawSelectedBlocksPolygon(Canvas canvas, Size size) {
+    if (selectedBlocks.isEmpty) return;
+
+    // 선택된 블록들의 좌표를 Set으로 저장 (빠른 검색)
+    final selectedCoords = <String>{};
+    for (var block in selectedBlocks) {
+      selectedCoords.add('${block.row},${block.col}');
+    }
+
+    // 채우기 페인트 (반투명 분홍색)
+    final fillPaint = Paint()
+      ..color = const Color(0xFFFF69B4).withOpacity(0.4)
+      ..style = PaintingStyle.fill;
+
+    // 테두리 페인트 (진한 분홍색, 두꺼운 선)
+    final borderPaint = Paint()
+      ..color = const Color(0xFFFF1493).withOpacity(0.8)
+      ..strokeWidth = 3.0 / zoom // 화면에서 3px로 보이도록
+      ..style = PaintingStyle.stroke;
+
+    // 각 선택된 블록에 대해
+    for (var block in selectedBlocks) {
+      final x = (block.col - 1) * cellSize;
+      final y = (block.row - 1) * cellSize;
+
+      // 셀 영역 채우기
+      canvas.drawRect(
+        Rect.fromLTWH(x, y, cellSize, cellSize),
+        fillPaint,
+      );
+
+      // 외곽선만 그리기 (인접하지 않은 변만)
+      // 위쪽 변
+      if (!selectedCoords.contains('${block.row - 1},${block.col}')) {
+        canvas.drawLine(
+          Offset(x, y),
+          Offset(x + cellSize, y),
+          borderPaint,
+        );
+      }
+      // 아래쪽 변
+      if (!selectedCoords.contains('${block.row + 1},${block.col}')) {
+        canvas.drawLine(
+          Offset(x, y + cellSize),
+          Offset(x + cellSize, y + cellSize),
+          borderPaint,
+        );
+      }
+      // 왼쪽 변
+      if (!selectedCoords.contains('${block.row},${block.col - 1}')) {
+        canvas.drawLine(
+          Offset(x, y),
+          Offset(x, y + cellSize),
+          borderPaint,
+        );
+      }
+      // 오른쪽 변
+      if (!selectedCoords.contains('${block.row},${block.col + 1}')) {
+        canvas.drawLine(
+          Offset(x + cellSize, y),
+          Offset(x + cellSize, y + cellSize),
+          borderPaint,
+        );
+      }
     }
   }
 

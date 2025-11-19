@@ -721,7 +721,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       panX: gridState.panX,
       panY: gridState.panY,
       screenSize: MediaQuery.of(context).size,
-      show: true,
+      show: false,  // 초록색 배경/테두리 제거
     );
   }
 
