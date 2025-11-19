@@ -6,7 +6,6 @@ import '../../core/auth/domain/providers/auth_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../features/auth/presentation/dialogs/auth_dialogs.dart';
 import '../../providers/platform_mode_provider.dart';
-import '../dialogs/platform_selector_sheet.dart';
 
 /// 메인 AppBar (플랫폼 선택 드롭다운 포함)
 class MainAppBar extends ConsumerWidget implements PreferredSizeWidget {

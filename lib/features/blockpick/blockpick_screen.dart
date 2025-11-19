@@ -28,7 +28,7 @@ class BlockpickScreen extends ConsumerStatefulWidget {
 }
 
 class _BlockpickScreenState extends ConsumerState<BlockpickScreen> {
-  int _currentIndex = 2; // 기본 탭: PICK (게임 목록)
+  int _currentIndex = 0; // 기본 탭: HOME (새로운 프리미엄 디자인)
 
   // BlockPick 앱 화면들
   final List<Widget> _blockpickScreens = const [

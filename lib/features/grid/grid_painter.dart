@@ -79,7 +79,10 @@ class GridPainter extends CustomPainter {
     // 배경 이미지 그리기 (0, 0부터 그리드 크기만큼)
     _drawBackgroundTransformed(canvas, size);
 
-    // 구역 배경색 그리기
+    // 🎮 지뢰찾기 스타일: 전체 구역 체스판 패턴
+    _drawAllRegionGrid(canvas, size);
+
+    // 선택된 구역 하이라이트
     _drawRegionBackgrounds(canvas, size);
 
     // 그리드 선 그리기

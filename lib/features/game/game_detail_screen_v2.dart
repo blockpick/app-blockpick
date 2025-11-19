@@ -71,7 +71,8 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
     setState(() {
       _selectedBlocks.clear();
     });
-    ref.read(gridStateProvider.notifier).clearBlocks();
+    // GridConfig를 사용하는 경우에만 호출
+    // ref.read(gridStateProvider(...).notifier).clearBlocks();
   }
 
   @override
@@ -131,7 +132,9 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
         Container(
           color: AppColors.deepWhite,
           child: GameGridWidget(
-            gridSize: gridSize,
+            gameId: widget.gameId,
+            gridWidth: gridSize,
+            gridHeight: gridSize,
             backgroundImagePath: _game!.imageUrl,
             onBlockTap: _handleBlockTap,
           ),
@@ -159,7 +162,9 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
           child: Container(
             color: AppColors.deepWhite,
             child: GameGridWidget(
-              gridSize: gridSize,
+              gameId: widget.gameId,
+            gridWidth: gridSize,
+            gridHeight: gridSize,
               backgroundImagePath: _game!.imageUrl,
               onBlockTap: _handleBlockTap,
             ),

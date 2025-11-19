@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>암호화 키 온체인 조회 테스트</title>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+</head>
+<body>
+  <h2>🔍 암호화 키 온체인 확인</h2>
+  <button onclick="checkKey()">키 확인하기</button>
+  <pre id="result"></pre>
+
+  <script>
+    const CONTRACT_ADDRESS = '0x746e1c7652c31484b54fdbe69eb99f355b9408d8';
+    const USER_INDEX = 'e40fdef1bc6e3c17cdac438b653bbf757fae1f373ffb71fc03a2a3315c7966e3';
+    const USER_ADDRESS = '0x3783673683fa8cf16a687461c55d048ac1703be5';
+    const RPC_URL = 'https://rpc-amoy.polygon.technology/';
+
+    const ABI = [{
+      "inputs": [
+        {"internalType": "string", "name": "_index", "type": "string"},
+        {"internalType": "address", "name": "_owner", "type": "address"}
+      ],
+      "name": "getEncryptionKey",
+      "outputs": [{"internalType": "string", "name": "", "type": "string"}],
+      "stateMutability": "view",
+      "type": "function"
+    }];
+
+    async function checkKey() {
+      const output = document.getElementById('result');
+      output.textContent = '조회 중...\n';
+
+      try {
+        const web3 = new Web3(RPC_URL);
+        const contract = new web3.eth.Contract(ABI, CONTRACT_ADDRESS);
+
+        output.textContent += `\n📡 온체인 조회 시작...\n`;
+        output.textContent += `컨트랙트: ${CONTRACT_ADDRESS}\n`;
+        output.textContent += `userIndex: ${USER_INDEX}\n`;
+        output.textContent += `userAddress: ${USER_ADDRESS}\n\n`;
+
+        const key = await contract.methods.getEncryptionKey(USER_INDEX, USER_ADDRESS).call();
+
+        if (key && key.length > 0) {
+          output.textContent += `✅ 키 발견!\n`;
+          output.textContent += `암호화 키: ${key}\n`;
+          output.textContent += `키 길이: ${key.length}\n`;
+        } else {
+          output.textContent += `❌ 키 없음\n`;
+          output.textContent += `\n결론: 서버가 트랜잭션을 블록체인에 보내지 못했습니다.\n`;
+          output.textContent += `서버 내부 에러로 인해 블록체인에 키가 기록되지 않았습니다.\n`;
+        }
+      } catch (error) {
+        output.textContent += `\n❌ 에러 발생:\n${error.message}\n`;
+        if (error.message.includes('No encryption key found')) {
+          output.textContent += `\n✓ 확인: 온체인에 키가 없습니다.\n`;
+          output.textContent += `서버 트랜잭션이 실행되지 않았습니다.\n`;
+        }
+      }
+    }
+  </script>
+
+  <hr>
+  <h3>📋 상황 정리</h3>
+  <ul>
+    <li><strong>서버 에러:</strong> "Transaction silently rolled back"</li>
+    <li><strong>암호화 키 생성:</strong> ❌ 실패</li>
+    <li><strong>블록체인 트랜잭션:</strong> ❌ 전송되지 않음</li>
+    <li><strong>원인:</strong> 서버 내부 데이터베이스 트랜잭션 에러</li>
+  </ul>
+
+  <h3>💡 임시 해결 방법</h3>
+  <p>서버를 우회해서 클라이언트에서 직접 블록체인에 트랜잭션을 보낼 수 있습니다.</p>
+  <p><strong>단점:</strong> 사용자가 가스비를 직접 부담해야 합니다.</p>
+</body>
+</html>

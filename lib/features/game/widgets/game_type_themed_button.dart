@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../models/game_model.dart';
-import 'game_join_button.dart';
+import '../../../models/game_round_model.dart';
 
 /// 게임 타입별 테마가 적용된 참가 버튼
 ///

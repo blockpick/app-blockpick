@@ -9,7 +9,7 @@ import '../../models/event_cash_model.dart';
 import 'widgets/event_cash_widget.dart';
 import 'widgets/event_banner_carousel.dart';
 import 'widgets/rolling_announcements_widget.dart';
-import 'widgets/pick_section_redesign_widget.dart';
+import 'widgets/pick_section_premium_widget.dart';
 import 'widgets/blockpick_guide_widget.dart';
 import 'widgets/tutorial_button_widget.dart';
 import 'widgets/participation_feed_widget.dart';
@@ -65,8 +65,8 @@ class NewHomeScreen extends ConsumerWidget {
 
           const Divider(height: 1, thickness: 8, color: AppColors.deepWhite),
 
-          // 4. Pick 섹션 (SELECT 강조, STAGE/VIBE, 하단 상품 쇼케이스)
-          const PickSectionRedesignWidget(),
+          // 4. Pick 섹션 (프리미엄 디자인 - 화려한 효과)
+          const PickSectionPremiumWidget(),
 
           const Divider(height: 1, thickness: 8, color: AppColors.deepWhite),
 

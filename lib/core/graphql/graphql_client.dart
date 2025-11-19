@@ -19,6 +19,7 @@ class DioHttpClient extends http.BaseClient {
     print('   - URL: ${request.url}');
     print('   - Method: ${request.method}');
     print('   - Headers: ${request.headers}');
+    print('   - Timestamp: ${DateTime.now().toIso8601String()}');
 
     try {
       final options = Options(
@@ -26,6 +27,8 @@ class DioHttpClient extends http.BaseClient {
         headers: request.headers,
         responseType: ResponseType.plain,
         validateStatus: (status) => true, // 모든 상태 코드 허용
+        // 응답 헤더 수집
+        responseDecoder: null,
       );
 
       String? body;
@@ -54,8 +57,36 @@ class DioHttpClient extends http.BaseClient {
 
       print('📥 DioHttpClient 응답:');
       print('   - Status: ${response.statusCode}');
+      print('   - Timestamp: ${DateTime.now().toIso8601String()}');
+      print('   - Headers: ${response.headers.map}');
       print('   - Data length: ${response.data?.toString().length ?? 0}');
       print('   - Data: ${response.data}');
+
+      // 서버 에러 상세 분석
+      if (response.data != null && response.data.toString().contains('INTERNAL_ERROR')) {
+        print('');
+        print('⚠️  서버 INTERNAL_ERROR 감지!');
+        print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        print('📋 디버깅 정보 (백엔드 팀에 전달):');
+        print('   - Request URL: ${request.url}');
+        print('   - Request Time: ${DateTime.now().toIso8601String()}');
+        print('   - Response Headers:');
+        response.headers.map.forEach((key, value) {
+          print('     * $key: ${value.join(", ")}');
+        });
+        try {
+          final data = jsonDecode(response.data);
+          final error = data['data']?['requestEncryptionKey'];
+          if (error != null) {
+            print('   - Error Code: ${error['code']}');
+            print('   - Error Message: ${error['message']}');
+          }
+        } catch (e) {
+          // JSON 파싱 실패는 무시
+        }
+        print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        print('');
+      }
 
       return http.StreamedResponse(
         Stream.value(utf8.encode(response.data?.toString() ?? '')),

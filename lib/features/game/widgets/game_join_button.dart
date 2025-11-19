@@ -4,8 +4,9 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../providers/game_participation_provider.dart';
-import 'game_join_loading_overlay.dart';
+import '../../../providers/game_join_progress_provider.dart';
 import 'game_join_result_overlay.dart';
+import 'game_join_progress_overlay.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 /// 게임 참가 버튼 (토스 스타일 애니메이션)
@@ -113,11 +114,17 @@ class _GameJoinButtonState extends ConsumerState<GameJoinButton> {
   }
 
   Future<void> _handleJoinGame() async {
-    try {
-      // 1. 로딩 오버레이 표시
-      GameJoinLoadingOverlay.show(context);
+    OverlayEntry? progressOverlay;
 
-      // 2. 게임 참가 실행
+    try {
+      // 1. 진행 오버레이 표시
+      progressOverlay = GameJoinProgressOverlay.show(
+        context,
+        currentStep: GameJoinStep.walletCheck,
+        statusMessage: '게임 참여를 준비하고 있습니다...',
+      );
+
+      // 2. 게임 참가 실행 (자동으로 폴링 포함)
       final result = await ref
           .read(gameParticipationProvider.notifier)
           .joinGame(
@@ -128,12 +135,11 @@ class _GameJoinButtonState extends ConsumerState<GameJoinButton> {
             contractAddress: widget.contractAddress,
           );
 
-      // 3. 로딩 오버레이 숨김
-      if (mounted) {
-        GameJoinLoadingOverlay.hide(context);
-      }
+      // 3. 오버레이 제거
+      progressOverlay?.remove();
+      progressOverlay = null;
 
-      // 잠깐 대기 (애니메이션 전환을 위해)
+      // 잠깐 대기 (애니메이션 전환)
       await Future.delayed(const Duration(milliseconds: 300));
 
       // 4. 결과 표시
@@ -159,9 +165,10 @@ class _GameJoinButtonState extends ConsumerState<GameJoinButton> {
       }
     } catch (e) {
       // 에러 처리
-      if (mounted) {
-        GameJoinLoadingOverlay.hide(context);
+      progressOverlay?.remove();
+      progressOverlay = null;
 
+      if (mounted) {
         await Future.delayed(const Duration(milliseconds: 300));
 
         GameJoinResultOverlay.showError(
@@ -172,6 +179,9 @@ class _GameJoinButtonState extends ConsumerState<GameJoinButton> {
           },
         );
       }
+    } finally {
+      // 진행 상태 초기화
+      ref.read(gameJoinProgressNotifierProvider.notifier).reset();
     }
   }
 }
