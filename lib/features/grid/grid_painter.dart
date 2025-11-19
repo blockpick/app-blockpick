@@ -607,6 +607,10 @@ class GridPainter extends CustomPainter {
   void _drawSelectedBlocksPolygon(Canvas canvas, Size size) {
     if (selectedBlocks.isEmpty) return;
 
+    // LOD 레벨 확인 (L6에서는 폴리곤 숨김)
+    final lodLevel = _getLODLevel(zoom);
+    if (lodLevel >= 6) return; // L6 (최고 줌)에서는 표시 안 함
+
     // 선택된 블록들의 좌표를 Set으로 저장 (빠른 검색)
     final selectedCoords = <String>{};
     for (var block in selectedBlocks) {
