@@ -181,25 +181,82 @@ class _MinimapPainter extends CustomPainter {
     final scaleY = size.height / gridPixelHeight;
     final scale = scaleX < scaleY ? scaleX : scaleY;
 
-    // 픽 그리기
-    final pickPaint = Paint()
-      ..color = AppColors.blue
-      ..style = PaintingStyle.fill;
-
-    for (final block in selectedBlocks) {
-      final x = (block.col - 1) * AppConstants.cellSize * scale;
-      final y = (block.row - 1) * AppConstants.cellSize * scale;
-      final dotSize = (scale * AppConstants.cellSize).clamp(1.0, 4.0);
-
-      canvas.drawCircle(
-        Offset(x + dotSize / 2, y + dotSize / 2),
-        dotSize / 2,
-        pickPaint,
-      );
-    }
+    // 선택된 블록들을 폴리곤 영역으로 그리기
+    _drawSelectedBlocksPolygon(canvas, scale);
 
     // 현재 보이는 영역 그리기
     _drawViewport(canvas, size, scale, gridPixelWidth, gridPixelHeight);
+  }
+
+  /// 선택된 블록들을 폴리곤 영역으로 그리기 (땅따먹기 스타일)
+  void _drawSelectedBlocksPolygon(Canvas canvas, double scale) {
+    if (selectedBlocks.isEmpty) return;
+
+    // 선택된 블록들의 좌표를 Set으로 저장 (빠른 검색)
+    final selectedCoords = <String>{};
+    for (var block in selectedBlocks) {
+      selectedCoords.add('${block.row},${block.col}');
+    }
+
+    // 미니맵에서의 셀 크기
+    final minimapCellSize = AppConstants.cellSize * scale;
+
+    // 채우기 페인트 (반투명 분홍색)
+    final fillPaint = Paint()
+      ..color = const Color(0xFFFF69B4).withOpacity(0.4)
+      ..style = PaintingStyle.fill;
+
+    // 테두리 페인트 (진한 분홍색)
+    final borderPaint = Paint()
+      ..color = const Color(0xFFFF1493).withOpacity(0.8)
+      ..strokeWidth = 1.5 // 미니맵에서는 얇은 선
+      ..style = PaintingStyle.stroke;
+
+    // 각 선택된 블록에 대해
+    for (var block in selectedBlocks) {
+      final x = (block.col - 1) * minimapCellSize;
+      final y = (block.row - 1) * minimapCellSize;
+
+      // 셀 영역 채우기
+      canvas.drawRect(
+        Rect.fromLTWH(x, y, minimapCellSize, minimapCellSize),
+        fillPaint,
+      );
+
+      // 외곽선만 그리기 (인접하지 않은 변만)
+      // 위쪽 변
+      if (!selectedCoords.contains('${block.row - 1},${block.col}')) {
+        canvas.drawLine(
+          Offset(x, y),
+          Offset(x + minimapCellSize, y),
+          borderPaint,
+        );
+      }
+      // 아래쪽 변
+      if (!selectedCoords.contains('${block.row + 1},${block.col}')) {
+        canvas.drawLine(
+          Offset(x, y + minimapCellSize),
+          Offset(x + minimapCellSize, y + minimapCellSize),
+          borderPaint,
+        );
+      }
+      // 왼쪽 변
+      if (!selectedCoords.contains('${block.row},${block.col - 1}')) {
+        canvas.drawLine(
+          Offset(x, y),
+          Offset(x, y + minimapCellSize),
+          borderPaint,
+        );
+      }
+      // 오른쪽 변
+      if (!selectedCoords.contains('${block.row},${block.col + 1}')) {
+        canvas.drawLine(
+          Offset(x + minimapCellSize, y),
+          Offset(x + minimapCellSize, y + minimapCellSize),
+          borderPaint,
+        );
+      }
+    }
   }
 
   void _drawViewport(

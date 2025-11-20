@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 import 'dart:async';
 import '../../core/theme/app_colors.dart';
 import '../../core/constants/app_constants.dart';
+import '../../models/block_model.dart';
 
 /// 그리드 미니맵 위젯
 ///
@@ -37,6 +38,9 @@ class GridMinimap extends StatefulWidget {
   /// 현재 줌 레벨 (선택적, 구역 분할에 사용)
   final int? currentZoomLevel;
 
+  /// 선택된 블록 목록
+  final List<BlockModel> selectedBlocks;
+
   const GridMinimap({
     super.key,
     required this.gridWidth,
@@ -48,6 +52,7 @@ class GridMinimap extends StatefulWidget {
     this.minimapSize = AppConstants.minimapSize,
     this.backgroundImagePath,
     this.currentZoomLevel,
+    this.selectedBlocks = const [],
   });
 
   @override
@@ -165,6 +170,7 @@ class _GridMinimapState extends State<GridMinimap> {
             screenSize: widget.screenSize,
             backgroundImage: _backgroundImage,
             currentZoomLevel: widget.currentZoomLevel,
+            selectedBlocks: widget.selectedBlocks,
           ),
         ),
       ),
@@ -182,6 +188,7 @@ class _MinimapPainter extends CustomPainter {
   final Size screenSize;
   final ui.Image? backgroundImage;
   final int? currentZoomLevel;
+  final List<BlockModel> selectedBlocks;
 
   _MinimapPainter({
     required this.gridWidth,
@@ -192,6 +199,7 @@ class _MinimapPainter extends CustomPainter {
     required this.screenSize,
     this.backgroundImage,
     this.currentZoomLevel,
+    this.selectedBlocks = const [],
   });
 
   @override
@@ -249,7 +257,10 @@ class _MinimapPainter extends CustomPainter {
       canvas.drawRect(gridRect, gridPaint);
     }
 
-    // 2. 현재 뷰포트 영역 계산
+    // 2. 선택된 블록들을 폴리곤 영역으로 그리기
+    _drawSelectedBlocksPolygon(canvas, minimapScale, minimapOffsetX, minimapOffsetY);
+
+    // 3. 현재 뷰포트 영역 계산
     final viewportWidth = screenSize.width / zoom;
     final viewportHeight = screenSize.height / zoom;
     final viewportX = -panX / zoom;
@@ -302,14 +313,14 @@ class _MinimapPainter extends CustomPainter {
       viewportMinimapHeight,
     );
 
-    // 3. 현재 뷰포트 영역 그리기 (반투명 파란색 - 강조)
+    // 4. 현재 뷰포트 영역 그리기 (반투명 파란색 - 강조)
     final viewportPaint = Paint()
       ..color = AppColors.blue.withOpacity(0.4)
       ..style = PaintingStyle.fill;
 
     canvas.drawRect(viewportRect, viewportPaint);
 
-    // 4. 뷰포트 테두리 그리기 (강조된 두께)
+    // 5. 뷰포트 테두리 그리기 (강조된 두께)
     final viewportBorderPaint = Paint()
       ..color = AppColors.blue
       ..style = PaintingStyle.stroke
@@ -317,7 +328,7 @@ class _MinimapPainter extends CustomPainter {
 
     canvas.drawRect(viewportRect, viewportBorderPaint);
 
-    // 5. 뷰포트 외곽 그림자 효과 (더 명확한 구분)
+    // 6. 뷰포트 외곽 그림자 효과 (더 명확한 구분)
     final shadowPaint = Paint()
       ..color = AppColors.blue.withOpacity(0.15)
       ..style = PaintingStyle.stroke
@@ -325,7 +336,7 @@ class _MinimapPainter extends CustomPainter {
 
     canvas.drawRect(viewportRect, shadowPaint);
 
-    // 6. 그리드 테두리 그리기
+    // 7. 그리드 테두리 그리기
     final gridBorderPaint = Paint()
       ..color = AppColors.buleGray
       ..style = PaintingStyle.stroke
@@ -342,11 +353,88 @@ class _MinimapPainter extends CustomPainter {
     );
   }
 
+  /// 선택된 블록들을 폴리곤 영역으로 그리기 (땅따먹기 스타일)
+  void _drawSelectedBlocksPolygon(
+    Canvas canvas,
+    double minimapScale,
+    double minimapOffsetX,
+    double minimapOffsetY,
+  ) {
+    if (selectedBlocks.isEmpty) return;
+
+    // 선택된 블록들의 좌표를 Set으로 저장 (빠른 검색)
+    final selectedCoords = <String>{};
+    for (var block in selectedBlocks) {
+      selectedCoords.add('${block.row},${block.col}');
+    }
+
+    // 미니맵에서의 셀 크기
+    final minimapCellSize = AppConstants.cellSize * minimapScale;
+
+    // 채우기 페인트 (반투명 분홍색)
+    final fillPaint = Paint()
+      ..color = const Color(0xFFFF69B4).withOpacity(0.4)
+      ..style = PaintingStyle.fill;
+
+    // 테두리 페인트 (진한 분홍색, 두꺼운 선)
+    final borderPaint = Paint()
+      ..color = const Color(0xFFFF1493).withOpacity(0.8)
+      ..strokeWidth = 1.5 // 미니맵에서는 얇은 선
+      ..style = PaintingStyle.stroke;
+
+    // 각 선택된 블록에 대해
+    for (var block in selectedBlocks) {
+      final x = minimapOffsetX + (block.col - 1) * minimapCellSize;
+      final y = minimapOffsetY + (block.row - 1) * minimapCellSize;
+
+      // 셀 영역 채우기
+      canvas.drawRect(
+        Rect.fromLTWH(x, y, minimapCellSize, minimapCellSize),
+        fillPaint,
+      );
+
+      // 외곽선만 그리기 (인접하지 않은 변만)
+      // 위쪽 변
+      if (!selectedCoords.contains('${block.row - 1},${block.col}')) {
+        canvas.drawLine(
+          Offset(x, y),
+          Offset(x + minimapCellSize, y),
+          borderPaint,
+        );
+      }
+      // 아래쪽 변
+      if (!selectedCoords.contains('${block.row + 1},${block.col}')) {
+        canvas.drawLine(
+          Offset(x, y + minimapCellSize),
+          Offset(x + minimapCellSize, y + minimapCellSize),
+          borderPaint,
+        );
+      }
+      // 왼쪽 변
+      if (!selectedCoords.contains('${block.row},${block.col - 1}')) {
+        canvas.drawLine(
+          Offset(x, y),
+          Offset(x, y + minimapCellSize),
+          borderPaint,
+        );
+      }
+      // 오른쪽 변
+      if (!selectedCoords.contains('${block.row},${block.col + 1}')) {
+        canvas.drawLine(
+          Offset(x + minimapCellSize, y),
+          Offset(x + minimapCellSize, y + minimapCellSize),
+          borderPaint,
+        );
+      }
+    }
+  }
+
   @override
   bool shouldRepaint(_MinimapPainter oldDelegate) {
     return oldDelegate.zoom != zoom ||
         oldDelegate.panX != panX ||
         oldDelegate.panY != panY ||
-        oldDelegate.backgroundImage != backgroundImage;
+        oldDelegate.backgroundImage != backgroundImage ||
+        oldDelegate.selectedBlocks != selectedBlocks;
   }
 }

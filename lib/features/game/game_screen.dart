@@ -682,6 +682,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               panY: gridState.panY,
               screenSize: MediaQuery.of(context).size,
               backgroundImagePath: _game?.imageUrl,
+              selectedBlocks: gridState.selectedBlocks,
             ),
           ),
 
