@@ -70,42 +70,56 @@ class _ProductSelectorOverlayState extends State<ProductSelectorOverlay>
 
   @override
   Widget build(BuildContext context) {
+    final currentProduct = widget.products[_currentIndex];
+
     return GestureDetector(
       onTap: _close,
       child: Container(
-        color: Colors.black.withValues(alpha: 0.7),
+        color: Colors.black.withValues(alpha: 0.85),
         child: FadeTransition(
           opacity: _animation,
           child: GestureDetector(
             onTap: () {}, // 내부 탭은 무시
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 100),
-                // 헤더
+                // 닫기 버튼
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        'Select Product',
-                        style: AppTextStyles.large.copyWith(
-                          color: AppColors.white,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const Spacer(),
                       IconButton(
                         onPressed: _close,
                         icon: const Icon(
                           LucideIcons.x,
                           color: AppColors.white,
+                          size: 28,
                         ),
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 20),
-                // 상품 캐러셀
+
+                // 상품명 (크게)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: Text(
+                    currentProduct.product.name,
+                    style: AppTextStyles.large.copyWith(
+                      color: AppColors.white,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 28,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(height: 40),
+
+                // 스와이프 가능한 상품 이미지
                 SizedBox(
                   height: 400,
                   child: PageView.builder(
@@ -117,27 +131,59 @@ class _ProductSelectorOverlayState extends State<ProductSelectorOverlay>
                     },
                     itemCount: widget.products.length,
                     itemBuilder: (context, index) {
-                      return AnimatedBuilder(
-                        animation: _pageController,
-                        builder: (context, child) {
-                          double value = 1.0;
-                          if (_pageController.position.haveDimensions) {
-                            value = _pageController.page! - index;
-                            value = (1 - (value.abs() * 0.3)).clamp(0.7, 1.0);
-                          }
-                          return Center(
-                            child: Transform.scale(
-                              scale: value,
-                              child: child,
-                            ),
-                          );
-                        },
-                        child: _buildProductCard(widget.products[index], index),
+                      final product = widget.products[index].product;
+                      return Center(
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 40),
+                          decoration: BoxDecoration(
+                            color: AppColors.white,
+                            borderRadius: BorderRadius.circular(24),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.black.withValues(alpha: 0.3),
+                                blurRadius: 30,
+                                offset: const Offset(0, 10),
+                              ),
+                            ],
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(24),
+                            child: product.defaultImage != null &&
+                                    product.defaultImage!.isNotEmpty
+                                ? Image.network(
+                                    product.defaultImage!.replaceAll(' ', '%20'),
+                                    fit: BoxFit.contain,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Container(
+                                        color: AppColors.blueWhite,
+                                        child: const Center(
+                                          child: Icon(
+                                            LucideIcons.image,
+                                            size: 80,
+                                            color: AppColors.medium,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  )
+                                : Container(
+                                    color: AppColors.blueWhite,
+                                    child: const Center(
+                                      child: Icon(
+                                        LucideIcons.image,
+                                        size: 80,
+                                        color: AppColors.medium,
+                                      ),
+                                    ),
+                                  ),
+                          ),
+                        ),
                       );
                     },
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 40),
+
                 // 페이지 인디케이터
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -156,8 +202,9 @@ class _ProductSelectorOverlayState extends State<ProductSelectorOverlay>
                     ),
                   ),
                 ),
-                const SizedBox(height: 30),
-                // 선택 버튼
+                const SizedBox(height: 40),
+
+                // 선택 버튼 (고정)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: Container(
@@ -202,7 +249,6 @@ class _ProductSelectorOverlayState extends State<ProductSelectorOverlay>
                     ),
                   ),
                 ),
-                const Spacer(),
               ],
             ),
           ),
@@ -211,158 +257,4 @@ class _ProductSelectorOverlayState extends State<ProductSelectorOverlay>
     );
   }
 
-  Widget _buildProductCard(GameProduct gameProduct, int index) {
-    final product = gameProduct.product;
-    final isSelected = _currentIndex == index;
-
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: isSelected ? AppColors.purple : AppColors.buleGray,
-          width: isSelected ? 3 : 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: isSelected
-                ? AppColors.purple.withValues(alpha: 0.3)
-                : AppColors.black.withValues(alpha: 0.1),
-            blurRadius: isSelected ? 20 : 10,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // 상품 이미지
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: product.defaultImage != null &&
-                      product.defaultImage!.isNotEmpty
-                  ? Image.network(
-                      product.defaultImage!.replaceAll(' ', '%20'),
-                      fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          color: AppColors.blueWhite,
-                          child: const Icon(
-                            LucideIcons.image,
-                            size: 64,
-                            color: AppColors.medium,
-                          ),
-                        );
-                      },
-                    )
-                  : Container(
-                      color: AppColors.blueWhite,
-                      child: const Icon(
-                        LucideIcons.image,
-                        size: 64,
-                        color: AppColors.medium,
-                      ),
-                    ),
-            ),
-          ),
-          // 상품 정보
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: AppColors.blueWhite,
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(24),
-                bottomRight: Radius.circular(24),
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (product.brand != null) ...[
-                  Text(
-                    product.brand!,
-                    style: AppTextStyles.caption.copyWith(
-                      color: AppColors.purple,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                ],
-                Text(
-                  product.name,
-                  style: AppTextStyles.medium.copyWith(
-                    color: AppColors.darkBlue,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8),
-                if (product.originalPrice != null) ...[
-                  Row(
-                    children: [
-                      Text(
-                        'Value: ',
-                        style: AppTextStyles.bodySmall.copyWith(
-                          color: AppColors.medium,
-                        ),
-                      ),
-                      Text(
-                        '₩${_formatNumber(product.originalPrice!)}',
-                        style: AppTextStyles.bodySmall.copyWith(
-                          color: AppColors.purple,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-                if (gameProduct.isGrandPrize == true) ...[
-                  const SizedBox(height: 8),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      gradient: AppColors.gradientBluePurplePink,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(
-                          LucideIcons.crown,
-                          size: 12,
-                          color: AppColors.white,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          'GRAND PRIZE',
-                          style: AppTextStyles.caption.copyWith(
-                            color: AppColors.white,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  String _formatNumber(int number) {
-    if (number >= 1000000) {
-      return '${(number / 1000000).toStringAsFixed(1)}M';
-    } else if (number >= 1000) {
-      return '${(number / 1000).toStringAsFixed(0)}K';
-    }
-    return number.toString();
-  }
 }

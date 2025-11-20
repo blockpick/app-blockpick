@@ -20,7 +20,6 @@ import '../../components/minimap/grid_minimap.dart';
 import '../../utils/zoom_calculator.dart';
 import '../../utils/adaptive_zoom_system.dart';
 import '../../utils/debouncer.dart';
-import '../../widgets/pick_hud.dart';
 import '../../widgets/zoom_controls.dart';
 import '../../models/grid_section_model.dart';
 import '../../widgets/grid_section_overlay.dart';
@@ -243,6 +242,47 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         content: Text(message),
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  /// 선택 수량 배지 (왼쪽 상단)
+  Widget _buildSelectionBadge(int selected, int max) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppColors.white.withValues(alpha: 0.95),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: selected >= max ? AppColors.green : AppColors.blue,
+          width: 2,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withValues(alpha: 0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            LucideIcons.checkSquare,
+            size: 16,
+            color: selected >= max ? AppColors.green : AppColors.blue,
+          ),
+          const SizedBox(width: 6),
+          Text(
+            '$selected/$max',
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.darkBlue,
+              fontWeight: FontWeight.w700,
+              fontSize: 14,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -683,23 +723,22 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               fullGame: _fullGame,
             ),
 
-          // HUD (상단 중앙)
-          if (_zoomSpec != null)
+          // 선택 수량 배지 (왼쪽 상단)
+          Positioned(
+            top: 16,
+            left: 16,
+            child: _buildSelectionBadge(selectedCount, _pickMax),
+          ),
+
+          // 상품 선택 버튼 (우상단) - SELECT 게임인 경우
+          if (_fullGame != null &&
+              _fullGame!.gameType?.toUpperCase() == 'SELECT' &&
+              _fullGame!.gameProducts != null &&
+              _fullGame!.gameProducts!.isNotEmpty)
             Positioned(
               top: 16,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: PickHud(
-                  key: _hudKey,
-                  selected: selectedCount,
-                  pickMax: _pickMax,
-                  zoomLevel: currentZoomLevel,
-                  onSubmit: selectedCount >= _pickMax ? () {
-                    _showSnackBar('$selectedCount개 블록 제출됨!');
-                  } : null,
-                ),
-              ),
+              right: 16,
+              child: _buildCompactProductSelector(),
             ),
 
           // 미니맵 (좌하단)
@@ -720,22 +759,6 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               selectedBlocks: gridState.selectedBlocks,
             ),
           ),
-
-          // 상품 선택 버튼 (중하단) - SELECT 게임인 경우
-          if (_fullGame != null &&
-              _fullGame!.gameType?.toUpperCase() == 'SELECT' &&
-              _fullGame!.gameProducts != null &&
-              _fullGame!.gameProducts!.length > 1)
-            Positioned(
-              bottom: selectedCount > 0 && gridState.showBottomSheet
-                  ? 350 + bottomPadding + 16
-                  : 100 + bottomPadding + 16,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: _buildProductSelectorButton(),
-              ),
-            ),
 
           // Zoom Controls (우하단)
           if (_zoomSpec != null)
@@ -836,59 +859,75 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     );
   }
 
-  /// 상품 선택 버튼 (작은 아이콘 버튼)
-  Widget _buildProductSelectorButton() {
+  /// 상품 선택 버튼 (AppBar용 - 작고 배지 포함)
+  Widget _buildCompactProductSelector() {
     if (_fullGame == null ||
         _fullGame!.gameProducts == null ||
         _fullGame!.gameProducts!.isEmpty) {
       return const SizedBox.shrink();
     }
 
-    final selectedProduct = _fullGame!.gameProducts![_selectedProductIndex];
+    final productCount = _fullGame!.gameProducts!.length;
 
-    return GestureDetector(
-      onTap: _showProductSelector,
-      child: Container(
-        width: 56,
-        height: 56,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF7C4DFF), Color(0xFF9B7EFF)],
-          ),
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.purple.withValues(alpha: 0.3),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Center(
-          child: selectedProduct.product.defaultImage != null
-              ? ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    selectedProduct.product.defaultImage!.replaceAll(' ', '%20'),
-                    width: 40,
-                    height: 40,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(
-                        LucideIcons.package,
-                        size: 28,
-                        color: AppColors.white,
-                      );
-                    },
-                  ),
-                )
-              : const Icon(
-                  LucideIcons.package,
-                  size: 28,
-                  color: AppColors.white,
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        GestureDetector(
+          onTap: _showProductSelector,
+          child: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF7C4DFF), Color(0xFF9B7EFF)],
+              ),
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.purple.withValues(alpha: 0.2),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
                 ),
+              ],
+            ),
+            child: const Center(
+              child: Icon(
+                LucideIcons.repeat,
+                size: 22,
+                color: AppColors.white,
+              ),
+            ),
+          ),
         ),
-      ),
+        // 상품 개수 배지
+        if (productCount > 1)
+          Positioned(
+            top: -4,
+            right: -4,
+            child: Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: AppColors.red,
+                shape: BoxShape.circle,
+                border: Border.all(color: AppColors.white, width: 2),
+              ),
+              constraints: const BoxConstraints(
+                minWidth: 20,
+                minHeight: 20,
+              ),
+              child: Center(
+                child: Text(
+                  '$productCount',
+                  style: const TextStyle(
+                    color: AppColors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 
