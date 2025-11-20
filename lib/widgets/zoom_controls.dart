@@ -65,33 +65,17 @@ class ZoomControls extends StatelessWidget {
             padding: const EdgeInsets.all(12),
           ),
 
-          // 레벨 표시
-          if (currentLevel != null)
+          // LOD 레벨 표시 (숫자만)
+          if (lodLevel != null)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'L$currentLevel',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.darkBlue,
-                    ),
-                  ),
-                  if (lodLevel != null) ...[
-                    const SizedBox(height: 2),
-                    Text(
-                      'LOD$lodLevel',
-                      style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.medium,
-                      ),
-                    ),
-                  ],
-                ],
+              child: Text(
+                '$lodLevel',
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.darkBlue,
+                ),
               ),
             ),
 
