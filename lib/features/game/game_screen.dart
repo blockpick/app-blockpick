@@ -607,6 +607,20 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     final selectedCount = ref.watch(selectedBlockCountProvider(_gridConfig!));
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
+    // 현재 줌을 레벨로 변환 (핀치 줌과 버튼 줌 동기화)
+    final currentZoomLevel = _zoomMapper?.scaleToNearestLevel(gridState.zoom) ?? _currentZoomLevel;
+
+    // 레벨이 변경되었으면 상태 업데이트 (다음 프레임에)
+    if (currentZoomLevel != _currentZoomLevel && _zoomMapper != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {
+            _currentZoomLevel = currentZoomLevel;
+          });
+        }
+      });
+    }
+
     return Scaffold(
       backgroundColor: AppColors.deepWhite,
       appBar: _buildAppBar(context),
@@ -680,7 +694,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                   key: _hudKey,
                   selected: selectedCount,
                   pickMax: _pickMax,
-                  zoomLevel: _currentZoomLevel,
+                  zoomLevel: currentZoomLevel,
                   onSubmit: selectedCount >= _pickMax ? () {
                     _showSnackBar('$selectedCount개 블록 제출됨!');
                   } : null,
@@ -734,9 +748,10 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                 key: _zoomControlKey,
                 onZoomIn: _handleZoomIn,
                 onZoomOut: _handleZoomOut,
-                currentLevel: _currentZoomLevel,
+                currentLevel: currentZoomLevel,
                 maxLevel: _zoomSpec!.maxLevel,
                 minLevel: _zoomSpec!.minLevel,
+                lodLevel: gridState.lodLevel,
               ),
             ),
         ],

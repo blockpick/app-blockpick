@@ -19,6 +19,9 @@ class ZoomControls extends StatelessWidget {
   /// 최소 레벨
   final int? minLevel;
 
+  /// LOD (Level of Detail) 레벨
+  final int? lodLevel;
+
   /// 투명도
   final double opacity;
 
@@ -29,6 +32,7 @@ class ZoomControls extends StatelessWidget {
     this.currentLevel,
     this.maxLevel,
     this.minLevel,
+    this.lodLevel,
     this.opacity = 0.75,
   });
 
@@ -65,13 +69,29 @@ class ZoomControls extends StatelessWidget {
           if (currentLevel != null)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-              child: Text(
-                'L$currentLevel',
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.darkBlue,
-                ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'L$currentLevel',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.darkBlue,
+                    ),
+                  ),
+                  if (lodLevel != null) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      'LOD$lodLevel',
+                      style: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.medium,
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
 
@@ -103,6 +123,7 @@ class HorizontalZoomControls extends StatelessWidget {
   final int? currentLevel;
   final int? maxLevel;
   final int? minLevel;
+  final int? lodLevel;
   final double opacity;
 
   const HorizontalZoomControls({
@@ -112,6 +133,7 @@ class HorizontalZoomControls extends StatelessWidget {
     this.currentLevel,
     this.maxLevel,
     this.minLevel,
+    this.lodLevel,
     this.opacity = 0.75,
   });
 
@@ -149,13 +171,29 @@ class HorizontalZoomControls extends StatelessWidget {
           if (currentLevel != null)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              child: Text(
-                'L$currentLevel',
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.darkBlue,
-                ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'L$currentLevel',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.darkBlue,
+                    ),
+                  ),
+                  if (lodLevel != null) ...[
+                    const SizedBox(width: 4),
+                    Text(
+                      '(LOD$lodLevel)',
+                      style: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.medium,
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
 
