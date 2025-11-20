@@ -5,9 +5,13 @@ import '../../core/theme/app_text_styles.dart';
 import '../../models/game_model.dart';
 import '../../models/game_round_model.dart';
 import '../../providers/game_provider.dart';
+import '../../providers/grid_state_provider.dart';
 import '../grid/game_grid_widget.dart';
-import '../../models/block_model.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'widgets/product_selector_overlay.dart';
+import '../../components/minimap/grid_minimap.dart';
+import '../../widgets/zoom_controls.dart';
+import '../../utils/zoom_calculator.dart';
 
 /// 게임 상세 화면
 class GameDetailScreen extends ConsumerStatefulWidget {
@@ -23,9 +27,36 @@ class GameDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
+  int _selectedProductIndex = 0;
+
   @override
   void initState() {
     super.initState();
+  }
+
+  void _showProductSelector(Game game) {
+    if (game.gameProducts == null || game.gameProducts!.isEmpty) {
+      return;
+    }
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Dialog(
+        insetPadding: EdgeInsets.zero,
+        backgroundColor: Colors.transparent,
+        child: ProductSelectorOverlay(
+          products: game.gameProducts!,
+          initialIndex: _selectedProductIndex,
+          onProductSelected: (index, product) {
+            setState(() {
+              _selectedProductIndex = index;
+            });
+            debugPrint('✅ Product selected: ${product.product.name} (index: $index)');
+          },
+        ),
+      ),
+    );
   }
 
   @override
@@ -110,9 +141,21 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
               // 게임 그리드
               Builder(
                 builder: (context) {
-                  final imageUrl = gameRound.imageUrl.isEmpty ? null : gameRound.imageUrl;
+                  // SELECT 게임인 경우 선택된 상품의 이미지 사용
+                  String? imageUrl;
+                  if (game.gameType?.toUpperCase() == 'SELECT' &&
+                      game.gameProducts != null &&
+                      game.gameProducts!.isNotEmpty) {
+                    final selectedProduct = game.gameProducts![_selectedProductIndex];
+                    imageUrl = selectedProduct.product.defaultImage ??
+                        selectedProduct.product.imageUrl;
+                  } else {
+                    imageUrl = gameRound.imageUrl.isEmpty ? null : gameRound.imageUrl;
+                  }
+
                   debugPrint('🎮 GameGrid 빌드:');
-                  debugPrint('   - gameRound.imageUrl: ${gameRound.imageUrl}');
+                  debugPrint('   - gameType: ${game.gameType}');
+                  debugPrint('   - selectedProductIndex: $_selectedProductIndex');
                   debugPrint('   - backgroundImagePath: $imageUrl');
                   debugPrint('   - gridWidth: ${gameRound.gridWidth}');
                   debugPrint('   - gridHeight: ${gameRound.gridHeight}');
@@ -133,16 +176,11 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                 top: 16,
                 left: 16,
                 right: 16,
-                child: _buildInfoPanel(gameRound),
+                child: _buildInfoPanel(gameRound, game),
               ),
 
-              // 하단 참가 버튼
-              Positioned(
-                bottom: 24,
-                left: 16,
-                right: 16,
-                child: _buildParticipateButton(),
-              ),
+              // 하단 UI 요소들
+              ..._buildBottomUI(context, game, gameRound),
             ],
           ),
         );
@@ -203,17 +241,67 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
     );
   }
 
+  /// 상품 선택 버튼 (작은 아이콘 버튼)
+  Widget _buildProductSelectorButton(Game game) {
+    final selectedProduct = game.gameProducts![_selectedProductIndex];
+
+    return GestureDetector(
+      onTap: () => _showProductSelector(game),
+      child: Container(
+        width: 56,
+        height: 56,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF7C4DFF), Color(0xFF9B7EFF)],
+          ),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.purple.withValues(alpha: 0.3),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Center(
+          child: selectedProduct.product.defaultImage != null
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    selectedProduct.product.defaultImage!.replaceAll(' ', '%20'),
+                    width: 40,
+                    height: 40,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(
+                        LucideIcons.package,
+                        size: 28,
+                        color: AppColors.white,
+                      );
+                    },
+                  ),
+                )
+              : const Icon(
+                  LucideIcons.package,
+                  size: 28,
+                  color: AppColors.white,
+                ),
+        ),
+      ),
+    );
+  }
+
   /// 정보 패널
-  Widget _buildInfoPanel(GameRound game) {
+  Widget _buildInfoPanel(GameRound game, Game gameData) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.white.withOpacity(0.95),
+        color: AppColors.white.withValues(alpha: 0.95),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.buleGray),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withOpacity(0.1),
+            color: AppColors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -312,7 +400,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.blue.withOpacity(0.3),
+            color: AppColors.blue.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -388,5 +476,93 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
       return '${(number / 1000).toStringAsFixed(0)}K';
     }
     return number.toString();
+  }
+
+  /// 하단 UI 요소들 (상품 선택, 미니맵, 줌 컨트롤, 참가 버튼)
+  List<Widget> _buildBottomUI(BuildContext context, Game game, GameRound gameRound) {
+    final widgets = <Widget>[];
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+    final baseBottom = 100.0 + bottomPadding + 16;
+
+    // GridConfig 생성
+    final screenSize = MediaQuery.of(context).size;
+    final baseZoom = ZoomCalculator.calculateBaseZoom(
+      gridWidth: gameRound.gridWidth ?? 10,
+      gridHeight: gameRound.gridHeight ?? 10,
+      screenWidth: screenSize.width,
+      screenHeight: screenSize.height,
+    );
+    final gridConfig = GridConfig(
+      gameId: widget.gameId,
+      gridWidth: gameRound.gridWidth ?? 10,
+      gridHeight: gameRound.gridHeight ?? 10,
+      baseZoom: baseZoom,
+    );
+    final gridState = ref.watch(gridStateProvider(gridConfig));
+
+    // SELECT 게임인 경우 상품 선택 버튼 (중하단)
+    if (game.gameType?.toUpperCase() == 'SELECT' &&
+        game.gameProducts != null &&
+        game.gameProducts!.length > 1) {
+      widgets.add(
+        Positioned(
+          bottom: baseBottom,
+          left: 0,
+          right: 0,
+          child: Center(
+            child: _buildProductSelectorButton(game),
+          ),
+        ),
+      );
+    }
+
+    // 미니맵 (좌하단)
+    widgets.add(
+      Positioned(
+        bottom: baseBottom,
+        left: 16,
+        child: GridMinimap(
+          gridWidth: gameRound.gridWidth ?? 10,
+          gridHeight: gameRound.gridHeight ?? 10,
+          zoom: gridState.zoom,
+          panX: gridState.panX,
+          panY: gridState.panY,
+          screenSize: screenSize,
+          backgroundImagePath: gameRound.imageUrl.isEmpty ? null : gameRound.imageUrl,
+          selectedBlocks: gridState.selectedBlocks,
+        ),
+      ),
+    );
+
+    // Zoom 컨트롤 (우하단)
+    widgets.add(
+      Positioned(
+        bottom: baseBottom,
+        right: 16,
+        child: ZoomControls(
+          onZoomIn: () {
+            // TODO: 줌 인 구현
+          },
+          onZoomOut: () {
+            // TODO: 줌 아웃 구현
+          },
+          currentLevel: 1,
+          maxLevel: 10,
+          minLevel: 1,
+        ),
+      ),
+    );
+
+    // 참가 버튼 (최하단)
+    widgets.add(
+      Positioned(
+        bottom: 24,
+        left: 16,
+        right: 16,
+        child: _buildParticipateButton(),
+      ),
+    );
+
+    return widgets;
   }
 }

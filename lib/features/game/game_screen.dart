@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import '../grid/game_grid_widget.dart';
 import 'selected_blocks_sheet.dart';
+import 'widgets/product_selector_overlay.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/constants/app_constants.dart';
@@ -68,6 +69,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   final GlobalKey _zoomControlKey = GlobalKey();
   final GlobalKey _gridKey = GlobalKey();
   final GlobalKey _hudKey = GlobalKey();
+
+  // 상품 선택 (SELECT 게임용)
+  int _selectedProductIndex = 0;
 
   @override
   void initState() {
@@ -611,25 +615,42 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           // 게임 그리드
           Positioned.fill(
             key: _gridKey,
-            child: GameGridWidget(
-              gameId: gameId,
-              gridWidth: _gridWidth,
-              gridHeight: _gridHeight,
-              backgroundImagePath: _game?.imageUrl,
-              onBlockTap: (block) {
-                debugPrint('Block tapped: ${block.row}, ${block.col}');
-
-                // 튜토리얼 목표 블록을 탭했는지 확인
-                final gridState = ref.read(gridStateProvider(_gridConfig!));
-                if (gridState.tutorialTargetBlock != null &&
-                    gridState.tutorialTargetBlock!.id == block.id) {
-                  // 튜토리얼 목표 블록을 선택했으면 다음 단계로
-                  debugPrint('✅ Tutorial target block selected!');
-                  ref.read(gridStateProvider(_gridConfig!).notifier).setTutorialTargetBlock(null);
-                  _tutorialCoachMark?.next();
+            child: Builder(
+              builder: (context) {
+                // SELECT 게임인 경우 선택된 상품의 이미지 사용
+                String? backgroundImagePath;
+                if (_fullGame != null &&
+                    _fullGame!.gameType?.toUpperCase() == 'SELECT' &&
+                    _fullGame!.gameProducts != null &&
+                    _fullGame!.gameProducts!.isNotEmpty) {
+                  final selectedProduct = _fullGame!.gameProducts![_selectedProductIndex];
+                  backgroundImagePath = selectedProduct.product.defaultImage ??
+                      selectedProduct.product.imageUrl;
+                } else {
+                  backgroundImagePath = _game?.imageUrl;
                 }
 
-                ref.read(gridStateProvider(_gridConfig!).notifier).showBottomSheet();
+                return GameGridWidget(
+                  gameId: gameId,
+                  gridWidth: _gridWidth,
+                  gridHeight: _gridHeight,
+                  backgroundImagePath: backgroundImagePath,
+                  onBlockTap: (block) {
+                    debugPrint('Block tapped: ${block.row}, ${block.col}');
+
+                    // 튜토리얼 목표 블록을 탭했는지 확인
+                    final gridState = ref.read(gridStateProvider(_gridConfig!));
+                    if (gridState.tutorialTargetBlock != null &&
+                        gridState.tutorialTargetBlock!.id == block.id) {
+                      // 튜토리얼 목표 블록을 선택했으면 다음 단계로
+                      debugPrint('✅ Tutorial target block selected!');
+                      ref.read(gridStateProvider(_gridConfig!).notifier).setTutorialTargetBlock(null);
+                      _tutorialCoachMark?.next();
+                    }
+
+                    ref.read(gridStateProvider(_gridConfig!).notifier).showBottomSheet();
+                  },
+                );
               },
             ),
           ),
@@ -685,6 +706,22 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               selectedBlocks: gridState.selectedBlocks,
             ),
           ),
+
+          // 상품 선택 버튼 (중하단) - SELECT 게임인 경우
+          if (_fullGame != null &&
+              _fullGame!.gameType?.toUpperCase() == 'SELECT' &&
+              _fullGame!.gameProducts != null &&
+              _fullGame!.gameProducts!.length > 1)
+            Positioned(
+              bottom: selectedCount > 0 && gridState.showBottomSheet
+                  ? 350 + bottomPadding + 16
+                  : 100 + bottomPadding + 16,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: _buildProductSelectorButton(),
+              ),
+            ),
 
           // Zoom Controls (우하단)
           if (_zoomSpec != null)
@@ -753,6 +790,90 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           },
         ),
       ],
+    );
+  }
+
+  /// 상품 선택 오버레이 표시
+  void _showProductSelector() {
+    if (_fullGame == null ||
+        _fullGame!.gameProducts == null ||
+        _fullGame!.gameProducts!.isEmpty) {
+      return;
+    }
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Dialog(
+        insetPadding: EdgeInsets.zero,
+        backgroundColor: Colors.transparent,
+        child: ProductSelectorOverlay(
+          products: _fullGame!.gameProducts!,
+          initialIndex: _selectedProductIndex,
+          onProductSelected: (index, product) {
+            setState(() {
+              _selectedProductIndex = index;
+            });
+            debugPrint('✅ Product selected: ${product.product.name} (index: $index)');
+          },
+        ),
+      ),
+    );
+  }
+
+  /// 상품 선택 버튼 (작은 아이콘 버튼)
+  Widget _buildProductSelectorButton() {
+    if (_fullGame == null ||
+        _fullGame!.gameProducts == null ||
+        _fullGame!.gameProducts!.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    final selectedProduct = _fullGame!.gameProducts![_selectedProductIndex];
+
+    return GestureDetector(
+      onTap: _showProductSelector,
+      child: Container(
+        width: 56,
+        height: 56,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF7C4DFF), Color(0xFF9B7EFF)],
+          ),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.purple.withValues(alpha: 0.3),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Center(
+          child: selectedProduct.product.defaultImage != null
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    selectedProduct.product.defaultImage!.replaceAll(' ', '%20'),
+                    width: 40,
+                    height: 40,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(
+                        LucideIcons.package,
+                        size: 28,
+                        color: AppColors.white,
+                      );
+                    },
+                  ),
+                )
+              : const Icon(
+                  LucideIcons.package,
+                  size: 28,
+                  color: AppColors.white,
+                ),
+        ),
+      ),
     );
   }
 
