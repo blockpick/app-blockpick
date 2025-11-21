@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -74,44 +73,13 @@ class _PriceWheelSelectorState extends ConsumerState<PriceWheelSelector> {
     super.dispose();
   }
 
-  /// 자석 효과가 적용된 블록 (중력 반전 + 왜곡)
+  /// 기본 블록 (애니메이션 제거)
   Widget _build3DRotatedBlock({
     required Widget child,
     required int index,
     required int currentIndex,
   }) {
-    // 현재 인덱스와의 거리
-    final distance = (index - currentIndex).toDouble();
-    final absDistance = distance.abs();
-
-    // 자석 효과: 중앙에 가까울수록 강하게 끌림
-    final magneticPull = (1.0 - (absDistance * 0.3).clamp(0.0, 1.0));
-
-    // 스케일: 중앙으로 올수록 커짐 (자석에 끌려 늘어나는 느낌)
-    final scale = 0.85 + (magneticPull * 0.15);
-
-    // Y축 이동: 자석에 끌려오는 효과
-    final magneticOffset = -absDistance * 5.0 + (magneticPull * 8.0);
-
-    // 회전: 자기장에 의해 약간 기울어짐
-    final rotation = distance * 0.1;
-
-    // Wobbly 왜곡: 중앙에 가까울수록 X축으로 찌그러짐
-    final scaleX = 1.0 + (magneticPull * 0.05);
-    final scaleY = 1.0 - (magneticPull * 0.03);
-
-    return Transform(
-      transform: Matrix4.identity()
-        ..setEntry(3, 2, 0.001) // 원근감
-        ..translate(0.0, magneticOffset) // 자석 끌림
-        ..rotateX(rotation) // 자기장 회전
-        ..scale(scaleX * scale, scaleY * scale, scale),
-      alignment: Alignment.center,
-      child: _FloatingBlock(
-        distance: absDistance,
-        child: child,
-      ),
-    );
+    return child;
   }
 
   @override
@@ -146,13 +114,6 @@ class _PriceWheelSelectorState extends ConsumerState<PriceWheelSelector> {
             ),
           ),
 
-        // 자기장 파장 효과 (애니메이션 오라)
-        Positioned.fill(
-          child: Center(
-            child: _MagneticFieldEffect(),
-          ),
-        ),
-
         // 중앙 포커스 인디케이터 (Isometric 블록 테두리)
         Positioned.fill(
           child: Center(
@@ -174,7 +135,7 @@ class _PriceWheelSelectorState extends ConsumerState<PriceWheelSelector> {
             itemExtent: 100, // 각 블록 높이 (3D 효과를 위해 증가)
             diameterRatio: 1.2, // 휠 직경 (작을수록 3D 효과 강함)
             perspective: 0.004, // 3D 원근감 증가
-            physics: const FixedExtentScrollPhysics(),
+            physics: const FixedExtentScrollPhysics(), // 중앙 스냅
             onSelectedItemChanged: (index) {
               setState(() {
                 _currentIndex = index;
@@ -253,191 +214,6 @@ class _PriceWheelSelectorState extends ConsumerState<PriceWheelSelector> {
         ),
       ],
     );
-  }
-}
-
-/// 떠다니는 블록 애니메이션 (자기장 부유 효과)
-class _FloatingBlock extends StatefulWidget {
-  final Widget child;
-  final double distance;
-
-  const _FloatingBlock({
-    required this.child,
-    required this.distance,
-  });
-
-  @override
-  State<_FloatingBlock> createState() => _FloatingBlockState();
-}
-
-class _FloatingBlockState extends State<_FloatingBlock>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _floatAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // 떠다니는 애니메이션 (사인파 움직임)
-    _controller = AnimationController(
-      duration: Duration(milliseconds: 2000 + (widget.distance * 200).toInt()),
-      vsync: this,
-    )..repeat(reverse: true);
-
-    _floatAnimation = Tween<double>(
-      begin: -3.0,
-      end: 3.0,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    ));
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _floatAnimation,
-      builder: (context, child) {
-        return Transform.translate(
-          offset: Offset(0, _floatAnimation.value),
-          child: child,
-        );
-      },
-      child: widget.child,
-    );
-  }
-}
-
-/// 자기장 파장 효과 (중앙 주변 애니메이션 오라)
-class _MagneticFieldEffect extends StatefulWidget {
-  const _MagneticFieldEffect();
-
-  @override
-  State<_MagneticFieldEffect> createState() => _MagneticFieldEffectState();
-}
-
-class _MagneticFieldEffectState extends State<_MagneticFieldEffect>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // 파장이 퍼져나가는 애니메이션
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 2500),
-      vsync: this,
-    )..repeat();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        return CustomPaint(
-          painter: _MagneticFieldPainter(
-            animation: _controller.value,
-          ),
-          size: const Size(double.infinity, 100),
-        );
-      },
-    );
-  }
-}
-
-/// 자기장 파장 페인터
-class _MagneticFieldPainter extends CustomPainter {
-  final double animation;
-
-  _MagneticFieldPainter({required this.animation});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final maxRadius = size.width * 0.5;
-
-    // 3개의 파장 레이어 (시간차를 두고 퍼짐)
-    for (int i = 0; i < 3; i++) {
-      final phase = (animation + (i * 0.33)) % 1.0;
-      final radius = maxRadius * phase;
-      final opacity = (1.0 - phase) * 0.3;
-
-      // 파장 원형
-      final paint = Paint()
-        ..color = AppColors.purple.withValues(alpha: opacity)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2.0;
-
-      canvas.drawOval(
-        Rect.fromCenter(
-          center: center,
-          width: radius * 2,
-          height: radius * 0.6, // 타원형 (Isometric 느낌)
-        ),
-        paint,
-      );
-
-      // 내부 글로우 효과
-      final glowPaint = Paint()
-        ..color = AppColors.blue.withValues(alpha: opacity * 0.5)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 8.0
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 12);
-
-      canvas.drawOval(
-        Rect.fromCenter(
-          center: center,
-          width: radius * 2,
-          height: radius * 0.6,
-        ),
-        glowPaint,
-      );
-    }
-
-    // 중앙 자기장 코어 (맥동 효과)
-    final coreSize = 40.0 + (10.0 * (0.5 + 0.5 * math.sin(animation * 6.28)));
-    final corePaint = Paint()
-      ..shader = RadialGradient(
-        colors: [
-          AppColors.purple.withValues(alpha: 0.4),
-          AppColors.blue.withValues(alpha: 0.2),
-          Colors.transparent,
-        ],
-      ).createShader(Rect.fromCenter(
-        center: center,
-        width: coreSize * 2,
-        height: coreSize * 2,
-      ))
-      ..style = PaintingStyle.fill;
-
-    canvas.drawOval(
-      Rect.fromCenter(
-        center: center,
-        width: coreSize * 2,
-        height: coreSize * 0.6,
-      ),
-      corePaint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(_MagneticFieldPainter oldDelegate) {
-    return oldDelegate.animation != animation;
   }
 }
 
