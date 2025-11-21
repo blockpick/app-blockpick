@@ -60,7 +60,7 @@ class _PriceWheelSelectorState extends ConsumerState<PriceWheelSelector> {
         // 부드럽게 애니메이션으로 이동
         _scrollController.animateToItem(
           newIndex,
-          duration: const Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 800),
           curve: Curves.easeOutCubic,
         );
       }

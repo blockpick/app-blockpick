@@ -77,82 +77,51 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // 상품 이미지 (작게)
-          Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: AppColors.buleGray.withOpacity(0.3)),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                _game!.imageUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return const Icon(
-                    LucideIcons.package,
-                    size: 24,
-                    color: AppColors.grayBlue,
-                  );
-                },
+          // 왼쪽: 상품 이미지 + 참여자 수
+          Row(
+            children: [
+              // 상품 이미지
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppColors.buleGray.withOpacity(0.3)),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset(
+                    _game!.imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(
+                        LucideIcons.package,
+                        size: 24,
+                        color: AppColors.grayBlue,
+                      );
+                    },
+                  ),
+                ),
               ),
-            ),
+              const SizedBox(width: 12),
+              // 참여자 수 (카운트업 애니메이션)
+              _AnimatedParticipantCount(participants: _game!.participants),
+            ],
           ),
 
-          const SizedBox(width: 12),
-
-          // 상품 정보
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  _game!.title,
-                  style: AppTextStyles.medium.copyWith(
-                    color: AppColors.darkBlue,
-                    fontSize: 16,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Icon(
-                      LucideIcons.users,
-                      size: 12,
-                      color: AppColors.grayBlue,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      '${_game!.participants}명',
-                      style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.grayBlue,
-                        fontSize: 11,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Icon(
-                      LucideIcons.clock,
-                      size: 12,
-                      color: AppColors.yellow,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      _game!.timeLeft,
-                      style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.yellow,
-                        fontSize: 11,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+          // 오른쪽: 시간 카운트다운 + 트렌드 정보
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              // 실시간 카운트다운 타이머
+              _CountdownTimer(timeLeft: _game!.timeLeft),
+              const SizedBox(height: 4),
+              // 트렌드 정보
+              _AnimatedTrendInfo(),
+            ],
           ),
         ],
       ),
@@ -361,5 +330,452 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
           RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
           (Match m) => '${m[1]},',
         )}원';
+  }
+}
+
+/// 애니메이션으로 순환하는 트렌드 정보 위젯
+class _AnimatedTrendInfo extends StatefulWidget {
+  @override
+  State<_AnimatedTrendInfo> createState() => _AnimatedTrendInfoState();
+}
+
+class _AnimatedTrendInfoState extends State<_AnimatedTrendInfo>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _fadeAnimation;
+  int _currentIndex = 0;
+
+  final List<_TrendData> _trendInfoList = [
+    _TrendData(
+      icon: Icons.trending_up,
+      text: '최근 1시간 15명 입찰 중',
+      color: AppColors.purple,
+    ),
+    _TrendData(
+      icon: Icons.local_fire_department,
+      text: '지금 가장 인기있는 구간',
+      color: AppColors.red,
+    ),
+    _TrendData(
+      icon: Icons.flash_on,
+      text: '5분 전 3명 새로 참여',
+      color: AppColors.yellow,
+    ),
+    _TrendData(
+      icon: Icons.analytics,
+      text: '평균가 대비 -2%',
+      color: AppColors.green,
+    ),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+
+    _startAnimation();
+  }
+
+  void _startAnimation() async {
+    while (mounted) {
+      _controller.forward(from: 0.0);
+      await Future.delayed(const Duration(seconds: 3));
+      if (mounted) {
+        await _controller.reverse();
+        setState(() {
+          _currentIndex = (_currentIndex + 1) % _trendInfoList.length;
+        });
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final trend = _trendInfoList[_currentIndex];
+
+    return FadeTransition(
+      opacity: _fadeAnimation,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            trend.icon,
+            size: 11,
+            color: trend.color,
+          ),
+          const SizedBox(width: 3),
+          Flexible(
+            child: Text(
+              trend.text,
+              style: AppTextStyles.bodySmall.copyWith(
+                color: trend.color,
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 트렌드 데이터 모델
+class _TrendData {
+  final IconData icon;
+  final String text;
+  final Color color;
+
+  _TrendData({
+    required this.icon,
+    required this.text,
+    required this.color,
+  });
+}
+
+/// 참여자 수 카운트업 애니메이션
+class _AnimatedParticipantCount extends StatefulWidget {
+  final int participants;
+
+  const _AnimatedParticipantCount({required this.participants});
+
+  @override
+  State<_AnimatedParticipantCount> createState() =>
+      _AnimatedParticipantCountState();
+}
+
+class _AnimatedParticipantCountState extends State<_AnimatedParticipantCount>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<int> _countAnimation;
+  int _currentCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentCount = widget.participants;
+
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    );
+
+    _countAnimation = IntTween(
+      begin: widget.participants - 50, // 초기값 (약간 적게 시작)
+      end: widget.participants,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOut,
+    ));
+
+    _controller.forward();
+
+    // 주기적으로 참여자 수 증가 애니메이션
+    _startPeriodicUpdate();
+  }
+
+  void _startPeriodicUpdate() async {
+    await Future.delayed(const Duration(seconds: 5));
+    while (mounted) {
+      await Future.delayed(const Duration(seconds: 3));
+      if (mounted) {
+        setState(() {
+          _currentCount += 1;
+        });
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _countAnimation,
+      builder: (context, child) {
+        return Row(
+          children: [
+            const Icon(
+              LucideIcons.users,
+              size: 14,
+              color: AppColors.grayBlue,
+            ),
+            const SizedBox(width: 4),
+            Text(
+              '${_controller.isAnimating ? _countAnimation.value : _currentCount}명',
+              style: AppTextStyles.medium.copyWith(
+                color: AppColors.grayBlue,
+                fontSize: 13,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+/// 실시간 카운트다운 타이머 (시간별 긴박감 효과)
+class _CountdownTimer extends StatefulWidget {
+  final String timeLeft;
+
+  const _CountdownTimer({required this.timeLeft});
+
+  @override
+  State<_CountdownTimer> createState() => _CountdownTimerState();
+}
+
+class _CountdownTimerState extends State<_CountdownTimer>
+    with TickerProviderStateMixin {
+  late AnimationController _blinkController;
+  late AnimationController _fireController;
+  late Animation<double> _blinkAnimation;
+
+  Duration _remainingTime = Duration.zero;
+  late Duration _initialTime;
+
+  @override
+  void initState() {
+    super.initState();
+    _initialTime = _parseTimeLeft(widget.timeLeft);
+    _remainingTime = _initialTime;
+
+    // 깜빡임 애니메이션
+    _blinkController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    )..repeat(reverse: true);
+
+    _blinkAnimation = Tween<double>(begin: 1.0, end: 0.3).animate(
+      CurvedAnimation(parent: _blinkController, curve: Curves.easeInOut),
+    );
+
+    // 파이어 애니메이션 컨트롤러
+    _fireController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+
+    // 카운트다운 시작
+    _startCountdown();
+  }
+
+  Duration _parseTimeLeft(String timeLeft) {
+    // "2시간 30분" 형식 파싱
+    final hourMatch = RegExp(r'(\d+)시간').firstMatch(timeLeft);
+    final minuteMatch = RegExp(r'(\d+)분').firstMatch(timeLeft);
+
+    int hours = hourMatch != null ? int.parse(hourMatch.group(1)!) : 0;
+    int minutes = minuteMatch != null ? int.parse(minuteMatch.group(1)!) : 0;
+
+    return Duration(hours: hours, minutes: minutes);
+  }
+
+  void _startCountdown() async {
+    while (mounted && _remainingTime.inSeconds > 0) {
+      await Future.delayed(const Duration(seconds: 1));
+      if (mounted) {
+        setState(() {
+          _remainingTime -= const Duration(seconds: 1);
+        });
+      }
+    }
+  }
+
+  Color _getTimeColor() {
+    final minutes = _remainingTime.inMinutes;
+    if (minutes < 30) return AppColors.red;
+    if (minutes < 60) return const Color(0xFFFF8C00); // 주황색
+    return AppColors.yellow;
+  }
+
+  int _getFireIntensity() {
+    final minutes = _remainingTime.inMinutes;
+    if (minutes < 10) return 4; // 매우 격렬
+    if (minutes < 30) return 3; // 격렬
+    if (minutes < 60) return 2; // 중간
+    return 0; // 없음
+  }
+
+  String _formatTime() {
+    final hours = _remainingTime.inHours;
+    final minutes = _remainingTime.inMinutes % 60;
+    final seconds = _remainingTime.inSeconds % 60;
+
+    if (hours > 0) {
+      return '$hours시간 $minutes분';
+    } else if (minutes > 0) {
+      return '$minutes분 $seconds초';
+    } else {
+      return '$seconds초';
+    }
+  }
+
+  @override
+  void dispose() {
+    _blinkController.dispose();
+    _fireController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final intensity = _getFireIntensity();
+    final shouldBlink = _remainingTime.inMinutes < 30;
+
+    Widget timeWidget = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // 파이어 아이콘들
+        if (intensity > 0)
+          SizedBox(
+            width: 20,
+            height: 20,
+            child: Stack(
+              children: List.generate(
+                intensity,
+                (index) => _FireParticle(
+                  delay: index * 200,
+                  controller: _fireController,
+                  speed: intensity > 2 ? 1.5 : 1.0,
+                ),
+              ),
+            ),
+          ),
+        if (intensity > 0) const SizedBox(width: 4),
+
+        // 시계 아이콘
+        Icon(
+          LucideIcons.clock,
+          size: 14,
+          color: _getTimeColor(),
+        ),
+        const SizedBox(width: 4),
+
+        // 시간 텍스트
+        Text(
+          _formatTime(),
+          style: AppTextStyles.medium.copyWith(
+            color: _getTimeColor(),
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+
+    // 30분 미만일 때 깜빡임 효과
+    if (shouldBlink) {
+      return FadeTransition(
+        opacity: _blinkAnimation,
+        child: timeWidget,
+      );
+    }
+
+    return timeWidget;
+  }
+}
+
+/// 파이어 파티클 애니메이션 (연속으로 올라가는 불꽃)
+class _FireParticle extends StatefulWidget {
+  final int delay;
+  final AnimationController controller;
+  final double speed;
+
+  const _FireParticle({
+    required this.delay,
+    required this.controller,
+    this.speed = 1.0,
+  });
+
+  @override
+  State<_FireParticle> createState() => _FireParticleState();
+}
+
+class _FireParticleState extends State<_FireParticle>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _positionAnimation;
+  late Animation<double> _opacityAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      duration: Duration(milliseconds: (800 / widget.speed).round()),
+      vsync: this,
+    );
+
+    _positionAnimation = Tween<double>(
+      begin: 0.0,
+      end: -20.0, // 위로 20px 이동
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOut,
+    ));
+
+    _opacityAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.0,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeIn,
+    ));
+
+    _startAnimation();
+  }
+
+  void _startAnimation() async {
+    await Future.delayed(Duration(milliseconds: widget.delay));
+    while (mounted) {
+      await _controller.forward(from: 0.0);
+      await Future.delayed(const Duration(milliseconds: 300));
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(0, _positionAnimation.value),
+          child: Opacity(
+            opacity: _opacityAnimation.value,
+            child: const Icon(
+              Icons.local_fire_department,
+              size: 12,
+              color: AppColors.red,
+            ),
+          ),
+        );
+      },
+    );
   }
 }

@@ -9,12 +9,14 @@ class PriceBlockItem extends StatelessWidget {
   final int price;
   final bool isSelected;
   final bool isFocused; // 휠 중앙에 위치한 블록
+  final int? recentBidders; // 최근 1시간 입찰자 수 (선택 사항)
 
   const PriceBlockItem({
     super.key,
     required this.price,
     this.isSelected = false,
     this.isFocused = false,
+    this.recentBidders,
   });
 
   @override
@@ -72,24 +74,7 @@ class PriceBlockItem extends StatelessWidget {
                     fontSize: isFocused ? 28 : 24,
                   ),
                 ),
-                if (isSelected) ...[
-                  const SizedBox(height: 4),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: AppColors.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      '선택됨',
-                      style: AppTextStyles.caption.copyWith(
-                        color: AppColors.white,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
+                // 중앙 블록에는 가격만 표시 (추가 정보 제거)
               ],
             ),
           ),
