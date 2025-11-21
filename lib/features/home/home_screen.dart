@@ -5,6 +5,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../models/game_round_model.dart';
 import '../game/game_list_screen.dart';
+import '../game/vibe_game_list_screen.dart';
 import '../optimal/optimal_game_list_screen.dart';
 
 /// 홈 화면 (PICK 탭 - DAILY/SELECT/VIBE/OPTIMAL)
@@ -64,7 +65,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               children: const [
                 GameListScreen(gameType: GameType.daily),
                 GameListScreen(gameType: GameType.select),
-                GameListScreen(gameType: GameType.vibe),
+                VibeGameListScreen(),
                 OptimalGameListScreen(),
               ],
             ),

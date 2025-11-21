@@ -46,9 +46,6 @@ class _GameListScreenState extends ConsumerState<GameListScreen> {
       backgroundColor: AppColors.deepWhite,
       body: Column(
         children: [
-          // 배너
-          _buildBanner(),
-
           // 필터 바
           _buildFilterBar(),
 
@@ -57,47 +54,6 @@ class _GameListScreenState extends ConsumerState<GameListScreen> {
             child: _buildContent(),
           ),
         ],
-      ),
-    );
-  }
-
-  /// 배너
-  Widget _buildBanner() {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            AppColors.purple,
-            AppColors.blue,
-          ],
-        ),
-      ),
-      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
-      child: SafeArea(
-        bottom: false,
-        child: Column(
-          children: [
-            Text(
-              'PICK YOUR PRIZE, MAKE IT YOURS',
-              style: AppTextStyles.large.copyWith(
-                color: AppColors.white,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Choose your favorite items and participate in exciting games',
-              style: AppTextStyles.body.copyWith(
-                color: AppColors.white.withOpacity(0.9),
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -310,30 +266,54 @@ class _GameListScreenState extends ConsumerState<GameListScreen> {
 
   /// 게임 그리드
   Widget _buildGameGrid(List<GameRound> games) {
-    return GridView.builder(
-      padding: const EdgeInsets.all(16),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: MediaQuery.of(context).size.width > 600 ? 2 : 1,
-        childAspectRatio: 0.75,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-      ),
-      itemCount: games.length,
-      itemBuilder: (context, index) {
-        final game = games[index];
-        return GameCard(
-          game: game,
-          onTap: () {
-            debugPrint('🎯 게임 카드 탭:');
-            debugPrint('   - game.id: ${game.id}');
-            debugPrint('   - game.imageUrl: ${game.imageUrl}');
-            debugPrint('   - 이동: /game/${game.id}');
-            // GoRouter로 게임 상세 페이지 이동
-            context.go('/game/${game.id}');
-          },
-        );
-      },
-    );
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isWeb = screenWidth > 600;
+
+    if (isWeb) {
+      // 웹: 2열 그리드 with Wrap
+      return SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Wrap(
+          spacing: 16,
+          runSpacing: 16,
+          children: games.map((game) {
+            return SizedBox(
+              width: (screenWidth - 64) / 2, // 패딩과 간격 고려
+              child: GameCard(
+                game: game,
+                onTap: () {
+                  debugPrint('🎯 게임 카드 탭:');
+                  debugPrint('   - game.id: ${game.id}');
+                  debugPrint('   - game.imageUrl: ${game.imageUrl}');
+                  debugPrint('   - 이동: /game/${game.id}');
+                  context.go('/game/${game.id}');
+                },
+              ),
+            );
+          }).toList(),
+        ),
+      );
+    } else {
+      // 모바일: 1열 리스트
+      return ListView.separated(
+        padding: const EdgeInsets.all(16),
+        itemCount: games.length,
+        separatorBuilder: (context, index) => const SizedBox(height: 16),
+        itemBuilder: (context, index) {
+          final game = games[index];
+          return GameCard(
+            game: game,
+            onTap: () {
+              debugPrint('🎯 게임 카드 탭:');
+              debugPrint('   - game.id: ${game.id}');
+              debugPrint('   - game.imageUrl: ${game.imageUrl}');
+              debugPrint('   - 이동: /game/${game.id}');
+              context.go('/game/${game.id}');
+            },
+          );
+        },
+      );
+    }
   }
 
   /// 빈 상태
