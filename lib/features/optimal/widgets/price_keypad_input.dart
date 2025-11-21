@@ -10,6 +10,7 @@ class PriceKeypadInput extends StatefulWidget {
   final int? initialPrice;
   final int minPrice;
   final int maxPrice;
+  final int priceStep; // 호가 단위 추가
   final Function(int?) onPriceChanged;
   final Function()? onConfirm; // 확인 버튼 콜백 추가
   final String? backgroundImageUrl;
@@ -19,6 +20,7 @@ class PriceKeypadInput extends StatefulWidget {
     this.initialPrice,
     required this.minPrice,
     required this.maxPrice,
+    this.priceStep = 100, // 기본값 100원
     required this.onPriceChanged,
     this.onConfirm,
     this.backgroundImageUrl,
@@ -99,8 +101,33 @@ class _PriceKeypadInputState extends State<PriceKeypadInput> {
       _errorMessage = '최대 ${_formatPrice(widget.maxPrice)}';
       widget.onPriceChanged(null);
     } else {
+      // 호가 단위에 맞게 조정된 가격 계산
+      final adjustedPrice = _adjustToNearestStep(price);
       _showError = false;
-      widget.onPriceChanged(price);
+      widget.onPriceChanged(adjustedPrice);
+    }
+  }
+
+  /// 입력된 가격을 호가 단위에 맞게 조정 (가장 가까운 유효 가격으로)
+  int _adjustToNearestStep(int price) {
+    // 최소 가격으로부터의 차이 계산
+    final diff = price - widget.minPrice;
+
+    // 호가 단위로 나눈 나머지
+    final remainder = diff % widget.priceStep;
+
+    if (remainder == 0) {
+      // 이미 호가 단위에 맞음
+      return price;
+    }
+
+    // 반올림: 나머지가 호가 단위의 절반 이상이면 올림, 아니면 내림
+    if (remainder >= widget.priceStep / 2) {
+      // 올림
+      return price - remainder + widget.priceStep;
+    } else {
+      // 내림
+      return price - remainder;
     }
   }
 
@@ -126,110 +153,128 @@ class _PriceKeypadInputState extends State<PriceKeypadInput> {
     final canConfirm = _inputValue.isNotEmpty && !_showError;
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         // 가격 입력 디스플레이
-        Expanded(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // 입력된 가격 표시
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 40,
-                    vertical: 24,
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 16, 24, 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // 입력된 가격 표시
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
+                margin: const EdgeInsets.symmetric(horizontal: 0),
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: _showError
+                        ? AppColors.red.withOpacity(0.5)
+                        : AppColors.purple.withOpacity(0.3),
+                    width: 2,
                   ),
-                  margin: const EdgeInsets.symmetric(horizontal: 24),
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
-                      color: _showError
-                          ? AppColors.red.withOpacity(0.5)
-                          : AppColors.purple.withOpacity(0.3),
-                      width: 2,
+                  boxShadow: [
+                    BoxShadow(
+                      color: (_showError ? AppColors.red : AppColors.purple)
+                          .withOpacity(0.1),
+                      blurRadius: 15,
+                      offset: const Offset(0, 5),
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: (_showError ? AppColors.red : AppColors.purple)
-                            .withOpacity(0.1),
-                        blurRadius: 20,
-                        offset: const Offset(0, 10),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    // 가격 텍스트
+                    Text(
+                      _displayValue,
+                      style: AppTextStyles.display.copyWith(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w800,
+                        color: _showError
+                            ? AppColors.red
+                            : AppColors.darkBlue,
+                        height: 1.1,
                       ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      // 가격 텍스트
-                      Text(
-                        _displayValue,
-                        style: AppTextStyles.display.copyWith(
-                          fontSize: 48,
-                          fontWeight: FontWeight.w800,
-                          color: _showError
-                              ? AppColors.red
-                              : AppColors.darkBlue,
-                          height: 1.2,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 8),
-                      // "원" 단위
-                      Text(
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(width: 4),
+                    // "원" 단위
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 2),
+                      child: Text(
                         '원',
                         style: AppTextStyles.medium.copyWith(
-                          fontSize: 24,
+                          fontSize: 16,
                           color: AppColors.grayBlue,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // 에러 메시지
+              if (_showError)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        LucideIcons.alertCircle,
+                        size: 12,
+                        color: AppColors.red,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        _errorMessage,
+                        style: AppTextStyles.medium.copyWith(
+                          fontSize: 11,
+                          color: AppColors.red,
                         ),
                       ),
                     ],
                   ),
                 ),
 
-                // 에러 메시지
-                if (_showError)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          LucideIcons.alertCircle,
-                          size: 16,
-                          color: AppColors.red,
+              // 가격 범위 힌트
+              if (!_showError && _inputValue.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Column(
+                    children: [
+                      Text(
+                        '${_formatPrice(widget.minPrice)} ~ ${_formatPrice(widget.maxPrice)}',
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: AppColors.grayBlue,
+                          fontSize: 11,
                         ),
-                        const SizedBox(width: 8),
-                        Text(
-                          _errorMessage,
-                          style: AppTextStyles.medium.copyWith(
-                            fontSize: 14,
-                            color: AppColors.red,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                // 가격 범위 힌트
-                if (!_showError && _inputValue.isEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: Text(
-                      '${_formatPrice(widget.minPrice)} ~ ${_formatPrice(widget.maxPrice)}',
-                      style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.grayBlue,
-                        fontSize: 14,
                       ),
-                    ),
+                      const SizedBox(height: 2),
+                      Text(
+                        '호가 단위: ${_formatPrice(widget.priceStep)}',
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: AppColors.grayBlue.withOpacity(0.7),
+                          fontSize: 9,
+                        ),
+                      ),
+                    ],
                   ),
-              ],
-            ),
+                ),
+            ],
           ),
         ),
 
         // 숫자 키패드
         Container(
-          padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
+          padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
           decoration: BoxDecoration(
             color: AppColors.white,
             borderRadius: const BorderRadius.vertical(
@@ -244,21 +289,21 @@ class _PriceKeypadInputState extends State<PriceKeypadInput> {
             ],
           ),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               // 키패드 그리드 (3x4)
               ...List.generate(4, (row) {
                 return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.only(bottom: 8),
                   child: Row(
                     children: List.generate(3, (col) {
                       final index = row * 3 + col;
 
-                      // 마지막 줄 처리 (C, 0, ⌫)
+                      // 마지막 줄 처리 (AC, 0, ⌫)
                       if (row == 3) {
                         if (col == 0) {
                           return _buildKeypadButton(
-                            label: 'C',
-                            icon: LucideIcons.delete,
+                            label: 'AC',
                             onPressed: _handleClear,
                             isSpecial: true,
                           );
@@ -270,7 +315,6 @@ class _PriceKeypadInputState extends State<PriceKeypadInput> {
                         } else {
                           return _buildKeypadButton(
                             label: '⌫',
-                            icon: LucideIcons.delete,
                             onPressed: _handleBackspace,
                             isSpecial: true,
                           );
@@ -309,22 +353,22 @@ class _PriceKeypadInputState extends State<PriceKeypadInput> {
   }) {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 4),
         child: Material(
           color: isSpecial
               ? AppColors.grayBlue.withOpacity(0.1)
               : AppColors.deepWhite,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(12),
           child: InkWell(
             onTap: onPressed,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(12),
             child: Container(
-              height: 64,
+              height: 56,
               alignment: Alignment.center,
               child: icon != null
                   ? Icon(
                       icon,
-                      size: 28,
+                      size: 24,
                       color: isSpecial
                           ? AppColors.grayBlue
                           : AppColors.darkBlue,
@@ -332,7 +376,7 @@ class _PriceKeypadInputState extends State<PriceKeypadInput> {
                   : Text(
                       label,
                       style: AppTextStyles.large.copyWith(
-                        fontSize: 28,
+                        fontSize: 24,
                         color: isSpecial
                             ? AppColors.grayBlue
                             : AppColors.darkBlue,
@@ -349,18 +393,18 @@ class _PriceKeypadInputState extends State<PriceKeypadInput> {
   Widget _buildConfirmButton(bool enabled) {
     return Container(
       width: double.infinity,
-      height: 56,
+      height: 52,
       decoration: BoxDecoration(
         gradient: enabled
             ? AppColors.gradientBluePurplePink
             : AppColors.gradientDisable,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
         boxShadow: enabled
             ? [
                 BoxShadow(
                   color: AppColors.blue.withOpacity(0.3),
-                  blurRadius: 12,
-                  offset: const Offset(0, 6),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
                 ),
               ]
             : [],
@@ -369,21 +413,22 @@ class _PriceKeypadInputState extends State<PriceKeypadInput> {
         color: Colors.transparent,
         child: InkWell(
           onTap: enabled ? widget.onConfirm : null,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(14),
           child: Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
                   enabled ? LucideIcons.check : LucideIcons.lock,
-                  size: 20,
+                  size: 18,
                   color: AppColors.white,
                 ),
                 const SizedBox(width: 8),
                 Text(
                   enabled ? '확인' : '가격을 입력하세요',
-                  style: AppTextStyles.buttonLarge.copyWith(
+                  style: AppTextStyles.button.copyWith(
                     color: AppColors.white,
+                    fontSize: 15,
                   ),
                 ),
               ],

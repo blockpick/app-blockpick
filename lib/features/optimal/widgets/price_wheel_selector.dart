@@ -48,6 +48,26 @@ class _PriceWheelSelectorState extends ConsumerState<PriceWheelSelector> {
   }
 
   @override
+  void didUpdateWidget(PriceWheelSelector oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // selectedPrice가 변경되면 부드럽게 스크롤
+    if (widget.selectedPrice != oldWidget.selectedPrice &&
+        widget.selectedPrice != null) {
+      final newIndex = widget.prices.indexOf(widget.selectedPrice!);
+      if (newIndex != -1 && newIndex != _currentIndex) {
+        _currentIndex = newIndex;
+        // 부드럽게 애니메이션으로 이동
+        _scrollController.animateToItem(
+          newIndex,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeOutCubic,
+        );
+      }
+    }
+  }
+
+  @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();
