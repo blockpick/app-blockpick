@@ -115,6 +115,15 @@ flutter:
     - assets/images/home/
     - assets/icons/pick/
 
+  # Shaders
+  shaders:
+    - shaders/glow_effect.frag
+    - shaders/flowing_waves.frag
+    - shaders/ether.frag
+    - shaders/shooting_stars.frag
+    - shaders/wavy_lines.frag
+    - shaders/aurora.frag
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

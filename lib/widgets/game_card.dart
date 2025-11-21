@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
+
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_text_styles.dart';
 import '../models/game_round_model.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 /// 게임 카드 위젯
 class GameCard extends StatelessWidget {
   final GameRound game;
   final VoidCallback? onTap;
 
-  const GameCard({
-    super.key,
-    required this.game,
-    this.onTap,
-  });
+  const GameCard({super.key, required this.game, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +23,7 @@ class GameCard extends StatelessWidget {
           border: Border.all(color: AppColors.buleGray),
           boxShadow: [
             BoxShadow(
-              color: AppColors.black.withOpacity(0.05),
+              color: AppColors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -34,13 +31,14 @@ class GameCard extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             // 이미지 섹션
             _buildImageSection(),
 
             // 정보 섹션
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -80,7 +78,7 @@ class GameCard extends StatelessWidget {
         ClipRRect(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
           child: AspectRatio(
-            aspectRatio: 16 / 9,
+            aspectRatio: 2.0,
             child: game.imageUrl.isEmpty
                 ? Container(
                     color: AppColors.blueWhite,
@@ -103,7 +101,7 @@ class GameCard extends StatelessWidget {
                           child: CircularProgressIndicator(
                             value: loadingProgress.expectedTotalBytes != null
                                 ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
+                                      loadingProgress.expectedTotalBytes!
                                 : null,
                             valueColor: const AlwaysStoppedAnimation<Color>(
                               AppColors.blue,
@@ -178,50 +176,57 @@ class GameCard extends StatelessWidget {
   Widget _buildStatistics() {
     return Column(
       children: [
-        _buildStatRow(
-          LucideIcons.users,
-          'Participants',
-          '${game.participants.toStringAsFixed(0)}명',
+        Row(
+          children: [
+            Expanded(
+              child: _buildStatItem(
+                LucideIcons.users,
+                '${game.participants.toStringAsFixed(0)}명',
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: _buildStatItem(
+                LucideIcons.grid,
+                _formatNumber(game.totalBlocks),
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 8),
-        _buildStatRow(
-          LucideIcons.grid,
-          'Blocks',
-          _formatNumber(game.totalBlocks),
-        ),
-        const SizedBox(height: 8),
-        _buildStatRow(
-          LucideIcons.target,
-          'Required Picks',
-          game.requiredPicks.toString(),
-        ),
-        const SizedBox(height: 8),
-        _buildStatRow(
-          LucideIcons.trophy,
-          'Winners',
-          '${game.winners}명',
+        Row(
+          children: [
+            Expanded(
+              child: _buildStatItem(
+                LucideIcons.target,
+                game.requiredPicks.toString(),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: _buildStatItem(LucideIcons.trophy, '${game.winners}명'),
+            ),
+          ],
         ),
       ],
     );
   }
 
-  /// 통계 행
-  Widget _buildStatRow(IconData icon, String label, String value) {
+  /// 통계 아이템 (컴팩트)
+  Widget _buildStatItem(IconData icon, String value) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 16, color: AppColors.medium),
-        const SizedBox(width: 8),
-        Expanded(
+        Icon(icon, size: 14, color: AppColors.medium),
+        const SizedBox(width: 4),
+        Flexible(
           child: Text(
-            label,
-            style: AppTextStyles.bodySmall.copyWith(color: AppColors.medium),
-          ),
-        ),
-        Text(
-          value,
-          style: AppTextStyles.bodySmall.copyWith(
-            color: AppColors.darkBlue,
-            fontWeight: FontWeight.w600,
+            value,
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.darkBlue,
+              fontWeight: FontWeight.w600,
+            ),
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],
@@ -264,11 +269,7 @@ class GameCard extends StatelessWidget {
           ),
           child: Row(
             children: [
-              const Icon(
-                LucideIcons.clock,
-                size: 14,
-                color: AppColors.red,
-              ),
+              const Icon(LucideIcons.clock, size: 14, color: AppColors.red),
               const SizedBox(width: 4),
               Text(
                 game.timeLeft,

@@ -296,11 +296,20 @@ Future<List<GameRound>> gamesByType(
     }).toList();
 
     // GameRound로 변환
-    return filteredGames.map((game) => game.toGameRound()).toList();
+    final gameRounds = filteredGames.map((game) => game.toGameRound()).toList();
+
+    // 데이터가 없으면 목 데이터 사용
+    if (gameRounds.isEmpty) {
+      print('🔄 API 데이터 없음, Mock 데이터 사용: $typeString');
+      return MockGameData.getGamesByType(gameType);
+    }
+
+    return gameRounds;
   } catch (e) {
     print('❌ gamesByType 에러: $e');
-    // 에러 발생 시 빈 리스트 반환
-    return [];
+    print('🔄 에러 발생, Mock 데이터로 fallback');
+    // 에러 발생 시 목 데이터 반환
+    return MockGameData.getGamesByType(gameType);
   }
 }
 

@@ -1,28 +1,31 @@
 import 'dart:math' as math;
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
-import '../grid/game_grid_widget.dart';
-import 'selected_blocks_sheet.dart';
+
+import '../../components/minimap/grid_minimap.dart';
+import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
-import '../../core/constants/app_constants.dart';
-import '../../providers/grid_state_provider.dart';
-import '../../providers/game_provider.dart';
+import '../../models/block_model.dart';
 import '../../models/game_model.dart';
 import '../../models/game_round_model.dart';
-import '../../models/block_model.dart';
-import '../../components/minimap/grid_minimap.dart';
-import '../../utils/zoom_calculator.dart';
+import '../../models/grid_section_model.dart';
+import '../../providers/game_provider.dart';
+import '../../providers/grid_state_provider.dart';
 import '../../utils/adaptive_zoom_system.dart';
 import '../../utils/debouncer.dart';
-import '../../widgets/pick_hud.dart';
-import '../../widgets/zoom_controls.dart';
-import '../../models/grid_section_model.dart';
+import '../../utils/zoom_calculator.dart';
 import '../../widgets/grid_section_overlay.dart';
+import '../../widgets/zoom_controls.dart';
+import '../grid/game_grid_widget.dart';
+import 'selected_blocks_sheet.dart';
+import 'widgets/product_selector_overlay.dart';
 
 /// 게임 메인 화면
 class GameScreen extends ConsumerStatefulWidget {
@@ -68,6 +71,12 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   final GlobalKey _zoomControlKey = GlobalKey();
   final GlobalKey _gridKey = GlobalKey();
   final GlobalKey _hudKey = GlobalKey();
+
+  // 상품 선택 (SELECT 게임용)
+  int _selectedProductIndex = 0;
+
+  // 셰이더 선택
+  String _currentShader = 'shaders/glow_effect.frag';
 
   @override
   void initState() {
@@ -148,7 +157,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
   /// Zoom In
   void _handleZoomIn() {
-    if (!_zoomDebouncer.allow || _zoomSpec == null || _zoomMapper == null) return;
+    if (!_zoomDebouncer.allow || _zoomSpec == null || _zoomMapper == null)
+      return;
     _zoomDebouncer.hit();
 
     if (_currentZoomLevel >= _zoomSpec!.maxLevel) {
@@ -164,7 +174,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
   /// Zoom Out
   void _handleZoomOut() {
-    if (!_zoomDebouncer.allow || _zoomSpec == null || _zoomMapper == null) return;
+    if (!_zoomDebouncer.allow || _zoomSpec == null || _zoomMapper == null)
+      return;
     _zoomDebouncer.hit();
 
     if (_currentZoomLevel <= _zoomSpec!.minLevel) {
@@ -186,7 +197,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     final gridState = ref.read(gridStateProvider(_gridConfig!));
 
     // 그리드 위젯의 실제 렌더박스 가져오기
-    final RenderBox? gridBox = _gridKey.currentContext?.findRenderObject() as RenderBox?;
+    final RenderBox? gridBox =
+        _gridKey.currentContext?.findRenderObject() as RenderBox?;
 
     double viewportCenterX;
     double viewportCenterY;
@@ -197,7 +209,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       viewportCenterX = gridSize.width / 2;
       viewportCenterY = gridSize.height / 2;
 
-      debugPrint('📐 Grid viewport size: ${gridSize.width.toStringAsFixed(1)} x ${gridSize.height.toStringAsFixed(1)}');
+      debugPrint(
+        '📐 Grid viewport size: ${gridSize.width.toStringAsFixed(1)} x ${gridSize.height.toStringAsFixed(1)}',
+      );
     } else {
       // fallback: 전체 화면 크기 사용
       final screenSize = MediaQuery.of(context).size;
@@ -223,12 +237,24 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     gridNotifier.setZoom(newZoom);
     gridNotifier.setPan(newPanX, newPanY);
 
-    debugPrint('🔍 Snapped to Level $level (zoom: ${newZoom.toStringAsFixed(4)})');
-    debugPrint('   - Viewport center: (${viewportCenterX.toStringAsFixed(1)}, ${viewportCenterY.toStringAsFixed(1)})');
-    debugPrint('   - Grid center coord: (${gridCenterX.toStringAsFixed(1)}, ${gridCenterY.toStringAsFixed(1)})');
-    debugPrint('   - oldZoom: ${oldZoom.toStringAsFixed(4)}, newZoom: ${newZoom.toStringAsFixed(4)}');
-    debugPrint('   - oldPan: (${gridState.panX.toStringAsFixed(1)}, ${gridState.panY.toStringAsFixed(1)})');
-    debugPrint('   - newPan: (${newPanX.toStringAsFixed(1)}, ${newPanY.toStringAsFixed(1)})');
+    debugPrint(
+      '🔍 Snapped to Level $level (zoom: ${newZoom.toStringAsFixed(4)})',
+    );
+    debugPrint(
+      '   - Viewport center: (${viewportCenterX.toStringAsFixed(1)}, ${viewportCenterY.toStringAsFixed(1)})',
+    );
+    debugPrint(
+      '   - Grid center coord: (${gridCenterX.toStringAsFixed(1)}, ${gridCenterY.toStringAsFixed(1)})',
+    );
+    debugPrint(
+      '   - oldZoom: ${oldZoom.toStringAsFixed(4)}, newZoom: ${newZoom.toStringAsFixed(4)}',
+    );
+    debugPrint(
+      '   - oldPan: (${gridState.panX.toStringAsFixed(1)}, ${gridState.panY.toStringAsFixed(1)})',
+    );
+    debugPrint(
+      '   - newPan: (${newPanX.toStringAsFixed(1)}, ${newPanY.toStringAsFixed(1)})',
+    );
   }
 
   /// 스낵바 표시
@@ -243,6 +269,47 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     );
   }
 
+  /// 선택 수량 배지 (왼쪽 상단)
+  Widget _buildSelectionBadge(int selected, int max) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppColors.white.withValues(alpha: 0.95),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: selected >= max ? AppColors.green : AppColors.blue,
+          width: 2,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withValues(alpha: 0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            LucideIcons.checkSquare,
+            size: 16,
+            color: selected >= max ? AppColors.green : AppColors.blue,
+          ),
+          const SizedBox(width: 6),
+          Text(
+            '$selected/$max',
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.darkBlue,
+              fontWeight: FontWeight.w700,
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   /// 튜토리얼 자동 줌인 (중앙 블록으로 이동)
   void _performTutorialZoomIn() {
     if (_gridConfig == null || _zoomMapper == null || _zoomSpec == null) return;
@@ -252,7 +319,11 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     // 그리드 중앙 근처의 블록을 목표로 설정 (예: 50행 50열)
     final targetRow = (_gridHeight / 2).floor();
     final targetCol = (_gridWidth / 2).floor();
-    final targetBlock = BlockModel.fromPosition(targetRow, targetCol, state: BlockState.selected);
+    final targetBlock = BlockModel.fromPosition(
+      targetRow,
+      targetCol,
+      state: BlockState.selected,
+    );
 
     debugPrint('🎯 Tutorial zoom-in to block: Row $targetRow, Col $targetCol');
 
@@ -260,7 +331,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     gridNotifier.setTutorialTargetBlock(targetBlock);
 
     // 그리드 위젯의 실제 렌더박스 가져오기
-    final RenderBox? gridBox = _gridKey.currentContext?.findRenderObject() as RenderBox?;
+    final RenderBox? gridBox =
+        _gridKey.currentContext?.findRenderObject() as RenderBox?;
 
     double screenWidth;
     double screenHeight;
@@ -295,7 +367,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       _currentZoomLevel = targetZoomLevel;
     });
 
-    debugPrint('✅ Tutorial zoom-in complete: Level $_currentZoomLevel, Zoom ${targetZoom.toStringAsFixed(4)}');
+    debugPrint(
+      '✅ Tutorial zoom-in complete: Level $_currentZoomLevel, Zoom ${targetZoom.toStringAsFixed(4)}',
+    );
   }
 
   /// 튜토리얼 체크 및 표시
@@ -448,7 +522,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       onClickTarget: (target) {
         // "grid_zoom" 단계가 끝나고 다음으로 넘어갈 때 자동 줌인
         if (target.identify == "grid_zoom") {
-          debugPrint('🎯 Tutorial: grid_zoom step completed, performing auto zoom-in');
+          debugPrint(
+            '🎯 Tutorial: grid_zoom step completed, performing auto zoom-in',
+          );
           Future.delayed(const Duration(milliseconds: 300), () {
             _performTutorialZoomIn();
           });
@@ -459,7 +535,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         await prefs.setBool('game_tutorial_completed', true);
         // 튜토리얼 완료 시 목표 블록 제거
         if (_gridConfig != null) {
-          ref.read(gridStateProvider(_gridConfig!).notifier).setTutorialTargetBlock(null);
+          ref
+              .read(gridStateProvider(_gridConfig!).notifier)
+              .setTutorialTargetBlock(null);
         }
       },
       onSkip: () {
@@ -468,7 +546,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         });
         // 스킵 시에도 목표 블록 제거
         if (_gridConfig != null) {
-          ref.read(gridStateProvider(_gridConfig!).notifier).setTutorialTargetBlock(null);
+          ref
+              .read(gridStateProvider(_gridConfig!).notifier)
+              .setTutorialTargetBlock(null);
         }
         return true;
       },
@@ -512,9 +592,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           const SizedBox(height: 8),
           Text(
             description,
-            style: AppTextStyles.bodySmall.copyWith(
-              color: AppColors.navy,
-            ),
+            style: AppTextStyles.bodySmall.copyWith(color: AppColors.navy),
           ),
         ],
       ),
@@ -594,51 +672,100 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
   Widget _buildGameScreen(BuildContext context, String gameId) {
     if (_gridConfig == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     final gridState = ref.watch(gridStateProvider(_gridConfig!));
     final selectedCount = ref.watch(selectedBlockCountProvider(_gridConfig!));
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
+    // 현재 줌을 레벨로 변환 (핀치 줌과 버튼 줌 동기화)
+    final currentZoomLevel =
+        _zoomMapper?.scaleToNearestLevel(gridState.zoom) ?? _currentZoomLevel;
+
+    // 레벨이 변경되었으면 상태 업데이트 (다음 프레임에)
+    if (currentZoomLevel != _currentZoomLevel && _zoomMapper != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {
+            _currentZoomLevel = currentZoomLevel;
+          });
+        }
+      });
+    }
+
     return Scaffold(
-      backgroundColor: AppColors.deepWhite,
+      backgroundColor: Colors.black,
       appBar: _buildAppBar(context),
       body: Stack(
         children: [
+          // 배경 (셰이더 글로우 효과)
+          Positioned.fill(
+            child: _GlowBackground(
+              key: ValueKey(_currentShader),
+              shaderPath: _currentShader,
+            ),
+          ),
+
+          // 테크 패턴 오버레이 (나중에 이미지로 대체 가능)
+          // Positioned.fill(
+          //   child: CustomPaint(
+          //     painter: _TechPatternPainter(),
+          //   ),
+          // ),
+
           // 게임 그리드
           Positioned.fill(
             key: _gridKey,
-            child: GameGridWidget(
-              gameId: gameId,
-              gridWidth: _gridWidth,
-              gridHeight: _gridHeight,
-              backgroundImagePath: _game?.imageUrl,
-              onBlockTap: (block) {
-                debugPrint('Block tapped: ${block.row}, ${block.col}');
-
-                // 튜토리얼 목표 블록을 탭했는지 확인
-                final gridState = ref.read(gridStateProvider(_gridConfig!));
-                if (gridState.tutorialTargetBlock != null &&
-                    gridState.tutorialTargetBlock!.id == block.id) {
-                  // 튜토리얼 목표 블록을 선택했으면 다음 단계로
-                  debugPrint('✅ Tutorial target block selected!');
-                  ref.read(gridStateProvider(_gridConfig!).notifier).setTutorialTargetBlock(null);
-                  _tutorialCoachMark?.next();
+            child: Builder(
+              builder: (context) {
+                // SELECT 게임인 경우 선택된 상품의 이미지 사용
+                String? backgroundImagePath;
+                if (_fullGame != null &&
+                    _fullGame!.gameType?.toUpperCase() == 'SELECT' &&
+                    _fullGame!.gameProducts != null &&
+                    _fullGame!.gameProducts!.isNotEmpty) {
+                  final selectedProduct =
+                      _fullGame!.gameProducts![_selectedProductIndex];
+                  backgroundImagePath =
+                      selectedProduct.product.defaultImage ??
+                      selectedProduct.product.imageUrl;
+                } else {
+                  backgroundImagePath = _game?.imageUrl;
                 }
 
-                ref.read(gridStateProvider(_gridConfig!).notifier).showBottomSheet();
+                return GameGridWidget(
+                  gameId: gameId,
+                  gridWidth: _gridWidth,
+                  gridHeight: _gridHeight,
+                  backgroundImagePath: backgroundImagePath,
+                  onBlockTap: (block) {
+                    debugPrint('Block tapped: ${block.row}, ${block.col}');
+
+                    // 튜토리얼 목표 블록을 탭했는지 확인
+                    final gridState = ref.read(gridStateProvider(_gridConfig!));
+                    if (gridState.tutorialTargetBlock != null &&
+                        gridState.tutorialTargetBlock!.id == block.id) {
+                      // 튜토리얼 목표 블록을 선택했으면 다음 단계로
+                      debugPrint('✅ Tutorial target block selected!');
+                      ref
+                          .read(gridStateProvider(_gridConfig!).notifier)
+                          .setTutorialTargetBlock(null);
+                      _tutorialCoachMark?.next();
+                    }
+
+                    ref
+                        .read(gridStateProvider(_gridConfig!).notifier)
+                        .showBottomSheet();
+                  },
+                );
               },
             ),
           ),
 
           // 섹션 오버레이 (항상 표시, 실시간 업데이트)
           if (_sections.isNotEmpty)
-            Positioned.fill(
-              child: _buildSectionOverlay(gridState),
-            ),
+            Positioned.fill(child: _buildSectionOverlay(gridState)),
 
           // 바텀시트
           if (selectedCount > 0 && gridState.showBottomSheet)
@@ -648,23 +775,22 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               fullGame: _fullGame,
             ),
 
-          // HUD (상단 중앙)
-          if (_zoomSpec != null)
+          // 선택 수량 배지 (왼쪽 상단)
+          Positioned(
+            top: 16,
+            left: 16,
+            child: _buildSelectionBadge(selectedCount, _pickMax),
+          ),
+
+          // 상품 선택 버튼 (우상단) - SELECT 게임인 경우
+          if (_fullGame != null &&
+              _fullGame!.gameType?.toUpperCase() == 'SELECT' &&
+              _fullGame!.gameProducts != null &&
+              _fullGame!.gameProducts!.isNotEmpty)
             Positioned(
               top: 16,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: PickHud(
-                  key: _hudKey,
-                  selected: selectedCount,
-                  pickMax: _pickMax,
-                  zoomLevel: _currentZoomLevel,
-                  onSubmit: selectedCount >= _pickMax ? () {
-                    _showSnackBar('$selectedCount개 블록 제출됨!');
-                  } : null,
-                ),
-              ),
+              right: 16,
+              child: _buildCompactProductSelector(),
             ),
 
           // 미니맵 (좌하단)
@@ -697,9 +823,10 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                 key: _zoomControlKey,
                 onZoomIn: _handleZoomIn,
                 onZoomOut: _handleZoomOut,
-                currentLevel: _currentZoomLevel,
+                currentLevel: currentZoomLevel,
                 maxLevel: _zoomSpec!.maxLevel,
                 minLevel: _zoomSpec!.minLevel,
+                lodLevel: gridState.lodLevel,
               ),
             ),
         ],
@@ -722,7 +849,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       panX: gridState.panX,
       panY: gridState.panY,
       screenSize: MediaQuery.of(context).size,
-      show: false,  // 초록색 배경/테두리 제거
+      show: false, // 초록색 배경/테두리 제거
     );
   }
 
@@ -737,6 +864,43 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         onPressed: () => context.go('/'),
       ),
       actions: [
+        // 셰이더 변경 버튼
+        PopupMenuButton<String>(
+          icon: const Icon(LucideIcons.palette, color: AppColors.blue),
+          onSelected: (String shader) {
+            debugPrint('🎨 Shader selected: $shader');
+            setState(() {
+              _currentShader = shader;
+            });
+            debugPrint('✅ State updated with new shader');
+          },
+          itemBuilder: (BuildContext context) => [
+            const PopupMenuItem(
+              value: 'shaders/glow_effect.frag',
+              child: Text('Accretion (강착 디스크)'),
+            ),
+            const PopupMenuItem(
+              value: 'shaders/flowing_waves.frag',
+              child: Text('Flowing Waves (파도)'),
+            ),
+            const PopupMenuItem(
+              value: 'shaders/ether.frag',
+              child: Text('Ether (에테르)'),
+            ),
+            const PopupMenuItem(
+              value: 'shaders/shooting_stars.frag',
+              child: Text('Shooting Stars (유성)'),
+            ),
+            const PopupMenuItem(
+              value: 'shaders/wavy_lines.frag',
+              child: Text('Wavy Lines (물결선)'),
+            ),
+            const PopupMenuItem(
+              value: 'shaders/aurora.frag',
+              child: Text('Aurora (오로라)'),
+            ),
+          ],
+        ),
         // 튜토리얼 다시 보기
         IconButton(
           icon: const Icon(LucideIcons.helpCircle, color: AppColors.blue),
@@ -745,15 +909,416 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             _showTutorial();
           },
         ),
-        // 공유 버튼
-        IconButton(
-          icon: const Icon(LucideIcons.share2, color: AppColors.darkBlue),
-          onPressed: () {
-            // TODO: 공유 기능
-          },
-        ),
       ],
     );
   }
 
+  /// 상품 선택 오버레이 표시
+  void _showProductSelector() {
+    if (_fullGame == null ||
+        _fullGame!.gameProducts == null ||
+        _fullGame!.gameProducts!.isEmpty) {
+      return;
+    }
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Dialog(
+        insetPadding: EdgeInsets.zero,
+        backgroundColor: Colors.transparent,
+        child: ProductSelectorOverlay(
+          products: _fullGame!.gameProducts!,
+          initialIndex: _selectedProductIndex,
+          onProductSelected: (index, product) {
+            setState(() {
+              _selectedProductIndex = index;
+            });
+            debugPrint(
+              '✅ Product selected: ${product.product.name} (index: $index)',
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  /// 상품 선택 버튼 (AppBar용 - 작고 배지 포함)
+  Widget _buildCompactProductSelector() {
+    if (_fullGame == null ||
+        _fullGame!.gameProducts == null ||
+        _fullGame!.gameProducts!.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    final productCount = _fullGame!.gameProducts!.length;
+
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        GestureDetector(
+          onTap: _showProductSelector,
+          child: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF7C4DFF), Color(0xFF9B7EFF)],
+              ),
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.purple.withValues(alpha: 0.2),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: const Center(
+              child: Icon(LucideIcons.repeat, size: 22, color: AppColors.white),
+            ),
+          ),
+        ),
+        // 상품 개수 배지
+        if (productCount > 1)
+          Positioned(
+            top: -4,
+            right: -4,
+            child: Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: AppColors.red,
+                shape: BoxShape.circle,
+                border: Border.all(color: AppColors.white, width: 2),
+              ),
+              constraints: const BoxConstraints(minWidth: 20, minHeight: 20),
+              child: Center(
+                child: Text(
+                  '$productCount',
+                  style: const TextStyle(
+                    color: AppColors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// 테크 패턴 페인터 (배경용)
+class _TechPatternPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final random = math.Random(42); // 고정 시드로 일관된 패턴
+
+    // 메인 라인용 페인트 (두껍고 선명)
+    final mainPaint = Paint()
+      ..color = const Color(0xFF00ffff).withValues(alpha: 0.15)
+      ..strokeWidth = 1.5
+      ..style = PaintingStyle.stroke
+      ..maskFilter = const MaskFilter.blur(BlurStyle.outer, 2);
+
+    // 보조 라인용 페인트 (얇고 흐림)
+    final subPaint = Paint()
+      ..color = const Color(0xFF4A90E2).withValues(alpha: 0.08)
+      ..strokeWidth = 0.5
+      ..style = PaintingStyle.stroke;
+
+    // 강조 라인용 페인트 (밝고 굵음)
+    final highlightPaint = Paint()
+      ..color = const Color(0xFF00ffff).withValues(alpha: 0.25)
+      ..strokeWidth = 2.0
+      ..style = PaintingStyle.stroke
+      ..maskFilter = const MaskFilter.blur(BlurStyle.outer, 3);
+
+    // 1. 상단에서 아래로 내려오는 수직선들 (더 많이)
+    for (int i = 0; i < 50; i++) {
+      final startX = random.nextDouble() * size.width;
+      final length = 60 + random.nextDouble() * 150;
+      final thickness = random.nextDouble();
+
+      final paint = thickness > 0.8
+          ? highlightPaint
+          : (thickness > 0.4 ? mainPaint : subPaint);
+
+      canvas.drawLine(Offset(startX, 0), Offset(startX, length), paint);
+    }
+
+    // 2. 하단에서 위로 올라가는 수직선들
+    for (int i = 0; i < 50; i++) {
+      final startX = random.nextDouble() * size.width;
+      final length = 60 + random.nextDouble() * 150;
+      final thickness = random.nextDouble();
+
+      final paint = thickness > 0.8
+          ? highlightPaint
+          : (thickness > 0.4 ? mainPaint : subPaint);
+
+      canvas.drawLine(
+        Offset(startX, size.height),
+        Offset(startX, size.height - length),
+        paint,
+      );
+    }
+
+    // 3. 좌측에서 오른쪽으로 가는 수평선들
+    for (int i = 0; i < 50; i++) {
+      final startY = random.nextDouble() * size.height;
+      final length = 60 + random.nextDouble() * 150;
+      final thickness = random.nextDouble();
+
+      final paint = thickness > 0.8
+          ? highlightPaint
+          : (thickness > 0.4 ? mainPaint : subPaint);
+
+      canvas.drawLine(Offset(0, startY), Offset(length, startY), paint);
+    }
+
+    // 4. 우측에서 왼쪽으로 가는 수평선들
+    for (int i = 0; i < 50; i++) {
+      final startY = random.nextDouble() * size.height;
+      final length = 60 + random.nextDouble() * 150;
+      final thickness = random.nextDouble();
+
+      final paint = thickness > 0.8
+          ? highlightPaint
+          : (thickness > 0.4 ? mainPaint : subPaint);
+
+      canvas.drawLine(
+        Offset(size.width, startY),
+        Offset(size.width - length, startY),
+        paint,
+      );
+    }
+
+    // 5. L자 모양 패턴 (코너에서)
+    for (int i = 0; i < 20; i++) {
+      final isTopLeft = random.nextDouble() < 0.25;
+      final isTopRight = random.nextDouble() < 0.5;
+      final isBottomLeft = random.nextDouble() < 0.75;
+
+      final length1 = 40 + random.nextDouble() * 80;
+      final length2 = 40 + random.nextDouble() * 80;
+
+      final path = Path();
+      if (isTopLeft) {
+        // 상단 왼쪽
+        final startY = random.nextDouble() * (size.height * 0.3);
+        path.moveTo(0, startY);
+        path.lineTo(length1, startY);
+        path.lineTo(length1, startY + length2);
+      } else if (isTopRight) {
+        // 상단 오른쪽
+        final startY = random.nextDouble() * (size.height * 0.3);
+        path.moveTo(size.width, startY);
+        path.lineTo(size.width - length1, startY);
+        path.lineTo(size.width - length1, startY + length2);
+      } else if (isBottomLeft) {
+        // 하단 왼쪽
+        final startY =
+            size.height * 0.7 + random.nextDouble() * (size.height * 0.3);
+        path.moveTo(0, startY);
+        path.lineTo(length1, startY);
+        path.lineTo(length1, startY - length2);
+      } else {
+        // 하단 오른쪽
+        final startY =
+            size.height * 0.7 + random.nextDouble() * (size.height * 0.3);
+        path.moveTo(size.width, startY);
+        path.lineTo(size.width - length1, startY);
+        path.lineTo(size.width - length1, startY - length2);
+      }
+
+      canvas.drawPath(path, mainPaint);
+    }
+
+    // 6. 대각선 패턴 (더 복잡한 느낌)
+    for (int i = 0; i < 15; i++) {
+      final fromTop = random.nextDouble() < 0.5;
+      final fromLeft = random.nextDouble() < 0.5;
+
+      final startX = fromLeft ? 0.0 : size.width;
+      final startY = fromTop
+          ? random.nextDouble() * (size.height * 0.3)
+          : size.height * 0.7 + random.nextDouble() * (size.height * 0.3);
+
+      final length = 50 + random.nextDouble() * 100;
+      final angle =
+          (random.nextDouble() * 60 - 30) * math.pi / 180; // -30도 ~ +30도
+
+      final endX = startX + (fromLeft ? 1 : -1) * length * math.cos(angle);
+      final endY = startY + (fromTop ? 1 : -1) * length * math.sin(angle);
+
+      canvas.drawLine(Offset(startX, startY), Offset(endX, endY), subPaint);
+    }
+
+    // 7. 작은 사각형 테두리 (회로 느낌)
+    for (int i = 0; i < 8; i++) {
+      final isLeftSide = random.nextDouble() < 0.5;
+      final rectX = isLeftSide
+          ? random.nextDouble() * 100
+          : size.width - random.nextDouble() * 100 - 20;
+      final rectY = random.nextDouble() * size.height;
+      final rectSize = 8 + random.nextDouble() * 12;
+
+      canvas.drawRect(
+        Rect.fromLTWH(rectX, rectY, rectSize, rectSize),
+        subPaint,
+      );
+    }
+
+    // 8. 점 패턴 (회로 노드처럼)
+    for (int i = 0; i < 25; i++) {
+      final isEdge = random.nextDouble() < 0.7;
+      double dotX, dotY;
+
+      if (isEdge) {
+        final side = random.nextInt(4);
+        switch (side) {
+          case 0: // 상단
+            dotX = random.nextDouble() * size.width;
+            dotY = random.nextDouble() * 120;
+            break;
+          case 1: // 하단
+            dotX = random.nextDouble() * size.width;
+            dotY = size.height - random.nextDouble() * 120;
+            break;
+          case 2: // 좌측
+            dotX = random.nextDouble() * 120;
+            dotY = random.nextDouble() * size.height;
+            break;
+          default: // 우측
+            dotX = size.width - random.nextDouble() * 120;
+            dotY = random.nextDouble() * size.height;
+        }
+      } else {
+        dotX = random.nextDouble() * size.width;
+        dotY = random.nextDouble() * size.height;
+      }
+
+      final dotPaint = Paint()
+        ..color = const Color(0xFF00ffff).withValues(alpha: 0.3)
+        ..style = PaintingStyle.fill
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
+
+      canvas.drawCircle(Offset(dotX, dotY), 2, dotPaint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+/// 셰이더 기반 글로우 배경
+class _GlowBackground extends StatefulWidget {
+  final String shaderPath;
+
+  const _GlowBackground({super.key, required this.shaderPath});
+
+  @override
+  State<_GlowBackground> createState() => _GlowBackgroundState();
+}
+
+class _GlowBackgroundState extends State<_GlowBackground>
+    with SingleTickerProviderStateMixin {
+  ui.FragmentShader? _shader;
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 8),
+      vsync: this,
+    )..repeat();
+    _loadShader();
+  }
+
+  @override
+  void didUpdateWidget(_GlowBackground oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.shaderPath != widget.shaderPath) {
+      _loadShader();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _shader?.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadShader() async {
+    try {
+      debugPrint('🔄 Loading shader: ${widget.shaderPath}');
+      _shader?.dispose();
+      final program = await ui.FragmentProgram.fromAsset(widget.shaderPath);
+      if (mounted) {
+        setState(() {
+          _shader = program.fragmentShader();
+        });
+        debugPrint('✅ Shader loaded successfully: ${widget.shaderPath}');
+      }
+    } catch (e, stackTrace) {
+      debugPrint('❌ Failed to load shader: ${widget.shaderPath}');
+      debugPrint('Error: $e');
+      debugPrint('StackTrace: $stackTrace');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_shader == null) {
+      // 셰이더 로딩 중 fallback 배경
+      return Container(
+        decoration: const BoxDecoration(
+          gradient: RadialGradient(
+            center: Alignment.center,
+            radius: 0.8,
+            colors: [
+              Color(0xFF1a2332), // 중앙 - 어두운 파랑
+              Color(0xFF0a0e17), // 가장자리 - 거의 검정
+            ],
+          ),
+        ),
+      );
+    }
+
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return CustomPaint(
+          painter: _GlowPainter(_shader!, _controller.value),
+          size: Size.infinite,
+        );
+      },
+    );
+  }
+}
+
+/// 셰이더를 사용한 글로우 페인터
+class _GlowPainter extends CustomPainter {
+  final ui.FragmentShader shader;
+  final double time;
+
+  _GlowPainter(this.shader, this.time);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // 셰이더 유니폼 설정
+    shader.setFloat(0, size.width); // uSize.x
+    shader.setFloat(1, size.height); // uSize.y
+    shader.setFloat(2, time * 2.0 * math.pi); // uTime (0~2π)
+
+    final paint = Paint()..shader = shader;
+    canvas.drawRect(Offset.zero & size, paint);
+  }
+
+  @override
+  bool shouldRepaint(_GlowPainter oldDelegate) => time != oldDelegate.time;
 }

@@ -604,19 +604,25 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
           AppConstants.maxZoom,
         );
 
-        gridNotifier.setZoom(newZoom);
+        // focal point 기준으로 줌 (손가락 위치 기준)
+        gridNotifier.zoomAtPoint(
+          newZoom: newZoom,
+          focalPointX: details.focalPoint.dx,
+          focalPointY: details.focalPoint.dy,
+        );
+      } else {
+        // 줌이 없고 팬만 있는 경우 (한 손가락 드래그)
+        final delta = details.focalPoint - _initialFocalPoint!;
+
+        // 드래그 임계값 확인
+        if (delta.distance > AppConstants.dragThreshold) {
+          _isDragging = true;
+          gridNotifier.setDragging(true);
+        }
+
+        gridNotifier.addPan(delta.dx, delta.dy);
       }
 
-      // 팬 처리 (그리드 + 배경 이미지 함께 이동)
-      final delta = details.focalPoint - _initialFocalPoint!;
-
-      // 드래그 임계값 확인
-      if (delta.distance > AppConstants.dragThreshold) {
-        _isDragging = true;
-        gridNotifier.setDragging(true);
-      }
-
-      gridNotifier.addPan(delta.dx, delta.dy);
       _initialFocalPoint = details.focalPoint;
     }
   }

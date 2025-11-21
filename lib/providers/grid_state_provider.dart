@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:math' as math;
 import '../models/block_model.dart';
 import '../core/constants/app_constants.dart';
 
@@ -48,7 +49,10 @@ class GridState {
   /// 튜토리얼 목표 블록 (튜토리얼에서 선택해야 할 블록)
   final BlockModel? tutorialTargetBlock;
 
-  const GridState({
+  /// LOD (Level of Detail) 레벨 - 줌에 따라 자동 계산됨
+  final int lodLevel;
+
+  GridState({
     this.zoom = AppConstants.defaultZoom,
     this.baseZoom = AppConstants.defaultZoom,
     this.gridWidth = 100,
@@ -63,7 +67,8 @@ class GridState {
     this.showBottomSheet = true,
     this.focusedBlockId,
     this.tutorialTargetBlock,
-  });
+    int? lodLevel,
+  }) : lodLevel = lodLevel ?? _calculateLODLevel(zoom);
 
   GridState copyWith({
     double? zoom,
@@ -83,9 +88,11 @@ class GridState {
     bool clearFocusedBlock = false,
     BlockModel? tutorialTargetBlock,
     bool clearTutorialTarget = false,
+    int? lodLevel,
   }) {
+    final newZoom = zoom ?? this.zoom;
     return GridState(
-      zoom: zoom ?? this.zoom,
+      zoom: newZoom,
       baseZoom: baseZoom ?? this.baseZoom,
       gridWidth: gridWidth ?? this.gridWidth,
       gridHeight: gridHeight ?? this.gridHeight,
@@ -99,7 +106,23 @@ class GridState {
       showBottomSheet: showBottomSheet ?? this.showBottomSheet,
       focusedBlockId: clearFocusedBlock ? null : (focusedBlockId ?? this.focusedBlockId),
       tutorialTargetBlock: clearTutorialTarget ? null : (tutorialTargetBlock ?? this.tutorialTargetBlock),
+      lodLevel: lodLevel ?? _calculateLODLevel(newZoom),
     );
+  }
+
+  /// LOD 레벨 계산 (정적 메서드)
+  static int _calculateLODLevel(double zoom) {
+    if (zoom < 0.05) return 0;
+    if (zoom < 0.1) return 1;
+    if (zoom < 0.3) return 2;
+    if (zoom < 0.6) return 3;
+    if (zoom < 1.0) return 4;
+    if (zoom < 2.0) return 5;
+    if (zoom < 4.0) return 6;
+    if (zoom < 8.0) return 7;
+    if (zoom < 16.0) return 8;
+    // 줌이 계속 커지면 레벨도 계속 증가
+    return (math.log(zoom) / math.log(2)).floor() + 4;
   }
 
   /// 블록 추가
@@ -254,6 +277,33 @@ class GridStateNotifier extends StateNotifier<GridState> {
     // 같은 그리드 좌표가 화면 중앙에 오도록 pan 조정
     final newPanX = screenWidth / 2 - centerX * clampedZoom;
     final newPanY = screenHeight / 2 - centerY * clampedZoom;
+
+    state = state.copyWith(
+      zoom: clampedZoom,
+      panX: newPanX,
+      panY: newPanY,
+    );
+  }
+
+  /// 특정 포인트(focal point) 기준으로 줌 적용
+  /// 주로 핀치 제스처에서 사용됨
+  void zoomAtPoint({
+    required double newZoom,
+    required double focalPointX,
+    required double focalPointY,
+  }) {
+    final oldZoom = state.zoom;
+
+    // focal point의 그리드 좌표 계산 (줌 전)
+    final gridX = (focalPointX - state.panX) / oldZoom;
+    final gridY = (focalPointY - state.panY) / oldZoom;
+
+    // 줌 변경
+    final clampedZoom = newZoom.clamp(AppConstants.minZoom, AppConstants.maxZoom);
+
+    // focal point가 같은 그리드 좌표를 가리키도록 pan 조정
+    final newPanX = focalPointX - gridX * clampedZoom;
+    final newPanY = focalPointY - gridY * clampedZoom;
 
     state = state.copyWith(
       zoom: clampedZoom,
