@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'widgets/price_wheel_selector.dart';
+import 'widgets/price_keypad_input.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../models/optimal_game_model.dart';
@@ -21,6 +22,7 @@ class OptimalGameScreen extends ConsumerStatefulWidget {
 class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
   int? _selectedPrice;
   OptimalGame? _game;
+  bool _isKeypadMode = false; // 키패드 모드 vs 휠 모드
 
   @override
   void initState() {
@@ -44,9 +46,10 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
           // 상품 정보 헤더 (미니멀)
           _buildMinimalHeader(),
 
-          // 가격 휠 선택기 (전체 화면)
+          // 가격 휠 선택기 (항상 표시)
           Expanded(
             child: PriceWheelSelector(
+              key: ValueKey(_selectedPrice), // 선택된 가격이 바뀌면 휠을 다시 빌드
               prices: _game!.availablePrices,
               selectedPrice: _selectedPrice,
               backgroundImageUrl: _game!.imageUrl,
@@ -58,11 +61,11 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
             ),
           ),
 
-          // 하단 버튼
+          // 하단 버튼 (입찰하기 + 키패드 토글)
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
-              child: _buildSubmitButton(),
+              child: _buildBottomButtons(),
             ),
           ),
         ],
@@ -178,54 +181,132 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
     );
   }
 
-  /// 제출 버튼
-  Widget _buildSubmitButton() {
+  /// 하단 버튼들 (입찰하기 80% + 키패드 토글 20%)
+  Widget _buildBottomButtons() {
     final isDisabled = _selectedPrice == null;
 
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: isDisabled
-            ? AppColors.gradientDisable
-            : AppColors.gradientBluePurplePink,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: isDisabled
-            ? []
-            : [
+    return Row(
+      children: [
+        // 입찰하기 버튼 (80%)
+        Expanded(
+          flex: 80,
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: isDisabled
+                  ? AppColors.gradientDisable
+                  : AppColors.gradientBluePurplePink,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: isDisabled
+                  ? []
+                  : [
+                      BoxShadow(
+                        color: AppColors.blue.withOpacity(0.3),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10),
+                      ),
+                    ],
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: isDisabled ? null : _handleSubmit,
+                borderRadius: BorderRadius.circular(16),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 18),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        isDisabled ? LucideIcons.lock : LucideIcons.checkCircle,
+                        size: 24,
+                        color: AppColors.white,
+                      ),
+                      const SizedBox(width: 12),
+                      Flexible(
+                        child: Text(
+                          isDisabled
+                              ? '가격을 선택하세요'
+                              : '${_formatPrice(_selectedPrice!)}에 입찰하기',
+                          style: AppTextStyles.buttonLarge.copyWith(
+                            color: AppColors.white,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        const SizedBox(width: 12),
+
+        // 키패드 토글 버튼 (20%)
+        Expanded(
+          flex: 20,
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: AppColors.gradientBluePurplePink,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
                 BoxShadow(
-                  color: AppColors.blue.withOpacity(0.3),
+                  color: AppColors.purple.withOpacity(0.3),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
               ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: isDisabled ? null : _handleSubmit,
-          borderRadius: BorderRadius.circular(16),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 18),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  isDisabled ? LucideIcons.lock : LucideIcons.checkCircle,
-                  size: 24,
-                  color: AppColors.white,
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  isDisabled
-                      ? '가격을 선택하세요'
-                      : '${_formatPrice(_selectedPrice!)}에 입찰하기',
-                  style: AppTextStyles.buttonLarge.copyWith(
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: _showKeypadBottomSheet,
+                borderRadius: BorderRadius.circular(16),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 18),
+                  child: Icon(
+                    LucideIcons.calculator,
+                    size: 24,
                     color: AppColors.white,
                   ),
                 ),
-              ],
+              ),
             ),
           ),
+        ),
+      ],
+    );
+  }
+
+  /// 키패드 하단 시트 표시
+  void _showKeypadBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        height: MediaQuery.of(context).size.height * 0.75,
+        decoration: const BoxDecoration(
+          color: AppColors.deepWhite,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(32),
+          ),
+        ),
+        child: PriceKeypadInput(
+          initialPrice: _selectedPrice,
+          minPrice: _game!.minPrice,
+          maxPrice: _game!.maxPrice,
+          backgroundImageUrl: _game!.imageUrl,
+          onPriceChanged: (price) {
+            setState(() {
+              _selectedPrice = price;
+            });
+          },
+          onConfirm: () {
+            // 확인 버튼을 누르면 바텀시트 닫기
+            Navigator.of(context).pop();
+          },
         ),
       ),
     );
