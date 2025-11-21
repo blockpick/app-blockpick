@@ -257,46 +257,48 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       barrierColor: AppColors.darkBlue.withOpacity(0.3), // 반투명 배경
-      builder: (context) => Container(
-        constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height * 0.6,
-        ),
-        decoration: BoxDecoration(
-          color: AppColors.white.withOpacity(0.95), // 약간 투명하게
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.darkBlue.withOpacity(0.1),
-              blurRadius: 30,
-              offset: const Offset(0, -10),
+      builder: (context) => SafeArea(
+        child: Container(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.6,
+          ),
+          decoration: BoxDecoration(
+            color: AppColors.white.withOpacity(0.95), // 약간 투명하게
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.darkBlue.withOpacity(0.1),
+                blurRadius: 30,
+                offset: const Offset(0, -10),
+              ),
+            ],
+          ),
+          child: SingleChildScrollView(
+            child: PriceKeypadInput(
+              initialPrice: _selectedPrice,
+              minPrice: _game!.minPrice,
+              maxPrice: _game!.maxPrice,
+              priceStep: _game!.priceStep, // 호가 단위 전달
+              backgroundImageUrl: _game!.imageUrl,
+              onPriceChanged: (price) {
+                // 입력하는 동안은 임시 변수에만 저장 (휠은 업데이트 안 함)
+                tempPrice = price;
+              },
+              onConfirm: () async {
+                // 확인 버튼을 누르면 바텀시트 닫기
+                Navigator.of(context).pop();
+
+                // 바텀시트가 닫히는 애니메이션이 끝날 때까지 대기
+                await Future.delayed(const Duration(milliseconds: 300));
+
+                // 확인 버튼을 눌렀을 때만 휠 업데이트
+                if (mounted && tempPrice != null) {
+                  setState(() {
+                    _selectedPrice = tempPrice;
+                  });
+                }
+              },
             ),
-          ],
-        ),
-        child: SingleChildScrollView(
-          child: PriceKeypadInput(
-            initialPrice: _selectedPrice,
-            minPrice: _game!.minPrice,
-            maxPrice: _game!.maxPrice,
-            priceStep: _game!.priceStep, // 호가 단위 전달
-            backgroundImageUrl: _game!.imageUrl,
-            onPriceChanged: (price) {
-              // 입력하는 동안은 임시 변수에만 저장 (휠은 업데이트 안 함)
-              tempPrice = price;
-            },
-            onConfirm: () async {
-              // 확인 버튼을 누르면 바텀시트 닫기
-              Navigator.of(context).pop();
-
-              // 바텀시트가 닫히는 애니메이션이 끝날 때까지 대기
-              await Future.delayed(const Duration(milliseconds: 300));
-
-              // 확인 버튼을 눌렀을 때만 휠 업데이트
-              if (mounted && tempPrice != null) {
-                setState(() {
-                  _selectedPrice = tempPrice;
-                });
-              }
-            },
           ),
         ),
       ),
