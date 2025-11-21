@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'widgets/price_wheel_selector.dart';
-import 'widgets/price_keypad_input.dart';
+
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
-import '../../models/optimal_game_model.dart';
 import '../../data/mock_optimal_game_data.dart';
+import '../../models/optimal_game_model.dart';
+import 'widgets/price_keypad_input.dart';
+import 'widgets/price_wheel_selector.dart';
 
 /// 최적가 게임 화면
 class OptimalGameScreen extends ConsumerStatefulWidget {
@@ -33,9 +34,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
   @override
   Widget build(BuildContext context) {
     if (_game == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
@@ -79,7 +78,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // 왼쪽: 상품 이미지 + 참여자 수
+          // 왼쪽: 상품 이미지 + (참여자 수 / 타임) 수직 정렬
           Row(
             children: [
               // 상품 이미지
@@ -89,7 +88,9 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
                 decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: AppColors.buleGray.withOpacity(0.3)),
+                  border: Border.all(
+                    color: AppColors.buleGray.withOpacity(0.3),
+                  ),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
@@ -107,22 +108,22 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
                 ),
               ),
               const SizedBox(width: 12),
-              // 참여자 수 (카운트업 애니메이션)
-              _AnimatedParticipantCount(participants: _game!.participants),
+              // 참여자 수 + 타임 (수직 정렬)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 참여자 수 (카운트업 애니메이션)
+                  _AnimatedParticipantCount(participants: _game!.participants),
+                  const SizedBox(height: 4),
+                  // 실시간 카운트다운 타이머
+                  _CountdownTimer(timeLeft: _game!.timeLeft),
+                ],
+              ),
             ],
           ),
 
-          // 오른쪽: 시간 카운트다운 + 트렌드 정보
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              // 실시간 카운트다운 타이머
-              _CountdownTimer(timeLeft: _game!.timeLeft),
-              const SizedBox(height: 4),
-              // 트렌드 정보
-              _AnimatedTrendInfo(),
-            ],
-          ),
+          // 오른쪽: 트렌드 정보만
+          _AnimatedTrendInfo(),
         ],
       ),
     );
@@ -262,9 +263,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
         ),
         decoration: BoxDecoration(
           color: AppColors.white.withOpacity(0.95), // 약간 투명하게
-          borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(32),
-          ),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
           boxShadow: [
             BoxShadow(
               color: AppColors.darkBlue.withOpacity(0.1),
@@ -326,10 +325,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
 
   /// 가격 포맷
   String _formatPrice(int price) {
-    return '${price.toString().replaceAllMapped(
-          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-          (Match m) => '${m[1]},',
-        )}원';
+    return '${price.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}원';
   }
 }
 
@@ -376,9 +372,10 @@ class _AnimatedTrendInfoState extends State<_AnimatedTrendInfo>
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
     _startAnimation();
   }
@@ -411,18 +408,14 @@ class _AnimatedTrendInfoState extends State<_AnimatedTrendInfo>
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            trend.icon,
-            size: 11,
-            color: trend.color,
-          ),
+          Icon(trend.icon, size: 11, color: trend.color),
           const SizedBox(width: 3),
           Flexible(
             child: Text(
               trend.text,
               style: AppTextStyles.bodySmall.copyWith(
                 color: trend.color,
-                fontSize: 10,
+                fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
               maxLines: 1,
@@ -441,11 +434,7 @@ class _TrendData {
   final String text;
   final Color color;
 
-  _TrendData({
-    required this.icon,
-    required this.text,
-    required this.color,
-  });
+  _TrendData({required this.icon, required this.text, required this.color});
 }
 
 /// 참여자 수 카운트업 애니메이션
@@ -478,10 +467,7 @@ class _AnimatedParticipantCountState extends State<_AnimatedParticipantCount>
     _countAnimation = IntTween(
       begin: widget.participants - 50, // 초기값 (약간 적게 시작)
       end: widget.participants,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOut,
-    ));
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
     _controller.forward();
 
@@ -514,11 +500,7 @@ class _AnimatedParticipantCountState extends State<_AnimatedParticipantCount>
       builder: (context, child) {
         return Row(
           children: [
-            const Icon(
-              LucideIcons.users,
-              size: 14,
-              color: AppColors.grayBlue,
-            ),
+            const Icon(LucideIcons.users, size: 14, color: AppColors.grayBlue),
             const SizedBox(width: 4),
             Text(
               '${_controller.isAnimating ? _countAnimation.value : _currentCount}명',
@@ -548,7 +530,9 @@ class _CountdownTimerState extends State<_CountdownTimer>
     with TickerProviderStateMixin {
   late AnimationController _blinkController;
   late AnimationController _fireController;
+  late AnimationController _shakeController;
   late Animation<double> _blinkAnimation;
+  late Animation<double> _shakeAnimation;
 
   Duration _remainingTime = Duration.zero;
   late Duration _initialTime;
@@ -575,19 +559,47 @@ class _CountdownTimerState extends State<_CountdownTimer>
       vsync: this,
     );
 
+    // 흔들림 애니메이션 (매우 격렬할 때)
+    _shakeController = AnimationController(
+      duration: const Duration(milliseconds: 100),
+      vsync: this,
+    );
+
+    _shakeAnimation = Tween<double>(begin: -2.0, end: 2.0).animate(
+      CurvedAnimation(parent: _shakeController, curve: Curves.elasticIn),
+    );
+
     // 카운트다운 시작
     _startCountdown();
+    _startShakeAnimation();
+  }
+
+  void _startShakeAnimation() async {
+    while (mounted) {
+      if (_remainingTime.inMinutes < 10) {
+        // 10분 미만일 때만 흔들림
+        await _shakeController.forward();
+        await _shakeController.reverse();
+        await Future.delayed(const Duration(milliseconds: 200));
+      } else {
+        await Future.delayed(const Duration(seconds: 1));
+      }
+    }
   }
 
   Duration _parseTimeLeft(String timeLeft) {
-    // "2시간 30분" 형식 파싱
+    // "2주 3일", "1일 3시간", "2시간 30분" 형식 파싱
+    final weekMatch = RegExp(r'(\d+)주').firstMatch(timeLeft);
+    final dayMatch = RegExp(r'(\d+)일').firstMatch(timeLeft);
     final hourMatch = RegExp(r'(\d+)시간').firstMatch(timeLeft);
     final minuteMatch = RegExp(r'(\d+)분').firstMatch(timeLeft);
 
+    int weeks = weekMatch != null ? int.parse(weekMatch.group(1)!) : 0;
+    int days = dayMatch != null ? int.parse(dayMatch.group(1)!) : 0;
     int hours = hourMatch != null ? int.parse(hourMatch.group(1)!) : 0;
     int minutes = minuteMatch != null ? int.parse(minuteMatch.group(1)!) : 0;
 
-    return Duration(hours: hours, minutes: minutes);
+    return Duration(days: (weeks * 7) + days, hours: hours, minutes: minutes);
   }
 
   void _startCountdown() async {
@@ -617,11 +629,24 @@ class _CountdownTimerState extends State<_CountdownTimer>
   }
 
   String _formatTime() {
-    final hours = _remainingTime.inHours;
+    final days = _remainingTime.inDays;
+    final hours = _remainingTime.inHours % 24;
     final minutes = _remainingTime.inMinutes % 60;
     final seconds = _remainingTime.inSeconds % 60;
 
-    if (hours > 0) {
+    if (days > 7) {
+      final weeks = days ~/ 7;
+      final remainingDays = days % 7;
+      if (remainingDays > 0) {
+        return '$weeks주 $remainingDays일';
+      }
+      return '$weeks주';
+    } else if (days > 0) {
+      if (hours > 0) {
+        return '$days일 $hours시간';
+      }
+      return '$days일';
+    } else if (hours > 0) {
       return '$hours시간 $minutes분';
     } else if (minutes > 0) {
       return '$minutes분 $seconds초';
@@ -634,6 +659,7 @@ class _CountdownTimerState extends State<_CountdownTimer>
   void dispose() {
     _blinkController.dispose();
     _fireController.dispose();
+    _shakeController.dispose();
     super.dispose();
   }
 
@@ -645,50 +671,65 @@ class _CountdownTimerState extends State<_CountdownTimer>
     Widget timeWidget = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // 파이어 아이콘들
-        if (intensity > 0)
-          SizedBox(
-            width: 20,
-            height: 20,
-            child: Stack(
-              children: List.generate(
-                intensity,
-                (index) => _FireParticle(
-                  delay: index * 200,
-                  controller: _fireController,
-                  speed: intensity > 2 ? 1.5 : 1.0,
+        // 시계 아이콘
+        Icon(LucideIcons.clock, size: 14, color: _getTimeColor()),
+        const SizedBox(width: 4),
+
+        // 시간 텍스트 + 파이어 배경
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            // 파이어 아이콘들 (뒤에 배치)
+            if (intensity > 0)
+              Positioned.fill(
+                child: SizedBox(
+                  width: 80,
+                  height: 30,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: List.generate(
+                      intensity,
+                      (index) => Positioned(
+                        left: index * 8.0,
+                        child: _FireParticle(
+                          delay: index * 200,
+                          controller: _fireController,
+                          speed: intensity > 2 ? 1.5 : 1.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            // 시간 텍스트 (앞에 배치) + 흔들림 효과
+            AnimatedBuilder(
+              animation: _shakeAnimation,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(
+                    intensity >= 4 ? _shakeAnimation.value : 0, // 매우 격렬할 때만
+                    0,
+                  ),
+                  child: child,
+                );
+              },
+              child: Text(
+                _formatTime(),
+                style: AppTextStyles.medium.copyWith(
+                  color: _getTimeColor(),
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
-          ),
-        if (intensity > 0) const SizedBox(width: 4),
-
-        // 시계 아이콘
-        Icon(
-          LucideIcons.clock,
-          size: 14,
-          color: _getTimeColor(),
-        ),
-        const SizedBox(width: 4),
-
-        // 시간 텍스트
-        Text(
-          _formatTime(),
-          style: AppTextStyles.medium.copyWith(
-            color: _getTimeColor(),
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-          ),
+          ],
         ),
       ],
     );
 
     // 30분 미만일 때 깜빡임 효과
     if (shouldBlink) {
-      return FadeTransition(
-        opacity: _blinkAnimation,
-        child: timeWidget,
-      );
+      return FadeTransition(opacity: _blinkAnimation, child: timeWidget);
     }
 
     return timeWidget;
@@ -729,18 +770,12 @@ class _FireParticleState extends State<_FireParticle>
     _positionAnimation = Tween<double>(
       begin: 0.0,
       end: -20.0, // 위로 20px 이동
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOut,
-    ));
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
     _opacityAnimation = Tween<double>(
       begin: 1.0,
       end: 0.0,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeIn,
-    ));
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
 
     _startAnimation();
   }
