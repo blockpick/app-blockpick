@@ -8,7 +8,7 @@ import '../game/game_list_screen.dart';
 import '../game/vibe_game_list_screen.dart';
 import '../optimal/optimal_game_list_screen.dart';
 
-/// 홈 화면 (PICK 탭 - DAILY/SELECT/VIBE/OPTIMAL)
+/// 홈 화면 (PICK 탭 - DAILY/SELECT/VIBE/PRIME)
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -54,7 +54,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 Tab(text: 'DAILY'),
                 Tab(text: 'SELECT'),
                 Tab(text: 'VIBE'),
-                Tab(text: 'OPTIMAL'),
+                Tab(text: 'PRIME'),
               ],
             ),
           ),

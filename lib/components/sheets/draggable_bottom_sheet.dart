@@ -79,9 +79,12 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
 
   /// 바텀시트 크기 변경 감지하여 일정 크기 이하면 닫기 콜백 호출
   void _onSheetSizeChanged() {
-    if (_controller.size < widget.minChildSize + 0.05) {
-      // minChildSize보다 약간 위 (5%)에서 닫기 콜백 호출
-      widget.onClose?.call();
+    // minChildSize에 도달하면 닫기 (약간의 threshold 추가)
+    if (_controller.isAttached && _controller.size <= widget.minChildSize + 0.01) {
+      // 닫기 콜백을 다음 프레임에 호출하여 부드러운 애니메이션 보장
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.onClose?.call();
+      });
     }
   }
 
@@ -109,8 +112,42 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
 
   /// 마우스/터치 드래그 종료
   void _onDragEnd() {
+    if (_controller.isAttached) {
+      // 가장 가까운 snap size로 애니메이션
+      final currentSize = _controller.size;
+      final snapSize = _findNearestSnapSize(currentSize);
+
+      if ((currentSize - snapSize).abs() > 0.01) {
+        _controller.animateTo(
+          snapSize,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOutCubic,
+        );
+      }
+    }
+
     _dragStartY = null;
     _dragStartSize = null;
+  }
+
+  /// 현재 크기에서 가장 가까운 snap size 찾기
+  double _findNearestSnapSize(double currentSize) {
+    if (widget.snapSizes.isEmpty) {
+      return currentSize;
+    }
+
+    double nearest = widget.snapSizes.first;
+    double minDiff = (currentSize - nearest).abs();
+
+    for (final snapSize in widget.snapSizes) {
+      final diff = (currentSize - snapSize).abs();
+      if (diff < minDiff) {
+        minDiff = diff;
+        nearest = snapSize;
+      }
+    }
+
+    return nearest;
   }
 
   @override
@@ -122,6 +159,8 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
       maxChildSize: widget.maxChildSize,
       snap: true,
       snapSizes: widget.snapSizes,
+      shouldCloseOnMinExtent: false,
+      expand: false,
       builder: (context, scrollController) {
         return Container(
           decoration: BoxDecoration(
@@ -129,7 +168,7 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
             borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
             boxShadow: [
               BoxShadow(
-                color: AppColors.black.withOpacity(0.1),
+                color: AppColors.black.withValues(alpha: 0.1),
                 blurRadius: 20,
                 offset: const Offset(0, -4),
               ),
@@ -163,7 +202,7 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
                       color: AppColors.white,
                       border: Border(
                         top: BorderSide(
-                          color: AppColors.buleGray.withOpacity(0.2),
+                          color: AppColors.buleGray.withValues(alpha: 0.2),
                           width: 1,
                         ),
                       ),
