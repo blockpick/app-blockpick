@@ -48,7 +48,7 @@ class EncryptionKeyPollingService {
           QueryOptions(
             document: gql(_encryptionKeyStatusQuery),
             variables: {'requestId': requestId},
-            fetchPolicy: FetchPolicy.networkOnly, // 캐시 사용 안 함
+            fetchPolicy: FetchPolicy.noCache, // 캐시 완전 비활성화 (__typename 에러 방지)
           ),
         );
 

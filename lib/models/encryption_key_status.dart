@@ -29,7 +29,7 @@ class EncryptionKeyStatus {
 
   bool get isCompleted => status == 'COMPLETED';
   bool get isFailed => status == 'FAILED';
-  bool get isProcessing => status == 'PROCESSING' || status == 'PENDING';
+  bool get isProcessing => status == 'PROCESSING' || status == 'PENDING' || status == 'QUEUED';
 
   @override
   String toString() {

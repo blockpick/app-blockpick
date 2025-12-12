@@ -72,13 +72,16 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
           ),
         ),
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(32),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // 로딩 애니메이션
-                _buildLoadingAnimation(),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(32),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 48), // 상단 여백
+                  // 로딩 애니메이션
+                  _buildLoadingAnimation(),
 
                 const SizedBox(height: 48),
 
@@ -160,6 +163,7 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
                     .fadeIn(delay: 500.ms, duration: 500.ms)
                     .scale(begin: const Offset(0.8, 0.8)),
               ],
+              ),
             ),
           ),
         ),
