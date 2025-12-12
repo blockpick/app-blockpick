@@ -47,11 +47,14 @@ class GameJoinResultOverlay extends StatelessWidget {
           ),
         ),
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(32),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(32),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 48), // 상단 여백
                 // 결과 아이콘 애니메이션
                 _buildResultIcon(success),
 
@@ -113,7 +116,10 @@ class GameJoinResultOverlay extends StatelessWidget {
                 )
                     .animate()
                     .fadeIn(delay: 1000.ms, duration: 500.ms),
+
+                const SizedBox(height: 48), // 하단 여백
               ],
+              ),
             ),
           ),
         ),

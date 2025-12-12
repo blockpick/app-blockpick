@@ -256,10 +256,11 @@ class SmartContractService {
     required String userIndex,
     required String userAddress,
   }) async {
-    // print('🔍 블록체인에서 암호화 키 조회 시작...');
-    // print('   컨트랙트: $contractAddress');
-    // print('   인덱스: ${userIndex.substring(0, 30)}...');
-    // print('   소유자: $userAddress');
+    print('      🔍 온체인 조회 파라미터:');
+    print('         • RPC: $_currentRpcUrl');
+    print('         • 컨트랙트: $contractAddress');
+    print('         • userIndex: $userIndex');
+    print('         • userAddress: $userAddress');
 
     try {
       // 컨트랙트 ABI 정의 (getEncryptionKey view 함수)
@@ -276,7 +277,7 @@ class SmartContractService {
                 },
                 {
                   "internalType": "address",
-                  "name": "_owner",
+                  "name": "_userAddress",
                   "type": "address"
                 }
               ],
@@ -303,6 +304,7 @@ class SmartContractService {
 
       // print('📡 View 함수 호출 중 (가스비 없음)...');
 
+      print('         📡 RPC call 시작...');
       final result = await _client.call(
         contract: contract,
         function: function,
@@ -311,23 +313,25 @@ class SmartContractService {
           EthereumAddress.fromHex(userAddress),
         ],
       );
+      print('         📥 RPC 응답: $result');
 
       if (result.isEmpty) {
+        print('         ❌ 결과가 비어있음');
         throw Exception('암호화 키를 찾을 수 없습니다 (빈 응답)');
       }
 
       final encryptionKey = result[0] as String;
+      print('         🔑 조회된 키: "$encryptionKey" (길이: ${encryptionKey.length})');
 
       if (encryptionKey.isEmpty) {
+        print('         ❌ 키가 빈 문자열');
         throw Exception('암호화 키가 비어있습니다');
       }
 
-      // print('✅ 암호화 키 조회 완료');
-      // print('   키: ${encryptionKey.substring(0, 16)}...');
-
+      print('         ✅ 키 조회 성공!');
       return encryptionKey;
     } catch (e) {
-      // print('❌ 암호화 키 조회 실패: $e');
+      print('         ❌ 온체인 조회 에러: $e');
       rethrow;
     }
   }

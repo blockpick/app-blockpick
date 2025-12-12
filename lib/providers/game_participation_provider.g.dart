@@ -91,16 +91,21 @@ final userWalletAddressProvider = AutoDisposeFutureProvider<String?>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef UserWalletAddressRef = AutoDisposeFutureProviderRef<String?>;
-String _$gameParticipationHash() => r'434a1b7b4f16bd5fd5b7440d4fc8b2ed38ea566a';
+String _$gameParticipationHash() => r'a030a420b1b251ad36adb5c23c4425c38c4164dd';
 
 /// 게임 참여 통합 서비스 (서버 가스비 대납 방식)
 ///
+/// 문서 참조: docs/게임_참가_프로세스.md
+///
 /// 전체 프로세스:
-/// 1. 블록체인 지갑 확인/생성
-/// 2. GraphQL로 암호화 키 요청 (서버가 가스비 지불)
-/// 3. 좌표 암호화
-/// 4. 지갑 주소 해시화 (익명성 보장)
+/// 0. 게임 정보 조회 (getGame/getGames)
+/// 1. 좌표 선택 (UI)
+/// 2. 지갑 준비 (SecureStorage/localStorage)
+/// 3. 암호화 키 확보 (하이브리드: 온체인 조회 → 서버 생성 → 재조회)
+/// 4. 좌표 암호화 (로컬)
 /// 5. joinGame Mutation 호출
+/// 6. 초기 응답 처리
+/// 7. 상태 폴링 (EntryStatusPollingService)
 ///
 /// Copied from [GameParticipation].
 @ProviderFor(GameParticipation)
