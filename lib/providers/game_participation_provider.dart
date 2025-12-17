@@ -417,6 +417,7 @@ class GameParticipation extends _$GameParticipation {
         result = await client.mutate(
           MutationOptions(
             document: gql(_joinGameMutation),
+            fetchPolicy: FetchPolicy.noCache, // __typename 파싱 에러 방지
             variables: {
               'input': {
                 'gameId': gameId,

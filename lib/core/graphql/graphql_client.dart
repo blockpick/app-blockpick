@@ -134,10 +134,13 @@ class GraphQLClientService {
           if (currentToken != null) {
             options.headers['Authorization'] = 'Bearer $currentToken';
             print('🔑 Authorization 헤더 추가');
+            print('🔑 Token (first 20 chars): ${currentToken.substring(0, currentToken.length > 20 ? 20 : currentToken.length)}...');
+            print('🔑 Token length: ${currentToken.length}');
           }
         } else if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
           print('🔑 Authorization 헤더 추가');
+          print('🔑 Token (first 20 chars): ${token!.substring(0, token!.length > 20 ? 20 : token!.length)}...');
         }
         return handler.next(options);
       },
