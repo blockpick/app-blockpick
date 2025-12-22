@@ -513,49 +513,40 @@ class GridPainter extends CustomPainter {
           1.0 / zoom // 줌 레벨에 따라 조정 (화면에서 항상 1px)
       ..style = PaintingStyle.stroke;
 
-    // LOD에 따라 그리드 선 간격 조정
-    final lodLevel = _getLODLevel(zoom);
-    final maxGridSize = gridWidth > gridHeight ? gridWidth : gridHeight;
+    // 🎯 화면상 셀 크기 기반으로 그리드 선 간격 결정
+    // 그리드 크기(100x100, 300x300, 10000x10000 등)에 관계없이
+    // 화면에서 셀이 충분히 크게 보이면 개별 셀 선을 그림
+    final screenCellSize = zoom * cellSize; // 화면상 셀 크기 (픽셀)
     int step;
 
-    if (maxGridSize >= 5000) {
-      // 매우 큰 그리드 (10000x10000 등)
-      if (lodLevel <= 0) {
-        step = 500; // 극저 줌 (0.05 이하)
-      } else if (lodLevel <= 1) {
-        step = 200; // 매우 낮은 줌 (0.05-0.1)
-      } else if (lodLevel <= 2) {
-        step = 100; // 낮은 줌 (0.1-0.3)
-      } else if (lodLevel <= 3) {
-        step = 50; // 중간 줌 (0.3-0.6)
-      } else if (lodLevel <= 4) {
-        step = 20; // 높은 줌 (0.6-1.0)
-      } else {
-        step = 10; // 매우 높은 줌 (1.0+)
-      }
-    } else if (maxGridSize >= 1000) {
-      // 큰 그리드 (1000x1000)
-      if (lodLevel <= 0) {
-        step = 100;
-      } else if (lodLevel <= 1) {
-        step = 50;
-      } else if (lodLevel <= 2) {
-        step = 20;
-      } else if (lodLevel <= 3) {
-        step = 10;
-      } else {
-        step = 5;
-      }
+    if (screenCellSize >= 12) {
+      // 셀이 12px 이상이면 모든 선 그리기 (픽 선택 가능)
+      step = 1;
+    } else if (screenCellSize >= 6) {
+      // 셀이 6-12px면 2칸마다
+      step = 2;
+    } else if (screenCellSize >= 3) {
+      // 셀이 3-6px면 5칸마다
+      step = 5;
+    } else if (screenCellSize >= 1.5) {
+      // 셀이 1.5-3px면 10칸마다
+      step = 10;
+    } else if (screenCellSize >= 0.75) {
+      // 셀이 0.75-1.5px면 20칸마다
+      step = 20;
+    } else if (screenCellSize >= 0.3) {
+      // 셀이 0.3-0.75px면 50칸마다
+      step = 50;
+    } else if (screenCellSize >= 0.1) {
+      // 셀이 0.1-0.3px면 100칸마다
+      step = 100;
     } else {
-      // 작은 그리드 (100x100)
-      if (lodLevel <= 1) {
-        step = 10;
-      } else if (lodLevel <= 2) {
-        step = 5;
-      } else {
-        step = 1;
-      }
+      // 매우 작은 경우 200칸마다
+      step = 200;
     }
+
+    // 🔍 디버그: 그리드 선 정보 출력 (step 변경 시에만)
+    _logGridDebug(gridWidth, gridHeight, cellSize, zoom, screenCellSize, step);
 
     // 그리드 영역 (변환 전 좌표)
     final totalGridWidth = gridWidth * cellSize;
@@ -769,4 +760,48 @@ class _ViewportBounds {
     required this.minCol,
     required this.maxCol,
   });
+}
+
+/// 그리드 디버그 로그 헬퍼 (step 변경 시에만 출력)
+int _lastLoggedStep = -1;
+int _lastLoggedGridWidth = -1;
+
+void _logGridDebug(
+  int gridWidth,
+  int gridHeight,
+  double cellSize,
+  double zoom,
+  double screenCellSize,
+  int step,
+) {
+  // 같은 그리드에서 step이 변경되지 않았으면 스킵
+  if (_lastLoggedStep == step && _lastLoggedGridWidth == gridWidth) {
+    return;
+  }
+  _lastLoggedStep = step;
+  _lastLoggedGridWidth = gridWidth;
+
+  final zoomFor1to1 = 12.0 / cellSize;
+
+  debugPrint('');
+  debugPrint('┌─────────────────────────────────────────────────');
+  debugPrint('│ 🎯 Grid Line Debug');
+  debugPrint('├─────────────────────────────────────────────────');
+  debugPrint('│ 📐 Grid Size: ${gridWidth}x$gridHeight');
+  debugPrint('│ 📏 Cell Size (base): ${cellSize}px');
+  debugPrint('│ 🔍 Zoom: ${zoom.toStringAsFixed(4)}');
+  debugPrint('│ 📱 Screen Cell Size: ${screenCellSize.toStringAsFixed(2)}px');
+  debugPrint('├─────────────────────────────────────────────────');
+  debugPrint('│ 🎲 Step: $step');
+  if (step == 1) {
+    debugPrint('│ ✅ 1:1 매칭! (그리드 선 = 실제 셀)');
+  } else {
+    debugPrint('│ ⚠️ ${step}칸마다 선 그림 (그리드 > 셀)');
+    debugPrint('│ 📊 화면상 그리드 간격: ${(screenCellSize * step).toStringAsFixed(2)}px');
+    debugPrint('├─────────────────────────────────────────────────');
+    debugPrint('│ 💡 1:1 매칭 필요 줌: ${zoomFor1to1.toStringAsFixed(4)}');
+    debugPrint('│    (현재 줌의 ${(zoomFor1to1 / zoom).toStringAsFixed(1)}배 확대 필요)');
+  }
+  debugPrint('└─────────────────────────────────────────────────');
+  debugPrint('');
 }
