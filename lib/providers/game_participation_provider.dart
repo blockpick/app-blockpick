@@ -192,7 +192,7 @@ class GameParticipation extends _$GameParticipation {
         encryptionKey = await contractService.getEncryptionKey(
           contractAddress: contractAddress,
           userIndex: userIndex,
-          userAddress: walletAddress,
+          credentials: credentials,
         );
 
         print('✅ 기존 키 발견! 재사용 (가스비 절약)');
@@ -288,7 +288,7 @@ class GameParticipation extends _$GameParticipation {
               polledKey = await contractService.getEncryptionKey(
                 contractAddress: contractAddr ?? contractAddress,
                 userIndex: userIndex,
-                userAddress: walletAddress,
+                credentials: credentials,
               );
 
               print('   ✅ 키 발견!');

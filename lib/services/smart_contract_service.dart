@@ -248,19 +248,21 @@ class SmartContractService {
   ///
   /// [contractAddress]: 게임별 스마트 컨트랙트 주소
   /// [userIndex]: 사용자 고유 인덱스 (예: "wallet-timestamp")
-  /// [userAddress]: 사용자 지갑 주소 (소유자 확인용)
+  /// [credentials]: 사용자 지갑 (조회 권한 확인용 - msg.sender 검증)
   ///
   /// Returns: 암호화 키 (16진수 문자열)
   Future<String> getEncryptionKey({
     required String contractAddress,
     required String userIndex,
-    required String userAddress,
+    required Credentials credentials,
   }) async {
+    final senderAddress = credentials.address;
+
     print('      🔍 온체인 조회 파라미터:');
     print('         • RPC: $_currentRpcUrl');
     print('         • 컨트랙트: $contractAddress');
     print('         • userIndex: $userIndex');
-    print('         • userAddress: $userAddress');
+    print('         • sender (msg.sender): ${senderAddress.hex}');
 
     try {
       // 컨트랙트 ABI 정의 (getEncryptionKey view 함수)
@@ -274,11 +276,6 @@ class SmartContractService {
                   "internalType": "string",
                   "name": "_index",
                   "type": "string"
-                },
-                {
-                  "internalType": "address",
-                  "name": "_userAddress",
-                  "type": "address"
                 }
               ],
               "name": "getEncryptionKey",
@@ -299,19 +296,15 @@ class SmartContractService {
         EthereumAddress.fromHex(contractAddress),
       );
 
-      // View 함수 호출 (가스비 없음, 트랜잭션 서명 불필요)
+      // View 함수 호출 (가스비 없음, msg.sender로 권한 검증)
       final function = contract.function('getEncryptionKey');
-
-      // print('📡 View 함수 호출 중 (가스비 없음)...');
 
       print('         📡 RPC call 시작...');
       final result = await _client.call(
+        sender: senderAddress,
         contract: contract,
         function: function,
-        params: [
-          userIndex,
-          EthereumAddress.fromHex(userAddress),
-        ],
+        params: [userIndex],
       );
       print('         📥 RPC 응답: $result');
 
