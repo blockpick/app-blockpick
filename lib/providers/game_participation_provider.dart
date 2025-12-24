@@ -398,6 +398,7 @@ class GameParticipation extends _$GameParticipation {
       print('   • idempotencyKey: $idempotencyKey');
       print('   • signerWallet (해시): ${walletHash.substring(0, 16)}...');
       print('   • contractAddress: $contractAddress');
+      print('   • userIndex: ${userIndex.substring(0, 16)}...');
       print('');
       print('→ Mutation 전송 중...');
 
@@ -426,6 +427,7 @@ class GameParticipation extends _$GameParticipation {
                 'idempotencyKey': idempotencyKey,
                 'signerWallet': walletHash, // 해시된 지갑 주소
                 'contractAddress': contractAddress,
+                'userIndex': userIndex, // 암호화 키 생성 시 사용한 인덱스
               },
             },
           ),
