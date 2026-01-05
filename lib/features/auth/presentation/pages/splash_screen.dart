@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/auth/domain/providers/auth_provider.dart';
 
 /// SC-001: 스플래시 화면
 ///
@@ -115,15 +114,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       // 권한 설정 완료, 온보딩 미완료 - 온보딩 화면으로
       context.go('/onboarding');
     } else {
-      // 모두 완료 - 인증 상태 확인 후 분기
-      final isAuth = ref.read(isAuthenticatedProvider);
-      if (isAuth) {
-        // 인증됨 - 홈 화면으로
-        context.go('/');
-      } else {
-        // 인증 안됨 - 로그인 화면으로
-        context.go('/login');
-      }
+      // 모두 완료 - 홈 화면으로 (로그인 여부 상관없이 컨텐츠 볼 수 있음)
+      context.go('/');
     }
   }
 
