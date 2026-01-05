@@ -5,26 +5,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 
-/// SC-005-02, SC-005-03: 휴대폰 번호 인증 화면
+/// SC-006: 이메일 찾기 화면
 ///
-/// - 휴대폰 번호 입력
-/// - 인증번호 입력 (6자리, 3분 타이머)
-/// - 이용 동의 체크 (개인정보, 제3자, 서비스 약관, 마케팅)
-class PhoneVerifyScreen extends ConsumerStatefulWidget {
-  final String? signupType; // 'email', 'google', 'apple'
-  final String? flowType; // 'signup', 'find-email', 'withdrawal'
-
-  const PhoneVerifyScreen({
-    super.key,
-    this.signupType,
-    this.flowType,
-  });
+/// - SC-006-01: 휴대폰 번호 입력
+/// - SC-006-02: 인증번호 입력
+/// - SC-006-03: 이메일 찾기 결과
+class FindEmailScreen extends ConsumerStatefulWidget {
+  const FindEmailScreen({super.key});
 
   @override
-  ConsumerState<PhoneVerifyScreen> createState() => _PhoneVerifyScreenState();
+  ConsumerState<FindEmailScreen> createState() => _FindEmailScreenState();
 }
 
-class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
+class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
   final _phoneController = TextEditingController();
   final _codeController = TextEditingController();
   final _phoneFocusNode = FocusNode();
@@ -33,20 +26,11 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
   bool _codeSent = false;
   bool _isLoading = false;
   String? _phoneError;
-  String? _codeError;
 
-  // 타이머
   Timer? _timer;
-  int _remainingSeconds = 180; // 3분
+  int _remainingSeconds = 180;
   int _resendCount = 0;
   static const int _maxResendCount = 3;
-
-  // 동의 체크박스
-  bool _agreeAll = false;
-  bool _agreePrivacy = false;
-  bool _agreeThirdParty = false;
-  bool _agreeTerms = false;
-  bool _agreeMarketing = false;
 
   @override
   void dispose() {
@@ -67,14 +51,6 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
     return _codeController.text.length == 6;
   }
 
-  bool get _requiredAgreed {
-    return _agreePrivacy && _agreeThirdParty && _agreeTerms;
-  }
-
-  bool get _canComplete {
-    return _codeSent && _isCodeValid && _requiredAgreed;
-  }
-
   String get _timerText {
     final minutes = _remainingSeconds ~/ 60;
     final seconds = _remainingSeconds % 60;
@@ -89,7 +65,6 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
         setState(() => _remainingSeconds--);
       } else {
         timer.cancel();
-        _showExpiredDialog();
       }
     });
   }
@@ -105,7 +80,6 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
       _phoneError = null;
     });
 
-    // TODO: 실제 인증번호 전송 API 호출
     await Future.delayed(const Duration(seconds: 1));
 
     if (!mounted) return;
@@ -120,23 +94,13 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
   }
 
   Future<void> _resendCode() async {
-    if (_resendCount >= _maxResendCount) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('인증번호 재전송 횟수를 초과했습니다.'),
-          backgroundColor: AppColors.red,
-        ),
-      );
-      return;
-    }
+    if (_resendCount >= _maxResendCount) return;
 
     setState(() {
       _isLoading = true;
-      _codeError = null;
       _codeController.clear();
     });
 
-    // TODO: 실제 인증번호 재전송 API 호출
     await Future.delayed(const Duration(seconds: 1));
 
     if (!mounted) return;
@@ -149,65 +113,23 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
     _startTimer();
   }
 
-  Future<void> _verifyAndContinue() async {
+  Future<void> _verifyAndSearch() async {
     final code = _codeController.text;
 
-    // 테스트 코드 체크
     if (code != '000000') {
-      // TODO: 실제 인증번호 검증 API 호출
-      _showCodeMismatchDialog();
+      _showNoAccountDialog();
       return;
-    }
-
-    // 기존 가입 계정 확인 (회원가입 플로우일 때만)
-    if (widget.flowType != 'find-email') {
-      // TODO: 실제 API 호출로 확인
-      final hasExistingAccount = false; // 테스트용
-
-      if (hasExistingAccount) {
-        _showExistingAccountDialog('test@example.com', '구글로 로그인');
-        return;
-      }
     }
 
     if (!mounted) return;
 
-    // 다음 화면으로 이동
-    final flowType = widget.flowType ?? 'signup';
-    switch (flowType) {
-      case 'signup':
-        if (widget.signupType == 'email') {
-          context.push('/email-password-setup', extra: {
-            'phone': _phoneController.text,
-            'agreeMarketing': _agreeMarketing,
-          });
-        } else {
-          // SNS 가입의 경우 바로 완료
-          _completeSignup();
-        }
-        break;
-      case 'find-email':
-        context.push('/find-email-result', extra: {
-          'phone': _phoneController.text,
-        });
-        break;
-      default:
-        context.pop();
-    }
+    // 결과 화면으로 이동
+    context.push('/find-email-result', extra: {
+      'phone': _phoneController.text,
+    });
   }
 
-  void _completeSignup() {
-    // TODO: 회원가입 완료 처리
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('회원 가입을 축하합니다!\nBlockpick에서 특별한 행운을 만나보세요.'),
-        backgroundColor: AppColors.green,
-      ),
-    );
-    context.go('/');
-  }
-
-  void _showCodeMismatchDialog() {
+  void _showNoAccountDialog() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -216,7 +138,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text(
-              '인증번호가 일치하지 않아요.',
+              '해당번호로 가입된 계정이 없어요.',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -226,7 +148,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              '인증번호 재전송 버튼을 눌러주세요.',
+              '회원가입을 하시겠어요?',
               style: TextStyle(fontSize: 14, color: AppColors.gray600),
               textAlign: TextAlign.center,
             ),
@@ -240,120 +162,16 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              _resendCode();
+              context.push('/signup');
             },
             child: const Text(
-              '인증번호 재전송',
+              '회원가입 하기',
               style: TextStyle(color: AppColors.blue, fontWeight: FontWeight.w600),
             ),
           ),
         ],
       ),
     );
-  }
-
-  void _showExistingAccountDialog(String email, String loginMethod) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              '이미 가입된 계정이 있어요.',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AppColors.darkBlue,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 12),
-            Text(email, style: const TextStyle(fontSize: 14, color: AppColors.darkBlue)),
-            Text('($loginMethod)', style: TextStyle(fontSize: 12, color: AppColors.gray500)),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('취소', style: TextStyle(color: AppColors.gray600)),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              context.go('/login');
-            },
-            child: const Text(
-              '로그인 하기',
-              style: TextStyle(color: AppColors.blue, fontWeight: FontWeight.w600),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showExpiredDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              '인증번호 유효기간이 만료되었어요.',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AppColors.darkBlue,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              '인증번호를 재전송해 주세요.',
-              style: TextStyle(fontSize: 14, color: AppColors.gray600),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('취소', style: TextStyle(color: AppColors.gray600)),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _resendCode();
-            },
-            child: const Text(
-              '인증번호 재전송',
-              style: TextStyle(color: AppColors.blue, fontWeight: FontWeight.w600),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _toggleAgreeAll(bool? value) {
-    final newValue = value ?? false;
-    setState(() {
-      _agreeAll = newValue;
-      _agreePrivacy = newValue;
-      _agreeThirdParty = newValue;
-      _agreeTerms = newValue;
-      _agreeMarketing = newValue;
-    });
-  }
-
-  void _updateAgreeAll() {
-    setState(() {
-      _agreeAll = _agreePrivacy && _agreeThirdParty && _agreeTerms && _agreeMarketing;
-    });
   }
 
   @override
@@ -372,7 +190,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
             onPressed: () => context.pop(),
           ),
           title: const Text(
-            '휴대폰 번호 인증',
+            '이메일 찾기',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -393,9 +211,8 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                     children: [
                       const SizedBox(height: 24),
 
-                      // 안내 문구
                       const Text(
-                        '회원가입을 위해\n휴대폰 번호 인증이 필요해요.',
+                        '가입된 이메일을 찾기 위해\n휴대폰 번호 인증이 필요해요.',
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
@@ -405,11 +222,9 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                       ),
                       const SizedBox(height: 32),
 
-                      // 휴대폰 번호 입력
                       _buildPhoneInput(),
                       const SizedBox(height: 16),
 
-                      // 인증번호 전송 버튼
                       if (!_codeSent)
                         SizedBox(
                           width: double.infinity,
@@ -441,19 +256,15 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                           ),
                         ),
 
-                      // 인증번호 입력 (전송 후)
                       if (_codeSent) ...[
                         const SizedBox(height: 24),
                         _buildCodeInput(),
-                        const SizedBox(height: 32),
-                        _buildAgreementSection(),
                       ],
                     ],
                   ),
                 ),
               ),
 
-              // 인증 완료 버튼
               if (_codeSent)
                 Padding(
                   padding: const EdgeInsets.all(24),
@@ -461,7 +272,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                     width: double.infinity,
                     height: 56,
                     child: ElevatedButton(
-                      onPressed: _canComplete ? _verifyAndContinue : null,
+                      onPressed: _isCodeValid ? _verifyAndSearch : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.darkBlue,
                         foregroundColor: AppColors.white,
@@ -472,7 +283,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                         elevation: 0,
                       ),
                       child: const Text(
-                        '인증 완료',
+                        '다음',
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                     ),
@@ -491,7 +302,6 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
       children: [
         Row(
           children: [
-            // 국가 코드
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               decoration: BoxDecoration(
@@ -500,25 +310,13 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
               ),
               child: Row(
                 children: [
-                  Text(
-                    'KOR',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.gray600,
-                    ),
-                  ),
+                  Text('KOR', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.gray600)),
                   const SizedBox(width: 4),
-                  Text(
-                    '+82',
-                    style: TextStyle(fontSize: 16, color: AppColors.gray500),
-                  ),
+                  Text('+82', style: TextStyle(fontSize: 16, color: AppColors.gray500)),
                 ],
               ),
             ),
             const SizedBox(width: 12),
-
-            // 전화번호 입력
             Expanded(
               child: TextField(
                 controller: _phoneController,
@@ -572,7 +370,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
             FilteringTextInputFormatter.digitsOnly,
             LengthLimitingTextInputFormatter(6),
           ],
-          onChanged: (_) => setState(() => _codeError = null),
+          onChanged: (_) => setState(() {}),
           style: const TextStyle(fontSize: 16, color: AppColors.darkBlue, letterSpacing: 8),
           decoration: InputDecoration(
             hintText: '인증번호 6자리',
@@ -602,110 +400,18 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
         Align(
           alignment: Alignment.centerRight,
           child: TextButton(
-            onPressed: _codeController.text.isNotEmpty && _resendCount < _maxResendCount
-                ? _resendCode
-                : null,
+            onPressed: _resendCount < _maxResendCount ? _resendCode : null,
             child: Text(
               '인증번호 재전송${_resendCount > 0 ? ' ($_resendCount/$_maxResendCount)' : ''}',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: _codeController.text.isNotEmpty ? AppColors.blue : AppColors.gray400,
+                color: AppColors.blue,
               ),
             ),
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildAgreementSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildCheckboxTile(
-          value: _agreeAll,
-          onChanged: _toggleAgreeAll,
-          title: '모두 동의',
-          isMain: true,
-        ),
-        const Divider(height: 24),
-        _buildCheckboxTile(
-          value: _agreePrivacy,
-          onChanged: (v) {
-            setState(() => _agreePrivacy = v ?? false);
-            _updateAgreeAll();
-          },
-          title: '[필수] 개인정보 수집 및 이용 동의',
-          showArrow: true,
-        ),
-        _buildCheckboxTile(
-          value: _agreeThirdParty,
-          onChanged: (v) {
-            setState(() => _agreeThirdParty = v ?? false);
-            _updateAgreeAll();
-          },
-          title: '[필수] 제3자 제공 동의',
-          showArrow: true,
-        ),
-        _buildCheckboxTile(
-          value: _agreeTerms,
-          onChanged: (v) {
-            setState(() => _agreeTerms = v ?? false);
-            _updateAgreeAll();
-          },
-          title: '[필수] 서비스 이용약관 동의',
-          showArrow: true,
-        ),
-        _buildCheckboxTile(
-          value: _agreeMarketing,
-          onChanged: (v) {
-            setState(() => _agreeMarketing = v ?? false);
-            _updateAgreeAll();
-          },
-          title: '[선택] 마케팅 수신 동의',
-          showArrow: true,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCheckboxTile({
-    required bool value,
-    required ValueChanged<bool?> onChanged,
-    required String title,
-    bool isMain = false,
-    bool showArrow = false,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 24,
-            height: 24,
-            child: Checkbox(
-              value: value,
-              onChanged: onChanged,
-              activeColor: AppColors.blue,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              title,
-              style: TextStyle(
-                fontSize: isMain ? 16 : 14,
-                fontWeight: isMain ? FontWeight.w600 : FontWeight.w400,
-                color: AppColors.darkBlue,
-              ),
-            ),
-          ),
-          if (showArrow)
-            Icon(Icons.chevron_right_rounded, size: 20, color: AppColors.gray400),
-        ],
-      ),
     );
   }
 }

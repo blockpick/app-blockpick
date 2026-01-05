@@ -6,16 +6,24 @@ import '../../features/auth/presentation/pages/signup_page.dart';
 import '../../features/auth/presentation/pages/forgot_password_page.dart';
 // 새로운 토스 스타일 인증 화면들
 import '../../features/auth/presentation/pages/splash_screen.dart';
+import '../../features/auth/presentation/pages/permission_screen.dart';
+import '../../features/auth/presentation/pages/onboarding_screen.dart';
+import '../../features/auth/presentation/pages/login_screen.dart';
+import '../../features/auth/presentation/pages/signup_screen.dart';
 import '../../features/auth/presentation/pages/login_select_screen.dart';
 import '../../features/auth/presentation/pages/email_login_screen.dart';
 import '../../features/auth/presentation/pages/signup_select_screen.dart';
 import '../../features/auth/presentation/pages/phone_verify_screen.dart';
 import '../../features/auth/presentation/pages/email_signup_screen.dart';
+import '../../features/auth/presentation/pages/email_password_setup_screen.dart';
 import '../../features/auth/presentation/pages/terms_agree_screen.dart';
 import '../../features/auth/presentation/pages/email_verify_screen.dart';
 import '../../features/auth/presentation/pages/password_setup_screen.dart';
 import '../../features/auth/presentation/pages/signup_complete_screen.dart';
 import '../../features/auth/presentation/pages/forgot_password_screen.dart';
+import '../../features/auth/presentation/pages/find_email_screen.dart';
+import '../../features/auth/presentation/pages/find_email_result_screen.dart';
+import '../../features/auth/presentation/pages/find_password_screen.dart';
 import '../../features/game/game_screen.dart';
 import '../../features/game/screens/game_join_test_screen.dart';
 import '../../features/optimal/optimal_game_screen.dart';
@@ -34,6 +42,15 @@ final routerProvider = Provider<GoRouter>((ref) {
       // 인증 관련 경로들 (로그인 안해도 접근 가능)
       final authRoutes = [
         '/splash',
+        '/permission',
+        '/onboarding',
+        '/login',
+        '/signup',
+        '/phone-verify',
+        '/email-password-setup',
+        '/find-email',
+        '/find-email-result',
+        '/find-password',
         '/auth/login-select',
         '/auth/email-login',
         '/auth/signup-select',
@@ -44,8 +61,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         '/auth/password-setup',
         '/auth/signup-complete',
         '/auth/forgot-password',
-        '/login', // 기존 로그인 페이지
-        '/signup', // 기존 회원가입 페이지
         '/forgot-password', // 기존 비밀번호 찾기 페이지
       ];
 
@@ -93,10 +108,82 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const SplashScreen(),
       ),
 
+      // 권한 설정 화면
+      GoRoute(
+        path: '/permission',
+        builder: (context, state) => const PermissionScreen(),
+      ),
+
+      // 온보딩 화면
+      GoRoute(
+        path: '/onboarding',
+        builder: (context, state) => const OnboardingScreen(),
+      ),
+
       // 홈 화면
       GoRoute(
         path: '/',
         builder: (context, state) => const BlockpickScreen(),
+      ),
+
+      // ============ 새로운 인증 플로우 ============
+      // 로그인 화면
+      GoRoute(
+        path: '/login',
+        builder: (context, state) => const LoginScreen(),
+      ),
+
+      // 회원가입 화면
+      GoRoute(
+        path: '/signup',
+        builder: (context, state) => const SignupScreen(),
+      ),
+
+      // 휴대폰 인증 화면
+      GoRoute(
+        path: '/phone-verify',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return PhoneVerifyScreen(
+            signupType: extra?['signupType'] as String?,
+            flowType: extra?['flowType'] as String?,
+          );
+        },
+      ),
+
+      // 이메일/비밀번호 설정 화면
+      GoRoute(
+        path: '/email-password-setup',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return EmailPasswordSetupScreen(
+            phone: extra?['phone'] as String?,
+            agreeMarketing: extra?['agreeMarketing'] as bool?,
+          );
+        },
+      ),
+
+      // 이메일 찾기 화면
+      GoRoute(
+        path: '/find-email',
+        builder: (context, state) => const FindEmailScreen(),
+      ),
+
+      // 이메일 찾기 결과 화면
+      GoRoute(
+        path: '/find-email-result',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return FindEmailResultScreen(
+            phone: extra?['phone'] as String?,
+          );
+        },
+      ),
+
+      // 비밀번호 찾기 화면
+      GoRoute(
+        path: '/find-password',
+        builder: (context, state) => const FindPasswordScreen(),
       ),
 
       // ============ 새로운 토스 스타일 인증 플로우 ============
@@ -117,7 +204,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>?;
           return PhoneVerifyScreen(
-            provider: extra?['provider'] as String?,
+            signupType: extra?['provider'] as String?,
+            flowType: 'signup',
           );
         },
       ),
@@ -175,11 +263,11 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       // ============ 기존 인증 페이지 (하위 호환성) ============
       GoRoute(
-        path: '/login',
+        path: '/old-login',
         builder: (context, state) => const LoginPage(),
       ),
       GoRoute(
-        path: '/signup',
+        path: '/old-signup',
         builder: (context, state) => const SignupPage(),
       ),
       GoRoute(

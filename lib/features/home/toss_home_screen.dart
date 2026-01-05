@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/auth/domain/providers/auth_provider.dart';
+import '../../providers/current_tab_provider.dart';
 import '../../data/mock_game_data.dart';
 import 'widgets/toss_balance_card.dart';
 import 'widgets/toss_quick_actions.dart';
@@ -217,7 +218,8 @@ class _TossHomeScreenState extends ConsumerState<TossHomeScreen> {
         IconButton(
           onPressed: () {
             if (isAuthenticated) {
-              // TODO: 프로필
+              // MY 페이지로 이동
+              ref.read(currentTabProvider.notifier).goToMy();
             } else {
               context.push('/auth/login-select');
             }
