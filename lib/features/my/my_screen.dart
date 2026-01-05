@@ -73,15 +73,7 @@ class MyScreen extends ConsumerWidget {
 
                   const SizedBox(height: 24),
 
-                  // 5. 고객지원 섹션
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: _buildSupportSection(context),
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  // 6. 앱 정보
+                  // 5. 앱 정보
                   _buildAppInfo(),
 
                   const SizedBox(height: 100), // 바텀 네비게이션 여백
@@ -569,43 +561,6 @@ class MyScreen extends ConsumerWidget {
       margin: const EdgeInsets.symmetric(horizontal: 20),
       height: 1,
       color: AppColors.gray100,
-    );
-  }
-
-  /// 고객지원 섹션
-  Widget _buildSupportSection(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        children: [
-          _buildMenuItem(
-            icon: Icons.headset_mic_rounded,
-            title: '고객센터',
-            onTap: () {
-              // TODO: 고객센터
-            },
-          ),
-          _buildMenuDivider(),
-          _buildMenuItem(
-            icon: Icons.help_outline_rounded,
-            title: '자주 묻는 질문',
-            onTap: () {
-              // TODO: FAQ
-            },
-          ),
-          _buildMenuDivider(),
-          _buildMenuItem(
-            icon: Icons.chat_bubble_outline_rounded,
-            title: '1:1 문의',
-            onTap: () {
-              // TODO: 1:1 문의
-            },
-          ),
-        ],
-      ),
     );
   }
 
