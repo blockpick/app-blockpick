@@ -4,17 +4,15 @@ import '../../models/block_model.dart';
 import '../../models/game_model.dart';
 import '../../models/game_round_model.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_text_styles.dart';
 import '../../providers/grid_state_provider.dart';
 import '../../providers/game_participation_provider.dart';
 import '../../components/cards/block_item_card.dart';
-import '../../components/buttons/gradient_button.dart';
 import '../../core/auth/domain/providers/auth_provider.dart';
 import '../auth/presentation/dialogs/auth_dialogs.dart';
 import 'widgets/game_join_loading_overlay.dart';
 import 'widgets/game_join_result_overlay.dart';
 
-/// 선택된 블록 목록을 보여주는 바텀시트
+/// 선택된 블록 목록을 보여주는 바텀시트 (토스 스타일 애니메이션)
 class SelectedBlocksSheet extends ConsumerStatefulWidget {
   final GridConfig gridConfig;
   final GameRound? game;
@@ -32,37 +30,6 @@ class SelectedBlocksSheet extends ConsumerStatefulWidget {
 }
 
 class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
-  final DraggableScrollableController _controller = DraggableScrollableController();
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted && _controller.isAttached) {
-        _controller.addListener(_onSheetSizeChanged);
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    if (_controller.isAttached) {
-      _controller.removeListener(_onSheetSizeChanged);
-    }
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _onSheetSizeChanged() {
-    if (!mounted || !_controller.isAttached) return;
-
-    // minChildSize보다 작아지면 바텀시트 닫기
-    if (_controller.size < 0.15) {
-      final gridNotifier = ref.read(gridStateProvider(widget.gridConfig).notifier);
-      gridNotifier.hideBottomSheet();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final selectedBlocks = ref.watch(gridStateProvider(widget.gridConfig)).selectedBlocks;
@@ -70,14 +37,17 @@ class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
     final screenSize = MediaQuery.of(context).size;
     final isAuthenticated = ref.watch(isAuthenticatedProvider);
 
+    // 블록이 비었으면 모달 닫기
     if (selectedBlocks.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) Navigator.of(context).pop();
+      });
       return const SizedBox.shrink();
     }
 
     return DraggableScrollableSheet(
-      controller: _controller,
       initialChildSize: 0.4,
-      minChildSize: 0.05,
+      minChildSize: 0.2,
       maxChildSize: 0.7,
       snap: true,
       snapSizes: const [0.4, 0.7],
@@ -112,38 +82,52 @@ class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
                 ),
               ),
 
-              // 헤더: 선택된 블록 수 + CLEAR 버튼
+              // 토스 스타일 헤더: 선택된 블록 수 + CLEAR 버튼
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
                       children: [
                         Text(
-                          '${selectedBlocks.length} Blocks',
-                          style: AppTextStyles.large.copyWith(
-                            color: AppColors.blue,
-                            fontWeight: FontWeight.bold,
+                          '${selectedBlocks.length}',
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.darkBlue,
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: 6),
                         Text(
-                          'selected',
-                          style: AppTextStyles.body.copyWith(
-                            color: AppColors.medium,
+                          '블록 선택됨',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.gray600,
                           ),
                         ),
                       ],
                     ),
-                    TextButton(
-                      onPressed: () {
+                    GestureDetector(
+                      onTap: () {
                         gridNotifier.clearBlocks();
                       },
-                      child: Text(
-                        'CLEAR',
-                        style: AppTextStyles.button.copyWith(
-                          color: AppColors.red,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: AppColors.red.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          '전체 삭제',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.red,
+                          ),
                         ),
                       ),
                     ),
@@ -179,34 +163,64 @@ class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
                 ),
               ),
 
-              // 하단 제출 버튼
+              // 토스 스타일 하단 제출 버튼
               SafeArea(
                 top: false,
                 child: Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     color: AppColors.white,
                     border: Border(
                       top: BorderSide(
-                        color: AppColors.buleGray.withValues(alpha: 0.2),
+                        color: AppColors.gray200,
                         width: 1,
                       ),
                     ),
                   ),
-                  child: GradientButton(
-                    label: 'Select blocks (${selectedBlocks.length}/pick)',
-                    icon: Icons.bolt,
-                    onPressed: () async {
+                  child: GestureDetector(
+                    onTap: () async {
                       // 로그인 체크
                       if (!isAuthenticated) {
-                        // 다이얼로그로 로그인 표시
                         await showLoginDialog(context);
                         return;
                       }
-
                       // 게임 참가 프로세스 시작
                       await _handleJoinGame(context, ref, selectedBlocks);
                     },
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 18),
+                      decoration: BoxDecoration(
+                        color: AppColors.darkBlue,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.darkBlue.withValues(alpha: 0.3),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.check_circle_outline_rounded,
+                            size: 22,
+                            color: AppColors.white,
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            '${selectedBlocks.length}개 블록으로 참가하기',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),

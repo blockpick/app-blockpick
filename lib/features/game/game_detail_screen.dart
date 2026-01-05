@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../models/game_model.dart';
@@ -13,7 +14,7 @@ import '../../components/minimap/grid_minimap.dart';
 import '../../widgets/zoom_controls.dart';
 import '../../utils/zoom_calculator.dart';
 
-/// 게임 상세 화면
+/// 게임 상세 화면 (토스 스타일)
 class GameDetailScreen extends ConsumerStatefulWidget {
   final String gameId;
 
@@ -28,6 +29,7 @@ class GameDetailScreen extends ConsumerStatefulWidget {
 
 class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
   int _selectedProductIndex = 0;
+  bool _isInfoExpanded = true;
 
   @override
   void initState() {
@@ -109,19 +111,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
         debugPrint('   - gameRound.imageUrl.isEmpty: ${gameRound.imageUrl.isEmpty}');
 
         return Scaffold(
-          backgroundColor: AppColors.deepWhite,
-          appBar: AppBar(
-            title: Text(gameRound.title),
-            backgroundColor: AppColors.white,
-            actions: [
-              IconButton(
-                icon: const Icon(LucideIcons.share2),
-                onPressed: () {
-                  // TODO: 공유 기능
-                },
-              ),
-            ],
-          ),
+          backgroundColor: AppColors.white,
           body: Stack(
             children: [
               // 배경 (Vibe의 경우 이미지 표시)
@@ -171,12 +161,20 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                 },
               ),
 
-              // 상단 정보 패널
+              // 토스 스타일 커스텀 헤더
               Positioned(
-                top: 16,
+                top: 0,
+                left: 0,
+                right: 0,
+                child: _buildTossHeader(gameRound),
+              ),
+
+              // 토스 스타일 정보 패널 (접기/펼치기 가능)
+              Positioned(
+                top: MediaQuery.of(context).padding.top + 56,
                 left: 16,
                 right: 16,
-                child: _buildInfoPanel(gameRound, game),
+                child: _buildTossInfoPanel(gameRound, game),
               ),
 
               // 하단 UI 요소들
@@ -241,168 +239,393 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
     );
   }
 
-  /// 상품 선택 버튼 (작은 아이콘 버튼)
+  /// 토스 스타일 상품 선택 버튼
   Widget _buildProductSelectorButton(Game game) {
     final selectedProduct = game.gameProducts![_selectedProductIndex];
+    final productCount = game.gameProducts!.length;
 
     return GestureDetector(
       onTap: () => _showProductSelector(game),
       child: Container(
-        width: 56,
-        height: 56,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF7C4DFF), Color(0xFF9B7EFF)],
-          ),
-          borderRadius: BorderRadius.circular(12),
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: AppColors.purple.withValues(alpha: 0.3),
-              blurRadius: 10,
+              color: AppColors.black.withValues(alpha: 0.1),
+              blurRadius: 12,
               offset: const Offset(0, 4),
             ),
           ],
         ),
-        child: Center(
-          child: selectedProduct.product.defaultImage != null
-              ? ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    selectedProduct.product.defaultImage!.replaceAll(' ', '%20'),
-                    width: 40,
-                    height: 40,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(
-                        LucideIcons.package,
-                        size: 28,
-                        color: AppColors.white,
-                      );
-                    },
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // 상품 이미지
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                width: 44,
+                height: 44,
+                color: AppColors.gray100,
+                child: selectedProduct.product.defaultImage != null
+                    ? Image.network(
+                        selectedProduct.product.defaultImage!.replaceAll(' ', '%20'),
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(
+                            Icons.inventory_2_outlined,
+                            size: 22,
+                            color: AppColors.gray400,
+                          );
+                        },
+                      )
+                    : const Icon(
+                        Icons.inventory_2_outlined,
+                        size: 22,
+                        color: AppColors.gray400,
+                      ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            // 상품 정보
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  selectedProduct.product.name,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.darkBlue,
                   ),
-                )
-              : const Icon(
-                  LucideIcons.package,
-                  size: 28,
-                  color: AppColors.white,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
+                const SizedBox(height: 2),
+                Text(
+                  '$productCount개 중 ${_selectedProductIndex + 1}번째',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: AppColors.gray500,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(width: 8),
+            // 변경 아이콘
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: AppColors.gray100,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(
+                Icons.swap_horiz_rounded,
+                size: 18,
+                color: AppColors.darkBlue,
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  /// 정보 패널
-  Widget _buildInfoPanel(GameRound game, Game gameData) {
+  /// 토스 스타일 커스텀 헤더
+  Widget _buildTossHeader(GameRound game) {
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.white.withValues(alpha: 0.95),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.buleGray),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
+      color: AppColors.white,
+      child: SafeArea(
+        bottom: false,
+        child: Container(
+          height: 56,
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Row(
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: _getTypeColor(game.type),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  _getTypeText(game.type),
-                  style: AppTextStyles.caption.copyWith(
-                    color: AppColors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
+              // 뒤로가기
+              IconButton(
+                onPressed: () => context.pop(),
+                icon: const Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  size: 22,
+                  color: AppColors.darkBlue,
                 ),
               ),
-              const Spacer(),
-              const Icon(LucideIcons.clock, size: 16, color: AppColors.red),
-              const SizedBox(width: 4),
-              Text(
-                game.timeLeft,
-                style: AppTextStyles.bodySmall.copyWith(
+
+              // 제목 + 타입 배지
+              Expanded(
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: _getTypeColor(game.type),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        _getTypeText(game.type),
+                        style: const TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.white,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        game.title,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.darkBlue,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // 액션 버튼들
+              IconButton(
+                onPressed: () {
+                  // TODO: 공유 기능
+                },
+                icon: const Icon(
+                  Icons.share_outlined,
+                  size: 22,
                   color: AppColors.darkBlue,
-                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  // TODO: 찜하기 기능
+                },
+                icon: const Icon(
+                  Icons.bookmark_border_rounded,
+                  size: 24,
+                  color: AppColors.darkBlue,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
-          Text(
-            game.title,
-            style: AppTextStyles.medium.copyWith(
-              color: AppColors.darkBlue,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 12),
-          _buildInfoRow(
-            LucideIcons.users,
-            'Participants',
-            '${game.participants} / ${game.maxParticipants}',
-          ),
-          const SizedBox(height: 8),
-          _buildInfoRow(
-            LucideIcons.trophy,
-            'Winners',
-            '${game.winners}명',
-          ),
-          const SizedBox(height: 8),
-          _buildInfoRow(
-            LucideIcons.coins,
-            'Entry Fee',
-            '₩${_formatNumber(game.currentPrice)}',
-          ),
-        ],
+        ),
       ),
     );
   }
 
-  /// 정보 행
-  Widget _buildInfoRow(IconData icon, String label, String value) {
-    return Row(
+  /// 토스 스타일 정보 패널 (접기/펼치기 가능)
+  Widget _buildTossInfoPanel(GameRound game, Game gameData) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _isInfoExpanded = !_isInfoExpanded;
+        });
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        padding: EdgeInsets.all(_isInfoExpanded ? 16 : 12),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.black.withValues(alpha: 0.08),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // 상단 요약 (항상 표시)
+            Row(
+              children: [
+                // 남은 시간
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: AppColors.red.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.schedule_rounded, size: 14, color: AppColors.red),
+                      const SizedBox(width: 4),
+                      Text(
+                        game.timeLeft,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.red,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                // 참가비
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: AppColors.gray100,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 16,
+                        height: 16,
+                        decoration: const BoxDecoration(
+                          color: AppColors.darkBlue,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'P',
+                            style: TextStyle(
+                              fontSize: 9,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '${game.currentPrice}',
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.darkBlue,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Spacer(),
+                // 접기/펼치기 아이콘
+                AnimatedRotation(
+                  turns: _isInfoExpanded ? 0.5 : 0,
+                  duration: const Duration(milliseconds: 300),
+                  child: Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    color: AppColors.gray500,
+                    size: 24,
+                  ),
+                ),
+              ],
+            ),
+
+            // 확장된 상세 정보
+            AnimatedCrossFade(
+              firstChild: const SizedBox.shrink(),
+              secondChild: Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Column(
+                  children: [
+                    // 구분선
+                    Container(
+                      height: 1,
+                      color: AppColors.gray200,
+                    ),
+                    const SizedBox(height: 16),
+                    // 정보 그리드
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildTossInfoItem(
+                            Icons.people_outline_rounded,
+                            '참가자',
+                            '${game.participants.toInt()}명',
+                          ),
+                        ),
+                        Container(
+                          width: 1,
+                          height: 40,
+                          color: AppColors.gray200,
+                        ),
+                        Expanded(
+                          child: _buildTossInfoItem(
+                            Icons.emoji_events_outlined,
+                            '당첨자',
+                            '${game.winners}명',
+                          ),
+                        ),
+                        Container(
+                          width: 1,
+                          height: 40,
+                          color: AppColors.gray200,
+                        ),
+                        Expanded(
+                          child: _buildTossInfoItem(
+                            Icons.grid_view_rounded,
+                            '그리드',
+                            '${game.gridWidth ?? 100}×${game.gridHeight ?? 100}',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              crossFadeState: _isInfoExpanded
+                  ? CrossFadeState.showSecond
+                  : CrossFadeState.showFirst,
+              duration: const Duration(milliseconds: 300),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 토스 스타일 정보 아이템
+  Widget _buildTossInfoItem(IconData icon, String label, String value) {
+    return Column(
       children: [
-        Icon(icon, size: 16, color: AppColors.blue),
-        const SizedBox(width: 8),
+        Icon(icon, size: 20, color: AppColors.gray500),
+        const SizedBox(height: 6),
         Text(
           label,
-          style: AppTextStyles.bodySmall.copyWith(color: AppColors.medium),
+          style: TextStyle(
+            fontSize: 11,
+            color: AppColors.gray500,
+          ),
         ),
-        const Spacer(),
+        const SizedBox(height: 2),
         Text(
           value,
-          style: AppTextStyles.bodySmall.copyWith(
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
             color: AppColors.darkBlue,
-            fontWeight: FontWeight.w600,
           ),
         ),
       ],
     );
   }
 
-  /// 참가 버튼
+  /// 토스 스타일 참가 버튼
   Widget _buildParticipateButton() {
     return Container(
       decoration: BoxDecoration(
-        gradient: AppColors.gradientBluePurplePink,
+        color: AppColors.darkBlue,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.blue.withValues(alpha: 0.3),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            color: AppColors.darkBlue.withValues(alpha: 0.3),
+            blurRadius: 16,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
@@ -412,27 +635,33 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
           onTap: () {
             // TODO: 참가 로직
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('게임 참가 기능은 곧 추가됩니다!'),
-                backgroundColor: AppColors.green,
+              SnackBar(
+                content: const Text('블록을 선택해주세요'),
+                backgroundColor: AppColors.darkBlue,
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
             );
           },
           borderRadius: BorderRadius.circular(16),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Icon(
-                  LucideIcons.zap,
-                  size: 24,
+                  Icons.touch_app_rounded,
+                  size: 22,
                   color: AppColors.white,
                 ),
-                const SizedBox(width: 12),
-                Text(
-                  'Participate Now',
-                  style: AppTextStyles.buttonLarge.copyWith(
+                const SizedBox(width: 10),
+                const Text(
+                  '블록 선택하고 참가하기',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
                     color: AppColors.white,
                   ),
                 ),
@@ -466,16 +695,6 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
       case GameType.vibe:
         return 'VIBE';
     }
-  }
-
-  /// 숫자 포맷팅
-  String _formatNumber(int number) {
-    if (number >= 1000000) {
-      return '${(number / 1000000).toStringAsFixed(1)}M';
-    } else if (number >= 1000) {
-      return '${(number / 1000).toStringAsFixed(0)}K';
-    }
-    return number.toString();
   }
 
   /// 하단 UI 요소들 (상품 선택, 미니맵, 줌 컨트롤, 참가 버튼)

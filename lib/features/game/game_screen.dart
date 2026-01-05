@@ -269,40 +269,58 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     );
   }
 
-  /// 선택 수량 배지 (왼쪽 상단)
+  /// 토스 스타일 선택 수량 배지 (왼쪽 상단)
   Widget _buildSelectionBadge(int selected, int max) {
+    final isComplete = selected >= max;
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.white.withValues(alpha: 0.95),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: selected >= max ? AppColors.green : AppColors.blue,
-          width: 2,
-        ),
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
             color: AppColors.black.withValues(alpha: 0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            LucideIcons.checkSquare,
-            size: 16,
-            color: selected >= max ? AppColors.green : AppColors.blue,
+          // 체크 아이콘
+          Container(
+            width: 20,
+            height: 20,
+            decoration: BoxDecoration(
+              color: isComplete
+                  ? AppColors.green.withValues(alpha: 0.15)
+                  : AppColors.blue.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Icon(
+              isComplete ? Icons.check_rounded : Icons.touch_app_rounded,
+              size: 14,
+              color: isComplete ? AppColors.green : AppColors.blue,
+            ),
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 8),
+          // 카운트
           Text(
-            '$selected/$max',
-            style: AppTextStyles.bodySmall.copyWith(
-              color: AppColors.darkBlue,
+            '$selected',
+            style: TextStyle(
+              fontSize: 16,
               fontWeight: FontWeight.w700,
+              color: isComplete ? AppColors.green : AppColors.blue,
+            ),
+          ),
+          Text(
+            '/$max',
+            style: TextStyle(
               fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: AppColors.gray500,
             ),
           ),
         ],
@@ -754,9 +772,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                       _tutorialCoachMark?.next();
                     }
 
-                    ref
-                        .read(gridStateProvider(_gridConfig!).notifier)
-                        .showBottomSheet();
+                    // 블록 선택만 하고, 바텀시트는 배지/FAB 탭으로 열림
                   },
                 );
               },
@@ -767,19 +783,16 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           if (_sections.isNotEmpty)
             Positioned.fill(child: _buildSectionOverlay(gridState)),
 
-          // 바텀시트
-          if (selectedCount > 0 && gridState.showBottomSheet)
-            SelectedBlocksSheet(
-              gridConfig: _gridConfig!,
-              game: _game,
-              fullGame: _fullGame,
-            ),
+          // 바텀시트는 showModalBottomSheet로 표시
 
-          // 선택 수량 배지 (왼쪽 상단)
+          // 선택 수량 배지 (왼쪽 상단) - 탭하면 바텀시트 열림
           Positioned(
             top: 16,
             left: 16,
-            child: _buildSelectionBadge(selectedCount, _pickMax),
+            child: GestureDetector(
+              onTap: selectedCount > 0 ? _showSelectedBlocksModal : null,
+              child: _buildSelectionBadge(selectedCount, _pickMax),
+            ),
           ),
 
           // 상품 선택 버튼 (우상단) - SELECT 게임인 경우
@@ -795,9 +808,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
           // 미니맵 (좌하단)
           Positioned(
-            bottom: selectedCount > 0 && gridState.showBottomSheet
-                ? 350 + bottomPadding + 16
-                : 100 + bottomPadding + 16,
+            bottom: 100 + bottomPadding + 16,
             left: 16,
             child: GridMinimap(
               key: _minimapKey,
@@ -815,9 +826,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           // Zoom Controls (우하단)
           if (_zoomSpec != null)
             Positioned(
-              bottom: selectedCount > 0 && gridState.showBottomSheet
-                  ? 350 + bottomPadding + 16
-                  : 100 + bottomPadding + 16,
+              bottom: 100 + bottomPadding + 16,
               right: 16,
               child: ZoomControls(
                 key: _zoomControlKey,
@@ -827,6 +836,17 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                 maxLevel: _zoomSpec!.maxLevel,
                 minLevel: _zoomSpec!.minLevel,
                 lodLevel: gridState.lodLevel,
+              ),
+            ),
+
+          // FAB - 선택된 블록 보기 (선택된 블록이 있을 때만)
+          if (selectedCount > 0)
+            Positioned(
+              bottom: bottomPadding + 24,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: _buildSelectionFAB(selectedCount, _pickMax),
               ),
             ),
         ],
@@ -853,63 +873,112 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     );
   }
 
-  /// AppBar 구성
+  /// 토스 스타일 AppBar 구성
   PreferredSizeWidget _buildAppBar(BuildContext context) {
-    return AppBar(
-      title: Text(_game?.title ?? 'BlockPick Game'),
-      backgroundColor: AppColors.white,
-      elevation: 0,
-      leading: IconButton(
-        icon: const Icon(LucideIcons.chevronLeft, color: AppColors.darkBlue),
-        onPressed: () => context.go('/'),
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(56),
+      child: Container(
+        color: AppColors.white,
+        child: SafeArea(
+          bottom: false,
+          child: Container(
+            height: 56,
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Row(
+              children: [
+                // 뒤로가기
+                IconButton(
+                  onPressed: () => context.go('/'),
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    size: 22,
+                    color: AppColors.darkBlue,
+                  ),
+                ),
+
+                // 제목
+                Expanded(
+                  child: Text(
+                    _game?.title ?? 'BlockPick Game',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.darkBlue,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+
+                // 셰이더 변경 버튼
+                PopupMenuButton<String>(
+                  icon: Icon(
+                    Icons.palette_outlined,
+                    size: 22,
+                    color: AppColors.gray600,
+                  ),
+                  onSelected: (String shader) {
+                    debugPrint('🎨 Shader selected: $shader');
+                    setState(() {
+                      _currentShader = shader;
+                    });
+                    debugPrint('✅ State updated with new shader');
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  itemBuilder: (BuildContext context) => [
+                    _buildShaderMenuItem('shaders/glow_effect.frag', '강착 디스크'),
+                    _buildShaderMenuItem('shaders/flowing_waves.frag', '파도'),
+                    _buildShaderMenuItem('shaders/ether.frag', '에테르'),
+                    _buildShaderMenuItem('shaders/shooting_stars.frag', '유성'),
+                    _buildShaderMenuItem('shaders/wavy_lines.frag', '물결선'),
+                    _buildShaderMenuItem('shaders/aurora.frag', '오로라'),
+                  ],
+                ),
+
+                // 튜토리얼 다시 보기
+                IconButton(
+                  icon: Icon(
+                    Icons.help_outline_rounded,
+                    size: 22,
+                    color: AppColors.gray600,
+                  ),
+                  onPressed: () {
+                    _tutorialCoachMark?.finish();
+                    _showTutorial();
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
-      actions: [
-        // 셰이더 변경 버튼
-        PopupMenuButton<String>(
-          icon: const Icon(LucideIcons.palette, color: AppColors.blue),
-          onSelected: (String shader) {
-            debugPrint('🎨 Shader selected: $shader');
-            setState(() {
-              _currentShader = shader;
-            });
-            debugPrint('✅ State updated with new shader');
-          },
-          itemBuilder: (BuildContext context) => [
-            const PopupMenuItem(
-              value: 'shaders/glow_effect.frag',
-              child: Text('Accretion (강착 디스크)'),
+    );
+  }
+
+  /// 셰이더 메뉴 아이템
+  PopupMenuItem<String> _buildShaderMenuItem(String value, String label) {
+    final isSelected = _currentShader == value;
+    return PopupMenuItem<String>(
+      value: value,
+      child: Row(
+        children: [
+          if (isSelected)
+            const Icon(Icons.check_rounded, size: 18, color: AppColors.blue)
+          else
+            const SizedBox(width: 18),
+          const SizedBox(width: 8),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+              color: isSelected ? AppColors.blue : AppColors.darkBlue,
             ),
-            const PopupMenuItem(
-              value: 'shaders/flowing_waves.frag',
-              child: Text('Flowing Waves (파도)'),
-            ),
-            const PopupMenuItem(
-              value: 'shaders/ether.frag',
-              child: Text('Ether (에테르)'),
-            ),
-            const PopupMenuItem(
-              value: 'shaders/shooting_stars.frag',
-              child: Text('Shooting Stars (유성)'),
-            ),
-            const PopupMenuItem(
-              value: 'shaders/wavy_lines.frag',
-              child: Text('Wavy Lines (물결선)'),
-            ),
-            const PopupMenuItem(
-              value: 'shaders/aurora.frag',
-              child: Text('Aurora (오로라)'),
-            ),
-          ],
-        ),
-        // 튜토리얼 다시 보기
-        IconButton(
-          icon: const Icon(LucideIcons.helpCircle, color: AppColors.blue),
-          onPressed: () {
-            _tutorialCoachMark?.finish();
-            _showTutorial();
-          },
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -943,7 +1012,93 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     );
   }
 
-  /// 상품 선택 버튼 (AppBar용 - 작고 배지 포함)
+  /// 토스 스타일 FAB - 선택된 블록 보기
+  Widget _buildSelectionFAB(int selected, int max) {
+    return GestureDetector(
+      onTap: _showSelectedBlocksModal,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        decoration: BoxDecoration(
+          color: AppColors.darkBlue,
+          borderRadius: BorderRadius.circular(32),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.darkBlue.withValues(alpha: 0.4),
+              blurRadius: 16,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // 체크 아이콘
+            Container(
+              width: 24,
+              height: 24,
+              decoration: BoxDecoration(
+                color: AppColors.white.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(
+                Icons.check_rounded,
+                size: 16,
+                color: AppColors.white,
+              ),
+            ),
+            const SizedBox(width: 12),
+            // 텍스트
+            Text(
+              '$selected개 선택됨',
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: AppColors.white,
+              ),
+            ),
+            const SizedBox(width: 8),
+            // 화살표
+            const Icon(
+              Icons.keyboard_arrow_up_rounded,
+              size: 20,
+              color: AppColors.white,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 선택된 블록 바텀시트 모달 표시
+  bool _isModalShowing = false;
+
+  void _showSelectedBlocksModal() {
+    if (_gridConfig == null) return;
+
+    final selectedCount = ref.read(selectedBlockCountProvider(_gridConfig!));
+    if (selectedCount == 0) return;
+
+    // 이미 모달이 열려있으면 무시
+    if (_isModalShowing) return;
+
+    _isModalShowing = true;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.black.withValues(alpha: 0.3),
+      builder: (context) => SelectedBlocksSheet(
+        gridConfig: _gridConfig!,
+        game: _game,
+        fullGame: _fullGame,
+      ),
+    ).whenComplete(() {
+      _isModalShowing = false;
+    });
+  }
+
+  /// 토스 스타일 상품 선택 버튼 (우상단)
   Widget _buildCompactProductSelector() {
     if (_fullGame == null ||
         _fullGame!.gameProducts == null ||
@@ -952,59 +1107,72 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     }
 
     final productCount = _fullGame!.gameProducts!.length;
+    final selectedProduct = _fullGame!.gameProducts![_selectedProductIndex];
 
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        GestureDetector(
-          onTap: _showProductSelector,
-          child: Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF7C4DFF), Color(0xFF9B7EFF)],
-              ),
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.purple.withValues(alpha: 0.2),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+    return GestureDetector(
+      onTap: _showProductSelector,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.black.withValues(alpha: 0.1),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
             ),
-            child: const Center(
-              child: Icon(LucideIcons.repeat, size: 22, color: AppColors.white),
-            ),
-          ),
+          ],
         ),
-        // 상품 개수 배지
-        if (productCount > 1)
-          Positioned(
-            top: -4,
-            right: -4,
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: AppColors.red,
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.white, width: 2),
-              ),
-              constraints: const BoxConstraints(minWidth: 20, minHeight: 20),
-              child: Center(
-                child: Text(
-                  '$productCount',
-                  style: const TextStyle(
-                    color: AppColors.white,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // 상품 썸네일
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                width: 32,
+                height: 32,
+                color: AppColors.gray100,
+                child: selectedProduct.product.defaultImage != null
+                    ? Image.network(
+                        selectedProduct.product.defaultImage!.replaceAll(' ', '%20'),
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(
+                            Icons.inventory_2_outlined,
+                            size: 16,
+                            color: AppColors.gray400,
+                          );
+                        },
+                      )
+                    : const Icon(
+                        Icons.inventory_2_outlined,
+                        size: 16,
+                        color: AppColors.gray400,
+                      ),
               ),
             ),
-          ),
-      ],
+            const SizedBox(width: 8),
+            // 선택 인덱스
+            Text(
+              '${_selectedProductIndex + 1}/$productCount',
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: AppColors.darkBlue,
+              ),
+            ),
+            const SizedBox(width: 4),
+            // 변경 아이콘
+            Icon(
+              Icons.swap_horiz_rounded,
+              size: 18,
+              color: AppColors.gray500,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
