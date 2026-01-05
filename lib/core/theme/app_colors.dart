@@ -24,6 +24,9 @@ class AppColors {
   /// Yellow - 경고, 시간 제한 표시
   static const Color yellow = Color(0xFFF59E0B);
 
+  /// Orange - 경고, 만료 알림
+  static const Color orange = Color(0xFFFF9500);
+
   /// White - 배경, 텍스트
   static const Color white = Color(0xFFFFFFFF);
 

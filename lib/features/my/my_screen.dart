@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 
 import '../../core/auth/domain/providers/auth_provider.dart';
 import '../../core/theme/app_colors.dart';
+import '../../components/common/common_app_bar.dart';
 
 /// 토스 스타일 MY 화면 (마이페이지)
 class MyScreen extends ConsumerWidget {
@@ -23,12 +24,20 @@ class MyScreen extends ConsumerWidget {
       ),
       child: Scaffold(
         backgroundColor: AppColors.gray100,
-        body: CustomScrollView(
-          slivers: [
-            // 앱바
-            _buildAppBar(context),
+        body: SafeArea(
+          child: CustomScrollView(
+            slivers: [
+              // 앱바
+              SliverToBoxAdapter(
+                child: CommonAppBar(
+                  title: 'My',
+                  trailing: SettingsButton(
+                    onTap: () => context.push('/settings'),
+                  ),
+                ),
+              ),
 
-            // 본문
+              // 본문
             SliverToBoxAdapter(
               child: Column(
                 children: [
@@ -81,39 +90,9 @@ class MyScreen extends ConsumerWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAppBar(BuildContext context) {
-    return SliverAppBar(
-      floating: true,
-      snap: true,
-      elevation: 0,
-      backgroundColor: AppColors.gray100,
-      surfaceTintColor: Colors.transparent,
-      title: const Text(
-        'MY',
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
-          color: AppColors.darkBlue,
-        ),
-      ),
-      actions: [
-        IconButton(
-          onPressed: () {
-            context.push('/settings');
-          },
-          icon: Icon(
-            Icons.settings_rounded,
-            color: AppColors.darkBlue,
-            size: 24,
           ),
         ),
-        const SizedBox(width: 8),
-      ],
+      ),
     );
   }
 

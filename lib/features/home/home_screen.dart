@@ -8,6 +8,7 @@ import '../../models/game_round_model.dart';
 import '../../providers/game_provider.dart';
 import '../../widgets/horizontal_game_card.dart';
 import '../optimal/optimal_game_list_screen.dart';
+import '../../components/common/common_app_bar.dart';
 
 /// 게임 화면 (SC-009 디자인)
 class HomeScreen extends ConsumerStatefulWidget {
@@ -56,83 +57,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final userBalance = authState.valueOrNull?.user?.balance?.toInt() ?? 0;
 
     return Scaffold(
-      backgroundColor: AppColors.white,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // 헤더 - "Game" + 포인트
-          _buildHeader(userBalance),
+      backgroundColor: AppColors.gray100,
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 헤더 - "Event" + 포인트
+            CommonAppBar(
+              title: 'Event',
+              trailing: PointBadge(
+                balance: userBalance,
+                onTap: () {
+                  // TODO: 포인트 충전 화면으로 이동
+                },
+              ),
+            ),
 
-          // 탭
-          _buildTabs(),
+            // 탭
+            _buildTabs(),
 
           // 콘텐츠
           Expanded(
             child: _buildContent(),
           ),
         ],
+        ),
       ),
       // FAB - 당첨자 내역
       floatingActionButton: _buildFAB(),
-    );
-  }
-
-  /// 헤더 - "Game" + 포인트
-  Widget _buildHeader(int balance) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text(
-            'Game',
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.w800,
-              color: AppColors.darkBlue,
-            ),
-          ),
-          // 포인트 표시
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: AppColors.gray100,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 18,
-                  height: 18,
-                  decoration: BoxDecoration(
-                    color: AppColors.darkBlue,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'P',
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  _formatNumber(balance),
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.darkBlue,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -374,12 +326,5 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
     );
-  }
-
-  String _formatNumber(int number) {
-    if (number >= 1000) {
-      return '${(number / 1000).toStringAsFixed(1)}K';
-    }
-    return number.toString();
   }
 }

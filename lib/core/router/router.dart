@@ -42,6 +42,7 @@ import '../../features/my/pages/refund_screen.dart';
 import '../../features/my/pages/coupon_screen.dart';
 import '../../features/my/pages/announcement_screen.dart';
 import '../../features/my/pages/usage_guide_screen.dart';
+import '../../features/notification/notification_screen.dart';
 import '../auth/domain/providers/auth_provider.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -367,6 +368,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/my/usage-guide',
         builder: (context, state) => const UsageGuideScreen(),
+      ),
+
+      // ============ 알림 ============
+      GoRoute(
+        path: '/notifications',
+        builder: (context, state) => const NotificationScreen(),
       ),
 
       // ============ E2E 테스트 ============

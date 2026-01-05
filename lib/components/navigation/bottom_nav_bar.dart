@@ -1,66 +1,68 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import '../../core/theme/app_colors.dart';
 
-/// 하단 네비게이션 바
+/// SC-008 디자인 하단 네비게이션 바
+/// Home / Shopping / Event / My (4개 탭)
 class BottomNavBar extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
+  final bool hasEventNotification; // Event 탭 알림 뱃지
 
   const BottomNavBar({
     super.key,
     required this.currentIndex,
     required this.onTap,
+    this.hasEventNotification = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.deepWhite,
+        color: AppColors.white,
         border: Border(
           top: BorderSide(
-            color: AppColors.buleGray.withOpacity(0.3),
+            color: AppColors.gray200,
             width: 1,
           ),
         ),
       ),
       child: SafeArea(
-        child: SizedBox(
-          height: 70,
+        top: false,
+        child: Container(
+          height: 60,
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _NavItem(
-                icon: LucideIcons.home,
-                label: 'HOME',
+                icon: Icons.home_outlined,
+                activeIcon: Icons.home_rounded,
+                label: 'Home',
                 isSelected: currentIndex == 0,
                 onTap: () => onTap(0),
               ),
               _NavItem(
-                icon: LucideIcons.target,
-                label: 'My Pick',
+                icon: Icons.shopping_bag_outlined,
+                activeIcon: Icons.shopping_bag_rounded,
+                label: 'Shopping',
                 isSelected: currentIndex == 1,
                 onTap: () => onTap(1),
               ),
-              // 중앙 PICK 버튼 (게임 목록 - 다른 것보다 크게)
-              _CenterNavItem(
-                icon: LucideIcons.grid,
-                label: 'PICK',
+              _NavItem(
+                icon: Icons.favorite_outline_rounded,
+                activeIcon: Icons.favorite_rounded,
+                label: 'Event',
                 isSelected: currentIndex == 2,
                 onTap: () => onTap(2),
+                showBadge: hasEventNotification,
               ),
               _NavItem(
-                icon: LucideIcons.trophy,
-                label: 'Winners',
+                icon: Icons.person_outline_rounded,
+                activeIcon: Icons.person_rounded,
+                label: 'My',
                 isSelected: currentIndex == 3,
                 onTap: () => onTap(3),
-              ),
-              _NavItem(
-                icon: LucideIcons.shoppingBag,
-                label: 'MALL',
-                isSelected: currentIndex == 4,
-                onTap: () => onTap(4),
               ),
             ],
           ),
@@ -70,101 +72,81 @@ class BottomNavBar extends StatelessWidget {
   }
 }
 
-/// 일반 네비게이션 아이템
+/// 네비게이션 아이템
 class _NavItem extends StatelessWidget {
   final IconData icon;
+  final IconData activeIcon;
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
+  final bool showBadge;
 
   const _NavItem({
     required this.icon,
+    required this.activeIcon,
     required this.label,
     required this.isSelected,
     required this.onTap,
+    this.showBadge = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: InkWell(
+      child: GestureDetector(
         onTap: onTap,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 24,
-              color: isSelected ? AppColors.blue : AppColors.medium,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                color: isSelected ? AppColors.blue : AppColors.medium,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// 중앙 네비게이션 아이템 (PLAY 버튼 - 다른 것보다 크고 눈에 띄게)
-class _CenterNavItem extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _CenterNavItem({
-    required this.icon,
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: InkWell(
-        onTap: onTap,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 56,
-              height: 56,
-              decoration: BoxDecoration(
-                gradient: isSelected
-                    ? AppColors.gradientBluePurplePink
-                    : LinearGradient(
-                        colors: [
-                          AppColors.blue.withOpacity(0.8),
-                          AppColors.blue.withOpacity(0.8),
-                        ],
-                      ),
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.blue.withOpacity(0.3),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+        behavior: HitTestBehavior.opaque,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Icon(
+                    isSelected ? activeIcon : icon,
+                    size: 24,
+                    color: isSelected ? AppColors.darkBlue : AppColors.gray400,
                   ),
+                  // 알림 뱃지 (빨간 점)
+                  if (showBadge)
+                    Positioned(
+                      right: -4,
+                      top: -2,
+                      child: Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          color: AppColors.red,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
                 ],
               ),
-              child: Center(
-                child: Icon(
-                  icon,
-                  size: 28,
-                  color: AppColors.white,
+              const SizedBox(height: 4),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                  color: isSelected ? AppColors.darkBlue : AppColors.gray400,
                 ),
               ),
-            ),
-          ],
+              // 선택된 탭 아래 인디케이터 라인
+              const SizedBox(height: 4),
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: isSelected ? 16 : 0,
+                height: 2,
+                decoration: BoxDecoration(
+                  color: AppColors.darkBlue,
+                  borderRadius: BorderRadius.circular(1),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

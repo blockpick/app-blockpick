@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -72,12 +71,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   }
 
   Future<bool> _hasInternetConnection() async {
-    try {
-      final result = await InternetAddress.lookup('google.com');
-      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
-    } on SocketException catch (_) {
-      return false;
-    }
+    final connectivityResult = await Connectivity().checkConnectivity();
+    return connectivityResult.isNotEmpty &&
+        connectivityResult.first != ConnectivityResult.none;
   }
 
   Future<void> _checkNetworkAndProceed() async {
