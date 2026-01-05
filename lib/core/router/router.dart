@@ -28,6 +28,20 @@ import '../../features/game/game_screen.dart';
 import '../../features/game/screens/game_join_test_screen.dart';
 import '../../features/optimal/optimal_game_screen.dart';
 import '../../features/settings/settings_screen.dart';
+import '../../features/settings/pages/profile_edit_screen.dart';
+import '../../features/settings/pages/password_change_screen.dart';
+import '../../features/settings/pages/terms_screen.dart';
+import '../../features/settings/pages/privacy_policy_screen.dart';
+import '../../features/settings/pages/customer_service_screen.dart';
+import '../../features/my/pages/game_history_screen.dart';
+import '../../features/my/pages/order_history_screen.dart';
+import '../../features/my/pages/winning_history_screen.dart';
+import '../../features/my/pages/transaction_screen.dart';
+import '../../features/my/pages/charge_screen.dart';
+import '../../features/my/pages/refund_screen.dart';
+import '../../features/my/pages/coupon_screen.dart';
+import '../../features/my/pages/announcement_screen.dart';
+import '../../features/my/pages/usage_guide_screen.dart';
 import '../auth/domain/providers/auth_provider.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -295,6 +309,64 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/settings',
         builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: '/settings/profile',
+        builder: (context, state) => const ProfileEditScreen(),
+      ),
+      GoRoute(
+        path: '/settings/password',
+        builder: (context, state) => const PasswordChangeScreen(),
+      ),
+      GoRoute(
+        path: '/settings/terms',
+        builder: (context, state) => const TermsScreen(),
+      ),
+      GoRoute(
+        path: '/settings/privacy',
+        builder: (context, state) => const PrivacyPolicyScreen(),
+      ),
+      GoRoute(
+        path: '/settings/customer-service',
+        builder: (context, state) => const CustomerServiceScreen(),
+      ),
+
+      // ============ MY 서브 페이지 ============
+      GoRoute(
+        path: '/my/game-history',
+        builder: (context, state) => const GameHistoryScreen(),
+      ),
+      GoRoute(
+        path: '/my/order-history',
+        builder: (context, state) => const OrderHistoryScreen(),
+      ),
+      GoRoute(
+        path: '/my/winning-history',
+        builder: (context, state) => const WinningHistoryScreen(),
+      ),
+      GoRoute(
+        path: '/my/transactions',
+        builder: (context, state) => const TransactionScreen(),
+      ),
+      GoRoute(
+        path: '/my/charge',
+        builder: (context, state) => const ChargeScreen(),
+      ),
+      GoRoute(
+        path: '/my/refund',
+        builder: (context, state) => const RefundScreen(),
+      ),
+      GoRoute(
+        path: '/my/coupon',
+        builder: (context, state) => const CouponScreen(),
+      ),
+      GoRoute(
+        path: '/my/announcements',
+        builder: (context, state) => const AnnouncementScreen(),
+      ),
+      GoRoute(
+        path: '/my/usage-guide',
+        builder: (context, state) => const UsageGuideScreen(),
       ),
 
       // ============ E2E 테스트 ============

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/auth/domain/providers/auth_provider.dart';
 import '../../core/theme/app_colors.dart';
+import '../../providers/notification_settings_provider.dart';
 
 /// 토스 스타일 설정 화면
 class SettingsScreen extends ConsumerWidget {
@@ -13,6 +14,8 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authProvider);
     final isAuthenticated = authState.valueOrNull?.isAuthenticated ?? false;
+    final notificationSettings = ref.watch(notificationSettingsProvider).valueOrNull ??
+        const NotificationSettings();
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark.copyWith(
@@ -45,17 +48,13 @@ class SettingsScreen extends ConsumerWidget {
                 _SettingItem(
                   icon: Icons.person_outline_rounded,
                   title: '프로필 수정',
-                  onTap: () {
-                    // TODO: 프로필 수정
-                  },
+                  onTap: () => context.push('/settings/profile'),
                 ),
                 _buildDivider(),
                 _SettingItem(
                   icon: Icons.lock_outline_rounded,
                   title: '비밀번호 변경',
-                  onTap: () {
-                    // TODO: 비밀번호 변경
-                  },
+                  onTap: () => context.push('/settings/password'),
                 ),
               ]),
               const SizedBox(height: 24),
@@ -68,18 +67,18 @@ class SettingsScreen extends ConsumerWidget {
               _SettingToggleItem(
                 icon: Icons.notifications_none_rounded,
                 title: '푸시 알림',
-                value: true,
+                value: notificationSettings.pushEnabled,
                 onChanged: (value) {
-                  // TODO: 푸시 알림 설정
+                  ref.read(notificationSettingsProvider.notifier).setPushEnabled(value);
                 },
               ),
               _buildDivider(),
               _SettingToggleItem(
                 icon: Icons.campaign_outlined,
                 title: '마케팅 수신 동의',
-                value: false,
+                value: notificationSettings.marketingEnabled,
                 onChanged: (value) {
-                  // TODO: 마케팅 수신 동의
+                  ref.read(notificationSettingsProvider.notifier).setMarketingEnabled(value);
                 },
               ),
             ]),
@@ -106,25 +105,19 @@ class SettingsScreen extends ConsumerWidget {
               _SettingItem(
                 icon: Icons.description_outlined,
                 title: '이용약관',
-                onTap: () {
-                  // TODO: 이용약관
-                },
+                onTap: () => context.push('/settings/terms'),
               ),
               _buildDivider(),
               _SettingItem(
                 icon: Icons.privacy_tip_outlined,
                 title: '개인정보처리방침',
-                onTap: () {
-                  // TODO: 개인정보처리방침
-                },
+                onTap: () => context.push('/settings/privacy'),
               ),
               _buildDivider(),
               _SettingItem(
                 icon: Icons.headset_mic_outlined,
                 title: '고객센터',
-                onTap: () {
-                  // TODO: 고객센터
-                },
+                onTap: () => context.push('/settings/customer-service'),
               ),
             ]),
             const SizedBox(height: 24),

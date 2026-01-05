@@ -258,9 +258,7 @@ class MyScreen extends ConsumerWidget {
             ),
             child: IconButton(
               padding: EdgeInsets.zero,
-              onPressed: () {
-                // TODO: 프로필 수정
-              },
+              onPressed: () => context.push('/settings/profile'),
               icon: Icon(
                 Icons.chevron_right_rounded,
                 color: AppColors.gray600,
@@ -299,9 +297,7 @@ class MyScreen extends ConsumerWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () {
-                  // TODO: 충전 내역
-                },
+                onTap: () => context.push('/my/transactions'),
                 child: Row(
                   children: [
                     Text(
@@ -367,30 +363,22 @@ class MyScreen extends ConsumerWidget {
           _buildQuickActionItem(
             icon: Icons.add_rounded,
             label: '충전',
-            onTap: () {
-              // TODO: 충전
-            },
+            onTap: () => context.push('/my/charge'),
           ),
           _buildQuickActionItem(
             icon: Icons.account_balance_wallet_outlined,
             label: '환불',
-            onTap: () {
-              // TODO: 환불
-            },
+            onTap: () => context.push('/my/refund'),
           ),
           _buildQuickActionItem(
             icon: Icons.receipt_long_rounded,
             label: '거래내역',
-            onTap: () {
-              // TODO: 거래내역
-            },
+            onTap: () => context.push('/my/transactions'),
           ),
           _buildQuickActionItem(
             icon: Icons.card_giftcard_rounded,
             label: '쿠폰',
-            onTap: () {
-              // TODO: 쿠폰
-            },
+            onTap: () => context.push('/my/coupon'),
           ),
         ],
       ),
@@ -444,54 +432,50 @@ class MyScreen extends ConsumerWidget {
         children: [
           if (isAuthenticated) ...[
             _buildMenuItem(
+              context,
               icon: Icons.videogame_asset_rounded,
               title: '게임 참여 내역',
               subtitle: '참여한 게임과 결과 확인',
-              onTap: () {
-                // TODO: 게임 참여 내역
-              },
+              onTap: () => context.push('/my/game-history'),
             ),
             _buildMenuDivider(),
             _buildMenuItem(
+              context,
               icon: Icons.shopping_bag_rounded,
               title: '쇼핑 주문 내역',
               subtitle: '주문 현황 및 배송 조회',
-              onTap: () {
-                // TODO: 쇼핑 주문 내역
-              },
+              onTap: () => context.push('/my/order-history'),
             ),
             _buildMenuDivider(),
             _buildMenuItem(
+              context,
               icon: Icons.emoji_events_rounded,
               title: '당첨 내역',
               subtitle: '나의 당첨 기록',
-              onTap: () {
-                // TODO: 당첨 내역
-              },
+              onTap: () => context.push('/my/winning-history'),
             ),
             _buildMenuDivider(),
           ],
           _buildMenuItem(
+            context,
             icon: Icons.campaign_rounded,
             title: '공지사항',
-            onTap: () {
-              // TODO: 공지사항
-            },
+            onTap: () => context.push('/my/announcements'),
           ),
           _buildMenuDivider(),
           _buildMenuItem(
+            context,
             icon: Icons.info_outline_rounded,
             title: '이용 안내',
-            onTap: () {
-              // TODO: 이용 안내
-            },
+            onTap: () => context.push('/my/usage-guide'),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildMenuItem({
+  Widget _buildMenuItem(
+    BuildContext context, {
     required IconData icon,
     required String title,
     String? subtitle,
