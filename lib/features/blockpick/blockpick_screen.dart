@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import '../../core/theme/app_colors.dart';
 import '../../components/navigation/bottom_nav_bar.dart';
 import '../../components/navigation/app_drawer.dart';
@@ -10,7 +9,7 @@ import '../../components/app_bars/sub_app_bar.dart';
 import '../../models/platform_mode.dart';
 import '../../providers/platform_mode_provider.dart';
 import '../home/home_screen.dart';
-import '../home/new_home_screen.dart';
+import '../home/toss_home_screen.dart';
 import '../my_pick/my_pick_screen.dart';
 import '../winners/winners_screen.dart';
 import '../my/my_screen.dart';
@@ -31,13 +30,13 @@ class _BlockpickScreenState extends ConsumerState<BlockpickScreen> {
   int _currentIndex = 0; // 기본 탭: HOME (새로운 프리미엄 디자인)
 
   // BlockPick 앱 화면들
-  final List<Widget> _blockpickScreens = const [
-    NewHomeScreen(),          // 0: HOME (새로운 디자인)
-    MyPickScreen(),           // 1: My Pick (참여한 게임)
-    HomeScreen(),             // 2: PICK (가운데 큰 버튼 - 게임 목록)
-    WinnersScreen(),          // 3: Winners (기획 중)
-    MallScreen(),             // 4: MALL (쇼핑몰)
-    MyScreen(),               // 5: MY (마이페이지)
+  final List<Widget> _blockpickScreens = [
+    const TossHomeScreen(),   // 0: HOME (토스 스타일 디자인)
+    const MyPickScreen(),     // 1: My Pick (참여한 게임)
+    const HomeScreen(),       // 2: PICK (가운데 큰 버튼 - 게임 목록)
+    const WinnersScreen(),    // 3: Winners (기획 중)
+    const MallScreen(),       // 4: MALL (쇼핑몰)
+    const MyScreen(),         // 5: MY (마이페이지)
   ];
 
   @override
@@ -83,15 +82,19 @@ class _BlockpickScreenState extends ConsumerState<BlockpickScreen> {
     );
   }
 
-  PreferredSizeWidget _buildAppBar(PlatformMode platformMode) {
+  PreferredSizeWidget? _buildAppBar(PlatformMode platformMode) {
+    // HOME 탭(index 0)은 TossHomeScreen이 자체 SliverAppBar를 가지므로 AppBar 숨김
+    if (platformMode == PlatformMode.blockpick && _currentIndex == 0) {
+      return null;
+    }
+
     // 메인 페이지 - 플랫폼 선택 드롭다운 표시
     // 1. OFFICIAL 모드
     // 2. MALL 모드
-    // 3. BlockPick의 HOME 탭 (index 0)
-    // 4. BlockPick의 PICK 탭 (index 2 - 가운데 큰 버튼)
+    // 3. BlockPick의 PICK 탭 (index 2 - 가운데 큰 버튼)
     final bool isMainPage = platformMode == PlatformMode.official ||
         platformMode == PlatformMode.mall ||
-        (platformMode == PlatformMode.blockpick && (_currentIndex == 0 || _currentIndex == 2));
+        (platformMode == PlatformMode.blockpick && _currentIndex == 2);
 
     if (isMainPage) {
       return MainAppBar(

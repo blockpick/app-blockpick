@@ -1,0 +1,85 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../widgets/auth_button.dart';
+
+/// 회원가입 완료 화면
+class SignupCompleteScreen extends ConsumerWidget {
+  const SignupCompleteScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      backgroundColor: AppColors.white,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            children: [
+              const Spacer(flex: 2),
+
+              // 축하 아이콘
+              Container(
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  gradient: AppColors.gradientBlue,
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.blue.withValues(alpha: 0.3),
+                      blurRadius: 30,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.check_rounded,
+                  size: 64,
+                  color: Colors.white,
+                ),
+              ),
+
+              const SizedBox(height: 40),
+
+              // 축하 메시지
+              const Text(
+                '가입 완료!',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.darkBlue,
+                  letterSpacing: -0.5,
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              Text(
+                '블록픽에 오신 것을 환영해요\n지금 바로 게임을 시작해보세요',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.gray600,
+                  height: 1.5,
+                ),
+                textAlign: TextAlign.center,
+              ),
+
+              const Spacer(flex: 3),
+
+              // 시작하기 버튼
+              AuthButton(
+                text: '시작하기',
+                onPressed: () => context.go('/'),
+              ),
+
+              const SizedBox(height: 32),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
