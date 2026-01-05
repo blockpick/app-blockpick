@@ -253,6 +253,64 @@ class Auth extends _$Auth {
       state = AsyncData(AuthState(user: user, token: token));
     }
   }
+
+  // 소셜 로그인
+  Future<void> socialSignIn({
+    required String provider,
+    required String socialId,
+    required String email,
+    String? name,
+    String? profileImageUrl,
+  }) async {
+    print('🔐 소셜 로그인 시도: $provider - $email');
+    state = const AsyncLoading();
+
+    state = await AsyncValue.guard(() async {
+      final repository = await ref.read(authRepositoryProvider.future);
+      final user = await repository.socialLogin(
+        provider: provider,
+        socialId: socialId,
+        email: email,
+        name: name,
+        profileImageUrl: profileImageUrl,
+      );
+      final token = await repository.getToken();
+
+      print('✅ 소셜 로그인 성공!');
+      print('   - 이메일: ${user.email}');
+      print('   - 토큰: ${token?.substring(0, 20)}...');
+
+      // 🔑 로그인 후 블록체인 지갑 확인/생성 (사용자 모르게)
+      try {
+        final walletService = BlockchainWalletService();
+        final hasWallet = await walletService.hasWallet();
+
+        if (!hasWallet) {
+          print('');
+          print('┌─────────────────────────────────────────────────────────┐');
+          print('│ 🔑 블록체인 지갑 자동 생성 (백그라운드)                   │');
+          print('└─────────────────────────────────────────────────────────┘');
+
+          final credentials = await walletService.getOrCreateWallet();
+          final walletAddress = credentials.address.hex;
+
+          print('✅ 블록체인 지갑 생성 완료!');
+          print('   • 지갑 주소: $walletAddress');
+        }
+      } catch (e) {
+        print('⚠️ 지갑 확인/생성 실패 (나중에 재시도 가능): $e');
+      }
+
+      return AuthState(user: user, token: token);
+    });
+
+    // 에러 발생 시 로그
+    state.whenOrNull(
+      error: (error, stackTrace) {
+        print('❌ 소셜 로그인 실패: $error');
+      },
+    );
+  }
 }
 
 // 편의 Provider들

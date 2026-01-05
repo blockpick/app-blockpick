@@ -1,8 +1,11 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/auth/data/services/apple_auth_service.dart';
+import '../../../../core/auth/domain/providers/auth_provider.dart';
 import '../widgets/auth_button.dart';
 
 /// 토스 스타일의 로그인 선택 화면
@@ -34,7 +37,7 @@ class LoginSelectScreen extends ConsumerWidget {
                 const Spacer(flex: 3),
 
                 // 로그인 버튼들
-                _buildLoginButtons(context),
+                _buildLoginButtons(context, ref),
 
                 const SizedBox(height: 24),
 
@@ -109,22 +112,18 @@ class LoginSelectScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildLoginButtons(BuildContext context) {
+  Widget _buildLoginButtons(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
-        // 애플 로그인
-        _SocialButton(
-          icon: Icons.apple,
-          text: 'Apple로 계속하기',
-          backgroundColor: AppColors.black,
-          textColor: AppColors.white,
-          onTap: () {
-            // TODO: Apple 로그인 구현
-            _handleSocialLogin(context, 'apple');
-          },
-        ),
-        const SizedBox(height: 12),
-
+        // 애플 로그인 (iOS에서만 표시)
+        if (Platform.isIOS)
+          _SocialButton(
+            icon: Icons.apple,
+            text: 'Apple로 계속하기',
+            backgroundColor: AppColors.black,
+            textColor: AppColors.white,
+            onTap: () => _handleAppleLogin(context, ref),
+          ),
         // 구글 로그인
         _SocialButton(
           icon: null,
@@ -226,6 +225,79 @@ class LoginSelectScreen extends ConsumerWidget {
           textAlign: TextAlign.center,
         ),
       ],
+    );
+  }
+
+  Future<void> _handleAppleLogin(BuildContext context, WidgetRef ref) async {
+    final appleAuthService = AppleAuthService();
+
+    // Apple 로그인 가능 여부 확인
+    if (!Platform.isIOS) {
+      _showErrorSnackBar(context, 'Apple 로그인은 iOS에서만 지원됩니다.');
+      return;
+    }
+
+    final isAvailable = await appleAuthService.isAvailable();
+    if (!isAvailable) {
+      _showErrorSnackBar(context, 'Apple 로그인을 사용할 수 없습니다.');
+      return;
+    }
+
+    try {
+      // 로딩 표시
+      _showLoadingDialog(context);
+
+      // Apple 로그인 수행
+      final appleResult = await appleAuthService.signIn();
+
+      // Auth Provider를 통해 소셜 로그인 수행
+      await ref.read(authProvider.notifier).socialSignIn(
+            provider: 'APPLE',
+            socialId: appleResult.userIdentifier,
+            email: appleResult.email,
+            name: appleResult.fullName,
+          );
+
+      // 로딩 닫기
+      if (context.mounted) Navigator.of(context).pop();
+
+      // 홈으로 이동
+      if (context.mounted) {
+        context.go('/home');
+      }
+    } catch (e) {
+      // 로딩 닫기
+      if (context.mounted) Navigator.of(context).pop();
+
+      // 사용자가 취소한 경우
+      if (e.toString().contains('canceled') ||
+          e.toString().contains('AuthorizationErrorCode.canceled')) {
+        return;
+      }
+
+      // 에러 처리
+      if (context.mounted) {
+        _showErrorSnackBar(context, 'Apple 로그인에 실패했습니다: ${e.toString()}');
+      }
+    }
+  }
+
+  void _showLoadingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(color: AppColors.blue),
+      ),
+    );
+  }
+
+  void _showErrorSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
     );
   }
 

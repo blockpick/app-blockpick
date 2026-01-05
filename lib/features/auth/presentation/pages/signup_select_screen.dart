@@ -120,7 +120,7 @@ class SignupSelectScreen extends ConsumerWidget {
                               ),
                             ),
                             TextButton(
-                              onPressed: () => context.go('/auth/login-select'),
+                              onPressed: () => context.go('/login'),
                               style: TextButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(horizontal: 8),
                                 minimumSize: Size.zero,

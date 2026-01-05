@@ -154,6 +154,30 @@ class AuthRepository {
 
     return success;
   }
+
+  // 소셜 로그인
+  Future<User> socialLogin({
+    required String provider,
+    required String socialId,
+    required String email,
+    String? name,
+    String? profileImageUrl,
+  }) async {
+    final result = await _remoteDataSource.socialLogin(
+      provider: provider,
+      socialId: socialId,
+      email: email,
+      name: name,
+      profileImageUrl: profileImageUrl,
+    );
+
+    // 토큰 저장
+    await _localDataSource.saveToken(result.accessToken);
+    await _localDataSource.saveRefreshToken(result.refreshToken);
+
+    // 유저 정보 반환
+    return result.user;
+  }
 }
 
 @riverpod

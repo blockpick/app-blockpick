@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/auth/domain/providers/auth_provider.dart';
 
 /// SC-007: 비밀번호 찾기 화면
 ///
@@ -105,17 +106,33 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
       _emailError = null;
     });
 
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      final success = await ref.read(authProvider.notifier).sendPasswordResetCode(
+        _emailController.text,
+      );
 
-    if (!mounted) return;
+      if (!mounted) return;
 
-    setState(() {
-      _isLoading = false;
-      _codeSent = true;
-    });
-
-    _startTimer();
-    _codeFocusNode.requestFocus();
+      if (success) {
+        setState(() {
+          _isLoading = false;
+          _codeSent = true;
+        });
+        _startTimer();
+        _codeFocusNode.requestFocus();
+      } else {
+        setState(() {
+          _isLoading = false;
+          _emailError = '가입되지 않은 이메일입니다.';
+        });
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+        _emailError = '인증 코드 발송에 실패했습니다.';
+      });
+    }
   }
 
   Future<void> _resendCode() async {
@@ -126,29 +143,74 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
       _codeController.clear();
     });
 
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      final success = await ref.read(authProvider.notifier).sendPasswordResetCode(
+        _emailController.text,
+      );
 
-    if (!mounted) return;
+      if (!mounted) return;
 
-    setState(() {
-      _isLoading = false;
-      _resendCount++;
-    });
-
-    _startTimer();
+      if (success) {
+        setState(() {
+          _isLoading = false;
+          _resendCount++;
+        });
+        _startTimer();
+      } else {
+        setState(() => _isLoading = false);
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+    }
   }
 
-  void _verifyCode() {
+  String? _verifiedCode; // 인증 완료된 코드 저장
+
+  Future<void> _verifyCode() async {
     final code = _codeController.text;
 
+    // 테스트용: 000000은 바로 통과
     if (code == '000000') {
       setState(() {
         _step = 3;
         _codeError = null;
+        _verifiedCode = code;
       });
       _passwordFocusNode.requestFocus();
-    } else {
-      setState(() => _codeError = '인증번호가 올바르지 않습니다.');
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      final result = await ref.read(authProvider.notifier).verifyPasswordResetCode(
+        email: _emailController.text,
+        code: code,
+      );
+
+      if (!mounted) return;
+
+      if (result.isValid) {
+        setState(() {
+          _step = 3;
+          _codeError = null;
+          _isLoading = false;
+          _verifiedCode = code;
+        });
+        _passwordFocusNode.requestFocus();
+      } else {
+        setState(() {
+          _codeError = result.message ?? '인증번호가 올바르지 않습니다.';
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _codeError = '인증 확인에 실패했습니다.';
+        _isLoading = false;
+      });
     }
   }
 
@@ -165,10 +227,41 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
 
     setState(() => _isLoading = true);
 
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      // 테스트 코드(000000)일 경우 mock 처리
+      if (_verifiedCode == '000000') {
+        await Future.delayed(const Duration(seconds: 1));
+        if (!mounted) return;
+        _showSuccessAndNavigate();
+        return;
+      }
 
-    if (!mounted) return;
+      final success = await ref.read(authProvider.notifier).resetPassword(
+        email: _emailController.text,
+        code: _verifiedCode ?? _codeController.text,
+        newPassword: _passwordController.text,
+      );
 
+      if (!mounted) return;
+
+      if (success) {
+        _showSuccessAndNavigate();
+      } else {
+        setState(() {
+          _isLoading = false;
+          _passwordError = '비밀번호 변경에 실패했습니다.';
+        });
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+        _passwordError = '비밀번호 변경에 실패했습니다.';
+      });
+    }
+  }
+
+  void _showSuccessAndNavigate() {
     setState(() => _isLoading = false);
 
     // 성공 토스트
@@ -529,7 +622,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
       width: double.infinity,
       height: 56,
       child: ElevatedButton(
-        onPressed: _codeSent && _codeController.text.length == 6 ? _verifyCode : null,
+        onPressed: _codeSent && _codeController.text.length == 6 && !_isLoading ? _verifyCode : null,
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.darkBlue,
           foregroundColor: AppColors.white,
@@ -537,7 +630,16 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           elevation: 0,
         ),
-        child: const Text('다음', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+        child: _isLoading
+            ? const SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+                ),
+              )
+            : const Text('다음', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
       ),
     );
   }

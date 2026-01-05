@@ -81,7 +81,7 @@ class _TossHomeScreenState extends ConsumerState<TossHomeScreen> {
                         isAuthenticated: isAuthenticated,
                         onTap: () {
                           if (!isAuthenticated) {
-                            context.push('/auth/login-select');
+                            context.push('/login');
                           }
                         },
                       ),
@@ -221,7 +221,7 @@ class _TossHomeScreenState extends ConsumerState<TossHomeScreen> {
               // MY 페이지로 이동
               ref.read(currentTabProvider.notifier).goToMy();
             } else {
-              context.push('/auth/login-select');
+              context.push('/login');
             }
           },
           icon: CircleAvatar(

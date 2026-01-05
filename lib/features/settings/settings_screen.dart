@@ -138,7 +138,7 @@ class SettingsScreen extends ConsumerWidget {
                   title: '로그인',
                   textColor: AppColors.blue,
                   onTap: () {
-                    context.push('/auth/login-select');
+                    context.push('/login');
                   },
                 ),
             ]),

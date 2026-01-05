@@ -150,7 +150,7 @@ class MyScreen extends ConsumerWidget {
               height: 48,
               child: ElevatedButton(
                 onPressed: () {
-                  context.push('/auth/login-select');
+                  context.push('/login');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.darkBlue,

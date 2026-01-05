@@ -8,9 +8,9 @@ import '../../features/auth/presentation/pages/forgot_password_page.dart';
 import '../../features/auth/presentation/pages/splash_screen.dart';
 import '../../features/auth/presentation/pages/permission_screen.dart';
 import '../../features/auth/presentation/pages/onboarding_screen.dart';
-import '../../features/auth/presentation/pages/login_screen.dart';
+// LoginScreen은 더 이상 사용하지 않음 (EmailLoginScreen으로 대체)
 import '../../features/auth/presentation/pages/signup_screen.dart';
-import '../../features/auth/presentation/pages/login_select_screen.dart';
+// login_select_screen은 더 이상 사용하지 않음 (/login = EmailLoginScreen으로 통합)
 import '../../features/auth/presentation/pages/email_login_screen.dart';
 import '../../features/auth/presentation/pages/signup_select_screen.dart';
 import '../../features/auth/presentation/pages/phone_verify_screen.dart';
@@ -66,7 +66,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         '/find-email',
         '/find-email-result',
         '/find-password',
-        '/auth/login-select',
         '/auth/email-login',
         '/auth/signup-select',
         '/auth/phone-verify',
@@ -99,14 +98,13 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       // 보호된 경로인데 인증 안 됨 -> 로그인으로
       if (isProtectedRoute && !isAuth) {
-        return '/auth/login-select?redirect=${Uri.encodeComponent(currentPath)}';
+        return '/login?redirect=${Uri.encodeComponent(currentPath)}';
       }
 
       // 로그인 관련 페이지인데 이미 인증됨 -> 홈으로 (회원가입 완료 제외)
       if (isAuthRoute && isAuth && currentPath != '/auth/signup-complete') {
-        // splash, login-select 등에서 이미 로그인된 경우 홈으로
+        // splash, login 등에서 이미 로그인된 경우 홈으로
         if (currentPath == '/splash' ||
-            currentPath == '/auth/login-select' ||
             currentPath == '/auth/email-login' ||
             currentPath == '/login') {
           final redirect = state.uri.queryParameters['redirect'];
@@ -142,10 +140,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
 
       // ============ 새로운 인증 플로우 ============
-      // 로그인 화면
+      // 로그인 화면 (이메일 로그인이 기본)
       GoRoute(
         path: '/login',
-        builder: (context, state) => const LoginScreen(),
+        builder: (context, state) => const EmailLoginScreen(),
       ),
 
       // 회원가입 화면
@@ -202,10 +200,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
 
       // ============ 새로운 토스 스타일 인증 플로우 ============
-      GoRoute(
-        path: '/auth/login-select',
-        builder: (context, state) => const LoginSelectScreen(),
-      ),
+      // /auth/login-select는 더 이상 사용하지 않음 (/login으로 통합)
       GoRoute(
         path: '/auth/email-login',
         builder: (context, state) => const EmailLoginScreen(),

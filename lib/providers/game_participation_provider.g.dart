@@ -91,7 +91,7 @@ final userWalletAddressProvider = AutoDisposeFutureProvider<String?>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef UserWalletAddressRef = AutoDisposeFutureProviderRef<String?>;
-String _$gameParticipationHash() => r'a030a420b1b251ad36adb5c23c4425c38c4164dd';
+String _$gameParticipationHash() => r'e21cf30250433420d00ac52eb3168a0b909513e9';
 
 /// 게임 참여 통합 서비스 (서버 가스비 대납 방식)
 ///

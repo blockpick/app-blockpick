@@ -121,6 +121,29 @@ class AuthRemoteDataSource {
     }
   ''';
 
+  // 소셜 로그인
+  static const String socialLoginMutation = r'''
+    mutation SocialLogin($input: SocialLoginRequest!) {
+      socialLogin(input: $input) {
+        success
+        code
+        message
+        accessToken
+        refreshToken
+        user {
+          id
+          email
+          nickname
+          avatar
+          balance
+          totalGamesPlayed
+          totalWins
+          winRate
+        }
+      }
+    }
+  ''';
+
   // ME Query (사용자 정보 가져오기)
   static const String meQuery = r'''
     query Me {
@@ -484,6 +507,51 @@ class AuthRemoteDataSource {
     final user = User.fromJson(userData as Map<String, dynamic>);
     print('✅ fetchCurrentUser 성공: ${user.email}');
     return user;
+  }
+
+  // 소셜 로그인
+  Future<({String accessToken, String refreshToken, User user})> socialLogin({
+    required String provider,
+    required String socialId,
+    required String email,
+    String? name,
+    String? profileImageUrl,
+  }) async {
+    final result = await _client.mutate(
+      MutationOptions(
+        document: gql(socialLoginMutation),
+        variables: {
+          'input': {
+            'provider': provider,
+            'socialId': socialId,
+            'email': email,
+            if (name != null) 'name': name,
+            if (profileImageUrl != null) 'profileImageUrl': profileImageUrl,
+          },
+        },
+      ),
+    );
+
+    // 데이터가 있으면 캐시 에러를 무시하고 계속 진행
+    final data = result.data?['socialLogin'];
+
+    // 데이터가 없고 예외가 있으면 throw
+    if (data == null && result.hasException) {
+      throw result.exception!;
+    }
+
+    if (data == null || data['success'] != true) {
+      throw AuthException(
+        message: data?['message'] ?? 'Social login failed',
+        code: data?['code'],
+      );
+    }
+
+    return (
+      accessToken: data['accessToken'] as String,
+      refreshToken: data['refreshToken'] as String,
+      user: User.fromJson(data['user'] as Map<String, dynamic>),
+    );
   }
 
   // 레거시 메서드 (하위 호환성)

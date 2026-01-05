@@ -373,7 +373,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
-                        context.go('/auth/login-select');
+                        context.go('/login');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.darkBlue,
