@@ -25,6 +25,7 @@ import '../../features/auth/presentation/pages/find_email_screen.dart';
 import '../../features/auth/presentation/pages/find_email_result_screen.dart';
 import '../../features/auth/presentation/pages/find_password_screen.dart';
 import '../../features/game/game_screen.dart';
+import '../../features/game/gacha_game_screen.dart';
 import '../../features/game/screens/game_join_test_screen.dart';
 import '../../features/optimal/optimal_game_screen.dart';
 import '../../features/settings/settings_screen.dart';
@@ -299,8 +300,17 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
 
       // ============ 게임 관련 ============
+      // Gacha 스타일 게임 화면 (기본)
       GoRoute(
         path: '/game/:gameId',
+        builder: (context, state) {
+          final gameId = state.pathParameters['gameId']!;
+          return GachaGameScreen(gameId: gameId);
+        },
+      ),
+      // 기존 그리드 방식 게임 화면 (백업)
+      GoRoute(
+        path: '/game-grid/:gameId',
         builder: (context, state) {
           final gameId = state.pathParameters['gameId']!;
           return GameScreen(gameId: gameId);
