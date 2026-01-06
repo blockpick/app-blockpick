@@ -68,7 +68,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               trailing: PointBadge(
                 balance: userBalance,
                 onTap: () {
-                  // TODO: 포인트 충전 화면으로 이동
+                  final isAuth = authState.valueOrNull?.isAuthenticated ?? false;
+                  if (isAuth) {
+                    context.push('/my/charge');
+                  } else {
+                    context.push('/login');
+                  }
                 },
               ),
             ),
@@ -215,7 +220,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget _buildFAB() {
     return GestureDetector(
       onTap: () {
-        // TODO: 당첨자 내역 화면으로 이동
+        context.push('/winners');
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),

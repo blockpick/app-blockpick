@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/auth/domain/providers/auth_provider.dart';
 import '../../models/game_round_model.dart';
 import '../../providers/game_provider.dart';
+import '../../providers/current_tab_provider.dart';
 import '../../components/common/common_app_bar.dart';
 
 /// SC-008 새 홈 화면
@@ -159,7 +161,8 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
             icon: Icons.local_fire_department_rounded,
             iconColor: AppColors.red,
             onMoreTap: () {
-              // TODO: 더보기 페이지로 이동
+              // Shopping 탭으로 이동
+              ref.read(currentTabProvider.notifier).setTab(1);
             },
           ),
 
@@ -213,9 +216,9 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              itemCount: 5, // Mock 데이터
+              itemCount: _getProductsByCategory().length,
               itemBuilder: (context, index) {
-                return _buildProductCard(index);
+                return _buildProductCard(context, index);
               },
             ),
           ),
@@ -224,57 +227,161 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
     );
   }
 
+  /// 카테고리별 상품 데이터
+  List<Map<String, String>> _getProductsByCategory() {
+    switch (_selectedCategoryIndex) {
+      case 0: // Hotel
+        return [
+          {
+            'name': '[나트랑] JW 메리어트 깜란 베이 리조트 & 스파',
+            'price': '240,000원~',
+            'benefit': '캐시 1만원',
+            'image': 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&h=300&fit=crop',
+          },
+          {
+            'name': '[다낭] 퓨전 리조트 애빌라스',
+            'price': '300,000원~',
+            'benefit': '캐시 3만원',
+            'image': 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&h=300&fit=crop',
+          },
+          {
+            'name': '[푸켓] 반얀트리 리조트',
+            'price': '450,000원~',
+            'benefit': '캐시 5만원',
+            'image': 'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=400&h=300&fit=crop',
+          },
+          {
+            'name': '[발리] 아야나 리조트',
+            'price': '380,000원~',
+            'benefit': '캐시 4만원',
+            'image': 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400&h=300&fit=crop',
+          },
+          {
+            'name': '[몰디브] 콘래드 리조트',
+            'price': '1,200,000원~',
+            'benefit': '캐시 10만원',
+            'image': 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=400&h=300&fit=crop',
+          },
+        ];
+      case 1: // Fashion
+        return [
+          {
+            'name': '나이키 에어맥스 97 실버불릿',
+            'price': '159,000원',
+            'benefit': '캐시 5천원',
+            'image': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop',
+          },
+          {
+            'name': '구찌 마몽 벨트백',
+            'price': '1,650,000원',
+            'benefit': '캐시 5만원',
+            'image': 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=300&fit=crop',
+          },
+          {
+            'name': '캐나다구스 익스페디션 파카',
+            'price': '1,590,000원',
+            'benefit': '캐시 8만원',
+            'image': 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=400&h=300&fit=crop',
+          },
+          {
+            'name': '발렌시아가 트리플S 스니커즈',
+            'price': '1,290,000원',
+            'benefit': '캐시 6만원',
+            'image': 'https://images.unsplash.com/photo-1597045566677-8cf032ed6634?w=400&h=300&fit=crop',
+          },
+        ];
+      case 2: // Electronic
+        return [
+          {
+            'name': '애플 맥북 프로 14인치 M3 Pro',
+            'price': '2,690,000원',
+            'benefit': '캐시 15만원',
+            'image': 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=300&fit=crop',
+          },
+          {
+            'name': '소니 WH-1000XM5 헤드폰',
+            'price': '399,000원',
+            'benefit': '캐시 2만원',
+            'image': 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop',
+          },
+          {
+            'name': '삼성 갤럭시 Z 폴드6',
+            'price': '1,899,000원',
+            'benefit': '캐시 10만원',
+            'image': 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop',
+          },
+          {
+            'name': '애플 아이패드 프로 12.9형',
+            'price': '1,729,000원',
+            'benefit': '캐시 8만원',
+            'image': 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&h=300&fit=crop',
+          },
+        ];
+      case 3: // Voucher
+        return [
+          {
+            'name': '신세계 상품권 50만원권',
+            'price': '475,000원',
+            'benefit': '캐시 2만원',
+            'image': 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=300&fit=crop',
+          },
+          {
+            'name': '스타벅스 e-기프트카드 10만원',
+            'price': '95,000원',
+            'benefit': '캐시 5천원',
+            'image': 'https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=400&h=300&fit=crop',
+          },
+          {
+            'name': '롯데백화점 상품권 30만원',
+            'price': '285,000원',
+            'benefit': '캐시 1만원',
+            'image': 'https://images.unsplash.com/photo-1607082349566-187342175e2f?w=400&h=300&fit=crop',
+          },
+          {
+            'name': '배달의민족 상품권 5만원',
+            'price': '47,500원',
+            'benefit': '캐시 2천원',
+            'image': 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop',
+          },
+        ];
+      default:
+        return [];
+    }
+  }
+
   /// 상품 카드 (토스 스타일)
-  Widget _buildProductCard(int index) {
-    final products = [
-      {
-        'name': '[나트랑] JW 메리어트 깜란 베이 리조트 & 스파',
-        'price': '240,000원~',
-        'benefit': '캐시 1만원',
-        'image': 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&h=300&fit=crop',
-      },
-      {
-        'name': '[다낭] 퓨전 리조트 애빌라스',
-        'price': '300,000원~',
-        'benefit': '캐시 3만원',
-        'image': 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&h=300&fit=crop',
-      },
-      {
-        'name': '[푸켓] 반얀트리 리조트',
-        'price': '450,000원~',
-        'benefit': '캐시 5만원',
-        'image': 'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=400&h=300&fit=crop',
-      },
-      {
-        'name': '[발리] 아야나 리조트',
-        'price': '380,000원~',
-        'benefit': '캐시 4만원',
-        'image': 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400&h=300&fit=crop',
-      },
-      {
-        'name': '[몰디브] 콘래드 리조트',
-        'price': '1,200,000원~',
-        'benefit': '캐시 10만원',
-        'image': 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=400&h=300&fit=crop',
-      },
-    ];
+  Widget _buildProductCard(BuildContext context, int index) {
+    final products = _getProductsByCategory();
+    if (products.isEmpty) return const SizedBox.shrink();
     final product = products[index % products.length];
 
-    return Container(
-      width: 160,
-      margin: const EdgeInsets.only(right: 12),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.06),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+    return GestureDetector(
+      onTap: () {
+        // Shopping 탭으로 이동 (추후 상품 상세 페이지 구현 시 변경)
+        ref.read(currentTabProvider.notifier).setTab(1);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${product['name']}'),
+            duration: const Duration(seconds: 1),
+            behavior: SnackBarBehavior.floating,
           ),
-        ],
-      ),
-      child: Column(
+        );
+      },
+      child: Container(
+        width: 160,
+        margin: const EdgeInsets.only(right: 12),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.black.withValues(alpha: 0.06),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 이미지
@@ -364,6 +471,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
             ),
           ),
         ],
+        ),
       ),
     );
   }
@@ -410,30 +518,40 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: AppColors.darkBlue,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          '충전하기',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
+                  GestureDetector(
+                    onTap: () {
+                      final isAuth = ref.read(authProvider).valueOrNull?.isAuthenticated ?? false;
+                      if (isAuth) {
+                        context.push('/my/charge');
+                      } else {
+                        context.push('/login');
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: AppColors.darkBlue,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            '충전하기',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.white,
+                            ),
+                          ),
+                          SizedBox(width: 4),
+                          Icon(
+                            Icons.arrow_forward_rounded,
+                            size: 14,
                             color: AppColors.white,
                           ),
-                        ),
-                        SizedBox(width: 4),
-                        Icon(
-                          Icons.arrow_forward_rounded,
-                          size: 14,
-                          color: AppColors.white,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -483,6 +601,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
             iconColor: AppColors.blue,
             onMoreTap: () {
               // Event 탭으로 이동
+              ref.read(currentTabProvider.notifier).setTab(2);
             },
           ),
 
@@ -727,7 +846,8 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
             icon: Icons.emoji_events_rounded,
             iconColor: AppColors.green,
             onMoreTap: () {
-              // TODO: 당첨자 목록 페이지로 이동
+              // 당첨자 내역 페이지로 이동
+              context.push('/winners');
             },
           ),
 
@@ -741,21 +861,26 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
   }
 
   Widget _buildWinnerCard(String username, String type, String product, String time) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(20, 0, 20, 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Row(
+    return GestureDetector(
+      onTap: () {
+        // 당첨자 상세 또는 당첨 내역으로 이동
+        context.push('/winners');
+      },
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.black.withValues(alpha: 0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Row(
         children: [
           // 아바타 (토스 스타일 - 그라데이션 배경)
           Container(
@@ -855,6 +980,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
             color: AppColors.gray300,
           ),
         ],
+        ),
       ),
     );
   }

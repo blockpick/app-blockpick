@@ -43,6 +43,7 @@ import '../../features/my/pages/coupon_screen.dart';
 import '../../features/my/pages/announcement_screen.dart';
 import '../../features/my/pages/usage_guide_screen.dart';
 import '../../features/notification/notification_screen.dart';
+import '../../features/winners/winners_screen.dart';
 import '../auth/domain/providers/auth_provider.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -369,6 +370,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/notifications',
         builder: (context, state) => const NotificationScreen(),
+      ),
+
+      // ============ 당첨자 ============
+      GoRoute(
+        path: '/winners',
+        builder: (context, state) => const WinnersScreen(),
       ),
 
       // ============ E2E 테스트 ============
