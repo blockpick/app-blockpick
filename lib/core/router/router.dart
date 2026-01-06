@@ -45,6 +45,18 @@ import '../../features/my/pages/usage_guide_screen.dart';
 import '../../features/notification/notification_screen.dart';
 import '../../features/winners/winners_screen.dart';
 import '../auth/domain/providers/auth_provider.dart';
+// More modes
+import '../../features/more/modes/gravity_pick_screen.dart';
+import '../../features/more/modes/time_pick_screen.dart';
+import '../../features/more/modes/draw_pick_screen.dart';
+import '../../features/more/modes/wave_pick_screen.dart';
+import '../../features/more/modes/voice_pick_screen.dart';
+import '../../features/more/modes/farm_pick_screen.dart';
+import '../../features/more/modes/rpg_pick_screen.dart';
+import '../../features/more/modes/duo_pick_screen.dart';
+import '../../features/more/modes/fortune_pick_screen.dart';
+import '../../features/more/modes/predict_pick_screen.dart';
+import '../../features/more/modes/gacha_pick_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final isAuthenticated = ref.watch(isAuthenticatedProvider);
@@ -382,6 +394,52 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/test/game-join',
         builder: (context, state) => const GameJoinTestScreen(),
+      ),
+
+      // ============ More 모드들 ============
+      GoRoute(
+        path: '/more/gravity',
+        builder: (context, state) => const GravityPickScreen(),
+      ),
+      GoRoute(
+        path: '/more/time',
+        builder: (context, state) => const TimePickScreen(),
+      ),
+      GoRoute(
+        path: '/more/draw',
+        builder: (context, state) => const DrawPickScreen(),
+      ),
+      GoRoute(
+        path: '/more/wave',
+        builder: (context, state) => const WavePickScreen(),
+      ),
+      GoRoute(
+        path: '/more/voice',
+        builder: (context, state) => const VoicePickScreen(),
+      ),
+      GoRoute(
+        path: '/more/farm',
+        builder: (context, state) => const FarmPickScreen(),
+      ),
+      GoRoute(
+        path: '/more/rpg',
+        builder: (context, state) => const RpgPickScreen(),
+      ),
+      GoRoute(
+        path: '/more/duo',
+        builder: (context, state) => const DuoPickScreen(),
+      ),
+      GoRoute(
+        path: '/more/fortune',
+        builder: (context, state) => const FortunePickScreen(),
+      ),
+      GoRoute(
+        path: '/more/predict',
+        builder: (context, state) => const PredictPickScreen(),
+      ),
+      GoRoute(
+        path: '/more/gacha',
+        builder: (context, state) => const GachaPickScreen(),
       ),
     ],
   );

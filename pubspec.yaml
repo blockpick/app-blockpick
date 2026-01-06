@@ -85,6 +85,10 @@ dependencies:
   sign_in_with_apple: ^7.0.1
   google_sign_in: ^7.2.0
 
+  # Sensors for More modes
+  sensors_plus: ^4.0.2          # Gravity mode (accelerometer)
+  noise_meter: ^5.0.2           # Voice mode (microphone)
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

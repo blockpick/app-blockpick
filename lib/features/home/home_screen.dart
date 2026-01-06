@@ -8,6 +8,7 @@ import '../../models/game_round_model.dart';
 import '../../providers/game_provider.dart';
 import '../../widgets/horizontal_game_card.dart';
 import '../optimal/optimal_game_list_screen.dart';
+import '../more/more_screen.dart';
 import '../../components/common/common_app_bar.dart';
 
 /// 게임 화면 (SC-009 디자인)
@@ -24,10 +25,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool _isFabExpanded = true;
 
   final List<Map<String, dynamic>> _tabs = [
-    {'label': 'Daily', 'type': GameType.daily, 'isPrime': false},
-    {'label': 'Select', 'type': GameType.select, 'isPrime': false},
-    {'label': 'Vibe', 'type': GameType.vibe, 'isPrime': false},
-    {'label': 'Prime', 'type': null, 'isPrime': true}, // Prime은 OptimalGameListScreen 사용
+    {'label': 'Daily', 'type': GameType.daily, 'isPrime': false, 'isMore': false},
+    {'label': 'Select', 'type': GameType.select, 'isPrime': false, 'isMore': false},
+    {'label': 'Vibe', 'type': GameType.vibe, 'isPrime': false, 'isMore': false},
+    {'label': 'Prime', 'type': null, 'isPrime': true, 'isMore': false},
+    {'label': 'More', 'type': null, 'isPrime': false, 'isMore': true}, // 10가지 좌표 선택 모드 체험
   ];
 
   @override
@@ -140,10 +142,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget _buildContent() {
     final selectedTab = _tabs[_selectedTabIndex];
     final isPrime = selectedTab['isPrime'] as bool;
+    final isMore = selectedTab['isMore'] as bool? ?? false;
 
     // Prime 탭은 OptimalGameListScreen 사용
     if (isPrime) {
       return const OptimalGameListScreen();
+    }
+
+    // More 탭은 MoreScreen 사용
+    if (isMore) {
+      return const MoreScreen();
     }
 
     final gameType = selectedTab['type'] as GameType?;
