@@ -50,5 +50,22 @@
 	<string>프로필 사진, 상품 후기, QR코드 촬영을 위해 카메라 접근이 필요합니다.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>프로필 사진 및 상품 후기 이미지 업로드를 위해 사진 라이브러리 접근이 필요합니다.</string>
+	<!-- Google Sign-In 설정 -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<!-- TODO: Google Cloud Console에서 발급받은 iOS Client ID의 역순으로 교체 -->
+				<!-- 예: 123456789-abcdefg.apps.googleusercontent.com -> com.googleusercontent.apps.123456789-abcdefg -->
+				<string>com.googleusercontent.apps.YOUR_IOS_CLIENT_ID</string>
+			</array>
+		</dict>
+	</array>
+	<!-- TODO: Google Cloud Console에서 발급받은 iOS Client ID로 교체 -->
+	<key>GIDClientID</key>
+	<string>YOUR_IOS_CLIENT_ID.apps.googleusercontent.com</string>
 </dict>
 </plist>

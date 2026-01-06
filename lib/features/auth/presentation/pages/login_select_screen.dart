@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/auth/data/services/apple_auth_service.dart';
+import '../../../../core/auth/data/services/google_auth_service.dart';
 import '../../../../core/auth/domain/providers/auth_provider.dart';
 import '../widgets/auth_button.dart';
 
@@ -124,6 +125,8 @@ class LoginSelectScreen extends ConsumerWidget {
             textColor: AppColors.white,
             onTap: () => _handleAppleLogin(context, ref),
           ),
+        // 애플과 구글 버튼 사이 간격
+        if (Platform.isIOS) const SizedBox(height: 12),
         // 구글 로그인
         _SocialButton(
           icon: null,
@@ -132,10 +135,7 @@ class LoginSelectScreen extends ConsumerWidget {
           backgroundColor: AppColors.white,
           textColor: AppColors.darkBlue,
           borderColor: AppColors.gray300,
-          onTap: () {
-            // TODO: Google 로그인 구현
-            _handleSocialLogin(context, 'google');
-          },
+          onTap: () => _handleGoogleLogin(context, ref),
         ),
       ],
     );
@@ -278,6 +278,48 @@ class LoginSelectScreen extends ConsumerWidget {
       // 에러 처리
       if (context.mounted) {
         _showErrorSnackBar(context, 'Apple 로그인에 실패했습니다: ${e.toString()}');
+      }
+    }
+  }
+
+  Future<void> _handleGoogleLogin(BuildContext context, WidgetRef ref) async {
+    final googleAuthService = GoogleAuthService();
+
+    try {
+      // 로딩 표시
+      _showLoadingDialog(context);
+
+      // Google 로그인 수행
+      final googleResult = await googleAuthService.signIn();
+
+      // Auth Provider를 통해 소셜 로그인 수행
+      await ref.read(authProvider.notifier).socialSignIn(
+            provider: 'GOOGLE',
+            socialId: googleResult.id,
+            email: googleResult.email,
+            name: googleResult.displayName,
+            profileImageUrl: googleResult.photoUrl,
+          );
+
+      // 로딩 닫기
+      if (context.mounted) Navigator.of(context).pop();
+
+      // 홈으로 이동
+      if (context.mounted) {
+        context.go('/home');
+      }
+    } catch (e) {
+      // 로딩 닫기
+      if (context.mounted) Navigator.of(context).pop();
+
+      // 사용자가 취소한 경우
+      if (e.toString().contains('취소')) {
+        return;
+      }
+
+      // 에러 처리
+      if (context.mounted) {
+        _showErrorSnackBar(context, 'Google 로그인에 실패했습니다: ${e.toString()}');
       }
     }
   }
