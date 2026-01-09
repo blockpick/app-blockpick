@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -101,6 +102,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     }
 
     // 네트워크 연결됨 - 최초 실행 여부 확인 후 분기
+    // 웹에서는 권한/온보딩 화면 건너뛰기 (직접 URL 접근 허용)
+    if (kIsWeb) {
+      if (!mounted) return;
+      context.go('/');
+      return;
+    }
+
     final prefs = await SharedPreferences.getInstance();
     final permissionShown = prefs.getBool('permission_screen_shown') ?? false;
     final onboardingShown = prefs.getBool('onboarding_screen_shown') ?? false;

@@ -89,6 +89,8 @@ dependencies:
   sensors_plus: ^4.0.2          # Gravity mode (accelerometer)
   noise_meter: ^5.0.2           # Voice mode (microphone)
   intl_phone_number_input: ^0.7.5
+  flutter_web_plugins:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:

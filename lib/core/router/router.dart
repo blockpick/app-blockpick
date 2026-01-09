@@ -90,6 +90,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         '/auth/signup-complete',
         '/auth/forgot-password',
         '/forgot-password', // 기존 비밀번호 찾기 페이지
+        '/settings/privacy', // 개인정보처리방침 (공개)
+        '/settings/terms', // 이용약관 (공개)
       ];
 
       final isAuthRoute = authRoutes.any(
