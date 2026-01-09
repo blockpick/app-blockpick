@@ -109,9 +109,11 @@ class _PasswordSetupScreenState extends ConsumerState<PasswordSetupScreen> {
     });
 
     try {
+      // TODO: 레거시 코드 - 새 회원가입 플로우(phone_verify_screen → email_password_setup_screen) 사용 권장
       await ref.read(authProvider.notifier).signUp(
             email: widget.email!,
             password: _passwordController.text,
+            phoneNumber: '', // 레거시: phoneNumber 없음 - 서버에서 에러 발생함
           );
 
       if (!mounted) return;

@@ -13,11 +13,13 @@ import '../../../../core/auth/domain/providers/auth_provider.dart';
 /// - 비밀번호 설정 (영문,숫자,특수문자 8자 이상)
 class EmailPasswordSetupScreen extends ConsumerStatefulWidget {
   final String? phone;
+  final String? phoneE164;
   final bool? agreeMarketing;
 
   const EmailPasswordSetupScreen({
     super.key,
     this.phone,
+    this.phoneE164,
     this.agreeMarketing,
   });
 
@@ -520,6 +522,16 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
       return;
     }
 
+    // phoneE164 확인
+    final phoneNumber = widget.phoneE164;
+    if (phoneNumber == null || phoneNumber.isEmpty) {
+      _showSignupErrorDialog(
+        title: '휴대폰 인증이 필요해요',
+        message: '휴대폰 인증을 먼저 완료해 주세요.',
+      );
+      return;
+    }
+
     setState(() => _isLoading = true);
 
     try {
@@ -527,6 +539,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
       await ref.read(authProvider.notifier).signUp(
             email: _emailController.text,
             password: _passwordController.text,
+            phoneNumber: phoneNumber,
           );
 
       if (!mounted) return;
@@ -588,15 +601,105 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
       if (!mounted) return;
       setState(() => _isLoading = false);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('회원가입 실패: ${e.toString()}'),
-          backgroundColor: AppColors.red,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
-      );
+      // 에러 메시지 파싱 및 팝업 표시
+      _handleSignupError(e.toString());
     }
+  }
+
+  void _handleSignupError(String error) {
+    String title = '회원가입 실패';
+    String message = '회원가입 중 오류가 발생했습니다.';
+
+    if (error.contains('Phone number is required')) {
+      title = '휴대폰 인증이 필요해요';
+      message = '휴대폰 인증을 먼저 완료해 주세요.';
+    } else if (error.contains('Email is required') || error.contains('email verification')) {
+      title = '이메일 인증이 필요해요';
+      message = '이메일 인증을 먼저 완료해 주세요.';
+    } else if (error.contains('already exists') || error.contains('DUPLICATE')) {
+      title = '이미 가입된 계정이에요';
+      message = '해당 이메일 또는 휴대폰 번호로\n이미 가입된 계정이 있습니다.';
+    } else if (error.contains('expired') || error.contains('EXPIRED')) {
+      title = '인증이 만료되었어요';
+      message = '인증 유효기간(24시간)이 만료되었습니다.\n다시 인증해 주세요.';
+    } else if (error.contains('SIGNUP_FAILED')) {
+      // 일반적인 실패
+      if (error.contains('message:')) {
+        final msgStart = error.indexOf('message:');
+        message = error.substring(msgStart + 8).trim();
+      }
+    }
+
+    _showSignupErrorDialog(title: title, message: message);
+  }
+
+  void _showSignupErrorDialog({required String title, required String message}) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  color: AppColors.red.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: const Icon(
+                  Icons.error_outline_rounded,
+                  size: 28,
+                  color: AppColors.red,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.darkBlue,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                message,
+                style: TextStyle(fontSize: 14, color: AppColors.gray600),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.darkBlue,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    '확인',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   void _handleNext() {
@@ -1001,6 +1104,8 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
           focusNode: _passwordFocusNode,
           obscureText: _obscurePassword,
           autofocus: true,
+          textInputAction: TextInputAction.next,
+          onSubmitted: (_) => _confirmPasswordFocusNode.requestFocus(),
           onChanged: (_) => setState(() => _passwordError = null),
           style: const TextStyle(
             fontSize: 16,
@@ -1064,6 +1169,10 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
           controller: _confirmPasswordController,
           focusNode: _confirmPasswordFocusNode,
           obscureText: _obscureConfirmPassword,
+          textInputAction: TextInputAction.done,
+          onSubmitted: (_) {
+            if (_canProceed) _handleNext();
+          },
           onChanged: (_) => setState(() => _confirmPasswordError = null),
           style: const TextStyle(
             fontSize: 16,

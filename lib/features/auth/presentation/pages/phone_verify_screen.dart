@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/auth/data/repositories/auth_repository.dart';
+import '../../../../core/auth/domain/providers/verification_state_provider.dart';
 
 /// SC-005-02, SC-005-03: 휴대폰 번호 인증 화면
 ///
 /// - 토스 스타일 디자인
-/// - 휴대폰 번호 입력
+/// - 휴대폰 번호 입력 (국제 전화번호 지원)
 /// - 인증번호 입력 (6자리, 3분 타이머)
 /// - 이용 동의 체크 (개인정보, 제3자, 서비스 약관, 마케팅)
 class PhoneVerifyScreen extends ConsumerStatefulWidget {
@@ -28,8 +31,12 @@ class PhoneVerifyScreen extends ConsumerStatefulWidget {
 class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
   final _phoneController = TextEditingController();
   final _codeController = TextEditingController();
-  final _phoneFocusNode = FocusNode();
   final _codeFocusNode = FocusNode();
+
+  // 국제 전화번호 입력
+  PhoneNumber _phoneNumber = PhoneNumber(isoCode: 'KR');
+  bool _isPhoneValid = false;
+  String? _e164PhoneNumber;
 
   bool _codeSent = false;
   bool _isLoading = false;
@@ -54,14 +61,8 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
     _timer?.cancel();
     _phoneController.dispose();
     _codeController.dispose();
-    _phoneFocusNode.dispose();
     _codeFocusNode.dispose();
     super.dispose();
-  }
-
-  bool get _isPhoneValid {
-    final phone = _phoneController.text.replaceAll(RegExp(r'\D'), '');
-    return phone.length >= 10 && phone.length <= 11;
   }
 
   bool get _isCodeValid {
@@ -86,6 +87,20 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
     return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
   }
 
+  /// flowType에 따라 SmsVerifyType을 반환
+  String get _smsVerifyType {
+    switch (widget.flowType) {
+      case 'find-email':
+        return 'FIND_EMAIL';
+      case 'withdrawal':
+        return 'WITHDRAW';
+      case 'change-password':
+        return 'CHANGE_PASSWORD';
+      default:
+        return 'SIGN_UP';
+    }
+  }
+
   void _startTimer() {
     _timer?.cancel();
     _remainingSeconds = 180;
@@ -100,7 +115,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
   }
 
   Future<void> _sendCode() async {
-    if (!_isPhoneValid) {
+    if (!_isPhoneValid || _e164PhoneNumber == null) {
       setState(() => _phoneError = '휴대폰 번호를 정확히 입력해 주세요.');
       return;
     }
@@ -122,18 +137,173 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
       _phoneError = null;
     });
 
-    // TODO: 실제 인증번호 전송 API 호출
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      final authRepo = await ref.read(authRepositoryProvider.future);
 
-    if (!mounted) return;
+      // 회원가입 플로우일 때만 이미 가입된 번호인지 먼저 체크
+      if (_smsVerifyType == 'SIGN_UP') {
+        final checkResult = await authRepo.checkPhoneNumber(
+          phoneNumber: _e164PhoneNumber!,
+        );
 
-    setState(() {
-      _isLoading = false;
-      _codeSent = true;
-    });
+        if (!mounted) return;
 
-    _startTimer();
-    _codeFocusNode.requestFocus();
+        if (checkResult.success && checkResult.exists) {
+          // 이미 가입된 번호
+          setState(() => _isLoading = false);
+          _showExistingPhoneDialog();
+          return;
+        }
+      }
+
+      // SMS 인증 코드 발송
+      final result = await authRepo.sendSmsVerificationCode(
+        phoneNumber: _e164PhoneNumber!,
+        verifyType: _smsVerifyType,
+      );
+
+      if (!mounted) return;
+
+      if (result.success) {
+        setState(() {
+          _isLoading = false;
+          _codeSent = true;
+        });
+        _startTimer();
+        _codeFocusNode.requestFocus();
+      } else {
+        setState(() => _isLoading = false);
+
+        // 이미 가입된 전화번호 체크 (백업 - API 에러 코드로도 체크)
+        final errorCode = result.code?.toUpperCase() ?? '';
+        if (_isPhoneAlreadyRegisteredError(errorCode)) {
+          _showExistingPhoneDialog();
+        } else {
+          setState(() {
+            _phoneError = result.message ?? 'SMS 발송에 실패했습니다.';
+          });
+        }
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+        _phoneError = 'SMS 발송 중 오류가 발생했습니다.';
+      });
+    }
+  }
+
+  /// 이미 가입된 전화번호 에러인지 확인
+  bool _isPhoneAlreadyRegisteredError(String code) {
+    const duplicateCodes = [
+      'PHONE_ALREADY_EXISTS',
+      'PHONE_ALREADY_REGISTERED',
+      'DUPLICATE_PHONE',
+      'PHONE_DUPLICATE',
+      'USER_ALREADY_EXISTS',
+      'ALREADY_REGISTERED',
+    ];
+    return duplicateCodes.contains(code);
+  }
+
+  /// 이미 가입된 전화번호 다이얼로그
+  void _showExistingPhoneDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  color: AppColors.blue.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: const Icon(
+                  Icons.person_outline_rounded,
+                  size: 28,
+                  color: AppColors.blue,
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                '이미 가입된 번호예요',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.darkBlue,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                '해당 번호로 가입된 계정이 있어요.\n로그인하거나 이메일을 찾아보세요.',
+                style: TextStyle(fontSize: 14, color: AppColors.gray600, height: 1.4),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        context.push('/find-email');
+                      },
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        side: BorderSide(color: AppColors.gray300),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        '이메일 찾기',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.gray600,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        context.go('/login');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.darkBlue,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        '로그인하기',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Future<void> _resendCode() async {
@@ -148,54 +318,105 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
       _codeController.clear();
     });
 
-    // TODO: 실제 인증번호 재전송 API 호출
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      final authRepo = await ref.read(authRepositoryProvider.future);
 
-    if (!mounted) return;
+      final result = await authRepo.sendSmsVerificationCode(
+        phoneNumber: _e164PhoneNumber!,
+        verifyType: _smsVerifyType,
+      );
 
-    setState(() {
-      _isLoading = false;
-      _resendCount++;
-    });
+      if (!mounted) return;
 
-    _startTimer();
+      if (result.success) {
+        setState(() {
+          _isLoading = false;
+          _resendCount++;
+        });
+        _startTimer();
+      } else {
+        setState(() {
+          _isLoading = false;
+          _codeError = result.message ?? '재전송에 실패했습니다.';
+        });
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+        _codeError = '재전송 중 오류가 발생했습니다.';
+      });
+    }
   }
 
   Future<void> _verifyAndContinue() async {
-    final code = _codeController.text;
+    if (_e164PhoneNumber == null) return;
 
-    // 테스트 코드 체크
-    if (code != '000000') {
-      // TODO: 실제 인증번호 검증 API 호출
-      _showCodeMismatchDialog();
+    // 이미 인증된 번호인지 확인 (24시간 유효)
+    final verificationState = ref.read(verificationProvider);
+    if (verificationState.isPhoneVerified(_e164PhoneNumber!)) {
+      // 이미 인증됨 - API 호출 없이 바로 다음 화면으로
+      _navigateToNext(_e164PhoneNumber!);
       return;
     }
 
-    // 기존 가입 계정 확인 (회원가입 플로우일 때만)
-    if (widget.flowType != 'find-email') {
-      // TODO: 실제 API 호출로 확인
-      final hasExistingAccount = false; // 테스트용
+    final code = _codeController.text;
 
-      if (hasExistingAccount) {
-        _showExistingAccountDialog('test@example.com', '구글로 로그인');
+    setState(() {
+      _isLoading = true;
+      _codeError = null;
+    });
+
+    try {
+      final authRepo = await ref.read(authRepositoryProvider.future);
+
+      final result = await authRepo.verifySmsCode(
+        phoneNumber: _e164PhoneNumber!,
+        code: code,
+        verifyType: _smsVerifyType,
+      );
+
+      if (!mounted) return;
+
+      if (!result.success) {
+        setState(() => _isLoading = false);
+        _showCodeMismatchDialog();
         return;
       }
+
+      // 인증 상태 저장 (뒤로갔다가 다시 와도 재인증 불필요)
+      ref.read(verificationProvider.notifier).markPhoneVerified(_e164PhoneNumber!);
+
+      setState(() => _isLoading = false);
+
+      // 다음 화면으로 이동
+      _navigateToNext(_e164PhoneNumber!);
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+        _codeError = '인증 확인 중 오류가 발생했습니다.';
+      });
     }
+  }
 
-    if (!mounted) return;
-
-    // 다음 화면으로 이동
+  void _navigateToNext(String e164Phone) {
     final flowType = widget.flowType ?? 'signup';
+    // 표시용 전화번호 (국가코드 제외)
+    final displayPhone = _phoneController.text;
+
     switch (flowType) {
       case 'signup':
         context.push('/email-password-setup', extra: {
-          'phone': _phoneController.text,
+          'phone': displayPhone,
+          'phoneE164': e164Phone,
           'agreeMarketing': _agreeMarketing,
         });
         break;
       case 'find-email':
         context.push('/find-email-result', extra: {
-          'phone': _phoneController.text,
+          'phone': displayPhone,
+          'phoneE164': e164Phone,
         });
         break;
       default:
@@ -282,109 +503,6 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                       ),
                       child: const Text(
                         '재전송',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showExistingAccountDialog(String email, String loginMethod) {
-    showDialog(
-      context: context,
-      builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: AppColors.blue.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: const Icon(
-                  Icons.person_outline_rounded,
-                  size: 28,
-                  color: AppColors.blue,
-                ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                '이미 가입된 계정이 있어요',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.darkBlue,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 12),
-              Text(
-                email,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.darkBlue,
-                ),
-              ),
-              Text(
-                '($loginMethod)',
-                style: TextStyle(fontSize: 13, color: AppColors.gray500),
-              ),
-              const SizedBox(height: 24),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => Navigator.pop(context),
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        side: BorderSide(color: AppColors.gray300),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Text(
-                        '취소',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.gray600,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        context.go('/login');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.darkBlue,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: const Text(
-                        '로그인하기',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
@@ -625,7 +743,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                         const SizedBox(height: 8),
                         Text(
                           _codeSent
-                              ? '${_phoneController.text}로 전송된 6자리 인증번호를 입력해 주세요.'
+                              ? '${_phoneNumber.dialCode} ${_phoneController.text}로 전송된 6자리 인증번호를 입력해 주세요.'
                               : '본인 확인을 위해 휴대폰 인증이 필요해요.',
                           style: TextStyle(
                             fontSize: 15,
@@ -725,77 +843,78 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
           ),
         ),
         const SizedBox(height: 8),
-        Row(
-          children: [
-            // 국가 코드
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              decoration: BoxDecoration(
-                color: AppColors.gray100,
+        Container(
+          decoration: BoxDecoration(
+            color: _codeSent ? AppColors.gray200 : AppColors.gray100,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: InternationalPhoneNumberInput(
+            onInputChanged: (PhoneNumber number) {
+              setState(() {
+                _phoneNumber = number;
+                _e164PhoneNumber = number.phoneNumber;
+                _phoneError = null;
+              });
+            },
+            onInputValidated: (bool isValid) {
+              setState(() {
+                _isPhoneValid = isValid;
+              });
+            },
+            selectorConfig: const SelectorConfig(
+              selectorType: PhoneInputSelectorType.DIALOG,
+              useBottomSheetSafeArea: true,
+              leadingPadding: 16,
+              setSelectorButtonAsPrefixIcon: true,
+              trailingSpace: false,
+            ),
+            ignoreBlank: false,
+            autoValidateMode: AutovalidateMode.disabled,
+            selectorTextStyle: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: AppColors.darkBlue,
+            ),
+            initialValue: _phoneNumber,
+            textFieldController: _phoneController,
+            formatInput: true,
+            isEnabled: !_codeSent,
+            keyboardType: const TextInputType.numberWithOptions(
+              signed: true,
+              decimal: true,
+            ),
+            inputDecoration: InputDecoration(
+              hintText: '전화번호 입력',
+              hintStyle: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                color: AppColors.gray400,
+              ),
+              filled: true,
+              fillColor: Colors.transparent,
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 16),
+            ),
+            textStyle: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: AppColors.darkBlue,
+            ),
+            searchBoxDecoration: InputDecoration(
+              hintText: '국가 검색',
+              hintStyle: TextStyle(color: AppColors.gray400),
+              prefixIcon: Icon(Icons.search, color: AppColors.gray500),
+              border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: AppColors.gray300),
               ),
-              child: Row(
-                children: [
-                  Text(
-                    '🇰🇷',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    '+82',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.darkBlue,
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  Icon(
-                    Icons.keyboard_arrow_down_rounded,
-                    size: 20,
-                    color: AppColors.gray500,
-                  ),
-                ],
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: AppColors.blue, width: 2),
               ),
             ),
-            const SizedBox(width: 10),
-
-            // 전화번호 입력
-            Expanded(
-              child: TextField(
-                controller: _phoneController,
-                focusNode: _phoneFocusNode,
-                keyboardType: TextInputType.phone,
-                enabled: !_codeSent,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(11),
-                  _PhoneNumberFormatter(),
-                ],
-                onChanged: (_) => setState(() => _phoneError = null),
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.darkBlue,
-                ),
-                decoration: InputDecoration(
-                  hintText: '010-0000-0000',
-                  hintStyle: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.gray400,
-                  ),
-                  filled: true,
-                  fillColor: _codeSent ? AppColors.gray200 : AppColors.gray100,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                ),
-              ),
-            ),
-          ],
+            locale: 'ko',
+          ),
         ),
         if (_phoneError != null)
           Padding(
@@ -853,10 +972,8 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
               borderSide: BorderSide.none,
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-            suffixIcon: Container(
+            suffixIcon: Padding(
               padding: const EdgeInsets.only(right: 16),
-              alignment: Alignment.centerRight,
-              width: 60,
               child: Text(
                 _timerText,
                 style: TextStyle(
@@ -866,6 +983,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                 ),
               ),
             ),
+            suffixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
           ),
         ),
         if (_codeError != null)
@@ -1004,31 +1122,6 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
             ),
         ],
       ),
-    );
-  }
-}
-
-/// 전화번호 포맷터
-class _PhoneNumberFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
-    final text = newValue.text;
-    if (text.isEmpty) return newValue;
-
-    final buffer = StringBuffer();
-    for (int i = 0; i < text.length; i++) {
-      buffer.write(text[i]);
-      if (i == 2 || i == 6) {
-        if (i != text.length - 1) buffer.write('-');
-      }
-    }
-
-    return TextEditingValue(
-      text: buffer.toString(),
-      selection: TextSelection.collapsed(offset: buffer.length),
     );
   }
 }

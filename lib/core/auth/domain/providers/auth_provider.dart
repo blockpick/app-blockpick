@@ -131,6 +131,7 @@ class Auth extends _$Auth {
   Future<void> signUp({
     required String email,
     required String password,
+    required String phoneNumber,
     String? nickname,
   }) async {
     print('📝 회원가입 3단계: 최종 회원가입 - $email');
@@ -141,6 +142,7 @@ class Auth extends _$Auth {
       final user = await repository.signUp(
         email: email,
         password: password,
+        phoneNumber: phoneNumber,
         nickname: nickname,
       );
       final token = await repository.getToken();
@@ -310,6 +312,49 @@ class Auth extends _$Auth {
         print('❌ 소셜 로그인 실패: $error');
       },
     );
+  }
+
+  // SMS 인증 코드 발송
+  Future<({bool success, String? code, String? message})> sendSmsVerificationCode({
+    required String phoneNumber,
+    required String verifyType,
+  }) async {
+    print('📱 SMS 인증 코드 발송 요청: $phoneNumber ($verifyType)');
+    final repository = await ref.read(authRepositoryProvider.future);
+    final result = await repository.sendSmsVerificationCode(
+      phoneNumber: phoneNumber,
+      verifyType: verifyType,
+    );
+    print(result.success ? '✅ SMS 인증 코드 발송 성공' : '❌ SMS 인증 코드 발송 실패: ${result.message}');
+    return result;
+  }
+
+  // SMS 인증 코드 검증
+  Future<({bool success, String? message})> verifySmsCode({
+    required String phoneNumber,
+    required String code,
+    required String verifyType,
+  }) async {
+    print('🔍 SMS 인증 코드 검증: $phoneNumber');
+    final repository = await ref.read(authRepositoryProvider.future);
+    final result = await repository.verifySmsCode(
+      phoneNumber: phoneNumber,
+      code: code,
+      verifyType: verifyType,
+    );
+    print(result.success ? '✅ SMS 인증 코드 검증 성공' : '❌ SMS 인증 코드 검증 실패: ${result.message}');
+    return result;
+  }
+
+  // 이메일 찾기 (SMS 인증 완료 후)
+  Future<({bool success, String? code, String? message, String? email})> findEmail({
+    required String phoneNumber,
+  }) async {
+    print('📧 이메일 찾기 요청: $phoneNumber');
+    final repository = await ref.read(authRepositoryProvider.future);
+    final result = await repository.findEmail(phoneNumber: phoneNumber);
+    print(result.success ? '✅ 이메일 찾기 성공: ${result.email}' : '❌ 이메일 찾기 실패: ${result.message}');
+    return result;
   }
 }
 

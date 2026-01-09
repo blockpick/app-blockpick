@@ -62,25 +62,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         body: SafeArea(
           child: Column(
             children: [
-              // 스킵 버튼
-              Align(
-                alignment: Alignment.topRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: TextButton(
-                    onPressed: _goToHome,
-                    child: Text(
-                      '건너뛰기',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.gray500,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
               // 페이지 콘텐츠
               Expanded(
                 child: PageView.builder(

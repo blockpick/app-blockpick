@@ -63,6 +63,7 @@ class AuthRemoteDataSource {
           id
           email
           nickname
+          phoneNumber
           avatar
         }
       }
@@ -161,6 +162,51 @@ class AuthRemoteDataSource {
           totalWins
           winRate
         }
+      }
+    }
+  ''';
+
+  // SMS 인증 코드 발송
+  static const String sendSmsVerificationCodeMutation = r'''
+    mutation SendSmsVerificationCode($input: SendSmsVerificationRequest!) {
+      sendSmsVerificationCode(input: $input) {
+        success
+        code
+        message
+      }
+    }
+  ''';
+
+  // SMS 인증 코드 검증
+  static const String verifySmsCodeMutation = r'''
+    mutation VerifySmsCode($input: VerifySmsCodeRequest!) {
+      verifySmsCode(input: $input) {
+        success
+        message
+      }
+    }
+  ''';
+
+  // 이메일 찾기 (SMS 인증 완료 후)
+  static const String findEmailMutation = r'''
+    mutation FindEmail($input: FindEmailRequest!) {
+      findEmail(input: $input) {
+        success
+        code
+        message
+        email
+      }
+    }
+  ''';
+
+  // 전화번호 가입 여부 확인
+  static const String checkPhoneNumberQuery = r'''
+    query CheckPhoneNumber($input: CheckPhoneNumberRequest!) {
+      checkPhoneNumber(input: $input) {
+        success
+        code
+        message
+        exists
       }
     }
   ''';
@@ -298,6 +344,7 @@ class AuthRemoteDataSource {
   Future<User> signUp({
     required String email,
     required String password,
+    required String phoneNumber,
     String? nickname,
   }) async {
     final result = await _client.mutate(
@@ -307,6 +354,7 @@ class AuthRemoteDataSource {
           'input': {
             'email': email,
             'password': password,
+            'phoneNumber': phoneNumber,
             if (nickname != null) 'nickname': nickname,
           },
         },
@@ -572,5 +620,133 @@ class AuthRemoteDataSource {
     } catch (e) {
       return (isValid: false, message: e.toString());
     }
+  }
+
+  /// SMS 인증 코드 발송
+  /// [phoneNumber] E.164 형식의 전화번호 (예: +821012345678)
+  /// [verifyType] 인증 타입: SIGN_UP, FIND_EMAIL, CHANGE_PASSWORD, WITHDRAW
+  Future<({bool success, String? code, String? message})> sendSmsVerificationCode({
+    required String phoneNumber,
+    required String verifyType,
+  }) async {
+    final result = await _client.mutate(
+      MutationOptions(
+        document: gql(sendSmsVerificationCodeMutation),
+        variables: {
+          'input': {
+            'phoneNumber': phoneNumber,
+            'verifyType': verifyType,
+          },
+        },
+      ),
+    );
+
+    final data = result.data?['sendSmsVerificationCode'];
+
+    if (data == null && result.hasException) {
+      throw result.exception!;
+    }
+
+    return (
+      success: data?['success'] as bool? ?? false,
+      code: data?['code'] as String?,
+      message: data?['message'] as String?,
+    );
+  }
+
+  /// SMS 인증 코드 검증
+  /// [phoneNumber] E.164 형식의 전화번호 (예: +821012345678)
+  /// [code] 6자리 인증 코드
+  /// [verifyType] 인증 타입: SIGN_UP, FIND_EMAIL, CHANGE_PASSWORD, WITHDRAW
+  Future<({bool success, String? message})> verifySmsCode({
+    required String phoneNumber,
+    required String code,
+    required String verifyType,
+  }) async {
+    final result = await _client.mutate(
+      MutationOptions(
+        document: gql(verifySmsCodeMutation),
+        variables: {
+          'input': {
+            'phoneNumber': phoneNumber,
+            'code': code,
+            'verifyType': verifyType,
+          },
+        },
+      ),
+    );
+
+    final data = result.data?['verifySmsCode'];
+
+    if (data == null && result.hasException) {
+      throw result.exception!;
+    }
+
+    return (
+      success: data?['success'] as bool? ?? false,
+      message: data?['message'] as String?,
+    );
+  }
+
+  /// 이메일 찾기 (SMS 인증 완료 후)
+  /// [phoneNumber] E.164 형식의 전화번호 (예: +821012345678)
+  Future<({bool success, String? code, String? message, String? email})> findEmail({
+    required String phoneNumber,
+  }) async {
+    final result = await _client.mutate(
+      MutationOptions(
+        document: gql(findEmailMutation),
+        variables: {
+          'input': {
+            'phoneNumber': phoneNumber,
+          },
+        },
+      ),
+    );
+
+    final data = result.data?['findEmail'];
+
+    if (data == null && result.hasException) {
+      throw result.exception!;
+    }
+
+    return (
+      success: data?['success'] as bool? ?? false,
+      code: data?['code'] as String?,
+      message: data?['message'] as String?,
+      email: data?['email'] as String?,
+    );
+  }
+
+  /// 전화번호 가입 여부 확인
+  /// [phoneNumber] E.164 형식의 전화번호 (예: +821012345678)
+  /// returns exists: true면 이미 가입된 번호
+  Future<({bool success, String? code, String? message, bool exists})> checkPhoneNumber({
+    required String phoneNumber,
+  }) async {
+    final result = await _client.query(
+      QueryOptions(
+        document: gql(checkPhoneNumberQuery),
+        variables: {
+          'input': {
+            'phoneNumber': phoneNumber,
+          },
+        },
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+
+    final data = result.data?['checkPhoneNumber'];
+
+    if (data == null && result.hasException) {
+      throw result.exception!;
+    }
+
+    return (
+      success: data?['success'] as bool? ?? false,
+      code: data?['code'] as String?,
+      message: data?['message'] as String?,
+      exists: data?['exists'] as bool? ?? false,
+    );
   }
 }

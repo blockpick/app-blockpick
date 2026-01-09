@@ -159,9 +159,11 @@ class _SignupFormState extends ConsumerState<SignupForm> {
       final password = _passwordController.text;
       final nickname = _nicknameController.text.trim();
 
+      // TODO: 레거시 코드 - 새 회원가입 플로우(phone_verify_screen → email_password_setup_screen) 사용 권장
       await ref.read(authProvider.notifier).signUp(
         email: email,
         password: password,
+        phoneNumber: '', // 레거시: phoneNumber 없음 - 서버에서 에러 발생함
         nickname: nickname,
       );
 

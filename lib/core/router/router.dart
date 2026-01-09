@@ -185,6 +185,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           final extra = state.extra as Map<String, dynamic>?;
           return EmailPasswordSetupScreen(
             phone: extra?['phone'] as String?,
+            phoneE164: extra?['phoneE164'] as String?,
             agreeMarketing: extra?['agreeMarketing'] as bool?,
           );
         },
@@ -203,6 +204,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           final extra = state.extra as Map<String, dynamic>?;
           return FindEmailResultScreen(
             phone: extra?['phone'] as String?,
+            phoneE164: extra?['phoneE164'] as String?,
           );
         },
       ),

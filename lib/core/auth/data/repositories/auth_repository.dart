@@ -50,11 +50,13 @@ class AuthRepository {
   Future<User> signUp({
     required String email,
     required String password,
+    required String phoneNumber,
     String? nickname,
   }) async {
     final user = await _remoteDataSource.signUp(
       email: email,
       password: password,
+      phoneNumber: phoneNumber,
       nickname: nickname,
     );
 
@@ -177,6 +179,48 @@ class AuthRepository {
 
     // 유저 정보 반환
     return result.user;
+  }
+
+  // SMS 인증 코드 발송
+  Future<({bool success, String? code, String? message})> sendSmsVerificationCode({
+    required String phoneNumber,
+    required String verifyType,
+  }) async {
+    return await _remoteDataSource.sendSmsVerificationCode(
+      phoneNumber: phoneNumber,
+      verifyType: verifyType,
+    );
+  }
+
+  // SMS 인증 코드 검증
+  Future<({bool success, String? message})> verifySmsCode({
+    required String phoneNumber,
+    required String code,
+    required String verifyType,
+  }) async {
+    return await _remoteDataSource.verifySmsCode(
+      phoneNumber: phoneNumber,
+      code: code,
+      verifyType: verifyType,
+    );
+  }
+
+  // 이메일 찾기 (SMS 인증 완료 후)
+  Future<({bool success, String? code, String? message, String? email})> findEmail({
+    required String phoneNumber,
+  }) async {
+    return await _remoteDataSource.findEmail(
+      phoneNumber: phoneNumber,
+    );
+  }
+
+  // 전화번호 가입 여부 확인
+  Future<({bool success, String? code, String? message, bool exists})> checkPhoneNumber({
+    required String phoneNumber,
+  }) async {
+    return await _remoteDataSource.checkPhoneNumber(
+      phoneNumber: phoneNumber,
+    );
   }
 }
 

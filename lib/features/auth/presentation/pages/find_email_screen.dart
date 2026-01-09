@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/auth/data/repositories/auth_repository.dart';
+import '../../../../core/auth/domain/providers/verification_state_provider.dart';
 
 /// SC-006: 이메일 찾기 화면
 ///
-/// - SC-006-01: 휴대폰 번호 입력
+/// - SC-006-01: 휴대폰 번호 입력 (국제 전화번호 지원)
 /// - SC-006-02: 인증번호 입력
 /// - SC-006-03: 이메일 찾기 결과
 class FindEmailScreen extends ConsumerStatefulWidget {
@@ -20,8 +23,12 @@ class FindEmailScreen extends ConsumerStatefulWidget {
 class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
   final _phoneController = TextEditingController();
   final _codeController = TextEditingController();
-  final _phoneFocusNode = FocusNode();
   final _codeFocusNode = FocusNode();
+
+  // 국제 전화번호 입력
+  PhoneNumber _phoneNumber = PhoneNumber(isoCode: 'KR');
+  bool _isPhoneValid = false;
+  String? _e164PhoneNumber;
 
   bool _codeSent = false;
   bool _isLoading = false;
@@ -37,14 +44,8 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
     _timer?.cancel();
     _phoneController.dispose();
     _codeController.dispose();
-    _phoneFocusNode.dispose();
     _codeFocusNode.dispose();
     super.dispose();
-  }
-
-  bool get _isPhoneValid {
-    final phone = _phoneController.text.replaceAll(RegExp(r'\D'), '');
-    return phone.length >= 10 && phone.length <= 11;
   }
 
   bool get _isCodeValid {
@@ -70,7 +71,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
   }
 
   Future<void> _sendCode() async {
-    if (!_isPhoneValid) {
+    if (!_isPhoneValid || _e164PhoneNumber == null) {
       setState(() => _phoneError = '휴대폰 번호를 입력해 주세요.');
       return;
     }
@@ -80,17 +81,36 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
       _phoneError = null;
     });
 
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      final authRepo = await ref.read(authRepositoryProvider.future);
 
-    if (!mounted) return;
+      final result = await authRepo.sendSmsVerificationCode(
+        phoneNumber: _e164PhoneNumber!,
+        verifyType: 'FIND_EMAIL',
+      );
 
-    setState(() {
-      _isLoading = false;
-      _codeSent = true;
-    });
+      if (!mounted) return;
 
-    _startTimer();
-    _codeFocusNode.requestFocus();
+      if (result.success) {
+        setState(() {
+          _isLoading = false;
+          _codeSent = true;
+        });
+        _startTimer();
+        _codeFocusNode.requestFocus();
+      } else {
+        setState(() {
+          _isLoading = false;
+          _phoneError = result.message ?? 'SMS 발송에 실패했습니다.';
+        });
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+        _phoneError = 'SMS 발송 중 오류가 발생했습니다.';
+      });
+    }
   }
 
   Future<void> _resendCode() async {
@@ -101,32 +121,84 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
       _codeController.clear();
     });
 
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      final authRepo = await ref.read(authRepositoryProvider.future);
 
-    if (!mounted) return;
+      final result = await authRepo.sendSmsVerificationCode(
+        phoneNumber: _e164PhoneNumber!,
+        verifyType: 'FIND_EMAIL',
+      );
 
-    setState(() {
-      _isLoading = false;
-      _resendCount++;
-    });
+      if (!mounted) return;
 
-    _startTimer();
+      if (result.success) {
+        setState(() {
+          _isLoading = false;
+          _resendCount++;
+        });
+        _startTimer();
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   Future<void> _verifyAndSearch() async {
-    final code = _codeController.text;
+    if (_e164PhoneNumber == null) return;
 
-    if (code != '000000') {
-      _showNoAccountDialog();
+    // 이미 인증된 번호인지 확인 (24시간 유효)
+    final verificationState = ref.read(verificationProvider);
+    if (verificationState.isPhoneVerified(_e164PhoneNumber!)) {
+      // 이미 인증됨 - API 호출 없이 바로 결과 화면으로
+      context.push('/find-email-result', extra: {
+        'phone': _phoneController.text,
+        'phoneE164': _e164PhoneNumber,
+      });
       return;
     }
 
-    if (!mounted) return;
+    final code = _codeController.text;
 
-    // 결과 화면으로 이동
-    context.push('/find-email-result', extra: {
-      'phone': _phoneController.text,
-    });
+    setState(() => _isLoading = true);
+
+    try {
+      final authRepo = await ref.read(authRepositoryProvider.future);
+
+      final result = await authRepo.verifySmsCode(
+        phoneNumber: _e164PhoneNumber!,
+        code: code,
+        verifyType: 'FIND_EMAIL',
+      );
+
+      if (!mounted) return;
+
+      setState(() => _isLoading = false);
+
+      if (!result.success) {
+        _showNoAccountDialog();
+        return;
+      }
+
+      // 인증 상태 저장
+      ref.read(verificationProvider.notifier).markPhoneVerified(_e164PhoneNumber!);
+
+      // 결과 화면으로 이동
+      context.push('/find-email-result', extra: {
+        'phone': _phoneController.text,
+        'phoneE164': _e164PhoneNumber,
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+      _showNoAccountDialog();
+    }
   }
 
   void _showNoAccountDialog() {
@@ -300,49 +372,87 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              decoration: BoxDecoration(
-                color: AppColors.gray100,
+        const Text(
+          '휴대폰 번호',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: AppColors.darkBlue,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          decoration: BoxDecoration(
+            color: _codeSent ? AppColors.gray200 : AppColors.gray100,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: InternationalPhoneNumberInput(
+            onInputChanged: (PhoneNumber number) {
+              setState(() {
+                _phoneNumber = number;
+                _e164PhoneNumber = number.phoneNumber;
+                _phoneError = null;
+              });
+            },
+            onInputValidated: (bool isValid) {
+              setState(() {
+                _isPhoneValid = isValid;
+              });
+            },
+            selectorConfig: const SelectorConfig(
+              selectorType: PhoneInputSelectorType.DIALOG,
+              useBottomSheetSafeArea: true,
+              leadingPadding: 16,
+              setSelectorButtonAsPrefixIcon: true,
+              trailingSpace: false,
+            ),
+            ignoreBlank: false,
+            autoValidateMode: AutovalidateMode.disabled,
+            selectorTextStyle: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: AppColors.darkBlue,
+            ),
+            initialValue: _phoneNumber,
+            textFieldController: _phoneController,
+            formatInput: true,
+            isEnabled: !_codeSent,
+            keyboardType: const TextInputType.numberWithOptions(
+              signed: true,
+              decimal: true,
+            ),
+            inputDecoration: InputDecoration(
+              hintText: '전화번호 입력',
+              hintStyle: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                color: AppColors.gray400,
+              ),
+              filled: true,
+              fillColor: Colors.transparent,
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 16),
+            ),
+            textStyle: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: AppColors.darkBlue,
+            ),
+            searchBoxDecoration: InputDecoration(
+              hintText: '국가 검색',
+              hintStyle: TextStyle(color: AppColors.gray400),
+              prefixIcon: Icon(Icons.search, color: AppColors.gray500),
+              border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: AppColors.gray300),
               ),
-              child: Row(
-                children: [
-                  Text('KOR', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.gray600)),
-                  const SizedBox(width: 4),
-                  Text('+82', style: TextStyle(fontSize: 16, color: AppColors.gray500)),
-                ],
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: AppColors.blue, width: 2),
               ),
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: TextField(
-                controller: _phoneController,
-                focusNode: _phoneFocusNode,
-                keyboardType: TextInputType.phone,
-                enabled: !_codeSent,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(11),
-                ],
-                onChanged: (_) => setState(() => _phoneError = null),
-                style: const TextStyle(fontSize: 16, color: AppColors.darkBlue),
-                decoration: InputDecoration(
-                  hintText: '숫자만 입력',
-                  hintStyle: TextStyle(fontSize: 16, color: AppColors.gray400),
-                  filled: true,
-                  fillColor: _codeSent ? AppColors.gray200 : AppColors.gray100,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                ),
-              ),
-            ),
-          ],
+            locale: 'ko',
+          ),
         ),
         if (_phoneError != null)
           Padding(
