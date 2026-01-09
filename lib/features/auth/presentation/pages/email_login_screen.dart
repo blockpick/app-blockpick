@@ -1,9 +1,12 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/auth/domain/providers/auth_provider.dart';
+import '../../../../core/auth/data/services/google_auth_service.dart';
+import '../../../../core/auth/data/services/apple_auth_service.dart';
 
 /// SC-004: 이메일 로그인 화면
 ///
@@ -182,6 +185,134 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Future<void> _handleGoogleLogin() async {
+    final googleAuthService = GoogleAuthService();
+
+    try {
+      // 로딩 표시
+      _showLoadingDialog();
+
+      // Google 로그인 수행
+      final googleResult = await googleAuthService.signIn();
+
+      // Auth Provider를 통해 소셜 로그인 수행
+      await ref.read(authProvider.notifier).socialSignIn(
+            provider: 'GOOGLE',
+            socialId: googleResult.id,
+            email: googleResult.email,
+            name: googleResult.displayName,
+            profileImageUrl: googleResult.photoUrl,
+          );
+
+      // 로딩 닫기
+      if (mounted) Navigator.of(context).pop();
+
+      // 홈으로 이동
+      if (mounted) {
+        context.go('/');
+      }
+    } catch (e) {
+      // 로딩 닫기
+      if (mounted) Navigator.of(context).pop();
+
+      // 사용자가 취소한 경우
+      if (e.toString().contains('취소')) {
+        return;
+      }
+
+      // 에러 처리
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Google 로그인에 실패했습니다: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _handleAppleLogin() async {
+    final appleAuthService = AppleAuthService();
+
+    // Apple 로그인 가능 여부 확인
+    if (!Platform.isIOS) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Apple 로그인은 iOS에서만 지원됩니다.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    final isAvailable = await appleAuthService.isAvailable();
+    if (!isAvailable) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Apple 로그인을 사용할 수 없습니다.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+      return;
+    }
+
+    try {
+      // 로딩 표시
+      _showLoadingDialog();
+
+      // Apple 로그인 수행
+      final appleResult = await appleAuthService.signIn();
+
+      // Auth Provider를 통해 소셜 로그인 수행
+      await ref.read(authProvider.notifier).socialSignIn(
+            provider: 'APPLE',
+            socialId: appleResult.userIdentifier,
+            email: appleResult.email,
+            name: appleResult.fullName,
+          );
+
+      // 로딩 닫기
+      if (mounted) Navigator.of(context).pop();
+
+      // 홈으로 이동
+      if (mounted) {
+        context.go('/');
+      }
+    } catch (e) {
+      // 로딩 닫기
+      if (mounted) Navigator.of(context).pop();
+
+      // 사용자가 취소한 경우
+      if (e.toString().contains('canceled') ||
+          e.toString().contains('AuthorizationErrorCode.canceled')) {
+        return;
+      }
+
+      // 에러 처리
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Apple 로그인에 실패했습니다: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  void _showLoadingDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(color: AppColors.blue),
       ),
     );
   }
@@ -534,18 +665,15 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                             },
                           ),
                           text: '구글 계정으로 로그인',
-                          onTap: () {
-                            // TODO: 구글 로그인 구현
-                          },
+                          onTap: _handleGoogleLogin,
                         ),
                         const SizedBox(height: 12),
-                        _buildSocialLoginButton(
-                          icon: const Icon(Icons.apple, size: 24, color: AppColors.black),
-                          text: '애플 계정으로 로그인',
-                          onTap: () {
-                            // TODO: 애플 로그인 구현
-                          },
-                        ),
+                        if (Platform.isIOS)
+                          _buildSocialLoginButton(
+                            icon: const Icon(Icons.apple, size: 24, color: AppColors.black),
+                            text: '애플 계정으로 로그인',
+                            onTap: _handleAppleLogin,
+                          ),
                       ],
                     ),
                   ),

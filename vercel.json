@@ -4,6 +4,14 @@
   "installCommand": "echo 'Flutter will be installed during build'",
   "routes": [
     {
+      "src": "/privacy",
+      "dest": "/privacy.html"
+    },
+    {
+      "src": "/terms",
+      "dest": "/terms.html"
+    },
+    {
       "handle": "filesystem"
     },
     {

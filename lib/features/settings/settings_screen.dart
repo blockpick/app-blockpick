@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/auth/domain/providers/auth_provider.dart';
+import '../../core/auth/data/repositories/auth_repository.dart';
 import '../../core/theme/app_colors.dart';
 import '../../providers/notification_settings_provider.dart';
 
@@ -271,7 +272,7 @@ class SettingsScreen extends ConsumerWidget {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-              // TODO: 회원 탈퇴 처리
+              _showPasswordInputDialog(context, ref);
             },
             child: Text(
               '탈퇴',
@@ -279,6 +280,149 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showPasswordInputDialog(BuildContext context, WidgetRef ref) {
+    final passwordController = TextEditingController();
+    bool isLoading = false;
+    String? errorMessage;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: const Text(
+            '비밀번호 확인',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: AppColors.darkBlue,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                '탈퇴를 위해 비밀번호를 입력해 주세요.',
+                style: TextStyle(fontSize: 14, height: 1.4),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: passwordController,
+                obscureText: true,
+                enabled: !isLoading,
+                decoration: InputDecoration(
+                  hintText: '비밀번호',
+                  hintStyle: TextStyle(color: AppColors.gray400),
+                  filled: true,
+                  fillColor: AppColors.gray100,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 14,
+                  ),
+                  errorText: errorMessage,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: isLoading ? null : () => Navigator.of(context).pop(),
+              child: Text(
+                '취소',
+                style: TextStyle(
+                  color: isLoading ? AppColors.gray400 : AppColors.gray600,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: isLoading
+                  ? null
+                  : () async {
+                      final password = passwordController.text.trim();
+                      if (password.isEmpty) {
+                        setState(() {
+                          errorMessage = '비밀번호를 입력해 주세요.';
+                        });
+                        return;
+                      }
+
+                      setState(() {
+                        isLoading = true;
+                        errorMessage = null;
+                      });
+
+                      try {
+                        final authRepo = await ref.read(authRepositoryProvider.future);
+                        final success = await authRepo.withdrawUser(
+                          password: password,
+                        );
+
+                        if (!context.mounted) return;
+
+                        if (success) {
+                          Navigator.of(context).pop();
+                          // 로그아웃 처리 (토큰 삭제는 withdrawUser에서 이미 처리됨)
+                          await ref.read(authProvider.notifier).signOut();
+
+                          if (context.mounted) {
+                            // 탈퇴 완료 안내
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: const Text('회원 탈퇴가 완료되었습니다.'),
+                                backgroundColor: AppColors.darkBlue,
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            );
+                            context.go('/');
+                          }
+                        } else {
+                          setState(() {
+                            isLoading = false;
+                            errorMessage = '탈퇴 처리에 실패했습니다.';
+                          });
+                        }
+                      } catch (e) {
+                        if (!context.mounted) return;
+                        setState(() {
+                          isLoading = false;
+                          errorMessage = '비밀번호가 일치하지 않습니다.';
+                        });
+                      }
+                    },
+              child: isLoading
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(AppColors.red),
+                      ),
+                    )
+                  : Text(
+                      '탈퇴하기',
+                      style: TextStyle(
+                        color: AppColors.red,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }

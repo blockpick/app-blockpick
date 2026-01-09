@@ -1,4 +1,4 @@
-package com.adrock.blockpick.blockpick_flutter
+package net.blockpick.app
 
 import io.flutter.embedding.android.FlutterActivity
 

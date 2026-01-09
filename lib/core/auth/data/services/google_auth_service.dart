@@ -27,23 +27,33 @@ class GoogleAuthService {
   StreamSubscription<GoogleSignInAuthenticationEvent>? _authSubscription;
   bool _isInitialized = false;
 
+  // Web Client ID (Google Cloud Console에서 발급받은 웹 클라이언트 ID)
+  // Android에서 serverClientId로 필요
+  static const String _webClientId = '339699664526-c8qg0a3o2b8t6qorlboha55teg64rf4d.apps.googleusercontent.com';
+
   /// 초기화
   Future<void> _ensureInitialized() async {
     if (_isInitialized) return;
 
-    await _googleSignIn.initialize();
+    await _googleSignIn.initialize(
+      serverClientId: _webClientId,
+    );
     _isInitialized = true;
   }
 
   /// Google 로그인 수행
   Future<GoogleAuthResult> signIn() async {
+    print('🔵 [GoogleAuth] signIn() 시작');
+
     await _ensureInitialized();
+    print('🔵 [GoogleAuth] 초기화 완료');
 
     // 기존 세션 정리
     try {
       await _googleSignIn.disconnect();
-    } catch (_) {
-      // 이미 로그아웃 상태일 수 있음
+      print('🔵 [GoogleAuth] 기존 세션 정리 완료');
+    } catch (e) {
+      print('🔵 [GoogleAuth] 기존 세션 없음: $e');
     }
 
     // Completer 생성
@@ -55,15 +65,23 @@ class GoogleAuthService {
       _handleAuthenticationEvent,
       onError: _handleAuthenticationError,
     );
+    print('🔵 [GoogleAuth] 이벤트 리스너 설정 완료');
 
     // 인증 시도
-    if (_googleSignIn.supportsAuthenticate()) {
+    final supportsAuth = _googleSignIn.supportsAuthenticate();
+    print('🔵 [GoogleAuth] supportsAuthenticate: $supportsAuth');
+
+    if (supportsAuth) {
       try {
+        print('🔵 [GoogleAuth] authenticate() 호출 시작');
         await _googleSignIn.authenticate();
+        print('🔵 [GoogleAuth] authenticate() 호출 완료');
       } catch (e) {
+        print('🔴 [GoogleAuth] authenticate() 에러: $e');
         _signInCompleter?.completeError(e);
       }
     } else {
+      print('🔴 [GoogleAuth] 이 플랫폼에서 지원 안됨');
       _signInCompleter?.completeError(
         Exception('이 플랫폼에서는 Google 로그인을 지원하지 않습니다.'),
       );
