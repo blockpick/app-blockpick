@@ -58,6 +58,7 @@ import '../../features/more/modes/duo_pick_screen.dart';
 import '../../features/more/modes/fortune_pick_screen.dart';
 import '../../features/more/modes/predict_pick_screen.dart';
 import '../../features/more/modes/gacha_pick_screen.dart';
+import '../../features/more/modes/treasure_pick_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final isAuthenticated = ref.watch(isAuthenticatedProvider);
@@ -454,6 +455,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/more/gacha',
         builder: (context, state) => const GachaPickScreen(),
+      ),
+      GoRoute(
+        path: '/more/treasure',
+        builder: (context, state) => const TreasurePickScreen(),
       ),
     ],
   );
