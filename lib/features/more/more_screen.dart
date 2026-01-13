@@ -85,6 +85,13 @@ class MoreScreen extends StatelessWidget {
       description: '인형뽑기처럼 좌표를 잡아보세요',
       color: Color(0xFFEC4899),
     ),
+    PickMode(
+      id: 'treasure',
+      name: 'Treasure',
+      icon: '💎',
+      description: '숨겨진 보물을 찾아보세요!',
+      color: Color(0xFFFFD700),
+    ),
   ];
 
   @override
@@ -110,7 +117,7 @@ class MoreScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '11가지 독창적인 방법으로 좌표를 선택해보세요',
+                    '12가지 독창적인 방법으로 좌표를 선택해보세요',
                     style: TextStyle(
                       fontSize: 14,
                       color: AppColors.gray600,
