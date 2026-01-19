@@ -118,6 +118,26 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
     }
   }
 
+  /// 세이프존 비율 (양 끝 3%씩)
+  static const double _safeZoneRatio = 0.03;
+
+  /// 애니메이션 값을 좌표로 변환 (세이프존 적용)
+  /// 세이프존 내에서는 끝값(0 또는 gridSize)으로 스냅
+  int _valueToCoordinate(double value) {
+    double normalizedValue;
+    if (value <= _safeZoneRatio) {
+      // 시작 세이프존: 0으로 스냅
+      normalizedValue = 0.0;
+    } else if (value >= 1.0 - _safeZoneRatio) {
+      // 끝 세이프존: 1로 스냅
+      normalizedValue = 1.0;
+    } else {
+      // 중간 영역: 세이프존을 제외한 범위로 매핑
+      normalizedValue = (value - _safeZoneRatio) / (1.0 - 2 * _safeZoneRatio);
+    }
+    return (normalizedValue * widget.gridSize).round().clamp(0, widget.gridSize);
+  }
+
   /// 이벤트 성공 여부 체크 (하나라도 맞으면 성공)
   bool _checkEventSuccess(int row, int col) {
     if (!widget.eventMode || widget.targetCoordinates.isEmpty) return false;
@@ -162,8 +182,8 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
       _horizontalController.stop();
 
       Future.delayed(const Duration(milliseconds: 300), () {
-        final row = (_fixedVertical * widget.gridSize).round().clamp(0, widget.gridSize);
-        final col = (_fixedHorizontal * widget.gridSize).round().clamp(0, widget.gridSize);
+        final row = _valueToCoordinate(_fixedVertical);
+        final col = _valueToCoordinate(_fixedHorizontal);
 
         // 이벤트 모드에서 성공 체크
         if (widget.eventMode && _checkEventSuccess(row, col)) {
@@ -188,14 +208,14 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
   }
 
   int get currentRow => _phase == 0
-      ? (_verticalController.value * widget.gridSize).round().clamp(0, widget.gridSize)
-      : (_fixedVertical * widget.gridSize).round().clamp(0, widget.gridSize);
+      ? _valueToCoordinate(_verticalController.value)
+      : _valueToCoordinate(_fixedVertical);
 
   int? get currentCol => _phase < 1
       ? null
       : _phase == 1
-          ? (_horizontalController.value * widget.gridSize).round().clamp(0, widget.gridSize)
-          : (_fixedHorizontal * widget.gridSize).round().clamp(0, widget.gridSize);
+          ? _valueToCoordinate(_horizontalController.value)
+          : _valueToCoordinate(_fixedHorizontal);
 
   @override
   Widget build(BuildContext context) {
