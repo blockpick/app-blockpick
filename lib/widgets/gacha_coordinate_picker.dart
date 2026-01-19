@@ -162,8 +162,8 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
       _horizontalController.stop();
 
       Future.delayed(const Duration(milliseconds: 300), () {
-        final row = (_fixedVertical * widget.gridSize).round().clamp(1, widget.gridSize);
-        final col = (_fixedHorizontal * widget.gridSize).round().clamp(1, widget.gridSize);
+        final row = (_fixedVertical * widget.gridSize).round().clamp(0, widget.gridSize);
+        final col = (_fixedHorizontal * widget.gridSize).round().clamp(0, widget.gridSize);
 
         // 이벤트 모드에서 성공 체크
         if (widget.eventMode && _checkEventSuccess(row, col)) {
@@ -188,14 +188,14 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
   }
 
   int get currentRow => _phase == 0
-      ? (_verticalController.value * widget.gridSize).round().clamp(1, widget.gridSize)
-      : (_fixedVertical * widget.gridSize).round().clamp(1, widget.gridSize);
+      ? (_verticalController.value * widget.gridSize).round().clamp(0, widget.gridSize)
+      : (_fixedVertical * widget.gridSize).round().clamp(0, widget.gridSize);
 
   int? get currentCol => _phase < 1
       ? null
       : _phase == 1
-          ? (_horizontalController.value * widget.gridSize).round().clamp(1, widget.gridSize)
-          : (_fixedHorizontal * widget.gridSize).round().clamp(1, widget.gridSize);
+          ? (_horizontalController.value * widget.gridSize).round().clamp(0, widget.gridSize)
+          : (_fixedHorizontal * widget.gridSize).round().clamp(0, widget.gridSize);
 
   @override
   Widget build(BuildContext context) {
