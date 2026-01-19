@@ -206,27 +206,28 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
         _pulseController,
       ]),
       builder: (context, _) {
-        return Column(
-          children: [
-            const SizedBox(height: 16),
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 16),
 
-            // 단계 인디케이터
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: _buildPhaseIndicator(),
-            ),
+              // 단계 인디케이터
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: _buildPhaseIndicator(),
+              ),
 
-            const SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-            // 게임 캔버스 (1:1 비율 - 가로 전체 너비 기준)
-            LayoutBuilder(
-              builder: (context, constraints) {
-                final canvasSize = constraints.maxWidth - 32; // 좌우 마진 16씩
-                return SizedBox(
-                  width: constraints.maxWidth,
-                  height: canvasSize,
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
+              // 게임 캔버스 (1:1 비율 - 가로 전체 너비 기준)
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final canvasSize = constraints.maxWidth - 32; // 좌우 마진 16씩
+                  return SizedBox(
+                    width: constraints.maxWidth,
+                    height: canvasSize,
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
@@ -303,13 +304,14 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
               },
             ),
 
-            const SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-            // 하단 컨트롤
-            _buildBottomControls(),
+              // 하단 컨트롤
+              _buildBottomControls(),
 
-            const SizedBox(height: 16),
-          ],
+              const SizedBox(height: 16),
+            ],
+          ),
         );
       },
     );
