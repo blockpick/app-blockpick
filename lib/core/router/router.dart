@@ -59,6 +59,9 @@ import '../../features/more/modes/fortune_pick_screen.dart';
 import '../../features/more/modes/predict_pick_screen.dart';
 import '../../features/more/modes/gacha_pick_screen.dart';
 import '../../features/more/modes/treasure_pick_screen.dart';
+// Unity 3D Game
+import '../../features/more/unity/unity_blockpick_screen.dart';
+import '../../features/more/unity/unity_game_select_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final isAuthenticated = ref.watch(isAuthenticatedProvider);
@@ -456,9 +459,47 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/more/gacha',
         builder: (context, state) => const GachaPickScreen(),
       ),
-      GoRoute(
+GoRoute(
         path: '/more/treasure',
         builder: (context, state) => const TreasurePickScreen(),
+      ),
+
+      // ============ Unity 3D 게임 ============
+      // 게임 선택 화면
+      GoRoute(
+        path: '/more/unity',
+        builder: (context, state) => const UnityGameSelectScreen(),
+      ),
+      // Unity 게임 플레이 화면
+      GoRoute(
+        path: '/more/unity/play',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return UnityBlockpickScreen(
+            gameId: extra?['gameId'] as String?,
+            gridRows: extra?['gridRows'] as int?,
+            gridCols: extra?['gridCols'] as int?,
+            imageUrl: extra?['imageUrl'] as String?,
+            title: extra?['title'] as String?,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/unity-game/:gameId',
+        builder: (context, state) {
+          final gameId = state.pathParameters['gameId']!;
+          final rows = int.tryParse(state.uri.queryParameters['rows'] ?? '100');
+          final cols = int.tryParse(state.uri.queryParameters['cols'] ?? '100');
+          final imageUrl = state.uri.queryParameters['imageUrl'];
+          final title = state.uri.queryParameters['title'];
+          return UnityBlockpickScreen(
+            gameId: gameId,
+            gridRows: rows,
+            gridCols: cols,
+            imageUrl: imageUrl,
+            title: title,
+          );
+        },
       ),
     ],
   );

@@ -49,7 +49,7 @@ class AuthRemoteDataSource {
         code
         message
       }
-    }
+    } 
   ''';
 
   // 회원가입

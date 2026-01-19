@@ -43,3 +43,47 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+.vercel
+
+# Unity build artifacts
+/android/build/
+/android/unityLibrary/
+/android/shared/
+
+# Keystore files (NEVER commit!)
+*.keystore
+*.jks
+android/key.properties
+
+# Environment files
+.env
+.env.*
+*.env
+
+# Android
+android/.gradle/
+android/local.properties
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/flutter_export_environment.sh
+
+# Flutter plugins
+.flutter-plugins
+
+# FVM (Flutter Version Manager)
+.fvm/
+
+# Generated files
+*.g.dart
+*.freezed.dart
+*.mocks.dart
+lib/generated_plugin_registrant.dart
+
+# Test
+**/test_driver/
+.test_coverage.dart

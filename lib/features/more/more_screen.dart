@@ -92,6 +92,13 @@ class MoreScreen extends StatelessWidget {
       description: '숨겨진 보물을 찾아보세요!',
       color: Color(0xFFFFD700),
     ),
+    PickMode(
+      id: 'unity',
+      name: '3D Block',
+      icon: '🧊',
+      description: '3D 블록 세계에서 보물을 찾아보세요',
+      color: Color(0xFF10B981),
+    ),
   ];
 
   @override
