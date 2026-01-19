@@ -400,41 +400,36 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
           // 상품 정보 카드
           _buildProductCard(game),
 
-          // Gacha 좌표 선택기 (1:1 비율 유지)
+          // Gacha 좌표 선택기
           Expanded(
-            child: Center(
-              child: AspectRatio(
-                aspectRatio: 1.0,
-                child: Container(
-                  margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.darkBlue.withValues(alpha: 0.08),
-                        blurRadius: 20,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
+            child: Container(
+              margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.darkBlue.withValues(alpha: 0.08),
+                    blurRadius: 20,
+                    offset: const Offset(0, 4),
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(24),
-                    child: GachaCoordinatePicker(
-                      key: _pickerKey,
-                      imageUrl: game.imageUrl,
-                      gridSize: 1000,
-                      accentColor: AppColors.darkBlue,
-                      rowSpeed: _rowSpeed,
-                      colSpeed: _colSpeed,
-                      eventMode: _eventMode,
-                      targetCoordinates: _eventTargets.map((t) => Point(t.row, t.col)).toList(),
-                      allowedRange: _allowedRange,
-                      showTarget: _showTarget,
-                      onEventSuccess: _onEventSuccess,
-                      onCoordinateSelected: _onCoordinateSelected,
-                    ),
-                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(24),
+                child: GachaCoordinatePicker(
+                  key: _pickerKey,
+                  imageUrl: game.imageUrl,
+                  gridSize: 1000,
+                  accentColor: AppColors.darkBlue,
+                  rowSpeed: _rowSpeed,
+                  colSpeed: _colSpeed,
+                  eventMode: _eventMode,
+                  targetCoordinates: _eventTargets.map((t) => Point(t.row, t.col)).toList(),
+                  allowedRange: _allowedRange,
+                  showTarget: _showTarget,
+                  onEventSuccess: _onEventSuccess,
+                  onCoordinateSelected: _onCoordinateSelected,
                 ),
               ),
             ),

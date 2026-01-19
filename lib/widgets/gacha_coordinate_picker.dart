@@ -218,79 +218,84 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
 
             const SizedBox(height: 16),
 
-            // 게임 캔버스
+            // 게임 캔버스 (1:1 비율)
             Expanded(
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: AppColors.gray200,
-                    width: 2,
-                  ),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(18),
-                  child: Stack(
-                    children: [
-                      // 경품 이미지
-                      Positioned.fill(
-                        child: _buildProductImage(),
+              child: Center(
+                child: AspectRatio(
+                  aspectRatio: 1.0,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: AppColors.gray200,
+                        width: 2,
                       ),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(18),
+                      child: Stack(
+                        children: [
+                          // 경품 이미지
+                          Positioned.fill(
+                            child: _buildProductImage(),
+                          ),
 
-                      // 오버레이
-                      Positioned.fill(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.black.withValues(alpha: 0.1),
-                                Colors.black.withValues(alpha: 0.3),
-                              ],
+                          // 오버레이
+                          Positioned.fill(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Colors.black.withValues(alpha: 0.1),
+                                    Colors.black.withValues(alpha: 0.3),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
 
-                      // 그리드
-                      LayoutBuilder(
-                        builder: (context, constraints) {
-                          return CustomPaint(
-                            size: Size(constraints.maxWidth, constraints.maxHeight),
-                            painter: _TossGridPainter(),
-                          );
-                        },
-                      ),
+                          // 그리드
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              return CustomPaint(
+                                size: Size(constraints.maxWidth, constraints.maxHeight),
+                                painter: _TossGridPainter(),
+                              );
+                            },
+                          ),
 
-                      // 크로스헤어
-                      LayoutBuilder(
-                        builder: (context, constraints) {
-                          return CustomPaint(
-                            size: Size(constraints.maxWidth, constraints.maxHeight),
-                            painter: _TossCrosshairPainter(
-                              phase: _phase,
-                              verticalPos: _phase == 0
-                                  ? _verticalController.value
-                                  : _fixedVertical,
-                              horizontalPos: _phase >= 1
-                                  ? (_phase == 1
-                                      ? _horizontalController.value
-                                      : _fixedHorizontal)
-                                  : 0.5,
-                              accentColor: widget.accentColor,
-                              pulseValue: _pulseController.value,
-                              // 이벤트 모드 관련
-                              showTarget: widget.eventMode && widget.showTarget,
-                              targetCoordinates: widget.targetCoordinates,
-                              allowedRange: widget.allowedRange,
-                              gridSize: widget.gridSize,
-                            ),
-                          );
-                        },
+                          // 크로스헤어
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              return CustomPaint(
+                                size: Size(constraints.maxWidth, constraints.maxHeight),
+                                painter: _TossCrosshairPainter(
+                                  phase: _phase,
+                                  verticalPos: _phase == 0
+                                      ? _verticalController.value
+                                      : _fixedVertical,
+                                  horizontalPos: _phase >= 1
+                                      ? (_phase == 1
+                                          ? _horizontalController.value
+                                          : _fixedHorizontal)
+                                      : 0.5,
+                                  accentColor: widget.accentColor,
+                                  pulseValue: _pulseController.value,
+                                  // 이벤트 모드 관련
+                                  showTarget: widget.eventMode && widget.showTarget,
+                                  targetCoordinates: widget.targetCoordinates,
+                                  allowedRange: widget.allowedRange,
+                                  gridSize: widget.gridSize,
+                                ),
+                              );
+                            },
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ),
