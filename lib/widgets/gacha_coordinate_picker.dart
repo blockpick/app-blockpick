@@ -218,11 +218,13 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
 
             const SizedBox(height: 16),
 
-            // 게임 캔버스 (1:1 비율)
-            Expanded(
-              child: Center(
-                child: AspectRatio(
-                  aspectRatio: 1.0,
+            // 게임 캔버스 (1:1 비율 - 가로 전체 너비 기준)
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final canvasSize = constraints.maxWidth - 32; // 좌우 마진 16씩
+                return SizedBox(
+                  width: constraints.maxWidth,
+                  height: canvasSize,
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
@@ -297,8 +299,8 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
                       ),
                     ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
 
             const SizedBox(height: 16),
