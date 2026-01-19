@@ -49,6 +49,8 @@ post_install do |installer|
         'PERMISSION_PHOTOS=1',
         'PERMISSION_NOTIFICATIONS=1',
       ]
+      
+      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
     end
   end
 end

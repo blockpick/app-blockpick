@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -10,6 +11,9 @@ import '../../providers/game_provider.dart';
 import '../../providers/game_participation_provider.dart';
 import '../../providers/game_join_progress_provider.dart';
 import '../../widgets/gacha_coordinate_picker.dart';
+import '../../widgets/confetti_celebration.dart';
+import 'models/event_prize.dart';
+import 'widgets/event_prize_popup.dart';
 import 'widgets/game_join_progress_overlay.dart';
 import 'widgets/game_join_result_overlay.dart';
 import 'widgets/product_selector_overlay.dart';
@@ -31,14 +35,72 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
 
   final GlobalKey<GachaCoordinatePickerState> _pickerKey = GlobalKey();
   final _priceFormatter = NumberFormat('#,###');
+  final _random = Random();
+
+  // 이벤트 모드 설정
+  bool _eventMode = false;
+  bool _showTarget = true;
+  List<EventTarget> _eventTargets = [];
+  int _targetCount = 3;
+  int _allowedRange = 50;
+  int _rowSpeed = 2500;
+  int _colSpeed = 2200;
 
   @override
   void initState() {
     super.initState();
   }
 
+  /// 랜덤 타겟 좌표들 생성 (각각 랜덤 상품 포함)
+  void _generateRandomTargets() {
+    final gridSize = _game?.gridRows ?? 1000;
+    setState(() {
+      _eventTargets = List.generate(_targetCount, (_) => EventTarget(
+        row: _random.nextInt(gridSize) + 1,
+        col: _random.nextInt(gridSize) + 1,
+        prize: EventPrize.getRandomPrize(),
+      ));
+    });
+  }
+
+  /// 이벤트 당첨 체크 - 당첨된 타겟 반환
+  EventTarget? _checkEventWin(int row, int col) {
+    if (!_eventMode || _eventTargets.isEmpty) return null;
+
+    for (final target in _eventTargets) {
+      final rowDiff = (row - target.row).abs();
+      final colDiff = (col - target.col).abs();
+
+      if (rowDiff <= _allowedRange && colDiff <= _allowedRange) {
+        return target;
+      }
+    }
+    return null;
+  }
+
+  /// 이벤트 성공 시 축하 효과 (레거시 - picker에서 호출)
+  void _onEventSuccess() {
+    // 이제 _onCoordinateSelected에서 처리하므로 여기서는 아무것도 안 함
+  }
+
   void _onCoordinateSelected(int row, int col) {
-    _showCoordinateConfirmDialog(row, col);
+    // 이벤트 당첨 체크
+    final wonTarget = _checkEventWin(row, col);
+
+    if (wonTarget != null) {
+      // 당첨! → 축하 효과 + 팝업 → 기존 바텀시트
+      ConfettiCelebration.show(context);
+      EventPrizePopup.show(
+        context,
+        prize: wonTarget.prize,
+        onContinue: () {
+          _showCoordinateConfirmDialog(row, col);
+        },
+      );
+    } else {
+      // 미당첨 → 바로 기존 바텀시트
+      _showCoordinateConfirmDialog(row, col);
+    }
   }
 
   void _showCoordinateConfirmDialog(int row, int col) {
@@ -344,8 +406,13 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                   imageUrl: game.imageUrl,
                   gridSize: 1000,
                   accentColor: AppColors.darkBlue,
-                  rowSpeed: 2500,
-                  colSpeed: 2200,
+                  rowSpeed: _rowSpeed,
+                  colSpeed: _colSpeed,
+                  eventMode: _eventMode,
+                  targetCoordinates: _eventTargets.map((t) => Point(t.row, t.col)).toList(),
+                  allowedRange: _allowedRange,
+                  showTarget: _showTarget,
+                  onEventSuccess: _onEventSuccess,
                   onCoordinateSelected: _onCoordinateSelected,
                 ),
               ),
@@ -392,6 +459,15 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                // 설정 버튼 (이벤트 모드)
+                IconButton(
+                  onPressed: () => _showSettingsSheet(),
+                  icon: Icon(
+                    Icons.tune_rounded,
+                    size: 22,
+                    color: _eventMode ? AppColors.orange : AppColors.gray500,
                   ),
                 ),
                 // 도움말 버튼
@@ -616,6 +692,39 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
         Icons.card_giftcard_rounded,
         size: 32,
         color: AppColors.gray400,
+      ),
+    );
+  }
+
+  void _showSettingsSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => _EventSettingsSheet(
+        eventMode: _eventMode,
+        showTarget: _showTarget,
+        eventTargets: _eventTargets,
+        targetCount: _targetCount,
+        allowedRange: _allowedRange,
+        rowSpeed: _rowSpeed,
+        colSpeed: _colSpeed,
+        gridSize: _game?.gridRows ?? 1000,
+        onSettingsChanged: (settings) {
+          setState(() {
+            _eventMode = settings.eventMode;
+            _showTarget = settings.showTarget;
+            _eventTargets = settings.eventTargets;
+            _targetCount = settings.targetCount;
+            _allowedRange = settings.allowedRange;
+            _rowSpeed = settings.rowSpeed;
+            _colSpeed = settings.colSpeed;
+          });
+          // 속도 변경 적용
+          _pickerKey.currentState?.setRowSpeed(settings.rowSpeed);
+          _pickerKey.currentState?.setColSpeed(settings.colSpeed);
+        },
+        onGenerateTargets: _generateRandomTargets,
       ),
     );
   }
@@ -939,6 +1048,453 @@ class _TossStyleConfirmSheet extends StatelessWidget {
             fontWeight: FontWeight.w700,
             color: AppColors.darkBlue,
             fontFamily: 'monospace',
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// 이벤트 설정 데이터
+class _EventSettings {
+  final bool eventMode;
+  final bool showTarget;
+  final List<EventTarget> eventTargets;
+  final int targetCount;
+  final int allowedRange;
+  final int rowSpeed;
+  final int colSpeed;
+
+  _EventSettings({
+    required this.eventMode,
+    required this.showTarget,
+    required this.eventTargets,
+    required this.targetCount,
+    required this.allowedRange,
+    required this.rowSpeed,
+    required this.colSpeed,
+  });
+}
+
+/// 이벤트 설정 바텀시트
+class _EventSettingsSheet extends StatefulWidget {
+  final bool eventMode;
+  final bool showTarget;
+  final List<EventTarget> eventTargets;
+  final int targetCount;
+  final int allowedRange;
+  final int rowSpeed;
+  final int colSpeed;
+  final int gridSize;
+  final Function(_EventSettings) onSettingsChanged;
+  final VoidCallback onGenerateTargets;
+
+  const _EventSettingsSheet({
+    required this.eventMode,
+    required this.showTarget,
+    required this.eventTargets,
+    required this.targetCount,
+    required this.allowedRange,
+    required this.rowSpeed,
+    required this.colSpeed,
+    required this.gridSize,
+    required this.onSettingsChanged,
+    required this.onGenerateTargets,
+  });
+
+  @override
+  State<_EventSettingsSheet> createState() => _EventSettingsSheetState();
+}
+
+class _EventSettingsSheetState extends State<_EventSettingsSheet> {
+  late bool _eventMode;
+  late bool _showTarget;
+  late List<EventTarget> _eventTargets;
+  late int _targetCount;
+  late int _allowedRange;
+  late int _rowSpeed;
+  late int _colSpeed;
+
+  @override
+  void initState() {
+    super.initState();
+    _eventMode = widget.eventMode;
+    _showTarget = widget.showTarget;
+    _eventTargets = List.from(widget.eventTargets);
+    _targetCount = widget.targetCount;
+    _allowedRange = widget.allowedRange;
+    _rowSpeed = widget.rowSpeed;
+    _colSpeed = widget.colSpeed;
+  }
+
+  void _notifyChange() {
+    widget.onSettingsChanged(_EventSettings(
+      eventMode: _eventMode,
+      showTarget: _showTarget,
+      eventTargets: _eventTargets,
+      targetCount: _targetCount,
+      allowedRange: _allowedRange,
+      rowSpeed: _rowSpeed,
+      colSpeed: _colSpeed,
+    ));
+  }
+
+  void _generateRandomTargets() {
+    final random = Random();
+    setState(() {
+      _eventTargets = List.generate(_targetCount, (_) => EventTarget(
+        row: random.nextInt(widget.gridSize) + 1,
+        col: random.nextInt(widget.gridSize) + 1,
+        prize: EventPrize.getRandomPrize(),
+      ));
+    });
+    _notifyChange();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // 핸들
+          Center(
+            child: Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppColors.gray300,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // 타이틀
+          Row(
+            children: [
+              const Icon(Icons.tune_rounded, color: AppColors.darkBlue),
+              const SizedBox(width: 8),
+              const Text(
+                '이벤트 설정',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.darkBlue,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+
+          // 이벤트 모드 토글
+          _buildToggleRow(
+            '이벤트 모드',
+            '타겟 좌표를 맞추면 축하 효과!',
+            _eventMode,
+            (value) {
+              setState(() => _eventMode = value);
+              _notifyChange();
+            },
+          ),
+          const SizedBox(height: 16),
+
+          // 타겟 표시 토글
+          if (_eventMode) ...[
+            _buildToggleRow(
+              '타겟 좌표 표시',
+              '화면에 목표 좌표를 표시합니다',
+              _showTarget,
+              (value) {
+                setState(() => _showTarget = value);
+                _notifyChange();
+              },
+            ),
+            const SizedBox(height: 20),
+
+            // 타겟 개수 슬라이더
+            _buildSliderRow(
+              '타겟 좌표 개수',
+              '$_targetCount개',
+              _targetCount.toDouble(),
+              1,
+              10,
+              (value) {
+                setState(() => _targetCount = value.round());
+                _notifyChange();
+              },
+            ),
+            const SizedBox(height: 16),
+
+            // 현재 타겟 좌표 및 상품
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFD700).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFFFFD700).withValues(alpha: 0.3)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '보너스 타겟 (${_eventTargets.length}개)',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: AppColors.gray600,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              _eventTargets.isNotEmpty
+                                  ? '랜덤 좌표에 보너스 상품이 숨겨져 있어요!'
+                                  : '랜덤 버튼을 눌러 상품을 배치하세요',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                                color: _eventTargets.isNotEmpty ? AppColors.darkBlue : AppColors.gray500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: _generateRandomTargets,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFD700),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.shuffle_rounded, size: 18, color: Colors.white),
+                              SizedBox(width: 6),
+                              Text(
+                                '랜덤',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  // 타겟 상품 리스트
+                  if (_eventTargets.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: _eventTargets.map((target) {
+                        final (r, g, b) = EventPrize.getGradeColor(target.prize.grade);
+                        final gradeColor = Color.fromRGBO(r, g, b, 1);
+                        return Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: gradeColor.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: gradeColor.withValues(alpha: 0.3)),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(target.prize.emoji, style: const TextStyle(fontSize: 14)),
+                              const SizedBox(width: 6),
+                              Text(
+                                target.prize.name,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: gradeColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // 허용 범위 슬라이더
+            _buildSliderRow(
+              '허용 범위',
+              '±$_allowedRange 칸',
+              _allowedRange.toDouble(),
+              1,
+              200,
+              (value) {
+                setState(() => _allowedRange = value.round());
+                _notifyChange();
+              },
+            ),
+          ],
+
+          const SizedBox(height: 20),
+          const Divider(),
+          const SizedBox(height: 20),
+
+          // 속도 조절 섹션
+          const Text(
+            '속도 조절',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: AppColors.darkBlue,
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // ROW 속도
+          _buildSliderRow(
+            'ROW (세로) 속도',
+            '${(_rowSpeed / 1000).toStringAsFixed(1)}초',
+            _rowSpeed.toDouble(),
+            500,
+            5000,
+            (value) {
+              setState(() => _rowSpeed = value.round());
+              _notifyChange();
+            },
+          ),
+          const SizedBox(height: 16),
+
+          // COL 속도
+          _buildSliderRow(
+            'COL (가로) 속도',
+            '${(_colSpeed / 1000).toStringAsFixed(1)}초',
+            _colSpeed.toDouble(),
+            500,
+            5000,
+            (value) {
+              setState(() => _colSpeed = value.round());
+              _notifyChange();
+            },
+          ),
+
+          SizedBox(height: MediaQuery.of(context).padding.bottom + 16),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildToggleRow(
+    String title,
+    String subtitle,
+    bool value,
+    Function(bool) onChanged,
+  ) {
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.darkBlue,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: AppColors.gray500,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Switch(
+          value: value,
+          onChanged: onChanged,
+          activeTrackColor: AppColors.darkBlue,
+          thumbColor: WidgetStateProperty.resolveWith((states) =>
+            states.contains(WidgetState.selected) ? AppColors.white : AppColors.gray400,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSliderRow(
+    String title,
+    String valueText,
+    double value,
+    double min,
+    double max,
+    Function(double) onChanged,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: AppColors.gray700,
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.gray100,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                valueText,
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.darkBlue,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        SliderTheme(
+          data: SliderTheme.of(context).copyWith(
+            trackHeight: 4,
+            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+            overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
+          ),
+          child: Slider(
+            value: value.clamp(min, max),
+            min: min,
+            max: max,
+            activeColor: AppColors.darkBlue,
+            inactiveColor: AppColors.gray200,
+            onChanged: onChanged,
           ),
         ),
       ],

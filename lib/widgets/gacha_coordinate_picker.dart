@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -23,6 +24,21 @@ class GachaCoordinatePicker extends StatefulWidget {
   /// COL 축 이동 속도 (밀리초)
   final int colSpeed;
 
+  /// 이벤트 모드 활성화
+  final bool eventMode;
+
+  /// 타겟 좌표 리스트 (이벤트 모드)
+  final List<Point<int>> targetCoordinates;
+
+  /// 허용 범위 (이벤트 모드)
+  final int allowedRange;
+
+  /// 타겟 좌표 표시 여부
+  final bool showTarget;
+
+  /// 이벤트 성공 콜백
+  final VoidCallback? onEventSuccess;
+
   const GachaCoordinatePicker({
     super.key,
     this.imageUrl,
@@ -31,6 +47,11 @@ class GachaCoordinatePicker extends StatefulWidget {
     this.accentColor = AppColors.darkBlue,
     this.rowSpeed = 2000,
     this.colSpeed = 1800,
+    this.eventMode = false,
+    this.targetCoordinates = const [],
+    this.allowedRange = 10,
+    this.showTarget = true,
+    this.onEventSuccess,
   });
 
   @override
@@ -48,24 +69,68 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
   double _fixedVertical = 0.5;
   double _fixedHorizontal = 0.5;
 
+  // 현재 속도 (동적 변경 가능)
+  late int _currentRowSpeed;
+  late int _currentColSpeed;
+
   @override
   void initState() {
     super.initState();
+    _currentRowSpeed = widget.rowSpeed;
+    _currentColSpeed = widget.colSpeed;
 
     _verticalController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: widget.rowSpeed),
+      duration: Duration(milliseconds: _currentRowSpeed),
     )..repeat(reverse: true);
 
     _horizontalController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: widget.colSpeed),
+      duration: Duration(milliseconds: _currentColSpeed),
     );
 
     _pulseController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
     )..repeat(reverse: true);
+  }
+
+  /// ROW 속도 변경 (밀리초)
+  void setRowSpeed(int speed) {
+    _currentRowSpeed = speed;
+    final currentValue = _verticalController.value;
+    _verticalController.duration = Duration(milliseconds: speed);
+    if (_phase == 0) {
+      _verticalController.repeat(reverse: true);
+      // 현재 위치에서 계속
+      _verticalController.value = currentValue;
+    }
+  }
+
+  /// COL 속도 변경 (밀리초)
+  void setColSpeed(int speed) {
+    _currentColSpeed = speed;
+    final currentValue = _horizontalController.value;
+    _horizontalController.duration = Duration(milliseconds: speed);
+    if (_phase == 1) {
+      _horizontalController.repeat(reverse: true);
+      _horizontalController.value = currentValue;
+    }
+  }
+
+  /// 이벤트 성공 여부 체크 (하나라도 맞으면 성공)
+  bool _checkEventSuccess(int row, int col) {
+    if (!widget.eventMode || widget.targetCoordinates.isEmpty) return false;
+
+    for (final target in widget.targetCoordinates) {
+      final rowDiff = (row - target.x).abs();
+      final colDiff = (col - target.y).abs();
+
+      if (rowDiff <= widget.allowedRange && colDiff <= widget.allowedRange) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @override
@@ -86,6 +151,7 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
         _phase = 1;
       });
       _verticalController.stop();
+      _horizontalController.duration = Duration(milliseconds: _currentColSpeed);
       _horizontalController.repeat(reverse: true);
     } else if (_phase == 1) {
       // COL 고정 → 완료
@@ -98,6 +164,12 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
       Future.delayed(const Duration(milliseconds: 300), () {
         final row = (_fixedVertical * widget.gridSize).round().clamp(1, widget.gridSize);
         final col = (_fixedHorizontal * widget.gridSize).round().clamp(1, widget.gridSize);
+
+        // 이벤트 모드에서 성공 체크
+        if (widget.eventMode && _checkEventSuccess(row, col)) {
+          widget.onEventSuccess?.call();
+        }
+
         widget.onCoordinateSelected(row, col);
       });
     }
@@ -209,6 +281,11 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
                                   : 0.5,
                               accentColor: widget.accentColor,
                               pulseValue: _pulseController.value,
+                              // 이벤트 모드 관련
+                              showTarget: widget.eventMode && widget.showTarget,
+                              targetCoordinates: widget.targetCoordinates,
+                              allowedRange: widget.allowedRange,
+                              gridSize: widget.gridSize,
                             ),
                           );
                         },
@@ -515,6 +592,11 @@ class _TossCrosshairPainter extends CustomPainter {
   final double horizontalPos;
   final Color accentColor;
   final double pulseValue;
+  // 이벤트 모드 관련
+  final bool showTarget;
+  final List<Point<int>> targetCoordinates;
+  final int allowedRange;
+  final int gridSize;
 
   _TossCrosshairPainter({
     required this.phase,
@@ -522,12 +604,23 @@ class _TossCrosshairPainter extends CustomPainter {
     required this.horizontalPos,
     required this.accentColor,
     required this.pulseValue,
+    this.showTarget = false,
+    this.targetCoordinates = const [],
+    this.allowedRange = 10,
+    this.gridSize = 1000,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
     final y = verticalPos * size.height;
     final x = horizontalPos * size.width;
+
+    // 타겟 좌표들 표시 (이벤트 모드)
+    if (showTarget && targetCoordinates.isNotEmpty) {
+      for (final target in targetCoordinates) {
+        _drawTargetArea(canvas, size, target);
+      }
+    }
 
     // ROW 라인 (가로)
     if (phase >= 0) {
@@ -626,6 +719,82 @@ class _TossCrosshairPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
     canvas.drawCircle(position, size, borderPaint);
+  }
+
+  /// 타겟 영역 그리기
+  void _drawTargetArea(Canvas canvas, Size size, Point<int> target) {
+    // 좌표를 화면 위치로 변환
+    final targetX = (target.y / gridSize) * size.width;
+    final targetY = (target.x / gridSize) * size.height;
+
+    // 허용 범위를 화면 크기로 변환
+    final rangeX = (allowedRange / gridSize) * size.width;
+    final rangeY = (allowedRange / gridSize) * size.height;
+
+    // 허용 범위 영역 (반투명 사각형)
+    final rangePaint = Paint()
+      ..color = const Color(0xFFFFD700).withValues(alpha: 0.2 + pulseValue * 0.1)
+      ..style = PaintingStyle.fill;
+
+    final rangeRect = Rect.fromCenter(
+      center: Offset(targetX, targetY),
+      width: rangeX * 2,
+      height: rangeY * 2,
+    );
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(rangeRect, const Radius.circular(8)),
+      rangePaint,
+    );
+
+    // 허용 범위 테두리
+    final rangeBorderPaint = Paint()
+      ..color = const Color(0xFFFFD700).withValues(alpha: 0.6)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(rangeRect, const Radius.circular(8)),
+      rangeBorderPaint,
+    );
+
+    // 타겟 중심점 (별 모양 효과)
+    final targetPaint = Paint()
+      ..color = const Color(0xFFFFD700)
+      ..style = PaintingStyle.fill;
+
+    // 외곽 글로우
+    final glowPaint = Paint()
+      ..color = const Color(0xFFFFD700).withValues(alpha: 0.3 + pulseValue * 0.2)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
+    canvas.drawCircle(Offset(targetX, targetY), 16 + pulseValue * 4, glowPaint);
+
+    // 중심 원
+    canvas.drawCircle(Offset(targetX, targetY), 8, targetPaint);
+
+    // 십자 마커
+    final crossPaint = Paint()
+      ..color = const Color(0xFFFFD700)
+      ..strokeWidth = 2
+      ..strokeCap = StrokeCap.round;
+    canvas.drawLine(
+      Offset(targetX - 16, targetY),
+      Offset(targetX - 8, targetY),
+      crossPaint,
+    );
+    canvas.drawLine(
+      Offset(targetX + 8, targetY),
+      Offset(targetX + 16, targetY),
+      crossPaint,
+    );
+    canvas.drawLine(
+      Offset(targetX, targetY - 16),
+      Offset(targetX, targetY - 8),
+      crossPaint,
+    );
+    canvas.drawLine(
+      Offset(targetX, targetY + 8),
+      Offset(targetX, targetY + 16),
+      crossPaint,
+    );
   }
 
   @override
