@@ -46,6 +46,9 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
   int _rowSpeed = 2500;
   int _colSpeed = 2200;
 
+  // 상품군 설정 (나중에 게임별로 API에서 가져올 예정)
+  EventPrizePool _selectedPrizePool = EventPrizePool.defaultPool;
+
   @override
   void initState() {
     super.initState();
@@ -54,12 +57,22 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
   /// 랜덤 타겟 좌표들 생성 (각각 랜덤 상품 포함)
   void _generateRandomTargets() {
     final gridSize = _game?.gridRows ?? 1000;
+    // targetCount는 최대 상품 수를 초과할 수 없음
+    final actualCount = _targetCount.clamp(1, _selectedPrizePool.maxPrizeCount);
     setState(() {
-      _eventTargets = List.generate(_targetCount, (_) => EventTarget(
+      _eventTargets = List.generate(actualCount, (index) => EventTarget(
+        id: '${DateTime.now().millisecondsSinceEpoch}_$index',
         row: _random.nextInt(gridSize) + 1,
         col: _random.nextInt(gridSize) + 1,
-        prize: EventPrize.getRandomPrize(),
+        prize: _selectedPrizePool.getRandomPrize(),
       ));
+    });
+  }
+
+  /// 당첨된 타겟 제거
+  void _removeWonTarget(EventTarget target) {
+    setState(() {
+      _eventTargets.removeWhere((t) => t.id == target.id);
     });
   }
 
@@ -88,6 +101,9 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
     final wonTarget = _checkEventWin(row, col);
 
     if (wonTarget != null) {
+      // 당첨된 타겟 제거 (화면에서 사라짐)
+      _removeWonTarget(wonTarget);
+
       // 당첨! → 축하 효과 + 팝업 → 기존 바텀시트
       ConfettiCelebration.show(context);
       EventPrizePopup.show(
@@ -710,6 +726,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
         rowSpeed: _rowSpeed,
         colSpeed: _colSpeed,
         gridSize: _game?.gridRows ?? 1000,
+        selectedPrizePool: _selectedPrizePool,
         onSettingsChanged: (settings) {
           setState(() {
             _eventMode = settings.eventMode;
@@ -719,6 +736,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
             _allowedRange = settings.allowedRange;
             _rowSpeed = settings.rowSpeed;
             _colSpeed = settings.colSpeed;
+            _selectedPrizePool = settings.selectedPrizePool;
           });
           // 속도 변경 적용
           _pickerKey.currentState?.setRowSpeed(settings.rowSpeed);
@@ -1064,6 +1082,7 @@ class _EventSettings {
   final int allowedRange;
   final int rowSpeed;
   final int colSpeed;
+  final EventPrizePool selectedPrizePool;
 
   _EventSettings({
     required this.eventMode,
@@ -1073,6 +1092,7 @@ class _EventSettings {
     required this.allowedRange,
     required this.rowSpeed,
     required this.colSpeed,
+    required this.selectedPrizePool,
   });
 }
 
@@ -1086,6 +1106,7 @@ class _EventSettingsSheet extends StatefulWidget {
   final int rowSpeed;
   final int colSpeed;
   final int gridSize;
+  final EventPrizePool selectedPrizePool;
   final Function(_EventSettings) onSettingsChanged;
   final VoidCallback onGenerateTargets;
 
@@ -1098,6 +1119,7 @@ class _EventSettingsSheet extends StatefulWidget {
     required this.rowSpeed,
     required this.colSpeed,
     required this.gridSize,
+    required this.selectedPrizePool,
     required this.onSettingsChanged,
     required this.onGenerateTargets,
   });
@@ -1114,6 +1136,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
   late int _allowedRange;
   late int _rowSpeed;
   late int _colSpeed;
+  late EventPrizePool _selectedPrizePool;
 
   @override
   void initState() {
@@ -1125,6 +1148,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
     _allowedRange = widget.allowedRange;
     _rowSpeed = widget.rowSpeed;
     _colSpeed = widget.colSpeed;
+    _selectedPrizePool = widget.selectedPrizePool;
   }
 
   void _notifyChange() {
@@ -1136,16 +1160,19 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
       allowedRange: _allowedRange,
       rowSpeed: _rowSpeed,
       colSpeed: _colSpeed,
+      selectedPrizePool: _selectedPrizePool,
     ));
   }
 
   void _generateRandomTargets() {
     final random = Random();
+    final actualCount = _targetCount.clamp(1, _selectedPrizePool.maxPrizeCount);
     setState(() {
-      _eventTargets = List.generate(_targetCount, (_) => EventTarget(
+      _eventTargets = List.generate(actualCount, (index) => EventTarget(
+        id: '${DateTime.now().millisecondsSinceEpoch}_$index',
         row: random.nextInt(widget.gridSize) + 1,
         col: random.nextInt(widget.gridSize) + 1,
-        prize: EventPrize.getRandomPrize(),
+        prize: _selectedPrizePool.getRandomPrize(),
       ));
     });
     _notifyChange();
@@ -1218,13 +1245,90 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
             ),
             const SizedBox(height: 20),
 
-            // 타겟 개수 슬라이더
+            // 상품군 선택
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '상품군 선택',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.gray700,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.gray100,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.gray200),
+                  ),
+                  child: DropdownButton<EventPrizePool>(
+                    value: _selectedPrizePool,
+                    isExpanded: true,
+                    underline: const SizedBox(),
+                    icon: const Icon(Icons.keyboard_arrow_down_rounded),
+                    items: EventPrizePool.availablePools.map((pool) {
+                      return DropdownMenuItem(
+                        value: pool,
+                        child: Row(
+                          children: [
+                            Text(
+                              pool.name,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.darkBlue,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: AppColors.blue.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                '최대 ${pool.maxPrizeCount}개',
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  color: AppColors.blue,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (pool) {
+                      if (pool != null) {
+                        setState(() {
+                          _selectedPrizePool = pool;
+                          // 개수가 새 풀의 최대를 초과하면 조정
+                          if (_targetCount > pool.maxPrizeCount) {
+                            _targetCount = pool.maxPrizeCount;
+                          }
+                          // 기존 타겟 초기화
+                          _eventTargets = [];
+                        });
+                        _notifyChange();
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            // 타겟 개수 슬라이더 (최대값은 선택된 상품군의 maxPrizeCount)
             _buildSliderRow(
               '타겟 좌표 개수',
-              '$_targetCount개',
+              '$_targetCount개 (최대 ${_selectedPrizePool.maxPrizeCount}개)',
               _targetCount.toDouble(),
               1,
-              10,
+              _selectedPrizePool.maxPrizeCount.toDouble(),
               (value) {
                 setState(() => _targetCount = value.round());
                 _notifyChange();
