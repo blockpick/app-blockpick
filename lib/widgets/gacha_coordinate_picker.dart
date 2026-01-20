@@ -750,79 +750,139 @@ class _TossCrosshairPainter extends CustomPainter {
     canvas.drawCircle(position, size, borderPaint);
   }
 
-  /// 타겟 영역 그리기
+  /// 타겟 영역 그리기 (반짝이는 보석 스타일)
   void _drawTargetArea(Canvas canvas, Size size, Point<int> target) {
     // 좌표를 화면 위치로 변환
     final targetX = (target.y / gridSize) * size.width;
     final targetY = (target.x / gridSize) * size.height;
+    final center = Offset(targetX, targetY);
 
     // 허용 범위를 화면 크기로 변환
     final rangeX = (allowedRange / gridSize) * size.width;
     final rangeY = (allowedRange / gridSize) * size.height;
 
-    // 허용 범위 영역 (반투명 사각형)
-    final rangePaint = Paint()
-      ..color = const Color(0xFFFFD700).withValues(alpha: 0.2 + pulseValue * 0.1)
-      ..style = PaintingStyle.fill;
+    // 색상 정의
+    const primaryColor = Color(0xFFFF6B9D); // 핑크
+    const secondaryColor = Color(0xFFFF9E4F); // 오렌지
+    const sparkleColor = Color(0xFFFFFFFF); // 화이트
 
+    // 1. 허용 범위 영역 (그라데이션 원형)
     final rangeRect = Rect.fromCenter(
-      center: Offset(targetX, targetY),
+      center: center,
       width: rangeX * 2,
       height: rangeY * 2,
     );
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(rangeRect, const Radius.circular(8)),
-      rangePaint,
-    );
 
-    // 허용 범위 테두리
-    final rangeBorderPaint = Paint()
-      ..color = const Color(0xFFFFD700).withValues(alpha: 0.6)
+    final rangePaint = Paint()
+      ..shader = RadialGradient(
+        colors: [
+          primaryColor.withValues(alpha: 0.3 + pulseValue * 0.15),
+          primaryColor.withValues(alpha: 0.1),
+          Colors.transparent,
+        ],
+        stops: const [0.0, 0.7, 1.0],
+      ).createShader(rangeRect);
+    canvas.drawOval(rangeRect, rangePaint);
+
+    // 2. 회전하는 외곽 링
+    canvas.save();
+    canvas.translate(targetX, targetY);
+    canvas.rotate(pulseValue * pi * 2); // 360도 회전
+
+    final ringRadius = rangeX * 0.8;
+    final ringPaint = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(rangeRect, const Radius.circular(8)),
-      rangeBorderPaint,
-    );
-
-    // 타겟 중심점 (별 모양 효과)
-    final targetPaint = Paint()
-      ..color = const Color(0xFFFFD700)
-      ..style = PaintingStyle.fill;
-
-    // 외곽 글로우
-    final glowPaint = Paint()
-      ..color = const Color(0xFFFFD700).withValues(alpha: 0.3 + pulseValue * 0.2)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
-    canvas.drawCircle(Offset(targetX, targetY), 16 + pulseValue * 4, glowPaint);
-
-    // 중심 원
-    canvas.drawCircle(Offset(targetX, targetY), 8, targetPaint);
-
-    // 십자 마커
-    final crossPaint = Paint()
-      ..color = const Color(0xFFFFD700)
       ..strokeWidth = 2
+      ..shader = SweepGradient(
+        colors: [
+          primaryColor.withValues(alpha: 0.8),
+          secondaryColor.withValues(alpha: 0.4),
+          Colors.transparent,
+          primaryColor.withValues(alpha: 0.8),
+        ],
+        stops: const [0.0, 0.3, 0.6, 1.0],
+      ).createShader(Rect.fromCircle(center: Offset.zero, radius: ringRadius));
+    canvas.drawCircle(Offset.zero, ringRadius, ringPaint);
+    canvas.restore();
+
+    // 3. 바깥쪽 글로우
+    final outerGlowPaint = Paint()
+      ..color = primaryColor.withValues(alpha: 0.2 + pulseValue * 0.1)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 15);
+    canvas.drawCircle(center, 20 + pulseValue * 8, outerGlowPaint);
+
+    // 4. 중간 글로우
+    final midGlowPaint = Paint()
+      ..color = secondaryColor.withValues(alpha: 0.4 + pulseValue * 0.2)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
+    canvas.drawCircle(center, 12 + pulseValue * 4, midGlowPaint);
+
+    // 5. 다이아몬드 모양 중심
+    final diamondPath = Path();
+    final diamondSize = 10 + pulseValue * 2;
+    diamondPath.moveTo(targetX, targetY - diamondSize); // 위
+    diamondPath.lineTo(targetX + diamondSize * 0.7, targetY); // 오른쪽
+    diamondPath.lineTo(targetX, targetY + diamondSize * 0.6); // 아래
+    diamondPath.lineTo(targetX - diamondSize * 0.7, targetY); // 왼쪽
+    diamondPath.close();
+
+    // 다이아몬드 그라데이션
+    final diamondPaint = Paint()
+      ..shader = LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          sparkleColor,
+          primaryColor,
+          secondaryColor,
+        ],
+      ).createShader(Rect.fromCenter(center: center, width: diamondSize * 2, height: diamondSize * 2));
+    canvas.drawPath(diamondPath, diamondPaint);
+
+    // 다이아몬드 테두리
+    final diamondBorderPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.5
+      ..color = sparkleColor.withValues(alpha: 0.8);
+    canvas.drawPath(diamondPath, diamondBorderPaint);
+
+    // 6. 반짝이 효과 (4개 별)
+    _drawSparkle(canvas, Offset(targetX - 18, targetY - 12), 4 + pulseValue * 2, sparkleColor, 1.0 - pulseValue * 0.3);
+    _drawSparkle(canvas, Offset(targetX + 16, targetY - 8), 3 + pulseValue * 1.5, sparkleColor, 0.7 + pulseValue * 0.3);
+    _drawSparkle(canvas, Offset(targetX + 12, targetY + 14), 3.5 + pulseValue * 1.8, sparkleColor, 0.8 - pulseValue * 0.2);
+    _drawSparkle(canvas, Offset(targetX - 14, targetY + 10), 2.5 + pulseValue * 1.2, sparkleColor, 0.6 + pulseValue * 0.4);
+  }
+
+  /// 반짝이(별) 그리기
+  void _drawSparkle(Canvas canvas, Offset position, double size, Color color, double alpha) {
+    final paint = Paint()
+      ..color = color.withValues(alpha: alpha.clamp(0.0, 1.0))
+      ..strokeWidth = 1.5
       ..strokeCap = StrokeCap.round;
+
+    // 가로 선
     canvas.drawLine(
-      Offset(targetX - 16, targetY),
-      Offset(targetX - 8, targetY),
-      crossPaint,
+      Offset(position.dx - size, position.dy),
+      Offset(position.dx + size, position.dy),
+      paint,
+    );
+    // 세로 선
+    canvas.drawLine(
+      Offset(position.dx, position.dy - size),
+      Offset(position.dx, position.dy + size),
+      paint,
+    );
+    // 대각선 (작게)
+    final diagSize = size * 0.5;
+    canvas.drawLine(
+      Offset(position.dx - diagSize, position.dy - diagSize),
+      Offset(position.dx + diagSize, position.dy + diagSize),
+      paint..strokeWidth = 1,
     );
     canvas.drawLine(
-      Offset(targetX + 8, targetY),
-      Offset(targetX + 16, targetY),
-      crossPaint,
-    );
-    canvas.drawLine(
-      Offset(targetX, targetY - 16),
-      Offset(targetX, targetY - 8),
-      crossPaint,
-    );
-    canvas.drawLine(
-      Offset(targetX, targetY + 8),
-      Offset(targetX, targetY + 16),
-      crossPaint,
+      Offset(position.dx + diagSize, position.dy - diagSize),
+      Offset(position.dx - diagSize, position.dy + diagSize),
+      paint,
     );
   }
 
