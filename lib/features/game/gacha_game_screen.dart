@@ -1181,47 +1181,57 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.85,
+      ),
       decoration: const BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      padding: const EdgeInsets.all(24),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 핸들
-          Center(
-            child: Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: AppColors.gray300,
-                borderRadius: BorderRadius.circular(2),
+          // 핸들 (고정)
+          Padding(
+            padding: const EdgeInsets.only(top: 24, bottom: 24),
+            child: Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppColors.gray300,
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
             ),
           ),
-          const SizedBox(height: 24),
 
-          // 타이틀
-          Row(
-            children: [
-              const Icon(Icons.tune_rounded, color: AppColors.darkBlue),
-              const SizedBox(width: 8),
-              const Text(
-                '이벤트 설정',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.darkBlue,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
+          // 스크롤 가능한 콘텐츠
+          Flexible(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 타이틀
+                  Row(
+                    children: [
+                      const Icon(Icons.tune_rounded, color: AppColors.darkBlue),
+                      const SizedBox(width: 8),
+                      const Text(
+                        '이벤트 설정',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.darkBlue,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
 
-          // 이벤트 모드 토글
-          _buildToggleRow(
+                  // 이벤트 모드 토글
+                  _buildToggleRow(
             '이벤트 모드',
             '타겟 좌표를 맞추면 축하 효과!',
             _eventMode,
@@ -1497,7 +1507,11 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
             },
           ),
 
-          SizedBox(height: MediaQuery.of(context).padding.bottom + 16),
+                  SizedBox(height: MediaQuery.of(context).padding.bottom + 16),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
