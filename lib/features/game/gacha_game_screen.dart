@@ -46,6 +46,14 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
   int _rowSpeed = 2500;
   int _colSpeed = 2200;
 
+  // 가이드선 설정
+  bool _showGuideLine = false;
+  int? _guideX;
+  int? _guideY;
+
+  // 전체 화면 모드
+  bool _isFullScreenMode = false;
+
   // 상품군 설정 (나중에 게임별로 API에서 가져올 예정)
   EventPrizePool _selectedPrizePool = EventPrizePool.defaultPool;
 
@@ -392,6 +400,12 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
   }
 
   Widget _buildGameContent(GameRound game) {
+    // 전체 화면 모드
+    if (_isFullScreenMode) {
+      return _buildFullScreenMode(game);
+    }
+
+    // 기본 상세 화면
     return Scaffold(
       backgroundColor: AppColors.gray100,
       appBar: _buildAppBar(game),
@@ -430,11 +444,111 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                   showTarget: _showTarget,
                   onEventSuccess: _onEventSuccess,
                   onCoordinateSelected: _onCoordinateSelected,
+                  showGuideLine: _showGuideLine,
+                  guideX: _guideX,
+                  guideY: _guideY,
                 ),
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  /// 전체 화면 모드
+  Widget _buildFullScreenMode(GameRound game) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Stack(
+        children: [
+          // 전체 화면 게임 캔버스
+          Positioned.fill(
+            child: GachaCoordinatePicker(
+              key: _pickerKey,
+              imageUrl: game.imageUrl,
+              gridSize: 1000,
+              accentColor: AppColors.darkBlue,
+              rowSpeed: _rowSpeed,
+              colSpeed: _colSpeed,
+              eventMode: _eventMode,
+              targetCoordinates: _eventTargets.map((t) => Point(t.row, t.col)).toList(),
+              allowedRange: _allowedRange,
+              showTarget: _showTarget,
+              onEventSuccess: _onEventSuccess,
+              onCoordinateSelected: _onCoordinateSelected,
+              showGuideLine: _showGuideLine,
+              guideX: _guideX,
+              guideY: _guideY,
+              fullScreenMode: true,
+            ),
+          ),
+
+          // 상단 플로팅 버튼들
+          Positioned(
+            top: MediaQuery.of(context).padding.top + 8,
+            left: 12,
+            right: 12,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // 전체 화면 닫기 버튼
+                _buildFloatingIconButton(
+                  icon: Icons.close_fullscreen_rounded,
+                  onTap: () => setState(() => _isFullScreenMode = false),
+                ),
+                // 오른쪽 버튼들
+                Row(
+                  children: [
+                    // 설정 버튼
+                    _buildFloatingIconButton(
+                      icon: Icons.tune_rounded,
+                      onTap: _showSettingsSheet,
+                      isActive: _eventMode,
+                    ),
+                    const SizedBox(width: 8),
+                    // 도움말 버튼
+                    _buildFloatingIconButton(
+                      icon: Icons.help_outline_rounded,
+                      onTap: _showHelpSheet,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 플로팅 아이콘 버튼
+  Widget _buildFloatingIconButton({
+    required IconData icon,
+    required VoidCallback onTap,
+    bool isActive = false,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+          color: AppColors.white.withValues(alpha: 0.9),
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.15),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Icon(
+          icon,
+          size: 22,
+          color: isActive ? AppColors.orange : AppColors.darkBlue,
+        ),
       ),
     );
   }
@@ -477,9 +591,18 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                // 설정 버튼 (이벤트 모드)
+                // 전체 화면 버튼
                 IconButton(
-                  onPressed: () => _showSettingsSheet(),
+                  onPressed: () => setState(() => _isFullScreenMode = true),
+                  icon: const Icon(
+                    Icons.open_in_full_rounded,
+                    size: 22,
+                    color: AppColors.darkBlue,
+                  ),
+                ),
+                // 설정 버튼
+                IconButton(
+                  onPressed: _showSettingsSheet,
                   icon: Icon(
                     Icons.tune_rounded,
                     size: 22,
@@ -488,7 +611,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                 ),
                 // 도움말 버튼
                 IconButton(
-                  onPressed: () => _showHelpSheet(),
+                  onPressed: _showHelpSheet,
                   icon: Icon(
                     Icons.help_outline_rounded,
                     size: 22,
@@ -522,7 +645,6 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
             offset: const Offset(0, 4),
           ),
         ],
-        // SELECT 타입일 때 테두리 강조
         border: canChangeProduct
             ? Border.all(color: AppColors.purple.withValues(alpha: 0.3), width: 1.5)
             : null,
@@ -550,9 +672,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                       : _buildImagePlaceholder(),
                 ),
               ),
-
               const SizedBox(width: 16),
-
               // 상품 정보
               Expanded(
                 child: Column(
@@ -587,19 +707,11 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(
-                                  Icons.swap_horiz_rounded,
-                                  size: 12,
-                                  color: AppColors.purple,
-                                ),
+                                Icon(Icons.swap_horiz_rounded, size: 12, color: AppColors.purple),
                                 const SizedBox(width: 2),
                                 Text(
                                   '${_selectedProductIndex + 1}/${_game!.gameProducts!.length}',
-                                  style: const TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.purple,
-                                  ),
+                                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColors.purple),
                                 ),
                               ],
                             ),
@@ -608,55 +720,34 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    // 상품명
                     Text(
                       game.title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.darkBlue,
-                      ),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.darkBlue),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 4),
-                    // 그리드 정보
                     Text(
                       '${game.actualGridWidth} × ${game.actualGridHeight} 그리드',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: AppColors.gray500,
-                      ),
+                      style: TextStyle(fontSize: 13, color: AppColors.gray500),
                     ),
                   ],
                 ),
               ),
-
               // 참가비
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(
-                    '참가비',
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: AppColors.gray500,
-                    ),
-                  ),
+                  Text('참가비', style: TextStyle(fontSize: 11, color: AppColors.gray500)),
                   const SizedBox(height: 4),
                   Text(
                     '${_priceFormatter.format(game.currentPrice)}원',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.darkBlue,
-                    ),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.darkBlue),
                   ),
                 ],
               ),
             ],
           ),
-          // SELECT 타입일 때 상품 변경 안내
           if (canChangeProduct) ...[
             const SizedBox(height: 12),
             Container(
@@ -668,20 +759,9 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.touch_app_rounded,
-                    size: 16,
-                    color: AppColors.purple,
-                  ),
+                  Icon(Icons.touch_app_rounded, size: 16, color: AppColors.purple),
                   const SizedBox(width: 6),
-                  Text(
-                    '탭하여 다른 상품으로 변경',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.purple,
-                    ),
-                  ),
+                  Text('탭하여 다른 상품으로 변경', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppColors.purple)),
                 ],
               ),
             ),
@@ -690,25 +770,16 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
       ),
     );
 
-    // SELECT 타입이면 탭 가능하게
     if (canChangeProduct) {
-      return GestureDetector(
-        onTap: _showProductSelector,
-        child: cardContent,
-      );
+      return GestureDetector(onTap: _showProductSelector, child: cardContent);
     }
-
     return cardContent;
   }
 
   Widget _buildImagePlaceholder() {
     return Container(
       color: AppColors.gray100,
-      child: Icon(
-        Icons.card_giftcard_rounded,
-        size: 32,
-        color: AppColors.gray400,
-      ),
+      child: Icon(Icons.card_giftcard_rounded, size: 32, color: AppColors.gray400),
     );
   }
 
@@ -727,6 +798,9 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
         colSpeed: _colSpeed,
         gridSize: _game?.gridRows ?? 1000,
         selectedPrizePool: _selectedPrizePool,
+        showGuideLine: _showGuideLine,
+        guideX: _guideX,
+        guideY: _guideY,
         onSettingsChanged: (settings) {
           setState(() {
             _eventMode = settings.eventMode;
@@ -737,6 +811,9 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
             _rowSpeed = settings.rowSpeed;
             _colSpeed = settings.colSpeed;
             _selectedPrizePool = settings.selectedPrizePool;
+            _showGuideLine = settings.showGuideLine;
+            _guideX = settings.guideX;
+            _guideY = settings.guideY;
           });
           // 속도 변경 적용
           _pickerKey.currentState?.setRowSpeed(settings.rowSpeed);
@@ -1083,6 +1160,9 @@ class _EventSettings {
   final int rowSpeed;
   final int colSpeed;
   final EventPrizePool selectedPrizePool;
+  final bool showGuideLine;
+  final int? guideX;
+  final int? guideY;
 
   _EventSettings({
     required this.eventMode,
@@ -1093,6 +1173,9 @@ class _EventSettings {
     required this.rowSpeed,
     required this.colSpeed,
     required this.selectedPrizePool,
+    required this.showGuideLine,
+    this.guideX,
+    this.guideY,
   });
 }
 
@@ -1109,6 +1192,9 @@ class _EventSettingsSheet extends StatefulWidget {
   final EventPrizePool selectedPrizePool;
   final Function(_EventSettings) onSettingsChanged;
   final VoidCallback onGenerateTargets;
+  final bool showGuideLine;
+  final int? guideX;
+  final int? guideY;
 
   const _EventSettingsSheet({
     required this.eventMode,
@@ -1122,6 +1208,9 @@ class _EventSettingsSheet extends StatefulWidget {
     required this.selectedPrizePool,
     required this.onSettingsChanged,
     required this.onGenerateTargets,
+    required this.showGuideLine,
+    this.guideX,
+    this.guideY,
   });
 
   @override
@@ -1137,6 +1226,13 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
   late int _rowSpeed;
   late int _colSpeed;
   late EventPrizePool _selectedPrizePool;
+  late bool _showGuideLine;
+  int? _guideX;
+  int? _guideY;
+
+  // 텍스트 컨트롤러
+  late TextEditingController _guideXController;
+  late TextEditingController _guideYController;
 
   @override
   void initState() {
@@ -1149,6 +1245,19 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
     _rowSpeed = widget.rowSpeed;
     _colSpeed = widget.colSpeed;
     _selectedPrizePool = widget.selectedPrizePool;
+    _showGuideLine = widget.showGuideLine;
+    _guideX = widget.guideX;
+    _guideY = widget.guideY;
+
+    _guideXController = TextEditingController(text: _guideX?.toString() ?? '');
+    _guideYController = TextEditingController(text: _guideY?.toString() ?? '');
+  }
+
+  @override
+  void dispose() {
+    _guideXController.dispose();
+    _guideYController.dispose();
+    super.dispose();
   }
 
   void _notifyChange() {
@@ -1161,6 +1270,9 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
       rowSpeed: _rowSpeed,
       colSpeed: _colSpeed,
       selectedPrizePool: _selectedPrizePool,
+      showGuideLine: _showGuideLine,
+      guideX: _guideX,
+      guideY: _guideY,
     ));
   }
 
@@ -1506,6 +1618,242 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
               _notifyChange();
             },
           ),
+
+          const SizedBox(height: 20),
+          const Divider(),
+          const SizedBox(height: 20),
+
+          // 가이드선 설정 섹션
+          const Text(
+            '가이드선 설정',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: AppColors.darkBlue,
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // 가이드선 토글
+          _buildToggleRow(
+            '가이드선 표시',
+            '입력한 좌표에 가이드선을 표시합니다',
+            _showGuideLine,
+            (value) {
+              setState(() => _showGuideLine = value);
+              _notifyChange();
+            },
+          ),
+
+          if (_showGuideLine) ...[
+            const SizedBox(height: 16),
+
+            // 좌표 입력 필드
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFD700).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFFFFD700).withValues(alpha: 0.3)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.grid_on_rounded,
+                        size: 18,
+                        color: Color(0xFFFFD700),
+                      ),
+                      const SizedBox(width: 8),
+                      const Text(
+                        '가이드 좌표 입력',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.darkBlue,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '0 ~ ${widget.gridSize} 범위 입력',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppColors.gray500,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      // X 좌표 (COL) 입력
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'X (COL)',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.gray600,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            TextField(
+                              controller: _guideXController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                hintText: '세로선',
+                                hintStyle: TextStyle(
+                                  color: AppColors.gray400,
+                                  fontSize: 14,
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 10,
+                                ),
+                                filled: true,
+                                fillColor: AppColors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(color: AppColors.gray200),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(color: AppColors.gray200),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(color: Color(0xFFFFD700), width: 2),
+                                ),
+                              ),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.darkBlue,
+                              ),
+                              onChanged: (value) {
+                                final parsed = int.tryParse(value);
+                                if (parsed != null && parsed >= 0 && parsed <= widget.gridSize) {
+                                  setState(() => _guideX = parsed);
+                                } else if (value.isEmpty) {
+                                  setState(() => _guideX = null);
+                                }
+                                _notifyChange();
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      // Y 좌표 (ROW) 입력
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Y (ROW)',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.gray600,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            TextField(
+                              controller: _guideYController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                hintText: '가로선',
+                                hintStyle: TextStyle(
+                                  color: AppColors.gray400,
+                                  fontSize: 14,
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 10,
+                                ),
+                                filled: true,
+                                fillColor: AppColors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(color: AppColors.gray200),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(color: AppColors.gray200),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(color: Color(0xFFFFD700), width: 2),
+                                ),
+                              ),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.darkBlue,
+                              ),
+                              onChanged: (value) {
+                                final parsed = int.tryParse(value);
+                                if (parsed != null && parsed >= 0 && parsed <= widget.gridSize) {
+                                  setState(() => _guideY = parsed);
+                                } else if (value.isEmpty) {
+                                  setState(() => _guideY = null);
+                                }
+                                _notifyChange();
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  // 초기화 버튼
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _guideX = null;
+                        _guideY = null;
+                        _guideXController.clear();
+                        _guideYController.clear();
+                      });
+                      _notifyChange();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: AppColors.gray100,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.clear_rounded,
+                            size: 16,
+                            color: AppColors.gray600,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '초기화',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.gray600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
 
                   SizedBox(height: MediaQuery.of(context).padding.bottom + 16),
                 ],

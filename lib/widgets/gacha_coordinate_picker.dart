@@ -39,6 +39,18 @@ class GachaCoordinatePicker extends StatefulWidget {
   /// 이벤트 성공 콜백
   final VoidCallback? onEventSuccess;
 
+  /// 가이드선 표시 여부
+  final bool showGuideLine;
+
+  /// 가이드선 X 좌표 (COL)
+  final int? guideX;
+
+  /// 가이드선 Y 좌표 (ROW)
+  final int? guideY;
+
+  /// 전체 화면 모드 (플로팅 UI 사용)
+  final bool fullScreenMode;
+
   const GachaCoordinatePicker({
     super.key,
     this.imageUrl,
@@ -52,6 +64,10 @@ class GachaCoordinatePicker extends StatefulWidget {
     this.allowedRange = 10,
     this.showTarget = true,
     this.onEventSuccess,
+    this.showGuideLine = false,
+    this.guideX,
+    this.guideY,
+    this.fullScreenMode = false,
   });
 
   @override
@@ -226,172 +242,103 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
         _pulseController,
       ]),
       builder: (context, _) {
-        return SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(height: 16),
+        // 전체 화면 모드: 플로팅 UI
+        if (widget.fullScreenMode) {
+          return _buildFullScreenLayout();
+        }
+        // 기본 모드: 스크롤 가능한 레이아웃
+        return _buildDefaultLayout();
+      },
+    );
+  }
 
-              // 단계 인디케이터
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: _buildPhaseIndicator(),
-              ),
+  /// 기본 레이아웃 (스크롤 가능)
+  Widget _buildDefaultLayout() {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const SizedBox(height: 16),
 
-              const SizedBox(height: 16),
+          // 단계 인디케이터
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: _buildPhaseIndicator(),
+          ),
 
-              // 게임 캔버스 (1:1 비율 - 가로 전체 너비 기준)
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  final canvasSize = constraints.maxWidth - 32; // 좌우 마진 16씩
-                  return SizedBox(
-                    width: constraints.maxWidth,
-                    height: canvasSize,
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: AppColors.gray200,
-                        width: 2,
-                      ),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(18),
-                      child: Stack(
-                        children: [
-                          // 경품 이미지
-                          Positioned.fill(
-                            child: _buildProductImage(),
-                          ),
+          const SizedBox(height: 16),
 
-                          // 오버레이
-                          Positioned.fill(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [
-                                    Colors.black.withValues(alpha: 0.1),
-                                    Colors.black.withValues(alpha: 0.3),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          // 그리드
-                          LayoutBuilder(
-                            builder: (context, constraints) {
-                              return CustomPaint(
-                                size: Size(constraints.maxWidth, constraints.maxHeight),
-                                painter: _TossGridPainter(),
-                              );
-                            },
-                          ),
-
-                          // 크로스헤어
-                          LayoutBuilder(
-                            builder: (context, constraints) {
-                              return CustomPaint(
-                                size: Size(constraints.maxWidth, constraints.maxHeight),
-                                painter: _TossCrosshairPainter(
-                                  phase: _phase,
-                                  verticalPos: _phase == 0
-                                      ? _verticalController.value
-                                      : _fixedVertical,
-                                  horizontalPos: _phase >= 1
-                                      ? (_phase == 1
-                                          ? _horizontalController.value
-                                          : _fixedHorizontal)
-                                      : 0.5,
-                                  accentColor: widget.accentColor,
-                                  pulseValue: _pulseController.value,
-                                  // 이벤트 모드 관련
-                                  showTarget: widget.eventMode && widget.showTarget,
-                                  targetCoordinates: widget.targetCoordinates,
-                                  allowedRange: widget.allowedRange,
-                                  gridSize: widget.gridSize,
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
+          // 게임 캔버스 (1:1 비율 - 가로 전체 너비 기준)
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final canvasSize = constraints.maxWidth - 32;
+              return SizedBox(
+                width: constraints.maxWidth,
+                height: canvasSize,
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: AppColors.gray200, width: 2),
                   ),
-                );
-              },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(18),
+                    child: _buildGameCanvas(),
+                  ),
+                ),
+              );
+            },
+          ),
+
+          const SizedBox(height: 16),
+
+          // 하단 컨트롤
+          _buildBottomControls(),
+
+          const SizedBox(height: 16),
+        ],
+      ),
+    );
+  }
+
+  /// 전체 화면 레이아웃 (플로팅 UI)
+  Widget _buildFullScreenLayout() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final canvasSize = constraints.maxWidth;
+
+        return Stack(
+          children: [
+            // 중앙: 1:1 비율 게임 캔버스
+            Center(
+              child: SizedBox(
+                width: canvasSize,
+                height: canvasSize,
+                child: _buildGameCanvas(),
+              ),
             ),
 
-              const SizedBox(height: 16),
+            // 상단: 단계 인디케이터 (플로팅)
+            Positioned(
+              top: 12,
+              left: 12,
+              right: 12,
+              child: _buildFloatingPhaseIndicator(),
+            ),
 
-              // 하단 컨트롤
-              _buildBottomControls(),
-
-              const SizedBox(height: 16),
-            ],
-          ),
+            // 하단: 좌표 표시 + 버튼 (플로팅)
+            Positioned(
+              bottom: 12,
+              left: 12,
+              right: 12,
+              child: _buildFloatingBottomControls(),
+            ),
+          ],
         );
       },
     );
   }
 
-  Widget _buildProductImage() {
-    final url = widget.imageUrl;
-
-    if (url == null || url.isEmpty) {
-      return _buildPlaceholder();
-    }
-
-    if (url.startsWith('http://') || url.startsWith('https://')) {
-      return Image.network(
-        url.replaceAll(' ', '%20'),
-        fit: BoxFit.cover,
-        loadingBuilder: (context, child, loadingProgress) {
-          if (loadingProgress == null) return child;
-          return _buildLoadingPlaceholder();
-        },
-        errorBuilder: (context, error, stackTrace) {
-          return _buildPlaceholder();
-        },
-      );
-    }
-
-    return Image.asset(
-      url,
-      fit: BoxFit.cover,
-      errorBuilder: (context, error, stackTrace) {
-        return _buildPlaceholder();
-      },
-    );
-  }
-
-  Widget _buildLoadingPlaceholder() {
-    return Container(
-      color: AppColors.gray100,
-      child: Center(
-        child: CircularProgressIndicator(
-          color: AppColors.gray400,
-          strokeWidth: 2,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPlaceholder() {
-    return Container(
-      color: AppColors.gray100,
-      child: Center(
-        child: Icon(
-          Icons.card_giftcard_rounded,
-          size: 64,
-          color: AppColors.gray300,
-        ),
-      ),
-    );
-  }
-
+  /// 기본 단계 인디케이터
   Widget _buildPhaseIndicator() {
     return Row(
       children: [
@@ -451,6 +398,7 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
     );
   }
 
+  /// 기본 하단 컨트롤
   Widget _buildBottomControls() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -591,6 +539,351 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
       ],
     );
   }
+
+  /// 게임 캔버스 (1:1 비율)
+  Widget _buildGameCanvas() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(0),
+      child: Stack(
+        children: [
+          // 경품 이미지
+          Positioned.fill(
+            child: _buildProductImage(),
+          ),
+
+          // 오버레이
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black.withValues(alpha: 0.15),
+                    Colors.black.withValues(alpha: 0.35),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // 그리드
+          Positioned.fill(
+            child: CustomPaint(
+              painter: _TossGridPainter(),
+            ),
+          ),
+
+          // 크로스헤어
+          Positioned.fill(
+            child: CustomPaint(
+              painter: _TossCrosshairPainter(
+                phase: _phase,
+                verticalPos: _phase == 0
+                    ? _verticalController.value
+                    : _fixedVertical,
+                horizontalPos: _phase >= 1
+                    ? (_phase == 1
+                        ? _horizontalController.value
+                        : _fixedHorizontal)
+                    : 0.5,
+                accentColor: widget.accentColor,
+                pulseValue: _pulseController.value,
+                // 이벤트 모드 관련
+                showTarget: widget.eventMode && widget.showTarget,
+                targetCoordinates: widget.targetCoordinates,
+                allowedRange: widget.allowedRange,
+                gridSize: widget.gridSize,
+                // 가이드선 관련
+                showGuideLine: widget.showGuideLine,
+                guideX: widget.guideX,
+                guideY: widget.guideY,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 플로팅 단계 인디케이터
+  Widget _buildFloatingPhaseIndicator() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: AppColors.white.withValues(alpha: 0.95),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(child: _buildCompactPhaseStep(0, 'ROW', Icons.swap_vert_rounded)),
+          _buildCompactConnector(0),
+          Expanded(child: _buildCompactPhaseStep(1, 'COL', Icons.swap_horiz_rounded)),
+          _buildCompactConnector(1),
+          Expanded(child: _buildCompactPhaseStep(2, '완료', Icons.check_rounded)),
+        ],
+      ),
+    );
+  }
+
+  /// 컴팩트 단계 스텝
+  Widget _buildCompactPhaseStep(int phaseNum, String label, IconData icon) {
+    final isActive = _phase == phaseNum;
+    final isDone = _phase > phaseNum;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: 28,
+          height: 28,
+          decoration: BoxDecoration(
+            color: isDone
+                ? AppColors.green
+                : isActive
+                    ? widget.accentColor
+                    : AppColors.gray200,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            isDone ? Icons.check_rounded : icon,
+            size: 16,
+            color: (isDone || isActive) ? AppColors.white : AppColors.gray500,
+          ),
+        ),
+        const SizedBox(width: 6),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
+            color: isActive ? widget.accentColor : AppColors.gray500,
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// 컴팩트 연결선
+  Widget _buildCompactConnector(int afterPhase) {
+    final isDone = _phase > afterPhase;
+
+    return Container(
+      width: 20,
+      height: 2,
+      margin: const EdgeInsets.symmetric(horizontal: 4),
+      color: isDone ? AppColors.green : AppColors.gray200,
+    );
+  }
+
+  /// 플로팅 하단 컨트롤
+  Widget _buildFloatingBottomControls() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.white.withValues(alpha: 0.95),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.15),
+            blurRadius: 15,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // 좌표 표시
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildCompactCoordDisplay('ROW', currentRow, _phase >= 1),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  '×',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w300,
+                    color: AppColors.gray400,
+                  ),
+                ),
+              ),
+              _buildCompactCoordDisplay('COL', currentCol ?? 0, _phase >= 2),
+            ],
+          ),
+
+          const SizedBox(height: 12),
+
+          // 버튼
+          Row(
+            children: [
+              // 리셋 버튼
+              if (_phase > 0)
+                GestureDetector(
+                  onTap: reset,
+                  child: Container(
+                    width: 48,
+                    height: 48,
+                    margin: const EdgeInsets.only(right: 10),
+                    decoration: BoxDecoration(
+                      color: AppColors.gray100,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Icon(
+                      Icons.refresh_rounded,
+                      color: AppColors.gray600,
+                      size: 22,
+                    ),
+                  ),
+                ),
+
+              // 메인 버튼
+              Expanded(
+                child: GestureDetector(
+                  onTap: _phase < 2 ? _onButtonPressed : null,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    decoration: BoxDecoration(
+                      color: _phase < 2 ? widget.accentColor : AppColors.gray300,
+                      borderRadius: BorderRadius.circular(14),
+                      boxShadow: _phase < 2
+                          ? [
+                              BoxShadow(
+                                color: widget.accentColor.withValues(alpha: 0.3),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ]
+                          : null,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          _phase == 0
+                              ? Icons.swap_vert_rounded
+                              : _phase == 1
+                                  ? Icons.swap_horiz_rounded
+                                  : Icons.check_rounded,
+                          color: AppColors.white,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          _phase == 0
+                              ? 'ROW 고정'
+                              : _phase == 1
+                                  ? 'COL 고정'
+                                  : '완료',
+                          style: const TextStyle(
+                            color: AppColors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 컴팩트 좌표 표시
+  Widget _buildCompactCoordDisplay(String label, int value, bool isLocked) {
+    return Column(
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            color: AppColors.gray500,
+            fontSize: 10,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 1,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          value.toString().padLeft(4, '0'),
+          style: TextStyle(
+            color: isLocked ? widget.accentColor : AppColors.gray400,
+            fontSize: 22,
+            fontWeight: FontWeight.w700,
+            fontFamily: 'monospace',
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildProductImage() {
+    final url = widget.imageUrl;
+
+    if (url == null || url.isEmpty) {
+      return _buildPlaceholder();
+    }
+
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return Image.network(
+        url.replaceAll(' ', '%20'),
+        fit: BoxFit.cover,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return _buildLoadingPlaceholder();
+        },
+        errorBuilder: (context, error, stackTrace) {
+          return _buildPlaceholder();
+        },
+      );
+    }
+
+    return Image.asset(
+      url,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        return _buildPlaceholder();
+      },
+    );
+  }
+
+  Widget _buildLoadingPlaceholder() {
+    return Container(
+      color: AppColors.gray100,
+      child: Center(
+        child: CircularProgressIndicator(
+          color: AppColors.gray400,
+          strokeWidth: 2,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPlaceholder() {
+    return Container(
+      color: AppColors.gray100,
+      child: Center(
+        child: Icon(
+          Icons.card_giftcard_rounded,
+          size: 64,
+          color: AppColors.gray300,
+        ),
+      ),
+    );
+  }
 }
 
 /// 토스 스타일 그리드 페인터
@@ -626,6 +919,10 @@ class _TossCrosshairPainter extends CustomPainter {
   final List<Point<int>> targetCoordinates;
   final int allowedRange;
   final int gridSize;
+  // 가이드선 관련
+  final bool showGuideLine;
+  final int? guideX;
+  final int? guideY;
 
   _TossCrosshairPainter({
     required this.phase,
@@ -637,12 +934,20 @@ class _TossCrosshairPainter extends CustomPainter {
     this.targetCoordinates = const [],
     this.allowedRange = 10,
     this.gridSize = 1000,
+    this.showGuideLine = false,
+    this.guideX,
+    this.guideY,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
     final y = verticalPos * size.height;
     final x = horizontalPos * size.width;
+
+    // 가이드선 표시
+    if (showGuideLine) {
+      _drawGuideLine(canvas, size);
+    }
 
     // 타겟 좌표들 표시 (이벤트 모드)
     if (showTarget && targetCoordinates.isNotEmpty) {
@@ -884,6 +1189,110 @@ class _TossCrosshairPainter extends CustomPainter {
       Offset(position.dx - diagSize, position.dy + diagSize),
       paint,
     );
+  }
+
+  /// 가이드선 그리기
+  void _drawGuideLine(Canvas canvas, Size size) {
+    const guideColor = Color(0xFFFFD700); // 골드 색상
+
+    // 가로 가이드선 (Y 좌표 - ROW)
+    if (guideY != null) {
+      final guideYPos = (guideY! / gridSize) * size.height;
+
+      // 글로우 효과
+      final glowPaint = Paint()
+        ..color = guideColor.withValues(alpha: 0.3 + pulseValue * 0.2)
+        ..strokeWidth = 6
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+      canvas.drawLine(Offset(0, guideYPos), Offset(size.width, guideYPos), glowPaint);
+
+      // 점선 효과
+      final dashPaint = Paint()
+        ..color = guideColor.withValues(alpha: 0.8)
+        ..strokeWidth = 2
+        ..strokeCap = StrokeCap.round;
+
+      const dashWidth = 8.0;
+      const dashSpace = 6.0;
+      double startX = 0;
+      while (startX < size.width) {
+        canvas.drawLine(
+          Offset(startX, guideYPos),
+          Offset((startX + dashWidth).clamp(0, size.width), guideYPos),
+          dashPaint,
+        );
+        startX += dashWidth + dashSpace;
+      }
+    }
+
+    // 세로 가이드선 (X 좌표 - COL)
+    if (guideX != null) {
+      final guideXPos = (guideX! / gridSize) * size.width;
+
+      // 글로우 효과
+      final glowPaint = Paint()
+        ..color = guideColor.withValues(alpha: 0.3 + pulseValue * 0.2)
+        ..strokeWidth = 6
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+      canvas.drawLine(Offset(guideXPos, 0), Offset(guideXPos, size.height), glowPaint);
+
+      // 점선 효과
+      final dashPaint = Paint()
+        ..color = guideColor.withValues(alpha: 0.8)
+        ..strokeWidth = 2
+        ..strokeCap = StrokeCap.round;
+
+      const dashWidth = 8.0;
+      const dashSpace = 6.0;
+      double startY = 0;
+      while (startY < size.height) {
+        canvas.drawLine(
+          Offset(guideXPos, startY),
+          Offset(guideXPos, (startY + dashWidth).clamp(0, size.height)),
+          dashPaint,
+        );
+        startY += dashWidth + dashSpace;
+      }
+    }
+
+    // 교차점 표시 (둘 다 있을 때)
+    if (guideX != null && guideY != null) {
+      final guideXPos = (guideX! / gridSize) * size.width;
+      final guideYPos = (guideY! / gridSize) * size.height;
+      final crossPoint = Offset(guideXPos, guideYPos);
+
+      // 외곽 글로우
+      final outerGlowPaint = Paint()
+        ..color = guideColor.withValues(alpha: 0.4 + pulseValue * 0.2)
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
+      canvas.drawCircle(crossPoint, 16 + pulseValue * 4, outerGlowPaint);
+
+      // 외곽 원
+      final outerPaint = Paint()
+        ..color = guideColor.withValues(alpha: 0.3)
+        ..style = PaintingStyle.fill;
+      canvas.drawCircle(crossPoint, 14, outerPaint);
+
+      // 테두리
+      final borderPaint = Paint()
+        ..color = guideColor
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2;
+      canvas.drawCircle(crossPoint, 14, borderPaint);
+
+      // 중심점
+      final centerPaint = Paint()
+        ..color = AppColors.white
+        ..style = PaintingStyle.fill;
+      canvas.drawCircle(crossPoint, 5, centerPaint);
+
+      // 중심점 테두리
+      final centerBorderPaint = Paint()
+        ..color = guideColor
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.5;
+      canvas.drawCircle(crossPoint, 5, centerBorderPaint);
+    }
   }
 
   @override
