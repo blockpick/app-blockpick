@@ -45,6 +45,7 @@ import '../../features/my/pages/announcement_screen.dart';
 import '../../features/my/pages/usage_guide_screen.dart';
 import '../../features/notification/notification_screen.dart';
 import '../../features/winners/winners_screen.dart';
+import '../../features/home/widgets/daily_checkin_modal.dart';
 import '../auth/domain/providers/auth_provider.dart';
 // More modes
 import '../../features/more/modes/gravity_pick_screen.dart';
@@ -406,6 +407,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/winners',
         builder: (context, state) => const WinnersScreen(),
+      ),
+
+      // ============ 출석체크 ============
+      GoRoute(
+        path: '/checkin',
+        builder: (context, state) => const DailyCheckinScreen(),
       ),
 
       // ============ E2E 테스트 ============

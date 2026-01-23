@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 
-/// SC-008 디자인 하단 네비게이션 바
-/// Home / Shopping / Event / My (4개 탭)
+/// SC-008 디자인 하단 네비게이션 바 (오픈 버전)
+/// Home / Event / Winners / My (4개 탭)
 class BottomNavBar extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
@@ -43,19 +43,19 @@ class BottomNavBar extends StatelessWidget {
                 onTap: () => onTap(0),
               ),
               _NavItem(
-                icon: Icons.shopping_bag_outlined,
-                activeIcon: Icons.shopping_bag_rounded,
-                label: 'Shopping',
+                icon: Icons.calendar_today_outlined,
+                activeIcon: Icons.calendar_today_rounded,
+                label: 'Event',
                 isSelected: currentIndex == 1,
                 onTap: () => onTap(1),
+                showBadge: hasEventNotification,
               ),
               _NavItem(
-                icon: Icons.favorite_outline_rounded,
-                activeIcon: Icons.favorite_rounded,
-                label: 'Event',
+                icon: Icons.emoji_events_outlined,
+                activeIcon: Icons.emoji_events_rounded,
+                label: 'Winners',
                 isSelected: currentIndex == 2,
                 onTap: () => onTap(2),
-                showBadge: hasEventNotification,
               ),
               _NavItem(
                 icon: Icons.person_outline_rounded,

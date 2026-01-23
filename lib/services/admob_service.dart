@@ -1,5 +1,6 @@
-import 'dart:io';
 import 'package:flutter/foundation.dart';
+// dart:io는 웹에서 지원하지 않으므로 조건부로 사용
+import 'dart:io' if (dart.library.html) 'package:blockpick_flutter/utils/platform_stub.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 /// AdMob 광고 서비스
@@ -13,7 +14,10 @@ class AdMobService {
   bool _isLoading = false;
 
   /// 플랫폼 지원 여부
-  static bool get isSupported => !kIsWeb && (Platform.isAndroid || Platform.isIOS);
+  static bool get isSupported {
+    if (kIsWeb) return false;
+    return Platform.isAndroid || Platform.isIOS;
+  }
 
   /// AdMob SDK 초기화
   static Future<void> initialize() async {

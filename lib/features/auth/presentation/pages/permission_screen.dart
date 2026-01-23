@@ -1,4 +1,6 @@
-import 'dart:io';
+import 'package:flutter/foundation.dart';
+// dart:io는 웹에서 지원하지 않으므로 조건부로 사용
+import 'dart:io' if (dart.library.html) 'package:blockpick_flutter/utils/platform_stub.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

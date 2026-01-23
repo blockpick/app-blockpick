@@ -6,16 +6,16 @@ class MockGameData {
   static final List<GameRound> dailyGames = [
     GameRound(
       id: 'daily-001',
-      title: 'iPhone 16 Pro Max 256GB',
-      description: '최신 아이폰 16 Pro Max를 획득하세요!',
-      imageUrl: 'assets/images/products/iphone-16-pro.webp',
+      title: '프로라고 불리는데는 다 이유가 있다.\n[Apple] iPhone 17 Pro Max - silver',
+      description: '최신 아이폰 17 Pro Max를 획득하세요!',
+      imageUrl: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=800&q=80',
       participants: 1234,
       maxParticipants: 5000,
       totalBlocks: 100000000, // 10000x10000
       requiredPicks: 1,
       winners: 1,
       originalPrice: 1590000,
-      currentPrice: 1000,
+      currentPrice: 200,
       timeLeft: '2시간 30분',
       type: GameType.daily,
       status: GameStatus.active,
@@ -25,9 +25,9 @@ class MockGameData {
     ),
     GameRound(
       id: 'daily-002',
-      title: 'AirPods Pro 2세대',
+      title: '[Samsung] 갤럭시 버즈3 프로 SM-R630NZAAKOO',
       description: '프리미엄 무선 이어폰',
-      imageUrl: 'assets/images/products/airpods-pro-2.jpeg',
+      imageUrl: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&q=80',
       participants: 567,
       maxParticipants: 2000,
       totalBlocks: 1000000, // 1000x1000
@@ -44,9 +44,9 @@ class MockGameData {
     ),
     GameRound(
       id: 'daily-003',
-      title: 'MacBook Air M4',
+      title: '[Apple] MacBook Air M4 - 스페이스 그레이',
       description: '최고 성능의 맥북',
-      imageUrl: 'assets/images/products/macbook-air-m4.jpeg',
+      imageUrl: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&q=80',
       participants: 890,
       maxParticipants: 3000,
       totalBlocks: 40000, // 200x200
@@ -63,9 +63,9 @@ class MockGameData {
     ),
     GameRound(
       id: 'daily-004',
-      title: '스타벅스 기프트카드 10만원',
+      title: '스타벅스 e-카드 교환권 5만원',
       description: '스타벅스 상품권',
-      imageUrl: 'assets/images/products/starbucks-giftcard.jpeg',
+      imageUrl: 'https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=800&q=80',
       participants: 2345,
       maxParticipants: 10000,
       totalBlocks: 2500, // 50x50
@@ -86,9 +86,9 @@ class MockGameData {
   static final List<GameRound> selectGames = [
     GameRound(
       id: 'select-001',
-      title: 'Luxury Brand 럭셔리 패키지',
+      title: '[Chanel] 클래식 플랩백 미디엄',
       description: '샤넬, 에르메스, 구찌 중 선택',
-      imageUrl: 'assets/images/products/chanel-bag.webp',
+      imageUrl: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&q=80',
       participants: 456,
       maxParticipants: 1000,
       totalBlocks: 100000000, // 10000x10000
@@ -105,9 +105,9 @@ class MockGameData {
     ),
     GameRound(
       id: 'select-002',
-      title: '명품 가방 셀렉션',
+      title: '[Louis Vuitton] 네버풀 MM 모노그램',
       description: '루이비통, 구찌, 프라다 중 선택',
-      imageUrl: 'assets/images/products/louis-vuitton-bag.jpeg',
+      imageUrl: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&q=80',
       participants: 678,
       maxParticipants: 2000,
       totalBlocks: 25000000, // 5000x5000
@@ -124,9 +124,9 @@ class MockGameData {
     ),
     GameRound(
       id: 'select-003',
-      title: '애플 제품 패키지',
+      title: '[Apple] iPad Pro 12.9인치 M4',
       description: 'iPhone, iPad, MacBook 중 선택',
-      imageUrl: 'assets/images/products/ipad-air.webp',
+      imageUrl: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&q=80',
       participants: 1890,
       maxParticipants: 5000,
       totalBlocks: 4000000, // 2000x2000

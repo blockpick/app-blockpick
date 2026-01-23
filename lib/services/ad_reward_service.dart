@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
+// dart:io는 웹에서 지원하지 않으므로 조건부로 사용
+import 'dart:io' if (dart.library.html) 'package:blockpick_flutter/utils/platform_stub.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'admob_service.dart';

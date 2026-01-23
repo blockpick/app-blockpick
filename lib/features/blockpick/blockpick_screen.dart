@@ -4,12 +4,12 @@ import '../../core/theme/app_colors.dart';
 import '../../components/navigation/bottom_nav_bar.dart';
 import '../../providers/current_tab_provider.dart';
 import '../home/new_home_screen.dart';
-import '../mall/mall_screen.dart';
-import '../home/home_screen.dart'; // Event 탭 (기존 게임 목록)
+import '../home/home_screen.dart'; // Event 탭 (게임 목록)
+import '../winners/winners_screen.dart';
 import '../my/my_screen.dart';
 
-/// SC-008 디자인 메인 화면
-/// Home / Shopping / Event / My (4개 탭)
+/// SC-008 디자인 메인 화면 (오픈 버전)
+/// Home / Event / Winners / My (4개 탭)
 class BlockpickScreen extends ConsumerStatefulWidget {
   const BlockpickScreen({super.key});
 
@@ -18,12 +18,12 @@ class BlockpickScreen extends ConsumerStatefulWidget {
 }
 
 class _BlockpickScreenState extends ConsumerState<BlockpickScreen> {
-  // SC-008 디자인 화면들 (4개 탭)
+  // SC-008 디자인 화면들 (4개 탭) - 오픈 버전
   final List<Widget> _screens = [
-    const NewHomeScreen(),  // 0: Home (새 홈 화면)
-    const MallScreen(),     // 1: Shopping (쇼핑몰)
-    const HomeScreen(),     // 2: Event (기존 게임 목록 - Daily/Select/Vibe/Prime)
-    const MyScreen(),       // 3: My (마이페이지)
+    const NewHomeScreen(),   // 0: Home (새 홈 화면)
+    const HomeScreen(),      // 1: Event (게임 목록 - Daily/Select/Vibe/Prime)
+    const WinnersScreen(),   // 2: Winners (당첨자)
+    const MyScreen(),        // 3: My (마이페이지)
   ];
 
   @override
