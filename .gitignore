@@ -78,9 +78,9 @@ ios/Flutter/Flutter.podspec
 # FVM (Flutter Version Manager)
 .fvm/
 
-# Generated files
-*.g.dart
-*.freezed.dart
+# Generated files (주석 처리 - Vercel 빌드에 필요)
+# *.g.dart
+# *.freezed.dart
 *.mocks.dart
 
 # Test
