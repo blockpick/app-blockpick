@@ -64,5 +64,15 @@
 	</array>
 	<key>GIDClientID</key>
 	<string>339699664526-1igk6o4vm0bhd656f0l3vfgdemm084c0.apps.googleusercontent.com</string>
+	<!-- AdMob App ID (테스트 ID - 프로덕션 배포 시 실제 ID로 교체 필요) -->
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-3940256099942544~1458002511</string>
+	<key>SKAdNetworkItems</key>
+	<array>
+		<dict>
+			<key>SKAdNetworkIdentifier</key>
+			<string>cstr6suwn9.skadnetwork</string>
+		</dict>
+	</array>
 </dict>
 </plist>

@@ -90,6 +90,9 @@ dependencies:
   noise_meter: ^5.0.2           # Voice mode (microphone)
   intl_phone_number_input: ^0.7.5
 
+  # AdMob
+  google_mobile_ads: ^5.3.0
+
   # Unity Integration (Unity 6000 지원)
   flutter_embed_unity: ^1.4.0
   flutter_embed_unity_6000_0_android: ^1.2.2

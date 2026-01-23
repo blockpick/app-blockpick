@@ -20,11 +20,6 @@ class AuthRemoteDataSource {
           id
           email
           nickname
-          avatar
-          balance
-          totalGamesPlayed
-          totalWins
-          winRate
         }
       }
     }
@@ -64,7 +59,6 @@ class AuthRemoteDataSource {
           email
           nickname
           phoneNumber
-          avatar
         }
       }
     }
@@ -94,7 +88,6 @@ class AuthRemoteDataSource {
           id
           email
           nickname
-          avatar
         }
       }
     }
@@ -135,11 +128,6 @@ class AuthRemoteDataSource {
           id
           email
           nickname
-          avatar
-          balance
-          totalGamesPlayed
-          totalWins
-          winRate
         }
       }
     }
@@ -156,11 +144,6 @@ class AuthRemoteDataSource {
           id
           email
           nickname
-          avatar
-          balance
-          totalGamesPlayed
-          totalWins
-          winRate
         }
       }
     }

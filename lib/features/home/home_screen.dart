@@ -6,6 +6,9 @@ import '../../core/theme/app_colors.dart';
 import '../../core/auth/domain/providers/auth_provider.dart';
 import '../../models/game_round_model.dart';
 import '../../providers/game_provider.dart';
+import '../../providers/ad_reward_provider.dart';
+import '../../services/ad_reward_service.dart';
+import '../../services/admob_service.dart';
 import '../../widgets/horizontal_game_card.dart';
 import '../optimal/optimal_game_list_screen.dart';
 import '../more/more_screen.dart';
@@ -23,6 +26,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   int _selectedTabIndex = 0;
   final ScrollController _scrollController = ScrollController();
   bool _isFabExpanded = true;
+  bool _isDirectAdLoading = false;
 
   final List<Map<String, dynamic>> _tabs = [
     {'label': 'Daily', 'type': GameType.daily, 'isPrime': false, 'isMore': false},
@@ -201,24 +205,335 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  /// AD 배너
+  /// 보상형 광고 배너 (2개 버튼: API 연동 + 직접 테스트)
   Widget _buildAdBanner() {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      height: 80,
-      decoration: BoxDecoration(
-        color: AppColors.gray100,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.gray200),
-      ),
-      child: Center(
-        child: Text(
-          'AD Banner',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: AppColors.gray500,
+    return Column(
+      children: [
+        // 1. API 연동 광고 버튼
+        _buildAdBannerWithApi(),
+        // 2. API 없이 직접 광고 테스트 버튼
+        _buildDirectAdBanner(),
+      ],
+    );
+  }
+
+  /// API 연동 광고 버튼
+  Widget _buildAdBannerWithApi() {
+    final adRewardState = ref.watch(adRewardNotifierProvider);
+    final authState = ref.watch(authProvider);
+    final isAuthenticated = authState.valueOrNull?.isAuthenticated ?? false;
+    final userId = authState.valueOrNull?.user?.id ?? '';
+
+    return GestureDetector(
+      onTap: () async {
+        if (!isAuthenticated) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('로그인이 필요합니다')),
+          );
+          context.push('/login');
+          return;
+        }
+
+        if (adRewardState.isLoading || adRewardState.isShowingAd) {
+          return;
+        }
+
+        final notifier = ref.read(adRewardNotifierProvider.notifier);
+        final result = await notifier.showAdAndGetReward(
+          contextType: AdContextType.homeDaily,
+          userId: userId,
+        );
+
+        if (!mounted) return;
+
+        if (result?.isSuccess == true) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${result!.grantedAmount}P 획득!'),
+              backgroundColor: AppColors.green,
+            ),
+          );
+          // 유저 정보 새로고침
+          ref.read(authProvider.notifier).refreshUser();
+        } else if (result != null && result.reasonCode != null) {
+          final message = switch (result.reasonCode) {
+            'LIMIT_DAILY' => '오늘은 이미 보상을 받으셨습니다',
+            'LIMIT_COOLDOWN' => '잠시 후 다시 시도해주세요',
+            _ => '보상을 받을 수 없습니다',
+          };
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(message)),
+          );
+        } else if (adRewardState.error != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('광고를 불러올 수 없습니다'),
+              backgroundColor: AppColors.red,
+            ),
+          );
+        }
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppColors.darkBlue,
+              AppColors.darkBlue.withValues(alpha: 0.8),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.darkBlue.withValues(alpha: 0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            // 아이콘
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: AppColors.white.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: adRewardState.isLoading || adRewardState.isShowingAd
+                  ? const Center(
+                      child: SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+                        ),
+                      ),
+                    )
+                  : const Icon(
+                      Icons.play_circle_filled_rounded,
+                      color: AppColors.white,
+                      size: 28,
+                    ),
+            ),
+            const SizedBox(width: 16),
+            // 텍스트
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '광고 보고 포인트 받기 (API)',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '1일 5회 · 회당 20P',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.white.withValues(alpha: 0.8),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // 보상 뱃지
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                '+20P',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.darkBlue,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// API 없이 직접 광고 테스트 버튼
+  Widget _buildDirectAdBanner() {
+    return GestureDetector(
+      onTap: () async {
+        if (_isDirectAdLoading) return;
+
+        setState(() => _isDirectAdLoading = true);
+
+        final adMobService = AdMobService();
+
+        // 광고가 로드되어 있지 않으면 먼저 로드
+        if (!adMobService.isAdLoaded) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('광고를 로드하는 중...')),
+          );
+
+          await adMobService.loadRewardedAd(
+            onAdLoaded: () {
+              debugPrint('✅ 광고 로드 완료');
+            },
+            onAdFailedToLoad: (error) {
+              debugPrint('❌ 광고 로드 실패: $error');
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('광고 로드 실패: $error'),
+                    backgroundColor: AppColors.red,
+                  ),
+                );
+                setState(() => _isDirectAdLoading = false);
+              }
+            },
+          );
+        }
+
+        // 광고가 로드되었으면 표시
+        if (adMobService.isAdLoaded) {
+          await adMobService.showRewardedAd(
+            onUserEarnedReward: (reward) {
+              debugPrint('🎉 보상 획득: ${reward.amount} ${reward.type}');
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('테스트 보상 획득: ${reward.amount} ${reward.type}'),
+                    backgroundColor: AppColors.green,
+                  ),
+                );
+              }
+            },
+            onAdDismissed: () {
+              debugPrint('🚪 광고 닫힘');
+              if (mounted) {
+                setState(() => _isDirectAdLoading = false);
+              }
+            },
+            onAdFailedToShow: (error) {
+              debugPrint('❌ 광고 표시 실패: $error');
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('광고 표시 실패: $error'),
+                    backgroundColor: AppColors.red,
+                  ),
+                );
+                setState(() => _isDirectAdLoading = false);
+              }
+            },
+          );
+        } else {
+          setState(() => _isDirectAdLoading = false);
+        }
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.orange,
+              Colors.orange.withValues(alpha: 0.8),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.orange.withValues(alpha: 0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            // 아이콘
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: AppColors.white.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: _isDirectAdLoading
+                  ? const Center(
+                      child: SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+                        ),
+                      ),
+                    )
+                  : const Icon(
+                      Icons.bug_report_rounded,
+                      color: AppColors.white,
+                      size: 28,
+                    ),
+            ),
+            const SizedBox(width: 16),
+            // 텍스트
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '광고 테스트 (API 없이)',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'AdMob 직접 테스트용',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.white.withValues(alpha: 0.8),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // 테스트 뱃지
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                'TEST',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.orange,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
