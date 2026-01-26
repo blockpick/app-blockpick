@@ -45,6 +45,7 @@ import '../../features/my/pages/announcement_screen.dart';
 import '../../features/my/pages/usage_guide_screen.dart';
 import '../../features/notification/notification_screen.dart';
 import '../../features/winners/winners_screen.dart';
+import '../../features/winners/winner_detail_screen.dart';
 import '../../features/home/widgets/daily_checkin_modal.dart';
 import '../auth/domain/providers/auth_provider.dart';
 // More modes
@@ -407,6 +408,13 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/winners',
         builder: (context, state) => const WinnersScreen(),
+      ),
+      GoRoute(
+        path: '/winners/:winnerId',
+        builder: (context, state) {
+          final winnerId = state.pathParameters['winnerId']!;
+          return WinnerDetailScreen(winnerId: winnerId);
+        },
       ),
 
       // ============ 출석체크 ============
