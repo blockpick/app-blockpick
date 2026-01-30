@@ -30,11 +30,15 @@ import '../../features/game/screens/game_join_test_screen.dart';
 import '../../features/optimal/optimal_game_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../features/settings/pages/profile_edit_screen.dart';
+import '../../features/settings/pages/email_change_screen.dart';
+import '../../features/settings/pages/phone_change_screen.dart';
 import '../../features/settings/pages/password_change_screen.dart';
+import '../../features/settings/pages/withdrawal_screen.dart';
 import '../../features/settings/pages/terms_screen.dart';
 import '../../features/settings/pages/privacy_policy_screen.dart';
 import '../../features/settings/pages/customer_service_screen.dart';
-import '../../features/my/pages/game_history_screen.dart';
+import '../../features/my/pages/participation_history_screen.dart';
+import '../../features/my/pages/shipping_address_screen.dart';
 import '../../features/my/pages/order_history_screen.dart';
 import '../../features/my/pages/winning_history_screen.dart';
 import '../../features/my/pages/transaction_screen.dart';
@@ -344,6 +348,14 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const ProfileEditScreen(),
       ),
       GoRoute(
+        path: '/settings/profile/email',
+        builder: (context, state) => const EmailChangeScreen(),
+      ),
+      GoRoute(
+        path: '/settings/profile/phone',
+        builder: (context, state) => const PhoneChangeScreen(),
+      ),
+      GoRoute(
         path: '/settings/password',
         builder: (context, state) => const PasswordChangeScreen(),
       ),
@@ -356,6 +368,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const PrivacyPolicyScreen(),
       ),
       GoRoute(
+        path: '/settings/withdrawal',
+        builder: (context, state) => const WithdrawalScreen(),
+      ),
+      GoRoute(
         path: '/settings/customer-service',
         builder: (context, state) => const CustomerServiceScreen(),
       ),
@@ -363,7 +379,16 @@ final routerProvider = Provider<GoRouter>((ref) {
       // ============ MY 서브 페이지 ============
       GoRoute(
         path: '/my/game-history',
-        builder: (context, state) => const GameHistoryScreen(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return ParticipationHistoryScreen(
+            initialTab: extra?['tab'] as int? ?? 0,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/my/shipping-address',
+        builder: (context, state) => const ShippingAddressScreen(),
       ),
       GoRoute(
         path: '/my/order-history',
