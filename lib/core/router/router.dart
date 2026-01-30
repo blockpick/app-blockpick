@@ -38,6 +38,9 @@ import '../../features/settings/pages/terms_screen.dart';
 import '../../features/settings/pages/privacy_policy_screen.dart';
 import '../../features/settings/pages/customer_service_screen.dart';
 import '../../features/my/pages/participation_history_screen.dart';
+import '../../features/my/pages/event_points_screen.dart';
+import '../../features/my/pages/review_management_screen.dart';
+import '../../features/my/pages/review_write_screen.dart';
 import '../../features/my/pages/shipping_address_screen.dart';
 import '../../features/my/pages/order_history_screen.dart';
 import '../../features/my/pages/winning_history_screen.dart';
@@ -421,6 +424,28 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/my/usage-guide',
         builder: (context, state) => const UsageGuideScreen(),
+      ),
+      GoRoute(
+        path: '/my/reviews',
+        builder: (context, state) => const ReviewManagementScreen(),
+      ),
+      GoRoute(
+        path: '/my/reviews/write',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return ReviewWriteScreen(
+            productName: extra?['productName'] as String? ?? '',
+            productImageUrl: extra?['productImageUrl'] as String?,
+            eventType: extra?['eventType'] as String? ?? '',
+            participatedAt: extra?['participatedAt'] as String? ?? '',
+            existingReview: extra?['existingReview'] as String?,
+          );
+        },
+      ),
+
+      GoRoute(
+        path: '/my/event-points',
+        builder: (context, state) => const EventPointsScreen(),
       ),
 
       // ============ 알림 ============

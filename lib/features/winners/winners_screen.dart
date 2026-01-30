@@ -87,29 +87,28 @@ class _WinnersScreenState extends State<WinnersScreen>
   Widget _buildTabBar() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: AppColors.bgWhite,
-        borderRadius: BorderRadius.circular(AppConstants.radiusMd),
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
+        border: Border.all(
+          color: AppColors.gray300,
+          width: 1,
+        ),
       ),
       child: TabBar(
         controller: _tabController,
         indicator: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(AppConstants.radiusMd),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.darkBlue.withValues(alpha: 0.08),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          color: AppColors.gray100,
+          borderRadius: BorderRadius.circular(AppConstants.radius2Xl - 4),
         ),
         indicatorSize: TabBarIndicatorSize.tab,
         dividerColor: Colors.transparent,
         labelColor: AppColors.darkBlue,
-        unselectedLabelColor: AppColors.medium,
+        unselectedLabelColor: AppColors.gray500,
         labelStyle: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
         unselectedLabelStyle: AppTextStyles.body,
+        labelPadding: EdgeInsets.zero,
         tabs: const [
           Tab(text: '역대 당첨자'),
           Tab(text: '리뷰'),
@@ -156,8 +155,8 @@ class _WinnersScreenState extends State<WinnersScreen>
           // 내 당첨/리뷰 내역 버튼
           GestureDetector(
             onTap: () {
-              // TODO: 내 정보 > 참여 내역 > 당첨/리뷰 화면으로 이동
-              // context.push('/my/history/winners');
+              // 내 정보 > 참여 내역 > 당첨 탭으로 이동
+              context.push('/my/game-history', extra: {'tab': 1});
             },
             child: Row(
               children: [

@@ -229,16 +229,7 @@ class GraphQLClientService {
       });
     });
 
-    // 에러를 무시하는 Link 추가
-    final errorIgnoringLink = Link.function((request, [forward]) {
-      return forward!(request).handleError((error) {
-        // UnexpectedResponseStructureException은 무시하고 데이터만 반환
-        print('⚠️  캐시 에러 무시: $error');
-      });
-    });
-
     final Link linkWithErrorHandling = Link.from([
-      errorIgnoringLink,
       loggingLink,
       httpLink,
     ]);

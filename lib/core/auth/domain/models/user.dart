@@ -30,6 +30,7 @@ class User with _$User {
     String? socialName,
     String? name,
     String? role,
+    String? phone,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

@@ -314,6 +314,24 @@ class Auth extends _$Auth {
     );
   }
 
+  // 회원탈퇴
+  Future<bool> withdrawUser({
+    required String password,
+    String? reason,
+  }) async {
+    print('🗑️ 회원탈퇴 시도');
+    final repository = await ref.read(authRepositoryProvider.future);
+    final success = await repository.withdrawUser(
+      password: password,
+      reason: reason,
+    );
+    if (success) {
+      state = const AsyncData(AuthState());
+      print('✅ 회원탈퇴 성공');
+    }
+    return success;
+  }
+
   // SMS 인증 코드 발송
   Future<({bool success, String? code, String? message})> sendSmsVerificationCode({
     required String phoneNumber,

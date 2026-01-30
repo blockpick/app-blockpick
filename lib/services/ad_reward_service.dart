@@ -64,7 +64,7 @@ class AdRewardSession {
     return AdRewardSession(
       rewardSessionId: json['rewardSessionId'] as String,
       verificationToken: json['verificationToken'] as String,
-      rewardPreviewAmount: json['rewardPreviewAmount'] as int,
+      rewardPreviewAmount: (json['rewardPreviewAmount'] as num).toInt(),
       expiresAt: DateTime.parse(json['expiresAt'] as String),
       status: AdRewardStatus.initiated,
     );
@@ -99,7 +99,7 @@ class AdRewardResult {
 
     return AdRewardResult(
       status: status,
-      grantedAmount: json['grantedAmount'] as int? ?? 0,
+      grantedAmount: (json['grantedAmount'] as num?)?.toInt() ?? 0,
       reasonCode: json['reasonCode'] as String?,
       walletSnapshot: json['walletSnapshot'] != null
           ? WalletSnapshot.fromJson(json['walletSnapshot'])
@@ -452,6 +452,7 @@ class AdRewardService {
       MutationOptions(
         document: gql(mutation),
         variables: variables,
+        fetchPolicy: FetchPolicy.noCache,
       ),
     );
 
@@ -508,6 +509,7 @@ class AdRewardService {
       MutationOptions(
         document: gql(mutation),
         variables: variables,
+        fetchPolicy: FetchPolicy.noCache,
       ),
     );
 

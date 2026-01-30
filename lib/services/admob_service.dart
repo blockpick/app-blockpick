@@ -13,6 +13,10 @@ class AdMobService {
   RewardedAd? _rewardedAd;
   bool _isLoading = false;
 
+  /// 로드 중일 때 대기하는 콜백들
+  final List<VoidCallback> _pendingLoadCallbacks = [];
+  final List<void Function(String)> _pendingFailCallbacks = [];
+
   /// 플랫폼 지원 여부
   static bool get isSupported {
     if (kIsWeb) return false;
@@ -59,8 +63,18 @@ class AdMobService {
       return;
     }
 
-    if (_isLoading || _rewardedAd != null) {
-      debugPrint('⚠️ 광고가 이미 로드 중이거나 로드되어 있습니다.');
+    // 광고가 이미 로드되어 있으면 즉시 콜백 호출
+    if (_rewardedAd != null) {
+      debugPrint('✅ 광고가 이미 로드되어 있습니다.');
+      onAdLoaded?.call();
+      return;
+    }
+
+    // 광고가 로드 중이면 콜백을 대기열에 추가
+    if (_isLoading) {
+      debugPrint('⏳ 광고가 로드 중입니다. 콜백을 대기열에 추가합니다.');
+      if (onAdLoaded != null) _pendingLoadCallbacks.add(onAdLoaded);
+      if (onAdFailedToLoad != null) _pendingFailCallbacks.add(onAdFailedToLoad);
       return;
     }
 
@@ -76,11 +90,23 @@ class AdMobService {
           _rewardedAd = ad;
           _isLoading = false;
           onAdLoaded?.call();
+          // 대기 중인 콜백들도 호출
+          for (final callback in _pendingLoadCallbacks) {
+            callback();
+          }
+          _pendingLoadCallbacks.clear();
+          _pendingFailCallbacks.clear();
         },
         onAdFailedToLoad: (error) {
           debugPrint('❌ 보상형 광고 로드 실패: ${error.message}');
           _isLoading = false;
           onAdFailedToLoad?.call(error.message);
+          // 대기 중인 실패 콜백들도 호출
+          for (final callback in _pendingFailCallbacks) {
+            callback(error.message);
+          }
+          _pendingLoadCallbacks.clear();
+          _pendingFailCallbacks.clear();
         },
       ),
     );

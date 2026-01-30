@@ -8,7 +8,6 @@ import '../../models/game_round_model.dart';
 import '../../providers/game_provider.dart';
 import '../../providers/ad_reward_provider.dart';
 import '../../services/ad_reward_service.dart';
-import '../../services/admob_service.dart';
 import '../../widgets/horizontal_game_card.dart';
 import '../optimal/optimal_game_list_screen.dart';
 import '../more/more_screen.dart';
@@ -26,7 +25,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   int _selectedTabIndex = 0;
   final ScrollController _scrollController = ScrollController();
   bool _isFabExpanded = true;
-  bool _isDirectAdLoading = false;
 
   final List<Map<String, dynamic>> _tabs = [
     {'label': 'Daily', 'type': GameType.daily, 'isPrime': false, 'isMore': false},
@@ -40,6 +38,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    // 광고 미리 로드 (build 후 실행)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _preloadAd();
+    });
+  }
+
+  /// 광고 미리 로드
+  void _preloadAd() {
+    // adRewardServiceProvider를 미리 초기화하여 광고 로드
+    ref.read(adRewardServiceProvider.future).then((_) {
+      debugPrint('✅ 광고 서비스 초기화 완료');
+    }).catchError((e) {
+      debugPrint('⚠️ 광고 서비스 초기화 실패: $e');
+    });
   }
 
   @override
@@ -205,20 +217,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  /// 보상형 광고 배너 (2개 버튼: API 연동 + 직접 테스트)
+  /// 보상형 광고 배너
   Widget _buildAdBanner() {
-    return Column(
-      children: [
-        // 1. API 연동 광고 버튼
-        _buildAdBannerWithApi(),
-        // 2. API 없이 직접 광고 테스트 버튼
-        _buildDirectAdBanner(),
-      ],
-    );
-  }
-
-  /// API 연동 광고 버튼
-  Widget _buildAdBannerWithApi() {
     final adRewardState = ref.watch(adRewardNotifierProvider);
     final authState = ref.watch(authProvider);
     final isAuthenticated = authState.valueOrNull?.isAuthenticated ?? false;
@@ -329,7 +329,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    '광고 보고 포인트 받기 (API)',
+                    '광고 보고 포인트 받기',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -361,175 +361,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: AppColors.darkBlue,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// API 없이 직접 광고 테스트 버튼
-  Widget _buildDirectAdBanner() {
-    return GestureDetector(
-      onTap: () async {
-        if (_isDirectAdLoading) return;
-
-        setState(() => _isDirectAdLoading = true);
-
-        final adMobService = AdMobService();
-
-        // 광고가 로드되어 있지 않으면 먼저 로드
-        if (!adMobService.isAdLoaded) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('광고를 로드하는 중...')),
-          );
-
-          await adMobService.loadRewardedAd(
-            onAdLoaded: () {
-              debugPrint('✅ 광고 로드 완료');
-            },
-            onAdFailedToLoad: (error) {
-              debugPrint('❌ 광고 로드 실패: $error');
-              if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('광고 로드 실패: $error'),
-                    backgroundColor: AppColors.red,
-                  ),
-                );
-                setState(() => _isDirectAdLoading = false);
-              }
-            },
-          );
-        }
-
-        // 광고가 로드되었으면 표시
-        if (adMobService.isAdLoaded) {
-          await adMobService.showRewardedAd(
-            onUserEarnedReward: (reward) {
-              debugPrint('🎉 보상 획득: ${reward.amount} ${reward.type}');
-              if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('테스트 보상 획득: ${reward.amount} ${reward.type}'),
-                    backgroundColor: AppColors.green,
-                  ),
-                );
-              }
-            },
-            onAdDismissed: () {
-              debugPrint('🚪 광고 닫힘');
-              if (mounted) {
-                setState(() => _isDirectAdLoading = false);
-              }
-            },
-            onAdFailedToShow: (error) {
-              debugPrint('❌ 광고 표시 실패: $error');
-              if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('광고 표시 실패: $error'),
-                    backgroundColor: AppColors.red,
-                  ),
-                );
-                setState(() => _isDirectAdLoading = false);
-              }
-            },
-          );
-        } else {
-          setState(() => _isDirectAdLoading = false);
-        }
-      },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 20),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Colors.orange,
-              Colors.orange.withValues(alpha: 0.8),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.orange.withValues(alpha: 0.3),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            // 아이콘
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: AppColors.white.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: _isDirectAdLoading
-                  ? const Center(
-                      child: SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
-                        ),
-                      ),
-                    )
-                  : const Icon(
-                      Icons.bug_report_rounded,
-                      color: AppColors.white,
-                      size: 28,
-                    ),
-            ),
-            const SizedBox(width: 16),
-            // 텍스트
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '광고 테스트 (API 없이)',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'AdMob 직접 테스트용',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.white.withValues(alpha: 0.8),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // 테스트 뱃지
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                'TEST',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.orange,
                 ),
               ),
             ),

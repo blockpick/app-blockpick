@@ -44,6 +44,7 @@ mixin _$User {
   String? get socialName => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   String? get role => throw _privateConstructorUsedError;
+  String? get phone => throw _privateConstructorUsedError;
 
   /// Serializes this User to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -82,6 +83,7 @@ abstract class $UserCopyWith<$Res> {
     String? socialName,
     String? name,
     String? role,
+    String? phone,
   });
 }
 
@@ -122,6 +124,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
     Object? socialName = freezed,
     Object? name = freezed,
     Object? role = freezed,
+    Object? phone = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -213,6 +216,10 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
                 ? _value.role
                 : role // ignore: cast_nullable_to_non_nullable
                       as String?,
+            phone: freezed == phone
+                ? _value.phone
+                : phone // ignore: cast_nullable_to_non_nullable
+                      as String?,
           )
           as $Val,
     );
@@ -250,6 +257,7 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
     String? socialName,
     String? name,
     String? role,
+    String? phone,
   });
 }
 
@@ -287,6 +295,7 @@ class __$$UserImplCopyWithImpl<$Res>
     Object? socialName = freezed,
     Object? name = freezed,
     Object? role = freezed,
+    Object? phone = freezed,
   }) {
     return _then(
       _$UserImpl(
@@ -378,6 +387,10 @@ class __$$UserImplCopyWithImpl<$Res>
             ? _value.role
             : role // ignore: cast_nullable_to_non_nullable
                   as String?,
+        phone: freezed == phone
+            ? _value.phone
+            : phone // ignore: cast_nullable_to_non_nullable
+                  as String?,
       ),
     );
   }
@@ -409,6 +422,7 @@ class _$UserImpl implements _User {
     this.socialName,
     this.name,
     this.role,
+    this.phone,
   });
 
   factory _$UserImpl.fromJson(Map<String, dynamic> json) =>
@@ -467,10 +481,12 @@ class _$UserImpl implements _User {
   final String? name;
   @override
   final String? role;
+  @override
+  final String? phone;
 
   @override
   String toString() {
-    return 'User(id: $id, email: $email, nickname: $nickname, avatar: $avatar, balance: $balance, totalGamesPlayed: $totalGamesPlayed, totalWins: $totalWins, winRate: $winRate, createdAt: $createdAt, updatedAt: $updatedAt, profileImageUrl: $profileImageUrl, point: $point, cash: $cash, isPushNotification: $isPushNotification, isMarketingNotification: $isMarketingNotification, isBan: $isBan, userRole: $userRole, isSocialAccount: $isSocialAccount, socialProvider: $socialProvider, socialName: $socialName, name: $name, role: $role)';
+    return 'User(id: $id, email: $email, nickname: $nickname, avatar: $avatar, balance: $balance, totalGamesPlayed: $totalGamesPlayed, totalWins: $totalWins, winRate: $winRate, createdAt: $createdAt, updatedAt: $updatedAt, profileImageUrl: $profileImageUrl, point: $point, cash: $cash, isPushNotification: $isPushNotification, isMarketingNotification: $isMarketingNotification, isBan: $isBan, userRole: $userRole, isSocialAccount: $isSocialAccount, socialProvider: $socialProvider, socialName: $socialName, name: $name, role: $role, phone: $phone)';
   }
 
   @override
@@ -514,7 +530,8 @@ class _$UserImpl implements _User {
             (identical(other.socialName, socialName) ||
                 other.socialName == socialName) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.role, role) || other.role == role));
+            (identical(other.role, role) || other.role == role) &&
+            (identical(other.phone, phone) || other.phone == phone));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -543,6 +560,7 @@ class _$UserImpl implements _User {
     socialName,
     name,
     role,
+    phone,
   ]);
 
   /// Create a copy of User
@@ -583,6 +601,7 @@ abstract class _User implements User {
     final String? socialName,
     final String? name,
     final String? role,
+    final String? phone,
   }) = _$UserImpl;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$UserImpl.fromJson;
@@ -631,6 +650,8 @@ abstract class _User implements User {
   String? get name;
   @override
   String? get role;
+  @override
+  String? get phone;
 
   /// Create a copy of User
   /// with the given fields replaced by the non-null parameter values.
