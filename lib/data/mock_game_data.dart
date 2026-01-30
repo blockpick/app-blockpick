@@ -357,6 +357,67 @@ class MockGameData {
     ),
   ];
 
+  /// Prime 게임 목록 (최저가 단독 입찰 방식)
+  static final List<GameRound> primeGames = [
+    GameRound(
+      id: 'prime-001',
+      title: 'Hermes Picotin Lock 18 Bag',
+      description: '에르메스 피코탄 락 18 백',
+      imageUrl: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&q=80',
+      participants: 12,
+      maxParticipants: 1000,
+      totalBlocks: 1500 * 1500,
+      requiredPicks: 1,
+      winners: 1,
+      originalPrice: 5600000,
+      currentPrice: 400,
+      timeLeft: '00:29:56',
+      type: GameType.prime,
+      status: GameStatus.active,
+      category: 'Fashion',
+      gridWidth: 1500,
+      gridHeight: 1500,
+    ),
+    GameRound(
+      id: 'prime-002',
+      title: '[Rolex] Submariner Date 126610LN',
+      description: '롤렉스 서브마리너 데이트',
+      imageUrl: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=800&q=80',
+      participants: 45,
+      maxParticipants: 500,
+      totalBlocks: 1000 * 1000,
+      requiredPicks: 1,
+      winners: 1,
+      originalPrice: 15800000,
+      currentPrice: 1000,
+      timeLeft: '01:45:30',
+      type: GameType.prime,
+      status: GameStatus.active,
+      category: 'Fashion',
+      gridWidth: 1000,
+      gridHeight: 1000,
+    ),
+    GameRound(
+      id: 'prime-003',
+      title: '[Dyson] Supersonic HD15 헤어드라이어',
+      description: '다이슨 슈퍼소닉 헤어드라이어',
+      imageUrl: 'https://images.unsplash.com/photo-1522338242992-e1a54571c780?w=800&q=80',
+      participants: 88,
+      maxParticipants: 2000,
+      totalBlocks: 500 * 500,
+      requiredPicks: 1,
+      winners: 1,
+      originalPrice: 598000,
+      currentPrice: 200,
+      timeLeft: '03:12:00',
+      type: GameType.prime,
+      status: GameStatus.active,
+      category: 'Digital',
+      gridWidth: 500,
+      gridHeight: 500,
+    ),
+  ];
+
   /// 타입별 게임 가져오기
   static List<GameRound> getGamesByType(GameType type) {
     switch (type) {
@@ -366,12 +427,14 @@ class MockGameData {
         return selectGames;
       case GameType.vibe:
         return vibeGames;
+      case GameType.prime:
+        return primeGames;
     }
   }
 
   /// 모든 게임 가져오기
   static List<GameRound> getAllGames() {
-    return [...dailyGames, ...selectGames, ...vibeGames];
+    return [...dailyGames, ...selectGames, ...vibeGames, ...primeGames];
   }
 
   /// ID로 게임 찾기

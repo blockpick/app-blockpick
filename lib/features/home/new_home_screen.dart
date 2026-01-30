@@ -550,9 +550,11 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
     );
   }
 
-  /// ⑤ 마감임박 이벤트 섹션
+  /// ⑤ 마감임박 이벤트 섹션 (DAILY/SELECT/VIBE/PRIME 모두 포함)
   Widget _buildClosingSoonEventsSection() {
     final dailyGamesAsync = ref.watch(gamesByTypeProvider(GameType.daily));
+    final selectGamesAsync = ref.watch(gamesByTypeProvider(GameType.select));
+    final primeGamesAsync = ref.watch(gamesByTypeProvider(GameType.prime));
 
     return SliverToBoxAdapter(
       child: Column(
@@ -567,34 +569,204 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
             },
           ),
 
-          // 이벤트 카드들
+          // 이벤트 카드들 (DAILY/SELECT/VIBE + PRIME)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: dailyGamesAsync.when(
-              data: (games) {
-                if (games.isEmpty) {
+            child: Builder(
+              builder: (context) {
+                final dailyGames = dailyGamesAsync.valueOrNull ?? [];
+                final selectGames = selectGamesAsync.valueOrNull ?? [];
+                final primeGames = primeGamesAsync.valueOrNull ?? [];
+
+                final allGames = [...dailyGames, ...selectGames, ...primeGames];
+                if (allGames.isEmpty) {
                   return _buildEmptyEventState();
                 }
+
                 return Column(
-                  children: games.asMap().entries.take(5).map((entry) {
-                    final index = entry.key;
-                    final game = entry.value;
+                  children: allGames.take(5).map((game) {
+                    if (game.type == GameType.prime) {
+                      return _buildPrimeEventCard(game);
+                    }
                     return ComingSoonItemCard(
                       game: game,
                       gameType: _getGameTypeString(game),
-                      isLastChance: index < 2, // 처음 2개만 LAST CHANCE
+                      isLastChance: _isLastChance(game),
                       onTap: () => context.go('/game/${game.id}'),
                     );
                   }).toList(),
                 );
               },
-              loading: () => _buildLoadingState(),
-              error: (error, stack) => _buildErrorState(),
             ),
           ),
         ],
       ),
     );
+  }
+
+  /// PRIME 이벤트 카드 (최저가 단독 입찰 방식)
+  Widget _buildPrimeEventCard(GameRound game) {
+    return GestureDetector(
+      onTap: () => context.go('/game/${game.id}'),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.black.withValues(alpha: 0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            // 이미지
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: SizedBox(
+                width: 80,
+                height: 80,
+                child: game.imageUrl.isEmpty
+                    ? Container(
+                        color: AppColors.gray100,
+                        child: const Icon(Icons.image_rounded,
+                            size: 32, color: AppColors.gray400),
+                      )
+                    : Image.network(
+                        game.imageUrl.replaceAll(' ', '%20'),
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(
+                          color: AppColors.gray100,
+                          child: const Icon(Icons.image_rounded,
+                              size: 32, color: AppColors.gray400),
+                        ),
+                      ),
+              ),
+            ),
+            const SizedBox(width: 14),
+            // 정보
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 배지 행
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: AppColors.yellow,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: const Text(
+                          'PRIME',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.white,
+                          ),
+                        ),
+                      ),
+                      if (_isNew(game)) ...[
+                        const SizedBox(width: 4),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: AppColors.green.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(
+                                color: AppColors.green.withValues(alpha: 0.3)),
+                          ),
+                          child: const Text(
+                            'NEW',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.green,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  // 상품명
+                  Text(
+                    game.title,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.darkBlue,
+                      height: 1.3,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 6),
+                  // 참여 인원 / 입찰 금액
+                  Row(
+                    children: [
+                      // 참여 인원
+                      Text(
+                        '👥 ${game.participants}/${game.maxParticipants}',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.gray600,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      // 입찰 금액 범위
+                      Text(
+                        '${_formatPrice(game.currentPrice)}원 ~ ${_formatPrice(game.originalPrice)}원',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.gray600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  // 남은 시간
+                  Row(
+                    children: [
+                      Icon(Icons.access_time_rounded,
+                          size: 12, color: AppColors.gray400),
+                      const SizedBox(width: 4),
+                      Text(
+                        '${game.timeLeft} 남음',
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: AppColors.gray400,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 가격 포맷 (만원 단위)
+  String _formatPrice(int price) {
+    if (price >= 10000) {
+      final man = price ~/ 10000;
+      final remainder = price % 10000;
+      if (remainder == 0) return '${man}만';
+      return '${man}만${remainder}';
+    }
+    return '$price';
   }
 
   /// ⑥ 최근 당첨자 섹션
@@ -1077,8 +1249,16 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
   }
 
   String _getGameTypeString(GameRound game) {
-    // 실제 게임 타입에 따라 반환
-    return 'daily'; // 임시
+    switch (game.type) {
+      case GameType.daily:
+        return 'daily';
+      case GameType.select:
+        return 'select';
+      case GameType.vibe:
+        return 'vibe';
+      case GameType.prime:
+        return 'prime';
+    }
   }
 
   Color _getTypeBadgeColor(String type) {

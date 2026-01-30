@@ -3,6 +3,7 @@ enum GameType {
   daily, // Stage -> Daily로 명칭 변경
   select,
   vibe,
+  prime,
 }
 
 /// 게임 상태
@@ -149,6 +150,8 @@ class GameRound {
         return GameType.select;
       case 'vibe':
         return GameType.vibe;
+      case 'prime':
+        return GameType.prime;
       default:
         return GameType.daily;
     }

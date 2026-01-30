@@ -49,6 +49,9 @@ extension GameX on Game {
         case 'VIBE':
           type = GameType.vibe;
           break;
+        case 'PRIME':
+          type = GameType.prime;
+          break;
       }
     }
 

@@ -682,6 +682,8 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
         return AppColors.purple;
       case GameType.vibe:
         return AppColors.blue;
+      case GameType.prime:
+        return AppColors.yellow;
     }
   }
 
@@ -694,6 +696,8 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
         return 'SELECT';
       case GameType.vibe:
         return 'VIBE';
+      case GameType.prime:
+        return 'PRIME';
     }
   }
 

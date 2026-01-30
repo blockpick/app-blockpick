@@ -318,6 +318,8 @@ class GameCard extends StatelessWidget {
         return AppColors.purple;
       case GameType.vibe:
         return AppColors.blue;
+      case GameType.prime:
+        return AppColors.yellow;
     }
   }
 
@@ -330,6 +332,8 @@ class GameCard extends StatelessWidget {
         return 'Select';
       case GameType.vibe:
         return 'Vibe';
+      case GameType.prime:
+        return 'Prime';
     }
   }
 

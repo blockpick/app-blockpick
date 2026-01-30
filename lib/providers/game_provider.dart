@@ -284,6 +284,9 @@ Future<List<GameRound>> gamesByType(
       case GameType.vibe:
         typeString = 'VIBE';
         break;
+      case GameType.prime:
+        typeString = 'PRIME';
+        break;
     }
 
     // gameType이 null이거나 일치하는 게임 필터링

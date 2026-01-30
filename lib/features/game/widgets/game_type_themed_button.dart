@@ -92,6 +92,10 @@ class GameTypeThemedButton extends ConsumerWidget {
         return const LinearGradient(
           colors: [AppColors.pink, AppColors.red],
         );
+      case GameType.prime:
+        return const LinearGradient(
+          colors: [AppColors.yellow, AppColors.orange],
+        );
     }
   }
 
@@ -103,6 +107,8 @@ class GameTypeThemedButton extends ConsumerWidget {
         return Icons.playlist_add_check;
       case GameType.vibe:
         return Icons.music_note;
+      case GameType.prime:
+        return Icons.diamond_outlined;
     }
   }
 
@@ -114,6 +120,8 @@ class GameTypeThemedButton extends ConsumerWidget {
         return '셀렉트 게임 참가하기';
       case GameType.vibe:
         return '바이브 게임 참가하기';
+      case GameType.prime:
+        return '프라임 게임 참가하기';
     }
   }
 
@@ -125,6 +133,8 @@ class GameTypeThemedButton extends ConsumerWidget {
         return AppColors.purple.withOpacity(0.4);
       case GameType.vibe:
         return AppColors.pink.withOpacity(0.4);
+      case GameType.prime:
+        return AppColors.yellow.withOpacity(0.4);
     }
   }
 
