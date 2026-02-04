@@ -9,6 +9,8 @@ import '../../providers/game_provider.dart';
 import '../../providers/ad_reward_provider.dart';
 import '../../services/ad_reward_service.dart';
 import '../../widgets/horizontal_game_card.dart';
+import '../../widgets/transaction_floating_banner.dart';
+import '../../providers/pending_transaction_provider.dart';
 import '../optimal/optimal_game_list_screen.dart';
 import '../more/more_screen.dart';
 import '../../components/common/common_app_bar.dart';
@@ -74,36 +76,51 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final authState = ref.watch(authProvider);
     final userBalance = authState.valueOrNull?.user?.balance?.toInt() ?? 0;
 
+    final pendingTx = ref.watch(pendingTransactionNotifierProvider);
+
     return Scaffold(
       backgroundColor: AppColors.gray100,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: [
-            // 헤더 - "Event" + 포인트
-            CommonAppBar(
-              title: 'Event',
-              trailing: PointBadge(
-                balance: userBalance,
-                onTap: () {
-                  final isAuth = authState.valueOrNull?.isAuthenticated ?? false;
-                  if (isAuth) {
-                    context.push('/my/charge');
-                  } else {
-                    context.push('/login');
-                  }
-                },
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 헤더 - "Event" + 포인트
+                CommonAppBar(
+                  title: 'Event',
+                  trailing: PointBadge(
+                    balance: userBalance,
+                    onTap: () {
+                      final isAuth = authState.valueOrNull?.isAuthenticated ?? false;
+                      if (isAuth) {
+                        context.push('/my/charge');
+                      } else {
+                        context.push('/login');
+                      }
+                    },
+                  ),
+                ),
+
+                // 탭
+                _buildTabs(),
+
+                // 콘텐츠
+                Expanded(
+                  child: _buildContent(),
+                ),
+              ],
             ),
 
-            // 탭
-            _buildTabs(),
-
-          // 콘텐츠
-          Expanded(
-            child: _buildContent(),
-          ),
-        ],
+            // 트랜잭션 상태 배너 (하단)
+            if (pendingTx != null)
+              const Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: TransactionFloatingBanner(),
+              ),
+          ],
         ),
       ),
       // FAB - 당첨자 내역

@@ -9,6 +9,7 @@ import '../services/entry_status_polling_service.dart';
 import '../models/entry_status.dart';
 import '../features/game/widgets/game_join_progress_overlay.dart';
 import 'game_join_progress_provider.dart';
+import 'pending_transaction_provider.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 
@@ -772,6 +773,276 @@ class GameParticipation extends _$GameParticipation {
       state = AsyncValue.data(errorResult);
 
       rethrow;
+    }
+  }
+
+  /// Phase A: Mutation까지만 실행 (steps 1-5)
+  ///
+  /// 폴링 없이 joinGame Mutation 응답을 즉시 반환합니다.
+  /// 폴링은 [startPolling]을 통해 별도로 시작합니다.
+  Future<GameJoinResult> submitJoinGame({
+    required String gameId,
+    required String selectedGameProductId,
+    required int row,
+    required int col,
+    required String contractAddress,
+  }) async {
+    try {
+      print('\n═══════════════════════════════════════════════════════════');
+      print('🎮 게임 참여 프로세스 시작 (Phase A: Mutation 전송)');
+      print('═══════════════════════════════════════════════════════════');
+
+      // PendingTransaction 상태 업데이트
+      final pendingNotifier = ref.read(pendingTransactionNotifierProvider.notifier);
+
+      // Step 1: 지갑 준비
+      pendingNotifier.updateSubmitProgress(currentStep: 1, message: '블록체인 지갑을 확인하고 있습니다...');
+      ref.read(gameJoinProgressNotifierProvider.notifier).updateProgress(
+        step: GameJoinStep.walletCheck,
+        message: '블록체인 지갑을 확인하고 있습니다...',
+      );
+
+      final walletService = ref.read(blockchainWalletServiceProvider);
+      final credentials = await walletService.getOrCreateWallet();
+      final walletAddress = credentials.address.hex;
+      print('✓ 지갑 준비 완료: $walletAddress');
+
+      // Step 2: 암호화 키 확보
+      pendingNotifier.updateSubmitProgress(currentStep: 2, message: '암호화 키를 생성하고 있습니다...');
+      ref.read(gameJoinProgressNotifierProvider.notifier).updateProgress(
+        step: GameJoinStep.encryptionKey,
+        message: '암호화 키를 생성하고 있습니다...',
+      );
+
+      final rawIndex = '${walletAddress.toLowerCase()}-$gameId';
+      final bytes = utf8.encode(rawIndex);
+      final digest = sha256.convert(bytes);
+      final userIndex = digest.toString();
+
+      final contractService = SmartContractService();
+      String encryptionKey;
+
+      try {
+        encryptionKey = await contractService.getEncryptionKey(
+          contractAddress: contractAddress,
+          userIndex: userIndex,
+          credentials: credentials,
+        );
+        print('✅ 기존 키 발견! 재사용');
+      } catch (e) {
+        final client = await ref.read(graphqlClientProvider.future);
+        final keyResult = await client.mutate(
+          MutationOptions(
+            document: gql(_requestEncryptionKeyMutation),
+            variables: {
+              'input': {
+                'gameId': gameId,
+                'userAddress': walletAddress,
+                'index': userIndex,
+              },
+            },
+            fetchPolicy: FetchPolicy.noCache,
+          ),
+        );
+
+        if (keyResult.hasException) {
+          throw Exception('암호화 키 생성 실패: ${keyResult.exception}');
+        }
+
+        final keyData = keyResult.data?['requestEncryptionKey'];
+        if (keyData == null || keyData['success'] != true) {
+          throw Exception(keyData?['message'] ?? '암호화 키 생성 실패');
+        }
+
+        final contractAddr = keyData['contractAddress'] as String?;
+
+        if (keyData['encryptionKey'] != null && keyData['encryptionKey'] != '') {
+          encryptionKey = keyData['encryptionKey'] as String;
+        } else {
+          pendingNotifier.updateSubmitProgress(currentStep: 2, message: '블록체인에서 암호화 키 생성 대기 중...');
+          ref.read(gameJoinProgressNotifierProvider.notifier).updateProgress(
+            step: GameJoinStep.encryptionKey,
+            message: '블록체인에서 암호화 키 생성 대기 중...',
+          );
+
+          const maxAttempts = 30;
+          const pollInterval = Duration(seconds: 2);
+          int attempts = 0;
+          String? polledKey;
+
+          while (attempts < maxAttempts && polledKey == null) {
+            attempts++;
+            try {
+              polledKey = await contractService.getEncryptionKey(
+                contractAddress: contractAddr ?? contractAddress,
+                userIndex: userIndex,
+                credentials: credentials,
+              );
+              break;
+            } catch (e) {
+              if (attempts < maxAttempts) {
+                await Future.delayed(pollInterval);
+              } else {
+                throw Exception('암호화 키 생성 타임아웃');
+              }
+            }
+          }
+
+          if (polledKey == null) {
+            throw Exception('암호화 키를 블록체인에서 조회할 수 없습니다');
+          }
+          encryptionKey = polledKey;
+        }
+      }
+
+      // Step 3: 좌표 암호화
+      pendingNotifier.updateSubmitProgress(currentStep: 3, message: '선택한 좌표를 암호화하고 있습니다...');
+      ref.read(gameJoinProgressNotifierProvider.notifier).updateProgress(
+        step: GameJoinStep.coordinateEncryption,
+        message: '선택한 좌표를 암호화하고 있습니다...',
+      );
+
+      final encryptionService = ref.read(coordinateEncryptionServiceProvider);
+      final coordCiphertext = encryptionService.encryptCoordinate(
+        row: row,
+        col: col,
+        encryptionKeyHex: encryptionKey,
+      );
+
+      // Step 4: 지갑 주소 해시화
+      pendingNotifier.updateSubmitProgress(currentStep: 4, message: '지갑 주소를 해시화하고 있습니다...');
+      ref.read(gameJoinProgressNotifierProvider.notifier).updateProgress(
+        step: GameJoinStep.walletHashing,
+        message: '지갑 주소를 해시화하고 있습니다...',
+      );
+
+      final walletBytes = utf8.encode(walletAddress.toLowerCase());
+      final walletHash = sha256.convert(walletBytes).toString();
+
+      // Step 5: joinGame Mutation 전송
+      pendingNotifier.updateSubmitProgress(currentStep: 5, message: '게임 참여 요청을 전송하고 있습니다...');
+      ref.read(gameJoinProgressNotifierProvider.notifier).updateProgress(
+        step: GameJoinStep.joinMutation,
+        message: '게임 참여 요청을 전송하고 있습니다...',
+      );
+
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final shortWalletHash = walletHash.substring(0, 16);
+      final idempotencyKey = '$gameId-$shortWalletHash-$timestamp';
+
+      final client = await ref.read(graphqlClientProvider.future);
+      final result = await client.mutate(
+        MutationOptions(
+          document: gql(_joinGameMutation),
+          fetchPolicy: FetchPolicy.noCache,
+          variables: {
+            'input': {
+              'gameId': gameId,
+              'selectedGameProductId': selectedGameProductId,
+              'coordCiphertext': coordCiphertext,
+              'idempotencyKey': idempotencyKey,
+              'signerWallet': walletHash,
+              'contractAddress': contractAddress,
+              'userIndex': userIndex,
+            },
+          },
+        ),
+      );
+
+      if (result.hasException) {
+        throw Exception(result.exception.toString());
+      }
+
+      final data = result.data?['joinGame'];
+      if (data == null) {
+        throw Exception('joinGame 응답 데이터가 없습니다');
+      }
+
+      final joinResult = GameJoinResult.fromJson(data as Map<String, dynamic>);
+
+      if (!joinResult.success) {
+        state = AsyncValue.data(joinResult);
+        return joinResult;
+      }
+
+      print('✅ Phase A 완료! Entry ID: ${joinResult.entryId}');
+      state = AsyncValue.data(joinResult);
+      return joinResult;
+
+    } catch (e) {
+      print('❌ Phase A 실패: $e');
+      final errorResult = GameJoinResult(
+        success: false,
+        message: e.toString(),
+        errorCode: 'CLIENT_ERROR',
+      );
+      state = AsyncValue.data(errorResult);
+      rethrow;
+    }
+  }
+
+  /// Phase B: 폴링 시작 (백그라운드)
+  ///
+  /// [PendingTransactionNotifier]를 통해 상태를 업데이트합니다.
+  /// 화면 전환 후에도 독립적으로 실행됩니다.
+  Future<void> startPolling({
+    required String entryId,
+  }) async {
+    final pendingNotifier = ref.read(pendingTransactionNotifierProvider.notifier);
+
+    try {
+      final client = await ref.read(graphqlClientProvider.future);
+      final pollingService = EntryStatusPollingService(client: client);
+
+      print('→ Phase B: 백그라운드 폴링 시작 (entryId: $entryId)');
+
+      EntryStatus? finalStatus;
+
+      await for (final status in pollingService.pollEntryStatus(entryId)) {
+        finalStatus = status;
+
+        final confirmedCount = status.txIntents.where((tx) => tx.status == 'CONFIRMED').length;
+
+        // PendingTransaction 상태 업데이트
+        pendingNotifier.updatePollingProgress(
+          currentTxCount: confirmedCount,
+          totalTxCount: status.txIntents.length,
+          txHash: status.txIntents.lastOrNull?.txHash,
+        );
+
+        // 기존 GameJoinProgress 업데이트도 유지
+        ref.read(gameJoinProgressNotifierProvider.notifier).updatePollingProgress(
+          entryId: entryId,
+          currentTxCount: confirmedCount,
+          totalTxCount: status.txIntents.length,
+          currentTxHash: status.txIntents.lastOrNull?.txHash,
+        );
+      }
+
+      if (finalStatus?.isConfirmed == true) {
+        print('✅ Phase B 완료: 블록체인 확정');
+        pendingNotifier.onConfirmed(
+          txHash: finalStatus?.txIntents.firstOrNull?.txHash,
+        );
+
+        // 최종 결과 업데이트
+        final finalResult = GameJoinResult(
+          success: true,
+          message: '게임 참여가 완료되었습니다!',
+          entryId: entryId,
+          status: finalStatus?.status,
+          txHash: finalStatus?.txIntents.firstOrNull?.txHash,
+        );
+        state = AsyncValue.data(finalResult);
+      } else {
+        print('⚠️ Phase B: 예상치 못한 상태 - ${finalStatus?.status}');
+        pendingNotifier.onFailed(
+          errorMessage: finalStatus?.errorMessage ?? '알 수 없는 상태',
+        );
+      }
+    } catch (e) {
+      print('❌ Phase B 폴링 실패: $e');
+      pendingNotifier.onFailed(errorMessage: e.toString());
     }
   }
 

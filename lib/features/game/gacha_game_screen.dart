@@ -12,12 +12,14 @@ import '../../models/game_round_model.dart';
 import '../../providers/game_provider.dart';
 import '../../providers/game_participation_provider.dart';
 import '../../providers/game_join_progress_provider.dart';
+import '../../providers/pending_transaction_provider.dart';
 import '../../widgets/gacha_coordinate_picker.dart';
 import '../../widgets/confetti_celebration.dart';
 import 'models/event_prize.dart';
 import 'widgets/game_join_progress_overlay.dart';
 import 'widgets/game_join_result_overlay.dart';
 import 'widgets/product_selector_overlay.dart';
+import 'widgets/transaction_progress_modal.dart';
 
 /// Gacha 스타일 게임 화면 (토스 디자인)
 class GachaGameScreen extends ConsumerStatefulWidget {
@@ -295,35 +297,69 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
       return;
     }
 
-    // 선택된 상품 사용 (SELECT 타입에서 변경 가능)
     final selectedGameProductId = gameProducts[_selectedProductIndex].id;
+    final gameId = _game!.id;
+    final gameTitle = _gameRound?.title ?? '게임';
 
     OverlayEntry? progressOverlay;
 
     try {
+      // Phase A 시작: PendingTransaction 초기화
+      final pendingNotifier = ref.read(pendingTransactionNotifierProvider.notifier);
+      pendingNotifier.startTransaction(gameId: gameId, gameTitle: gameTitle);
+
+      // Phase A 로딩 표시 (기존 GameJoinProgressOverlay)
       progressOverlay = GameJoinProgressOverlay.show(
         context,
         currentStep: GameJoinStep.walletCheck,
         statusMessage: '게임 참여를 준비하고 있습니다...',
       );
 
+      // Phase A: submitJoinGame (steps 1-5, Mutation까지만)
       final result = await ref
           .read(gameParticipationProvider.notifier)
-          .joinGame(
-            gameId: _game!.id,
+          .submitJoinGame(
+            gameId: gameId,
             selectedGameProductId: selectedGameProductId,
             row: row,
             col: col,
             contractAddress: contractAddress,
           );
 
+      // Phase A 로딩 제거
       progressOverlay.remove();
       progressOverlay = null;
 
-      await Future.delayed(const Duration(milliseconds: 300));
+      if (!mounted) return;
 
-      if (mounted) {
-        if (result.success) {
+      if (result.success) {
+        // Phase A 성공 → TransactionProgressModal 표시
+        final entryId = result.entryId;
+
+        if (entryId != null && entryId.isNotEmpty) {
+          // PendingTransaction을 Phase B(폴링)로 전환
+          pendingNotifier.onMutationSuccess(
+            entryId: entryId,
+            txHash: result.txHash,
+          );
+
+          // TransactionProgressModal 표시
+          await Future.delayed(const Duration(milliseconds: 200));
+          if (!mounted) return;
+
+          TransactionProgressModal.show(
+            context,
+            gameId: gameId,
+            gameTitle: gameTitle,
+          );
+
+          // Phase B: 백그라운드 폴링 시작 (비동기, 기다리지 않음)
+          ref.read(gameParticipationProvider.notifier).startPolling(
+            entryId: entryId,
+          );
+        } else {
+          // entryId 없음 → 성공 결과 바로 표시
+          pendingNotifier.clear();
           GameJoinResultOverlay.showSuccess(
             context,
             entryId: result.entryId,
@@ -332,23 +368,27 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
               context.go('/');
             },
           );
-        } else {
-          GameJoinResultOverlay.showError(
-            context,
-            errorMessage: result.message,
-            onRetry: () {
-              _pickerKey.currentState?.reset();
-            },
-          );
         }
+      } else {
+        // Phase A 실패 (서버 비즈니스 에러)
+        pendingNotifier.clear();
+        GameJoinResultOverlay.showError(
+          context,
+          errorMessage: result.message,
+          onRetry: () {
+            _pickerKey.currentState?.reset();
+          },
+        );
       }
     } catch (e) {
       progressOverlay?.remove();
       progressOverlay = null;
 
+      // PendingTransaction 정리
+      ref.read(pendingTransactionNotifierProvider.notifier).clear();
+
       if (mounted) {
         await Future.delayed(const Duration(milliseconds: 300));
-
         if (!mounted) return;
         GameJoinResultOverlay.showError(
           context,
