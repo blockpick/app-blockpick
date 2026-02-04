@@ -20,6 +20,7 @@ const String _getGamesQuery = r'''
         title
         description
         gameType
+        gameMethod
         status
         maxEntries
         minEntries
@@ -74,6 +75,7 @@ const String _getActiveGamesQuery = r'''
         title
         description
         gameType
+        gameMethod
         status
         maxEntries
         minEntries
@@ -117,6 +119,7 @@ const String _getGameQuery = r'''
         title
         description
         gameType
+        gameMethod
         status
         maxEntries
         minEntries
@@ -394,6 +397,7 @@ Game _convertGameRoundToGame(GameRound gameRound) {
     title: gameRound.title,
     description: gameRound.description,
     gameType: gameRound.type.toString().split('.').last.toUpperCase(),
+    gameMethod: gameRound.gameMethod,
     status: 'IN_PROGRESS',
     maxEntries: gameRound.maxParticipants,
     minEntries: 1,

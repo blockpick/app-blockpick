@@ -25,7 +25,9 @@ mixin _$Game {
   String get title => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   String? get gameType =>
-      throw _privateConstructorUsedError; // DAILY, SELECT, VIBE
+      throw _privateConstructorUsedError; // DAILY, SELECT, VIBE, PRIME
+  String? get gameMethod =>
+      throw _privateConstructorUsedError; // GACHA, BLOCK_PICK (VIBE 타입에서 관리자 선택)
   String? get status =>
       throw _privateConstructorUsedError; // SCHEDULED, IN_PROGRESS, PAUSED, SETTLING, ENDED, FAILED
   int? get maxEntries => throw _privateConstructorUsedError;
@@ -62,6 +64,7 @@ abstract class $GameCopyWith<$Res> {
     String title,
     String? description,
     String? gameType,
+    String? gameMethod,
     String? status,
     int? maxEntries,
     int? minEntries,
@@ -99,6 +102,7 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
     Object? title = null,
     Object? description = freezed,
     Object? gameType = freezed,
+    Object? gameMethod = freezed,
     Object? status = freezed,
     Object? maxEntries = freezed,
     Object? minEntries = freezed,
@@ -132,6 +136,10 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
             gameType: freezed == gameType
                 ? _value.gameType
                 : gameType // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            gameMethod: freezed == gameMethod
+                ? _value.gameMethod
+                : gameMethod // ignore: cast_nullable_to_non_nullable
                       as String?,
             status: freezed == status
                 ? _value.status
@@ -212,6 +220,7 @@ abstract class _$$GameImplCopyWith<$Res> implements $GameCopyWith<$Res> {
     String title,
     String? description,
     String? gameType,
+    String? gameMethod,
     String? status,
     int? maxEntries,
     int? minEntries,
@@ -246,6 +255,7 @@ class __$$GameImplCopyWithImpl<$Res>
     Object? title = null,
     Object? description = freezed,
     Object? gameType = freezed,
+    Object? gameMethod = freezed,
     Object? status = freezed,
     Object? maxEntries = freezed,
     Object? minEntries = freezed,
@@ -279,6 +289,10 @@ class __$$GameImplCopyWithImpl<$Res>
         gameType: freezed == gameType
             ? _value.gameType
             : gameType // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        gameMethod: freezed == gameMethod
+            ? _value.gameMethod
+            : gameMethod // ignore: cast_nullable_to_non_nullable
                   as String?,
         status: freezed == status
             ? _value.status
@@ -353,6 +367,7 @@ class _$GameImpl implements _Game {
     required this.title,
     this.description,
     this.gameType,
+    this.gameMethod,
     this.status,
     this.maxEntries,
     this.minEntries,
@@ -381,7 +396,10 @@ class _$GameImpl implements _Game {
   final String? description;
   @override
   final String? gameType;
-  // DAILY, SELECT, VIBE
+  // DAILY, SELECT, VIBE, PRIME
+  @override
+  final String? gameMethod;
+  // GACHA, BLOCK_PICK (VIBE 타입에서 관리자 선택)
   @override
   final String? status;
   // SCHEDULED, IN_PROGRESS, PAUSED, SETTLING, ENDED, FAILED
@@ -424,7 +442,7 @@ class _$GameImpl implements _Game {
 
   @override
   String toString() {
-    return 'Game(id: $id, title: $title, description: $description, gameType: $gameType, status: $status, maxEntries: $maxEntries, minEntries: $minEntries, entryFee: $entryFee, rewardPoint: $rewardPoint, gridRows: $gridRows, gridCols: $gridCols, startTime: $startTime, endTime: $endTime, customRules: $customRules, onchainTxHash: $onchainTxHash, onchainContractAddr: $onchainContractAddr, createdAt: $createdAt, updatedAt: $updatedAt, gameProducts: $gameProducts)';
+    return 'Game(id: $id, title: $title, description: $description, gameType: $gameType, gameMethod: $gameMethod, status: $status, maxEntries: $maxEntries, minEntries: $minEntries, entryFee: $entryFee, rewardPoint: $rewardPoint, gridRows: $gridRows, gridCols: $gridCols, startTime: $startTime, endTime: $endTime, customRules: $customRules, onchainTxHash: $onchainTxHash, onchainContractAddr: $onchainContractAddr, createdAt: $createdAt, updatedAt: $updatedAt, gameProducts: $gameProducts)';
   }
 
   @override
@@ -438,6 +456,8 @@ class _$GameImpl implements _Game {
                 other.description == description) &&
             (identical(other.gameType, gameType) ||
                 other.gameType == gameType) &&
+            (identical(other.gameMethod, gameMethod) ||
+                other.gameMethod == gameMethod) &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.maxEntries, maxEntries) ||
                 other.maxEntries == maxEntries) &&
@@ -478,6 +498,7 @@ class _$GameImpl implements _Game {
     title,
     description,
     gameType,
+    gameMethod,
     status,
     maxEntries,
     minEntries,
@@ -515,6 +536,7 @@ abstract class _Game implements Game {
     required final String title,
     final String? description,
     final String? gameType,
+    final String? gameMethod,
     final String? status,
     final int? maxEntries,
     final int? minEntries,
@@ -541,7 +563,9 @@ abstract class _Game implements Game {
   @override
   String? get description;
   @override
-  String? get gameType; // DAILY, SELECT, VIBE
+  String? get gameType; // DAILY, SELECT, VIBE, PRIME
+  @override
+  String? get gameMethod; // GACHA, BLOCK_PICK (VIBE 타입에서 관리자 선택)
   @override
   String? get status; // SCHEDULED, IN_PROGRESS, PAUSED, SETTLING, ENDED, FAILED
   @override

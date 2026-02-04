@@ -34,6 +34,7 @@ class GameRound {
   final int? gridWidth; // 그리드 가로 크기
   final int? gridHeight; // 그리드 세로 크기
   final String? vibeImageUrl; // Vibe의 경우 배경 이미지
+  final String? gameMethod; // GACHA, BLOCK_PICK (VIBE 타입에서 관리자 선택)
 
   const GameRound({
     required this.id,
@@ -55,6 +56,7 @@ class GameRound {
     this.gridWidth,
     this.gridHeight,
     this.vibeImageUrl,
+    this.gameMethod,
   });
 
   /// 실제 그리드 가로 크기 반환
@@ -95,6 +97,7 @@ class GameRound {
       gridWidth: gridWidth ?? (json['grid_width'] as int?),
       gridHeight: gridHeight ?? (json['grid_height'] as int?),
       vibeImageUrl: json['vibe_image_url'] as String?,
+      gameMethod: json['game_method'] as String?,
     );
   }
 
@@ -137,6 +140,7 @@ class GameRound {
       if (gridWidth != null && gridHeight != null)
         'grid_dimensions': '${gridWidth}x$gridHeight',
       'vibe_image_url': vibeImageUrl,
+      'game_method': gameMethod,
     };
   }
 
@@ -192,6 +196,7 @@ class GameRound {
     int? gridWidth,
     int? gridHeight,
     String? vibeImageUrl,
+    String? gameMethod,
   }) {
     return GameRound(
       id: id ?? this.id,
@@ -213,6 +218,7 @@ class GameRound {
       gridWidth: gridWidth ?? this.gridWidth,
       gridHeight: gridHeight ?? this.gridHeight,
       vibeImageUrl: vibeImageUrl ?? this.vibeImageUrl,
+      gameMethod: gameMethod ?? this.gameMethod,
     );
   }
 }

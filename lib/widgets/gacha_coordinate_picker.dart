@@ -9,8 +9,11 @@ class GachaCoordinatePicker extends StatefulWidget {
   /// 경품 이미지 URL
   final String? imageUrl;
 
-  /// 그리드 크기 (기본 1000x1000)
-  final int gridSize;
+  /// 그리드 가로 크기 (COL)
+  final int gridWidth;
+
+  /// 그리드 세로 크기 (ROW)
+  final int gridHeight;
 
   /// 좌표 선택 완료 콜백
   final Function(int row, int col) onCoordinateSelected;
@@ -54,7 +57,8 @@ class GachaCoordinatePicker extends StatefulWidget {
   const GachaCoordinatePicker({
     super.key,
     this.imageUrl,
-    this.gridSize = 1000,
+    this.gridWidth = 10000,
+    this.gridHeight = 10000,
     required this.onCoordinateSelected,
     this.accentColor = AppColors.darkBlue,
     this.rowSpeed = 2000,
@@ -89,6 +93,9 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
   late int _currentRowSpeed;
   late int _currentColSpeed;
 
+  // 캔버스 최대 크기 (태블릿/웹에서 너무 커지는 것 방지)
+  static const double _maxCanvasSize = 600.0;
+
   @override
   void initState() {
     super.initState();
@@ -98,12 +105,12 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
     _verticalController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: _currentRowSpeed),
-    )..repeat(reverse: true);
+    );
 
     _horizontalController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: _currentColSpeed),
-    );
+    )..repeat(reverse: true);
 
     _pulseController = AnimationController(
       vsync: this,
@@ -114,44 +121,29 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
   /// ROW 속도 변경 (밀리초)
   void setRowSpeed(int speed) {
     _currentRowSpeed = speed;
-    final currentValue = _verticalController.value;
     _verticalController.duration = Duration(milliseconds: speed);
-    if (_phase == 0) {
+    if (_phase == 1) {
       _verticalController.repeat(reverse: true);
-      // 현재 위치에서 계속
-      _verticalController.value = currentValue;
     }
   }
 
   /// COL 속도 변경 (밀리초)
   void setColSpeed(int speed) {
     _currentColSpeed = speed;
-    final currentValue = _horizontalController.value;
     _horizontalController.duration = Duration(milliseconds: speed);
-    if (_phase == 1) {
+    if (_phase == 0) {
       _horizontalController.repeat(reverse: true);
-      _horizontalController.value = currentValue;
     }
   }
 
-  /// 세이프존 비율 (양 끝 3%씩)
-  static const double _safeZoneRatio = 0.03;
+  /// 애니메이션 값을 COL 좌표로 변환
+  int _valueToCol(double value) {
+    return (value * widget.gridWidth).round().clamp(0, widget.gridWidth);
+  }
 
-  /// 애니메이션 값을 좌표로 변환 (세이프존 적용)
-  /// 세이프존 내에서는 끝값(0 또는 gridSize)으로 스냅
-  int _valueToCoordinate(double value) {
-    double normalizedValue;
-    if (value <= _safeZoneRatio) {
-      // 시작 세이프존: 0으로 스냅
-      normalizedValue = 0.0;
-    } else if (value >= 1.0 - _safeZoneRatio) {
-      // 끝 세이프존: 1로 스냅
-      normalizedValue = 1.0;
-    } else {
-      // 중간 영역: 세이프존을 제외한 범위로 매핑
-      normalizedValue = (value - _safeZoneRatio) / (1.0 - 2 * _safeZoneRatio);
-    }
-    return (normalizedValue * widget.gridSize).round().clamp(0, widget.gridSize);
+  /// 애니메이션 값을 ROW 좌표로 변환
+  int _valueToRow(double value) {
+    return (value * widget.gridHeight).round().clamp(0, widget.gridHeight);
   }
 
   /// 이벤트 성공 여부 체크 (하나라도 맞으면 성공)
@@ -181,25 +173,25 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
     HapticFeedback.mediumImpact();
 
     if (_phase == 0) {
-      // ROW 고정
-      setState(() {
-        _fixedVertical = _verticalController.value;
-        _phase = 1;
-      });
-      _verticalController.stop();
-      _horizontalController.duration = Duration(milliseconds: _currentColSpeed);
-      _horizontalController.repeat(reverse: true);
-    } else if (_phase == 1) {
-      // COL 고정 → 완료
+      // X (COL) 고정
       setState(() {
         _fixedHorizontal = _horizontalController.value;
-        _phase = 2;
+        _phase = 1;
       });
       _horizontalController.stop();
+      _verticalController.duration = Duration(milliseconds: _currentRowSpeed);
+      _verticalController.repeat(reverse: true);
+    } else if (_phase == 1) {
+      // Y (ROW) 고정 → 완료
+      setState(() {
+        _fixedVertical = _verticalController.value;
+        _phase = 2;
+      });
+      _verticalController.stop();
 
       Future.delayed(const Duration(milliseconds: 300), () {
-        final row = _valueToCoordinate(_fixedVertical);
-        final col = _valueToCoordinate(_fixedHorizontal);
+        final row = _valueToRow(_fixedVertical);
+        final col = _valueToCol(_fixedHorizontal);
 
         // 이벤트 모드에서 성공 체크
         if (widget.eventMode && _checkEventSuccess(row, col)) {
@@ -218,20 +210,20 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
       _fixedVertical = 0.5;
       _fixedHorizontal = 0.5;
     });
-    _horizontalController.stop();
-    _horizontalController.reset();
-    _verticalController.repeat(reverse: true);
+    _verticalController.stop();
+    _verticalController.reset();
+    _horizontalController.repeat(reverse: true);
   }
 
-  int get currentRow => _phase == 0
-      ? _valueToCoordinate(_verticalController.value)
-      : _valueToCoordinate(_fixedVertical);
+  int get currentCol => _phase == 0
+      ? _valueToCol(_horizontalController.value)
+      : _valueToCol(_fixedHorizontal);
 
-  int? get currentCol => _phase < 1
+  int? get currentRow => _phase < 1
       ? null
       : _phase == 1
-          ? _valueToCoordinate(_horizontalController.value)
-          : _valueToCoordinate(_fixedHorizontal);
+          ? _valueToRow(_verticalController.value)
+          : _valueToRow(_fixedVertical);
 
   @override
   Widget build(BuildContext context) {
@@ -252,51 +244,32 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
     );
   }
 
-  /// 기본 레이아웃 (스크롤 가능)
+  /// 기본 레이아웃
   Widget _buildDefaultLayout() {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const SizedBox(height: 16),
-
-          // 단계 인디케이터
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: _buildPhaseIndicator(),
+    return Column(
+      children: [
+        // 게임 캔버스 (1:1 비율, 최대 크기 제한)
+        Expanded(
+          child: Center(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final canvasSize = min(
+                  min(constraints.maxWidth, constraints.maxHeight),
+                  _maxCanvasSize,
+                );
+                return SizedBox(
+                  width: canvasSize,
+                  height: canvasSize,
+                  child: _buildGameCanvas(),
+                );
+              },
+            ),
           ),
+        ),
 
-          const SizedBox(height: 16),
-
-          // 게임 캔버스 (1:1 비율 - 가로 전체 너비 기준)
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final canvasSize = constraints.maxWidth - 32;
-              return SizedBox(
-                width: constraints.maxWidth,
-                height: canvasSize,
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.gray200, width: 2),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(18),
-                    child: _buildGameCanvas(),
-                  ),
-                ),
-              );
-            },
-          ),
-
-          const SizedBox(height: 16),
-
-          // 하단 컨트롤
-          _buildBottomControls(),
-
-          const SizedBox(height: 16),
-        ],
-      ),
+        // 하단 컨트롤
+        _buildBottomControls(),
+      ],
     );
   }
 
@@ -304,7 +277,8 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
   Widget _buildFullScreenLayout() {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final canvasSize = constraints.maxWidth;
+        // 가로/세로 중 작은 쪽 기준 1:1 캔버스 + 최대 크기 제한
+        final canvasSize = min(min(constraints.maxWidth, constraints.maxHeight), _maxCanvasSize);
 
         return Stack(
           children: [
@@ -338,205 +312,155 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
     );
   }
 
-  /// 기본 단계 인디케이터
-  Widget _buildPhaseIndicator() {
-    return Row(
-      children: [
-        Expanded(child: _buildPhaseStep(0, 'ROW 선택', Icons.swap_vert_rounded)),
-        _buildConnector(0),
-        Expanded(child: _buildPhaseStep(1, 'COL 선택', Icons.swap_horiz_rounded)),
-        _buildConnector(1),
-        Expanded(child: _buildPhaseStep(2, '완료', Icons.check_rounded)),
-      ],
-    );
-  }
-
-  Widget _buildPhaseStep(int phaseNum, String label, IconData icon) {
-    final isActive = _phase == phaseNum;
-    final isDone = _phase > phaseNum;
-
-    return Column(
-      children: [
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: isDone
-                ? AppColors.green
-                : isActive
-                    ? widget.accentColor
-                    : AppColors.gray200,
-            shape: BoxShape.circle,
-          ),
-          child: Icon(
-            isDone ? Icons.check_rounded : icon,
-            size: 20,
-            color: (isDone || isActive) ? AppColors.white : AppColors.gray500,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
-            color: isActive ? widget.accentColor : AppColors.gray500,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildConnector(int afterPhase) {
-    final isDone = _phase > afterPhase;
-
-    return Container(
-      width: 24,
-      height: 2,
-      margin: const EdgeInsets.only(bottom: 28),
-      color: isDone ? AppColors.green : AppColors.gray200,
-    );
-  }
-
   /// 기본 하단 컨트롤
   Widget _buildBottomControls() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           // 좌표 표시
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               color: AppColors.gray100,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildCoordDisplay('ROW', currentRow, _phase >= 1),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    '×',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w300,
-                      color: AppColors.gray400,
-                    ),
+                // X (COL)
+                Expanded(
+                  child: Row(
+                    children: [
+                      Text(
+                        'X (COL)',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.gray500,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        currentCol.toString().padLeft(4, '0'),
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: _phase >= 1
+                              ? widget.accentColor
+                              : AppColors.darkBlue,
+                          fontFamily: 'monospace',
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                _buildCoordDisplay('COL', currentCol ?? 0, _phase >= 2),
+                // 구분선
+                Container(
+                  width: 1,
+                  height: 28,
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  color: AppColors.gray300,
+                ),
+                // Y (ROW)
+                Expanded(
+                  child: Row(
+                    children: [
+                      Text(
+                        'Y (ROW)',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.gray500,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        (currentRow ?? 0).toString().padLeft(4, '0'),
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: _phase >= 2
+                              ? widget.accentColor
+                              : AppColors.gray400,
+                          fontFamily: 'monospace',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
 
-          // 버튼
-          Row(
-            children: [
-              // 리셋 버튼
-              if (_phase > 0)
-                GestureDetector(
-                  onTap: reset,
-                  child: Container(
-                    width: 56,
-                    height: 56,
-                    margin: const EdgeInsets.only(right: 12),
-                    decoration: BoxDecoration(
-                      color: AppColors.gray100,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Icon(
-                      Icons.refresh_rounded,
-                      color: AppColors.gray600,
-                      size: 24,
-                    ),
-                  ),
-                ),
-
-              // 메인 버튼
-              Expanded(
-                child: GestureDetector(
-                  onTap: _phase < 2 ? _onButtonPressed : null,
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.symmetric(vertical: 18),
-                    decoration: BoxDecoration(
-                      color: _phase < 2 ? widget.accentColor : AppColors.gray300,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: _phase < 2
-                          ? [
-                              BoxShadow(
-                                color: widget.accentColor.withValues(alpha: 0.3),
-                                blurRadius: 12,
-                                offset: const Offset(0, 4),
-                              ),
-                            ]
-                          : null,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          _phase == 0
-                              ? Icons.swap_vert_rounded
-                              : _phase == 1
-                                  ? Icons.swap_horiz_rounded
-                                  : Icons.check_rounded,
-                          color: AppColors.white,
-                          size: 22,
+          // 액션 버튼
+          GestureDetector(
+            onTap: _phase < 2 ? _onButtonPressed : null,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              decoration: BoxDecoration(
+                color: _phase < 2 ? widget.accentColor : AppColors.gray300,
+                borderRadius: BorderRadius.circular(14),
+                boxShadow: _phase < 2
+                    ? [
+                        BoxShadow(
+                          color: widget.accentColor.withValues(alpha: 0.3),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
                         ),
-                        const SizedBox(width: 8),
-                        Text(
-                          _phase == 0
-                              ? 'ROW 고정'
-                              : _phase == 1
-                                  ? 'COL 고정'
-                                  : '완료',
-                          style: const TextStyle(
-                            color: AppColors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ]
+                    : null,
+              ),
+              child: Center(
+                child: Text(
+                  _phase == 0
+                      ? 'X (COL) 좌표 선택'
+                      : _phase == 1
+                          ? 'Y (ROW) 좌표 선택'
+                          : '선택 완료',
+                  style: const TextStyle(
+                    color: AppColors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
-            ],
+            ),
+          ),
+
+          const SizedBox(height: 8),
+
+          // 초기화 링크
+          GestureDetector(
+            onTap: _phase > 0 ? reset : null,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.refresh_rounded,
+                    size: 14,
+                    color: _phase > 0 ? AppColors.gray500 : Colors.transparent,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    '초기화',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: _phase > 0 ? AppColors.gray500 : Colors.transparent,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildCoordDisplay(String label, int value, bool isLocked) {
-    return Column(
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            color: AppColors.gray500,
-            fontSize: 11,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 1,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          value.toString().padLeft(4, '0'),
-          style: TextStyle(
-            color: isLocked ? widget.accentColor : AppColors.gray400,
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-            fontFamily: 'monospace',
-          ),
-        ),
-      ],
     );
   }
 
@@ -579,13 +503,13 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
             child: CustomPaint(
               painter: _TossCrosshairPainter(
                 phase: _phase,
-                verticalPos: _phase == 0
-                    ? _verticalController.value
-                    : _fixedVertical,
-                horizontalPos: _phase >= 1
+                horizontalPos: _phase == 0
+                    ? _horizontalController.value
+                    : _fixedHorizontal,
+                verticalPos: _phase >= 1
                     ? (_phase == 1
-                        ? _horizontalController.value
-                        : _fixedHorizontal)
+                        ? _verticalController.value
+                        : _fixedVertical)
                     : 0.5,
                 accentColor: widget.accentColor,
                 pulseValue: _pulseController.value,
@@ -593,7 +517,8 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
                 showTarget: widget.eventMode && widget.showTarget,
                 targetCoordinates: widget.targetCoordinates,
                 allowedRange: widget.allowedRange,
-                gridSize: widget.gridSize,
+                gridWidth: widget.gridWidth,
+                gridHeight: widget.gridHeight,
                 // 가이드선 관련
                 showGuideLine: widget.showGuideLine,
                 guideX: widget.guideX,
@@ -623,9 +548,9 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
       ),
       child: Row(
         children: [
-          Expanded(child: _buildCompactPhaseStep(0, 'ROW', Icons.swap_vert_rounded)),
+          Expanded(child: _buildCompactPhaseStep(0, 'X(COL)', Icons.swap_horiz_rounded)),
           _buildCompactConnector(0),
-          Expanded(child: _buildCompactPhaseStep(1, 'COL', Icons.swap_horiz_rounded)),
+          Expanded(child: _buildCompactPhaseStep(1, 'Y(ROW)', Icons.swap_vert_rounded)),
           _buildCompactConnector(1),
           Expanded(child: _buildCompactPhaseStep(2, '완료', Icons.check_rounded)),
         ],
@@ -705,7 +630,7 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildCompactCoordDisplay('ROW', currentRow, _phase >= 1),
+              _buildCompactCoordDisplay('X(COL)', currentCol, _phase >= 1),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
@@ -717,7 +642,7 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
                   ),
                 ),
               ),
-              _buildCompactCoordDisplay('COL', currentCol ?? 0, _phase >= 2),
+              _buildCompactCoordDisplay('Y(ROW)', currentRow ?? 0, _phase >= 2),
             ],
           ),
 
@@ -766,32 +691,19 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
                             ]
                           : null,
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          _phase == 0
-                              ? Icons.swap_vert_rounded
-                              : _phase == 1
-                                  ? Icons.swap_horiz_rounded
-                                  : Icons.check_rounded,
+                    child: Center(
+                      child: Text(
+                        _phase == 0
+                            ? 'X (COL) 좌표 선택'
+                            : _phase == 1
+                                ? 'Y (ROW) 좌표 선택'
+                                : '선택 완료',
+                        style: const TextStyle(
                           color: AppColors.white,
-                          size: 20,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
                         ),
-                        const SizedBox(width: 6),
-                        Text(
-                          _phase == 0
-                              ? 'ROW 고정'
-                              : _phase == 1
-                                  ? 'COL 고정'
-                                  : '완료',
-                          style: const TextStyle(
-                            color: AppColors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
@@ -891,7 +803,7 @@ class _TossGridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppColors.white.withValues(alpha: 0.1)
+      ..color = AppColors.white.withValues(alpha: 0.2)
       ..strokeWidth = 1;
 
     // 10x10 그리드
@@ -918,7 +830,8 @@ class _TossCrosshairPainter extends CustomPainter {
   final bool showTarget;
   final List<Point<int>> targetCoordinates;
   final int allowedRange;
-  final int gridSize;
+  final int gridWidth;
+  final int gridHeight;
   // 가이드선 관련
   final bool showGuideLine;
   final int? guideX;
@@ -933,7 +846,8 @@ class _TossCrosshairPainter extends CustomPainter {
     this.showTarget = false,
     this.targetCoordinates = const [],
     this.allowedRange = 10,
-    this.gridSize = 1000,
+    this.gridWidth = 10000,
+    this.gridHeight = 10000,
     this.showGuideLine = false,
     this.guideX,
     this.guideY,
@@ -956,35 +870,10 @@ class _TossCrosshairPainter extends CustomPainter {
       }
     }
 
-    // ROW 라인 (가로)
+    // COL 라인 (세로) - Phase 0부터 표시
     if (phase >= 0) {
       final isMoving = phase == 0;
       final lineColor = isMoving ? AppColors.blue : accentColor;
-      final alpha = isMoving ? 0.6 + pulseValue * 0.4 : 1.0;
-
-      // 글로우 효과
-      final glowPaint = Paint()
-        ..color = lineColor.withValues(alpha: 0.2 * alpha)
-        ..strokeWidth = 8
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), glowPaint);
-
-      // 메인 라인
-      final linePaint = Paint()
-        ..color = lineColor.withValues(alpha: alpha)
-        ..strokeWidth = 2
-        ..strokeCap = StrokeCap.round;
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), linePaint);
-
-      // 좌우 마커
-      _drawMarker(canvas, Offset(16, y), lineColor, isMoving);
-      _drawMarker(canvas, Offset(size.width - 16, y), lineColor, isMoving);
-    }
-
-    // COL 라인 (세로)
-    if (phase >= 1) {
-      final isMoving = phase == 1;
-      final lineColor = isMoving ? AppColors.green : accentColor;
       final alpha = isMoving ? 0.6 + pulseValue * 0.4 : 1.0;
 
       // 글로우 효과
@@ -1004,6 +893,31 @@ class _TossCrosshairPainter extends CustomPainter {
       // 상하 마커
       _drawMarker(canvas, Offset(x, 16), lineColor, isMoving);
       _drawMarker(canvas, Offset(x, size.height - 16), lineColor, isMoving);
+    }
+
+    // ROW 라인 (가로) - Phase 1부터 표시
+    if (phase >= 1) {
+      final isMoving = phase == 1;
+      final lineColor = isMoving ? AppColors.green : accentColor;
+      final alpha = isMoving ? 0.6 + pulseValue * 0.4 : 1.0;
+
+      // 글로우 효과
+      final glowPaint = Paint()
+        ..color = lineColor.withValues(alpha: 0.2 * alpha)
+        ..strokeWidth = 8
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), glowPaint);
+
+      // 메인 라인
+      final linePaint = Paint()
+        ..color = lineColor.withValues(alpha: alpha)
+        ..strokeWidth = 2
+        ..strokeCap = StrokeCap.round;
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), linePaint);
+
+      // 좌우 마커
+      _drawMarker(canvas, Offset(16, y), lineColor, isMoving);
+      _drawMarker(canvas, Offset(size.width - 16, y), lineColor, isMoving);
     }
 
     // 교차점
@@ -1057,14 +971,14 @@ class _TossCrosshairPainter extends CustomPainter {
 
   /// 타겟 영역 그리기 (반짝이는 보석 스타일)
   void _drawTargetArea(Canvas canvas, Size size, Point<int> target) {
-    // 좌표를 화면 위치로 변환
-    final targetX = (target.y / gridSize) * size.width;
-    final targetY = (target.x / gridSize) * size.height;
+    // 좌표를 화면 위치로 변환 (col → X축, row → Y축)
+    final targetX = (target.y / gridWidth) * size.width;
+    final targetY = (target.x / gridHeight) * size.height;
     final center = Offset(targetX, targetY);
 
     // 허용 범위를 화면 크기로 변환
-    final rangeX = (allowedRange / gridSize) * size.width;
-    final rangeY = (allowedRange / gridSize) * size.height;
+    final rangeX = (allowedRange / gridWidth) * size.width;
+    final rangeY = (allowedRange / gridHeight) * size.height;
 
     // 색상 정의
     const primaryColor = Color(0xFFFF6B9D); // 핑크
@@ -1197,7 +1111,7 @@ class _TossCrosshairPainter extends CustomPainter {
 
     // 가로 가이드선 (Y 좌표 - ROW)
     if (guideY != null) {
-      final guideYPos = (guideY! / gridSize) * size.height;
+      final guideYPos = (guideY! / gridHeight) * size.height;
 
       // 글로우 효과
       final glowPaint = Paint()
@@ -1227,7 +1141,7 @@ class _TossCrosshairPainter extends CustomPainter {
 
     // 세로 가이드선 (X 좌표 - COL)
     if (guideX != null) {
-      final guideXPos = (guideX! / gridSize) * size.width;
+      final guideXPos = (guideX! / gridWidth) * size.width;
 
       // 글로우 효과
       final glowPaint = Paint()
@@ -1257,8 +1171,8 @@ class _TossCrosshairPainter extends CustomPainter {
 
     // 교차점 표시 (둘 다 있을 때)
     if (guideX != null && guideY != null) {
-      final guideXPos = (guideX! / gridSize) * size.width;
-      final guideYPos = (guideY! / gridSize) * size.height;
+      final guideXPos = (guideX! / gridWidth) * size.width;
+      final guideYPos = (guideY! / gridHeight) * size.height;
       final crossPoint = Offset(guideXPos, guideYPos);
 
       // 외곽 글로우

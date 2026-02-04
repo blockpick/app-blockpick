@@ -11,7 +11,8 @@ class Game with _$Game {
     required String id,
     required String title,
     String? description,
-    String? gameType, // DAILY, SELECT, VIBE
+    String? gameType, // DAILY, SELECT, VIBE, PRIME
+    String? gameMethod, // GACHA, BLOCK_PICK (VIBE 타입에서 관리자 선택)
     String? status, // SCHEDULED, IN_PROGRESS, PAUSED, SETTLING, ENDED, FAILED
     int? maxEntries,
     int? minEntries,
@@ -133,6 +134,7 @@ extension GameX on Game {
       gridWidth: gridCols,
       gridHeight: gridRows,
       vibeImageUrl: null,
+      gameMethod: gameMethod,
     );
   }
 
@@ -244,6 +246,9 @@ extension GameItemX on GameItem {
       case 'VIBE':
         gameType = GameType.vibe;
         break;
+      case 'PRIME':
+        gameType = GameType.prime;
+        break;
     }
 
     GameStatus gameStatus = GameStatus.active;
@@ -303,6 +308,7 @@ extension GameItemX on GameItem {
       gridWidth: gridCols,
       gridHeight: gridRows,
       vibeImageUrl: null,
+      gameMethod: null, // GameItem에는 gameMethod 없음
     );
   }
 }

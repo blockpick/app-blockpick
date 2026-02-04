@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -13,7 +15,6 @@ import '../../providers/game_join_progress_provider.dart';
 import '../../widgets/gacha_coordinate_picker.dart';
 import '../../widgets/confetti_celebration.dart';
 import 'models/event_prize.dart';
-import 'widgets/event_prize_popup.dart';
 import 'widgets/game_join_progress_overlay.dart';
 import 'widgets/game_join_result_overlay.dart';
 import 'widgets/product_selector_overlay.dart';
@@ -57,21 +58,150 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
   // 상품군 설정 (나중에 게임별로 API에서 가져올 예정)
   EventPrizePool _selectedPrizePool = EventPrizePool.defaultPool;
 
+  // 카운트다운 타이머
+  Timer? _countdownTimer;
+  String _countdownText = '';
+
   @override
   void initState() {
     super.initState();
+    _startCountdown();
+  }
+
+  @override
+  void dispose() {
+    _countdownTimer?.cancel();
+    super.dispose();
+  }
+
+  void _startCountdown() {
+    _updateCountdown();
+    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      _updateCountdown();
+    });
+  }
+
+  void _updateCountdown() {
+    if (_game?.endTime == null) return;
+    try {
+      final end = DateTime.parse(_game!.endTime!);
+      final remaining = end.difference(DateTime.now());
+      if (remaining.isNegative) {
+        setState(() => _countdownText = '종료됨');
+        _countdownTimer?.cancel();
+      } else {
+        final hours = remaining.inHours.toString().padLeft(2, '0');
+        final minutes = (remaining.inMinutes % 60).toString().padLeft(2, '0');
+        final seconds = (remaining.inSeconds % 60).toString().padLeft(2, '0');
+        setState(() => _countdownText = '$hours:$minutes:$seconds 남음');
+      }
+    } catch (_) {
+      setState(() => _countdownText = '');
+    }
+  }
+
+  /// 참여자 수 포맷 (만 단위 이상은 영어 숫자 단위 + 소수점 한 자리)
+  String _formatParticipants(int count) {
+    if (count >= 10000) {
+      final value = count / 10000;
+      return '${value.toStringAsFixed(1)}만';
+    }
+    return _priceFormatter.format(count);
+  }
+
+  /// 게임 공유
+  void _shareGame() {
+    final title = _gameRound?.title ?? '';
+    final gameId = widget.gameId ?? '';
+    final shareText = '블록픽에서 $title 이벤트에 참여해보세요!\nhttps://blockpick.io/game/$gameId';
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        decoration: const BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppColors.gray300,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              '공유하기',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: AppColors.darkBlue,
+              ),
+            ),
+            const SizedBox(height: 20),
+            // 링크 복사 버튼
+            GestureDetector(
+              onTap: () {
+                Clipboard.setData(ClipboardData(text: shareText));
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: const Text('링크가 복사되었습니다'),
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                );
+              },
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                decoration: BoxDecoration(
+                  color: AppColors.gray100,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.link_rounded, size: 20, color: AppColors.darkBlue),
+                    SizedBox(width: 8),
+                    Text(
+                      '링크 복사',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.darkBlue,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: MediaQuery.of(context).padding.bottom + 8),
+          ],
+        ),
+      ),
+    );
   }
 
   /// 랜덤 타겟 좌표들 생성 (각각 랜덤 상품 포함)
   void _generateRandomTargets() {
-    final gridSize = _game?.gridRows ?? 1000;
+    final gridWidth = _game?.gridCols ?? 10000;
+    final gridHeight = _game?.gridRows ?? 10000;
     // targetCount는 최대 상품 수를 초과할 수 없음
     final actualCount = _targetCount.clamp(1, _selectedPrizePool.maxPrizeCount);
     setState(() {
       _eventTargets = List.generate(actualCount, (index) => EventTarget(
         id: '${DateTime.now().millisecondsSinceEpoch}_$index',
-        row: _random.nextInt(gridSize) + 1,
-        col: _random.nextInt(gridSize) + 1,
+        row: _random.nextInt(gridHeight) + 1,
+        col: _random.nextInt(gridWidth) + 1,
         prize: _selectedPrizePool.getRandomPrize(),
       ));
     });
@@ -112,22 +242,19 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
       // 당첨된 타겟 제거 (화면에서 사라짐)
       _removeWonTarget(wonTarget);
 
-      // 당첨! → 축하 효과 + 팝업 → 기존 바텀시트
+      // 당첨! → 축하 효과 + 확인 시트에 당첨 정보 포함
       ConfettiCelebration.show(context);
-      EventPrizePopup.show(
-        context,
-        prize: wonTarget.prize,
-        onContinue: () {
-          _showCoordinateConfirmDialog(row, col);
-        },
-      );
+      _showCoordinateConfirmDialog(row, col, wonTarget: wonTarget);
     } else {
-      // 미당첨 → 바로 기존 바텀시트
+      // 미당첨 → 바로 확인 시트
       _showCoordinateConfirmDialog(row, col);
     }
   }
 
-  void _showCoordinateConfirmDialog(int row, int col) {
+  void _showCoordinateConfirmDialog(int row, int col, {EventTarget? wonTarget}) {
+    final entryFee = _gameRound?.currentPrice ?? 0;
+    final retryFee = (entryFee * 0.5).round();
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -135,9 +262,9 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
       builder: (context) => _TossStyleConfirmSheet(
         row: row,
         col: col,
-        productName: _gameRound?.title ?? '상품',
-        productImage: _gameRound?.imageUrl ?? '',
-        price: _gameRound?.currentPrice ?? 0,
+        entryFee: entryFee,
+        retryFee: retryFee,
+        wonTarget: wonTarget,
         onConfirm: () {
           context.pop();
           _joinGame(row, col);
@@ -407,47 +534,40 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
 
     // 기본 상세 화면
     return Scaffold(
-      backgroundColor: AppColors.gray100,
+      backgroundColor: AppColors.white,
       appBar: _buildAppBar(game),
       body: Column(
         children: [
-          // 상품 정보 카드
-          _buildProductCard(game),
+          // 상품 정보 바
+          _buildEventInfoBar(game),
+
+          // 옵션 토글 버튼
+          _buildOptionButtons(),
+
+          // 구분선
+          Container(height: 1, color: AppColors.gray200),
 
           // Gacha 좌표 선택기
           Expanded(
             child: Container(
-              margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.darkBlue.withValues(alpha: 0.08),
-                    blurRadius: 20,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(24),
-                child: GachaCoordinatePicker(
-                  key: _pickerKey,
-                  imageUrl: game.imageUrl,
-                  gridSize: 1000,
-                  accentColor: AppColors.darkBlue,
-                  rowSpeed: _rowSpeed,
-                  colSpeed: _colSpeed,
-                  eventMode: _eventMode,
-                  targetCoordinates: _eventTargets.map((t) => Point(t.row, t.col)).toList(),
-                  allowedRange: _allowedRange,
-                  showTarget: _showTarget,
-                  onEventSuccess: _onEventSuccess,
-                  onCoordinateSelected: _onCoordinateSelected,
-                  showGuideLine: _showGuideLine,
-                  guideX: _guideX,
-                  guideY: _guideY,
-                ),
+              color: AppColors.white,
+              child: GachaCoordinatePicker(
+                key: _pickerKey,
+                imageUrl: game.imageUrl,
+                gridWidth: game.actualGridWidth,
+                gridHeight: game.actualGridHeight,
+                accentColor: AppColors.darkBlue,
+                rowSpeed: _rowSpeed,
+                colSpeed: _colSpeed,
+                eventMode: _eventMode,
+                targetCoordinates: _eventTargets.map((t) => Point(t.row, t.col)).toList(),
+                allowedRange: _allowedRange,
+                showTarget: _showTarget,
+                onEventSuccess: _onEventSuccess,
+                onCoordinateSelected: _onCoordinateSelected,
+                showGuideLine: _showGuideLine,
+                guideX: _guideX,
+                guideY: _guideY,
               ),
             ),
           ),
@@ -467,7 +587,8 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
             child: GachaCoordinatePicker(
               key: _pickerKey,
               imageUrl: game.imageUrl,
-              gridSize: 1000,
+              gridWidth: game.actualGridWidth,
+              gridHeight: game.actualGridHeight,
               accentColor: AppColors.darkBlue,
               rowSpeed: _rowSpeed,
               colSpeed: _colSpeed,
@@ -553,6 +674,20 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
     );
   }
 
+  /// 게임 타입에 따른 제목
+  String _getGameTypeTitle(GameType type) {
+    switch (type) {
+      case GameType.daily:
+        return 'Daily Events';
+      case GameType.select:
+        return 'Select Events';
+      case GameType.vibe:
+        return 'Vibe Events';
+      case GameType.prime:
+        return 'Prime Events';
+    }
+  }
+
   PreferredSizeWidget _buildAppBar(GameRound game) {
     return PreferredSize(
       preferredSize: const Size.fromHeight(56),
@@ -580,42 +715,24 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                   ),
                 ),
                 Expanded(
-                  child: Text(
-                    game.title,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.darkBlue,
+                  child: Center(
+                    child: Text(
+                      _getGameTypeTitle(game.type),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.darkBlue,
+                      ),
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                // 전체 화면 버튼
+                // 공유 버튼
                 IconButton(
-                  onPressed: () => setState(() => _isFullScreenMode = true),
+                  onPressed: _shareGame,
                   icon: const Icon(
-                    Icons.open_in_full_rounded,
+                    Icons.share_outlined,
                     size: 22,
                     color: AppColors.darkBlue,
-                  ),
-                ),
-                // 설정 버튼
-                IconButton(
-                  onPressed: _showSettingsSheet,
-                  icon: Icon(
-                    Icons.tune_rounded,
-                    size: 22,
-                    color: _eventMode ? AppColors.orange : AppColors.gray500,
-                  ),
-                ),
-                // 도움말 버튼
-                IconButton(
-                  onPressed: _showHelpSheet,
-                  icon: Icon(
-                    Icons.help_outline_rounded,
-                    size: 22,
-                    color: AppColors.gray500,
                   ),
                 ),
               ],
@@ -626,160 +743,631 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
     );
   }
 
-  Widget _buildProductCard(GameRound game) {
+  /// 마감 게이지 진행률 계산
+  double _getDeadlineProgress() {
+    if (_game == null) return 0;
+    final game = _game!;
+
+    final gameType = game.gameType?.toUpperCase();
+    if (gameType == 'SELECT' || gameType == 'PRIME') {
+      // Select, Prime: 남은 인원 기반
+      final max = game.maxEntries ?? 1;
+      final current = game.minEntries ?? 0;
+      return (current / max).clamp(0.0, 1.0);
+    } else {
+      // Daily, Vibe: 남은 시간 기반
+      if (game.startTime == null || game.endTime == null) return 0;
+      try {
+        final start = DateTime.parse(game.startTime!);
+        final end = DateTime.parse(game.endTime!);
+        final now = DateTime.now();
+        final total = end.difference(start).inSeconds;
+        if (total <= 0) return 1.0;
+        final elapsed = now.difference(start).inSeconds;
+        return (elapsed / total).clamp(0.0, 1.0);
+      } catch (_) {
+        return 0;
+      }
+    }
+  }
+
+  /// 이벤트 정보 바 (컴팩트)
+  Widget _buildEventInfoBar(GameRound game) {
+    final gridW = _priceFormatter.format(game.actualGridWidth);
+    final gridH = _priceFormatter.format(game.actualGridHeight);
+
     // SELECT 타입이고 상품이 여러 개인지 확인
     final isSelectType = game.type == GameType.select;
     final hasMultipleProducts = (_game?.gameProducts?.length ?? 0) > 1;
     final canChangeProduct = isSelectType && hasMultipleProducts;
 
-    final cardContent = Container(
-      margin: const EdgeInsets.all(20),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
+    return GestureDetector(
+      onTap: canChangeProduct ? _showProductSelector : null,
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.darkBlue.withValues(alpha: 0.08),
-            blurRadius: 20,
-            offset: const Offset(0, 4),
-          ),
-        ],
-        border: canChangeProduct
-            ? Border.all(color: AppColors.purple.withValues(alpha: 0.3), width: 1.5)
-            : null,
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              // 상품 이미지
-              Container(
-                width: 72,
-                height: 72,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: AppColors.gray100,
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: game.imageUrl.isNotEmpty
-                      ? Image.network(
-                          game.imageUrl.replaceAll(' ', '%20'),
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => _buildImagePlaceholder(),
-                        )
-                      : _buildImagePlaceholder(),
-                ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 상품명 (1줄, 말줄임)
+            Text(
+              game.title,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: AppColors.darkBlue,
               ),
-              const SizedBox(width: 16),
-              // 상품 정보
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // 카테고리 태그
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: AppColors.blue.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Text(
-                            game.category,
-                            style: const TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.blue,
-                            ),
-                          ),
-                        ),
-                        if (canChangeProduct) ...[
-                          const SizedBox(width: 6),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                            decoration: BoxDecoration(
-                              color: AppColors.purple.withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.swap_horiz_rounded, size: 12, color: AppColors.purple),
-                                const SizedBox(width: 2),
-                                Text(
-                                  '${_selectedProductIndex + 1}/${_game!.gameProducts!.length}',
-                                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColors.purple),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      game.title,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.darkBlue),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '${game.actualGridWidth} × ${game.actualGridHeight} 그리드',
-                      style: TextStyle(fontSize: 13, color: AppColors.gray500),
-                    ),
-                  ],
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 8),
+            // 정보 행
+            Row(
+              children: [
+                // 응모 포인트
+                _buildStatChip(
+                  icon: Icons.circle,
+                  iconSize: 8,
+                  iconColor: AppColors.green,
+                  text: '${game.currentPrice}',
                 ),
-              ),
-              // 참가비
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text('참가비', style: TextStyle(fontSize: 11, color: AppColors.gray500)),
-                  const SizedBox(height: 4),
+                const SizedBox(width: 12),
+                // 참여자 수
+                _buildStatChip(
+                  icon: Icons.people_alt_outlined,
+                  iconSize: 14,
+                  iconColor: AppColors.gray500,
+                  text: _formatParticipants(game.participants),
+                ),
+                const SizedBox(width: 12),
+                // 그리드 크기
+                _buildStatChip(
+                  icon: Icons.grid_view_rounded,
+                  iconSize: 14,
+                  iconColor: AppColors.gray500,
+                  text: '$gridW×$gridH',
+                ),
+                const Spacer(),
+                // 카운트다운
+                if (_countdownText.isNotEmpty)
                   Text(
-                    '${_priceFormatter.format(game.currentPrice)}원',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.darkBlue),
+                    _countdownText,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.gray600,
+                    ),
                   ),
-                ],
-              ),
-            ],
-          ),
-          if (canChangeProduct) ...[
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.purple.withValues(alpha: 0.05),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.touch_app_rounded, size: 16, color: AppColors.purple),
-                  const SizedBox(width: 6),
-                  Text('탭하여 다른 상품으로 변경', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppColors.purple)),
-                ],
+              ],
+            ),
+            const SizedBox(height: 8),
+            // 마감 게이지
+            ClipRRect(
+              borderRadius: BorderRadius.circular(2),
+              child: LinearProgressIndicator(
+                value: _getDeadlineProgress(),
+                minHeight: 3,
+                backgroundColor: AppColors.gray200,
+                valueColor: const AlwaysStoppedAnimation<Color>(AppColors.darkBlue),
               ),
             ),
+            const SizedBox(height: 4),
           ],
+        ),
+      ),
+    );
+  }
+
+  /// 정보 칩 위젯
+  Widget _buildStatChip({
+    required IconData icon,
+    required double iconSize,
+    required Color iconColor,
+    required String text,
+  }) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: iconSize, color: iconColor),
+        const SizedBox(width: 4),
+        Text(
+          text,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: AppColors.gray600,
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// 옵션 토글 버튼
+  Widget _buildOptionButtons() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      color: AppColors.white,
+      child: Row(
+        children: [
+          // 즉석 결품 토글
+          _buildOptionChip(
+            label: '즉석 결품',
+            isActive: _eventMode,
+            onTap: _showInstantPrizeModal,
+          ),
+          const SizedBox(width: 8),
+          // 가이드 라인 토글
+          _buildOptionChip(
+            label: '가이드 라인',
+            isActive: _showGuideLine,
+            onTap: _showGuideLineModal,
+          ),
+          const Spacer(),
+          // 정보 버튼
+          GestureDetector(
+            onTap: _showHelpSheet,
+            child: Container(
+              width: 28,
+              height: 28,
+              decoration: BoxDecoration(
+                color: AppColors.gray100,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.info_outline_rounded,
+                size: 16,
+                color: AppColors.gray500,
+              ),
+            ),
+          ),
         ],
       ),
     );
-
-    if (canChangeProduct) {
-      return GestureDetector(onTap: _showProductSelector, child: cardContent);
-    }
-    return cardContent;
   }
 
-  Widget _buildImagePlaceholder() {
-    return Container(
-      color: AppColors.gray100,
-      child: Icon(Icons.card_giftcard_rounded, size: 32, color: AppColors.gray400),
+  /// 옵션 칩 위젯
+  Widget _buildOptionChip({
+    required String label,
+    required bool isActive,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: isActive
+              ? AppColors.darkBlue.withValues(alpha: 0.08)
+              : AppColors.gray100,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isActive ? AppColors.darkBlue.withValues(alpha: 0.3) : AppColors.gray200,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(
+                color: isActive ? AppColors.green : AppColors.gray400,
+                shape: BoxShape.circle,
+              ),
+            ),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: isActive ? AppColors.darkBlue : AppColors.gray600,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 즉석 경품 모달
+  void _showInstantPrizeModal() {
+    // 경품이 없으면 타겟 생성
+    if (_eventTargets.isEmpty && _eventMode) {
+      _generateRandomTargets();
+    }
+
+    showDialog(
+      context: context,
+      barrierColor: Colors.black.withValues(alpha: 0.5),
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) {
+          return Dialog(
+            backgroundColor: AppColors.white,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 80),
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 제목 + 토글
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        '즉석 경품 표시',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.darkBlue,
+                        ),
+                      ),
+                      Switch(
+                        value: _eventMode,
+                        onChanged: (value) {
+                          setState(() => _eventMode = value);
+                          setDialogState(() {});
+                          if (value && _eventTargets.isEmpty) {
+                            _generateRandomTargets();
+                            setDialogState(() {});
+                          }
+                        },
+                        activeTrackColor: AppColors.darkBlue,
+                        thumbColor: WidgetStateProperty.resolveWith((states) =>
+                          states.contains(WidgetState.selected) ? AppColors.white : AppColors.gray400,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '플레이 중 아래 경품 좌표를 선택하면 당첨되요!',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: AppColors.gray600,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // 경품 리스트
+                  if (_eventTargets.isNotEmpty)
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(maxHeight: 300),
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: _eventTargets.length,
+                        separatorBuilder: (context, index) => const Divider(height: 1),
+                        itemBuilder: (context, index) {
+                          final target = _eventTargets[index];
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            child: Row(
+                              children: [
+                                // 경품 아이콘
+                                Container(
+                                  width: 40,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.gray100,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      target.prize.emoji,
+                                      style: const TextStyle(fontSize: 20),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        target.prize.name,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: AppColors.darkBlue,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        'X,Y 좌표 (${target.col},${target.row})',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: AppColors.gray500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+
+                  if (_eventTargets.isEmpty)
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: AppColors.gray100,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '등록된 즉석 경품이 없습니다',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: AppColors.gray500,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                  const SizedBox(height: 20),
+
+                  // 닫기 버튼
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      decoration: BoxDecoration(
+                        color: AppColors.darkBlue,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          '닫기',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  /// 가이드 라인 모달
+  void _showGuideLineModal() {
+    final guideXController = TextEditingController(text: _guideX?.toString() ?? '');
+    final guideYController = TextEditingController(text: _guideY?.toString() ?? '');
+    final gridWidth = _game?.gridCols ?? 10000;
+    final gridHeight = _game?.gridRows ?? 10000;
+
+    showDialog(
+      context: context,
+      barrierColor: Colors.black.withValues(alpha: 0.5),
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) {
+          return Dialog(
+            backgroundColor: AppColors.white,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 80),
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 제목 + 토글
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        '가이드 라인 표시',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.darkBlue,
+                        ),
+                      ),
+                      Switch(
+                        value: _showGuideLine,
+                        onChanged: (value) {
+                          setState(() => _showGuideLine = value);
+                          setDialogState(() {});
+                        },
+                        activeTrackColor: AppColors.darkBlue,
+                        thumbColor: WidgetStateProperty.resolveWith((states) =>
+                          states.contains(WidgetState.selected) ? AppColors.white : AppColors.gray400,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '화면에 가이드 라인을 표시해보세요.\n(X: 0~$gridWidth, Y: 0~$gridHeight)',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: AppColors.gray600,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // 좌표 입력
+                  Row(
+                    children: [
+                      // X (COL)
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'X (COL)',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.gray600,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            TextField(
+                              controller: guideXController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                hintText: '0',
+                                hintStyle: TextStyle(color: AppColors.gray400),
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                filled: true,
+                                fillColor: AppColors.gray100,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(color: AppColors.gray200),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(color: AppColors.gray200),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(color: AppColors.darkBlue, width: 2),
+                                ),
+                              ),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.darkBlue,
+                              ),
+                              onChanged: (value) {
+                                final parsed = int.tryParse(value);
+                                if (parsed != null && parsed >= 0 && parsed <= gridWidth) {
+                                  setState(() => _guideX = parsed);
+                                } else if (value.isEmpty) {
+                                  setState(() => _guideX = null);
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      // Y (ROW)
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Y (ROW)',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.gray600,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            TextField(
+                              controller: guideYController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                hintText: '0',
+                                hintStyle: TextStyle(color: AppColors.gray400),
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                filled: true,
+                                fillColor: AppColors.gray100,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(color: AppColors.gray200),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(color: AppColors.gray200),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(color: AppColors.darkBlue, width: 2),
+                                ),
+                              ),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.darkBlue,
+                              ),
+                              onChanged: (value) {
+                                final parsed = int.tryParse(value);
+                                if (parsed != null && parsed >= 0 && parsed <= gridHeight) {
+                                  setState(() => _guideY = parsed);
+                                } else if (value.isEmpty) {
+                                  setState(() => _guideY = null);
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  // 초기화 링크
+                  GestureDetector(
+                    onTap: () {
+                      guideXController.clear();
+                      guideYController.clear();
+                      setState(() {
+                        _guideX = null;
+                        _guideY = null;
+                      });
+                      setDialogState(() {});
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.refresh_rounded, size: 14, color: AppColors.gray500),
+                        const SizedBox(width: 4),
+                        Text(
+                          '초기화',
+                          style: TextStyle(fontSize: 13, color: AppColors.gray500),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // 닫기 버튼
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      decoration: BoxDecoration(
+                        color: AppColors.darkBlue,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          '닫기',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -796,7 +1384,8 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
         allowedRange: _allowedRange,
         rowSpeed: _rowSpeed,
         colSpeed: _colSpeed,
-        gridSize: _game?.gridRows ?? 1000,
+        gridWidth: _game?.gridCols ?? 10000,
+        gridHeight: _game?.gridRows ?? 10000,
         selectedPrizePool: _selectedPrizePool,
         showGuideLine: _showGuideLine,
         guideX: _guideX,
@@ -825,96 +1414,119 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
   }
 
   void _showHelpSheet() {
-    showModalBottomSheet(
+    showDialog(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        decoration: const BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-        ),
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 핸들
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
+      barrierColor: Colors.black.withValues(alpha: 0.5),
+      builder: (context) => Dialog(
+        backgroundColor: AppColors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 제목 + 닫기
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Row(
+                    children: [
+                      Text('🎊 ', style: TextStyle(fontSize: 20)),
+                      Text(
+                        '경품 참여 방법',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.darkBlue,
+                        ),
+                      ),
+                    ],
+                  ),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: const Icon(Icons.close_rounded, color: AppColors.gray500),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+
+              // 참여 방법
+              _buildHelpItem(1, 'X (COL)과 Y (ROW) 좌표 값을 선택하세요.'),
+              const SizedBox(height: 12),
+              _buildHelpItem(2, '이벤트 포인트를 확인하고 최종 선택 좌표로 참여하세요.'),
+              const SizedBox(height: 12),
+              _buildHelpItem(3, '참여하기 버튼을 누르면 참여 포인트만큼 나의 이벤트 포인트가 차감됩니다. (재시도 포인트 : 참여 포인트의 50%)'),
+              const SizedBox(height: 12),
+              _buildHelpItem(4, '전략적으로 블록을 선택하여 최후의 단독 블록 당첨자가 되어보세요. (가이드를 설정하면 더 쉬어요!)'),
+
+              const SizedBox(height: 16),
+              const Divider(),
+              const SizedBox(height: 12),
+
+              // 즉석 경품 안내
+              Container(
+                padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: AppColors.gray300,
-                  borderRadius: BorderRadius.circular(2),
+                  color: AppColors.gray100,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('● ', style: TextStyle(fontSize: 10, color: AppColors.green)),
+                    Expanded(
+                      child: Text(
+                        '즉석 경품 좌표를 맞추면 바로 당첨 확정!\n즉석 경품 버튼을 활성화해보세요.',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: AppColors.gray700,
+                          height: 1.5,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              '게임 방법',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                color: AppColors.darkBlue,
-              ),
-            ),
-            const SizedBox(height: 20),
-            _buildHelpStep(1, 'ROW 선택', '버튼을 눌러 가로줄(ROW)을 고정하세요'),
-            const SizedBox(height: 16),
-            _buildHelpStep(2, 'COL 선택', '버튼을 눌러 세로줄(COL)을 고정하세요'),
-            const SizedBox(height: 16),
-            _buildHelpStep(3, '참가 완료', '선택한 좌표로 게임에 참가합니다'),
-            const SizedBox(height: 24),
-            SizedBox(height: MediaQuery.of(context).padding.bottom),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildHelpStep(int step, String title, String description) {
+  Widget _buildHelpItem(int step, String description) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width: 32,
-          height: 32,
+          width: 22,
+          height: 22,
           decoration: BoxDecoration(
-            color: AppColors.darkBlue.withValues(alpha: 0.1),
+            color: AppColors.darkBlue,
             shape: BoxShape.circle,
           ),
           child: Center(
             child: Text(
               '$step',
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 12,
                 fontWeight: FontWeight.w700,
-                color: AppColors.darkBlue,
+                color: AppColors.white,
               ),
             ),
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 10),
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.darkBlue,
-                ),
-              ),
-              Text(
-                description,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: AppColors.gray600,
-                ),
-              ),
-            ],
+          child: Text(
+            description,
+            style: const TextStyle(
+              fontSize: 13,
+              color: AppColors.gray700,
+              height: 1.5,
+            ),
           ),
         ),
       ],
@@ -922,29 +1534,29 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
   }
 }
 
-/// 토스 스타일 확인 바텀시트
+/// 참여하기 확인 바텀시트
 class _TossStyleConfirmSheet extends StatelessWidget {
   final int row;
   final int col;
-  final String productName;
-  final String productImage;
-  final int price;
+  final int entryFee;
+  final int retryFee;
+  final EventTarget? wonTarget;
   final VoidCallback onConfirm;
   final VoidCallback onRetry;
 
   const _TossStyleConfirmSheet({
     required this.row,
     required this.col,
-    required this.productName,
-    required this.productImage,
-    required this.price,
+    required this.entryFee,
+    required this.retryFee,
+    this.wonTarget,
     required this.onConfirm,
     required this.onRetry,
   });
 
   @override
   Widget build(BuildContext context) {
-    final priceFormatter = NumberFormat('#,###');
+    final hasPrize = wonTarget != null;
 
     return Container(
       decoration: const BoxDecoration(
@@ -966,186 +1578,193 @@ class _TossStyleConfirmSheet extends StatelessWidget {
           ),
           const SizedBox(height: 24),
 
-          // 체크 아이콘
-          Container(
-            width: 64,
-            height: 64,
-            decoration: BoxDecoration(
-              color: AppColors.green.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
+          if (hasPrize) ...[
+            // 당첨 경품 표시
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFF3CD),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Text(
+                  wonTarget!.prize.emoji,
+                  style: const TextStyle(fontSize: 40),
+                ),
+              ),
             ),
-            child: const Icon(
-              Icons.check_rounded,
-              color: AppColors.green,
-              size: 32,
+            const SizedBox(height: 12),
+            Text(
+              wonTarget!.prize.name,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: AppColors.darkBlue,
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              '방금 선택한 곳에서 경품이 나왔어요!\n이 행운으로 본 이벤트에 참여하시겠어요?',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                color: AppColors.gray700,
+                height: 1.5,
+              ),
+            ),
+          ] else ...[
+            // 체크 아이콘
+            Container(
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(
+                color: AppColors.green.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.check_rounded,
+                color: AppColors.green,
+                size: 32,
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              '선택한 좌표로 이벤트에 참여하시겠어요?',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: AppColors.darkBlue,
+              ),
+            ),
+          ],
+
+          const SizedBox(height: 8),
+
+          // 보유 포인트 (TODO: 실제 유저 데이터 연동)
+          Text(
+            '보유 포인트 : 250P (재시도 가능 2회)',
+            style: TextStyle(
+              fontSize: 13,
+              color: AppColors.gray500,
             ),
           ),
+
           const SizedBox(height: 20),
 
-          // 타이틀
-          const Text(
-            '좌표 선택 완료',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: AppColors.darkBlue,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            '선택한 좌표로 게임에 참가하시겠습니까?',
-            style: TextStyle(
-              fontSize: 14,
-              color: AppColors.gray600,
-            ),
-          ),
-
-          const SizedBox(height: 24),
-
-          // 좌표 정보 카드
+          // 좌표 표시
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               color: AppColors.gray100,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildCoordBox('ROW', row),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    '×',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w300,
-                      color: AppColors.gray400,
-                    ),
-                  ),
-                ),
-                _buildCoordBox('COL', col),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 16),
-
-          // 참가비 정보
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppColors.blue.withValues(alpha: 0.05),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.blue.withValues(alpha: 0.2)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
                 Text(
-                  '참가비',
+                  'X (COL)',
                   style: TextStyle(
-                    fontSize: 14,
-                    color: AppColors.gray600,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.gray500,
                   ),
                 ),
+                const SizedBox(width: 8),
                 Text(
-                  '${priceFormatter.format(price)}원',
+                  col.toString().padLeft(4, '0'),
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                     fontWeight: FontWeight.w700,
                     color: AppColors.darkBlue,
+                    fontFamily: 'monospace',
+                  ),
+                ),
+                Container(
+                  width: 1,
+                  height: 24,
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  color: AppColors.gray300,
+                ),
+                Text(
+                  'Y (ROW)',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.gray500,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  row.toString().padLeft(4, '0'),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.darkBlue,
+                    fontFamily: 'monospace',
                   ),
                 ),
               ],
             ),
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
 
-          // 버튼들
-          Row(
-            children: [
-              // 다시하기 버튼
-              Expanded(
-                child: GestureDetector(
-                  onTap: onRetry,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    decoration: BoxDecoration(
-                      color: AppColors.gray100,
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        '다시 선택',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.gray700,
-                        ),
-                      ),
-                    ),
+          // 참여하기 버튼
+          GestureDetector(
+            onTap: onConfirm,
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              decoration: BoxDecoration(
+                color: AppColors.darkBlue,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Center(
+                child: Text(
+                  '참여하기 (${entryFee}P)',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.white,
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
-              // 참가하기 버튼
-              Expanded(
-                flex: 2,
-                child: GestureDetector(
-                  onTap: onConfirm,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    decoration: BoxDecoration(
-                      color: AppColors.darkBlue,
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        '참가하기',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.white,
-                        ),
-                      ),
+            ),
+          ),
+
+          const SizedBox(height: 12),
+
+          // 재시도 링크
+          GestureDetector(
+            onTap: onRetry,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.refresh_rounded,
+                    size: 16,
+                    color: AppColors.gray500,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    '재시도 (${retryFee}P)',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: AppColors.gray500,
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
 
           SizedBox(height: MediaQuery.of(context).padding.bottom),
         ],
       ),
-    );
-  }
-
-  Widget _buildCoordBox(String label, int value) {
-    return Column(
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w600,
-            color: AppColors.gray500,
-            letterSpacing: 1,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          value.toString().padLeft(4, '0'),
-          style: const TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w700,
-            color: AppColors.darkBlue,
-            fontFamily: 'monospace',
-          ),
-        ),
-      ],
     );
   }
 }
@@ -1188,7 +1807,8 @@ class _EventSettingsSheet extends StatefulWidget {
   final int allowedRange;
   final int rowSpeed;
   final int colSpeed;
-  final int gridSize;
+  final int gridWidth;
+  final int gridHeight;
   final EventPrizePool selectedPrizePool;
   final Function(_EventSettings) onSettingsChanged;
   final VoidCallback onGenerateTargets;
@@ -1204,7 +1824,8 @@ class _EventSettingsSheet extends StatefulWidget {
     required this.allowedRange,
     required this.rowSpeed,
     required this.colSpeed,
-    required this.gridSize,
+    required this.gridWidth,
+    required this.gridHeight,
     required this.selectedPrizePool,
     required this.onSettingsChanged,
     required this.onGenerateTargets,
@@ -1282,8 +1903,8 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
     setState(() {
       _eventTargets = List.generate(actualCount, (index) => EventTarget(
         id: '${DateTime.now().millisecondsSinceEpoch}_$index',
-        row: random.nextInt(widget.gridSize) + 1,
-        col: random.nextInt(widget.gridSize) + 1,
+        row: random.nextInt(widget.gridHeight) + 1,
+        col: random.nextInt(widget.gridWidth) + 1,
         prize: _selectedPrizePool.getRandomPrize(),
       ));
     });
@@ -1679,7 +2300,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '0 ~ ${widget.gridSize} 범위 입력',
+                    'X: 0~${widget.gridWidth}, Y: 0~${widget.gridHeight}',
                     style: TextStyle(
                       fontSize: 12,
                       color: AppColors.gray500,
@@ -1737,7 +2358,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                               ),
                               onChanged: (value) {
                                 final parsed = int.tryParse(value);
-                                if (parsed != null && parsed >= 0 && parsed <= widget.gridSize) {
+                                if (parsed != null && parsed >= 0 && parsed <= widget.gridWidth) {
                                   setState(() => _guideX = parsed);
                                 } else if (value.isEmpty) {
                                   setState(() => _guideX = null);
@@ -1798,7 +2419,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                               ),
                               onChanged: (value) {
                                 final parsed = int.tryParse(value);
-                                if (parsed != null && parsed >= 0 && parsed <= widget.gridSize) {
+                                if (parsed != null && parsed >= 0 && parsed <= widget.gridHeight) {
                                   setState(() => _guideY = parsed);
                                 } else if (value.isEmpty) {
                                   setState(() => _guideY = null);
