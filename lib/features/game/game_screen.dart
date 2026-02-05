@@ -516,31 +516,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       );
     }
 
-    // 그리드 - 1단계: 줌 안내
-    if (_gridKey.currentContext != null) {
-      targets.add(
-        TargetFocus(
-          identify: "grid_zoom",
-          keyTarget: _gridKey,
-          alignSkip: Alignment.topRight,
-          shape: ShapeLightFocus.RRect,
-          contents: [
-            TargetContent(
-              align: ContentAlign.bottom,
-              builder: (context, controller) {
-                return _tutorialContent(
-                  '줌 레벨 안내',
-                  '축소된 상태에서 블록을 선택하면 자동으로 해당 구역으로 확대됩니다\n\n다음 단계에서 직접 체험해보세요!',
-                  LucideIcons.zoomIn,
-                );
-              },
-            ),
-          ],
-        ),
-      );
-    }
-
-    // 그리드 - 2단계: 블록 선택 실습
+    // 그리드 - 블록 선택 실습
     if (_gridKey.currentContext != null) {
       targets.add(
         TargetFocus(
@@ -597,17 +573,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       colorShadow: AppColors.darkBlue,
       paddingFocus: 10,
       opacityShadow: 0.8,
-      onClickTarget: (target) {
-        // "grid_zoom" 단계가 끝나고 다음으로 넘어갈 때 자동 줌인
-        if (target.identify == "grid_zoom") {
-          debugPrint(
-            '🎯 Tutorial: grid_zoom step completed, performing auto zoom-in',
-          );
-          Future.delayed(const Duration(milliseconds: 300), () {
-            _performTutorialZoomIn();
-          });
-        }
-      },
+      onClickTarget: (target) {},
       onFinish: () async {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('game_tutorial_completed', true);
