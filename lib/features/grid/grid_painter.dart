@@ -129,13 +129,13 @@ class GridPainter extends CustomPainter {
     return (math.log(zoom) / math.log(2)).floor() + 4;
   }
 
-  /// 배경 그리기 (변환된 좌표계)
+  /// 배경 그리기 (변환된 좌표계) - 글래스 효과
   void _drawBackgroundTransformed(Canvas canvas, Size size) {
-    if (backgroundImage != null) {
-      // 그리드 전체 크기 (변환 전 좌표)
-      final totalGridWidth = gridWidth * cellSize;
-      final totalGridHeight = gridHeight * cellSize;
+    final totalGridWidth = gridWidth * cellSize;
+    final totalGridHeight = gridHeight * cellSize;
+    final dstRect = Rect.fromLTWH(0, 0, totalGridWidth, totalGridHeight);
 
+    if (backgroundImage != null) {
       final srcRect = Rect.fromLTWH(
         0,
         0,
@@ -143,39 +143,16 @@ class GridPainter extends CustomPainter {
         backgroundImage!.height.toDouble(),
       );
 
-      // 그리드 크기에 맞춰 이미지 렌더링 (0, 0부터 시작)
-      final dstRect = Rect.fromLTWH(0, 0, totalGridWidth, totalGridHeight);
-
       // 이미지를 그리드에 맞춰 그리기
       final imagePaint = Paint()..filterQuality = FilterQuality.high;
-
       canvas.drawImageRect(backgroundImage!, srcRect, dstRect, imagePaint);
 
-      // 🎮 강한 오버레이 (구역 패턴 가시성을 위해)
-      final overlayPaint = Paint()..color = Colors.white.withOpacity(0.5);
-
-      canvas.drawRect(dstRect, overlayPaint);
+      // 오버레이 없음 → 상품 이미지 원본 그대로 표시
     } else {
-      // 배경 이미지가 없으면 그리드 영역만 그라데이션
-      final totalGridWidth = gridWidth * cellSize;
-      final totalGridHeight = gridHeight * cellSize;
-
+      // 배경 이미지 없음: 반투명 다크 블루 단색 배경 (셰이더가 비침)
       final paint = Paint()
-        ..shader = const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            AppColors.deepWhite,
-            AppColors.blueWhite,
-            AppColors.blueWhite,
-          ],
-          stops: [0.0, 0.5, 1.0],
-        ).createShader(Rect.fromLTWH(0, 0, totalGridWidth, totalGridHeight));
-
-      canvas.drawRect(
-        Rect.fromLTWH(0, 0, totalGridWidth, totalGridHeight),
-        paint,
-      );
+        ..color = const Color(0xFF0A1128).withValues(alpha: 0.75);
+      canvas.drawRect(dstRect, paint);
     }
   }
 
@@ -608,15 +585,15 @@ class GridPainter extends CustomPainter {
       selectedCoords.add('${block.row},${block.col}');
     }
 
-    // 채우기 페인트 (반투명 분홍색)
+    // 채우기 페인트 (브랜드 블루-퍼플)
     final fillPaint = Paint()
-      ..color = const Color(0xFFFF69B4).withOpacity(0.4)
+      ..color = AppColors.blue.withValues(alpha: 0.35)
       ..style = PaintingStyle.fill;
 
-    // 테두리 페인트 (진한 분홍색, 두꺼운 선)
+    // 테두리 페인트 (브랜드 블루)
     final borderPaint = Paint()
-      ..color = const Color(0xFFFF1493).withOpacity(0.8)
-      ..strokeWidth = 3.0 / zoom // 화면에서 3px로 보이도록
+      ..color = AppColors.blue.withValues(alpha: 0.85)
+      ..strokeWidth = 2.5 / zoom // 화면에서 2.5px로 보이도록
       ..style = PaintingStyle.stroke;
 
     // 각 선택된 블록에 대해

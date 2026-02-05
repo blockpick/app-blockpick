@@ -147,12 +147,12 @@ class _GridMinimapState extends State<GridMinimap> {
       width: widget.minimapSize,
       height: widget.minimapSize,
       decoration: BoxDecoration(
-        color: AppColors.white.withOpacity(0.9),
+        color: const Color(0xFF0A1128).withValues(alpha: 0.75),
         borderRadius: BorderRadius.circular(AppConstants.radiusMd),
-        border: Border.all(color: AppColors.buleGray, width: 2),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.15), width: 1),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withOpacity(0.1),
+            color: AppColors.black.withValues(alpha: 0.2),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -244,14 +244,14 @@ class _MinimapPainter extends CustomPainter {
         imagePaint,
       );
 
-      // 약한 오버레이 (뷰포트 가시성 향상)
+      // 반투명 다크 오버레이 (글래스 효과)
       final overlayPaint = Paint()
-        ..color = AppColors.white.withOpacity(0.3);
+        ..color = const Color(0xFF0A1128).withValues(alpha: 0.5);
       canvas.drawRect(gridRect, overlayPaint);
     } else {
-      // 배경 이미지가 없으면 기본 색상
+      // 배경 이미지가 없으면 반투명 다크 블루
       final gridPaint = Paint()
-        ..color = AppColors.blueWhite
+        ..color = const Color(0xFF0A1128).withValues(alpha: 0.5)
         ..style = PaintingStyle.fill;
 
       canvas.drawRect(gridRect, gridPaint);
@@ -371,14 +371,14 @@ class _MinimapPainter extends CustomPainter {
     // 미니맵에서의 셀 크기
     final minimapCellSize = AppConstants.cellSize * minimapScale;
 
-    // 채우기 페인트 (반투명 분홍색)
+    // 채우기 페인트 (브랜드 블루)
     final fillPaint = Paint()
-      ..color = const Color(0xFFFF69B4).withOpacity(0.4)
+      ..color = AppColors.blue.withValues(alpha: 0.4)
       ..style = PaintingStyle.fill;
 
-    // 테두리 페인트 (진한 분홍색, 두꺼운 선)
+    // 테두리 페인트 (브랜드 블루)
     final borderPaint = Paint()
-      ..color = const Color(0xFFFF1493).withOpacity(0.8)
+      ..color = AppColors.blue.withValues(alpha: 0.85)
       ..strokeWidth = 1.5 // 미니맵에서는 얇은 선
       ..style = PaintingStyle.stroke;
 

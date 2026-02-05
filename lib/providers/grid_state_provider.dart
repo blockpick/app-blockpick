@@ -184,6 +184,10 @@ class GridState {
 
 /// 그리드 상태 노티파이어
 class GridStateNotifier extends StateNotifier<GridState> {
+  /// 뷰포트 크기 (pan/zoom 클램핑에 사용)
+  double _viewportWidth = 0;
+  double _viewportHeight = 0;
+
   GridStateNotifier({
     required int gridWidth,
     required int gridHeight,
@@ -195,10 +199,52 @@ class GridStateNotifier extends StateNotifier<GridState> {
           zoom: baseZoom, // 초기 줌을 baseZoom으로 설정
         ));
 
+  /// 뷰포트 크기 설정 (GameGridWidget에서 호출)
+  void setViewportSize(double width, double height) {
+    _viewportWidth = width;
+    _viewportHeight = height;
+  }
+
+  /// 뷰포트를 채우기 위한 최소 줌 계산
+  double get _minZoomForViewport {
+    if (_viewportWidth <= 0 || _viewportHeight <= 0) return AppConstants.minZoom;
+    final gridTotalWidth = state.gridWidth * AppConstants.cellSize;
+    final gridTotalHeight = state.gridHeight * AppConstants.cellSize;
+    final minZoomW = _viewportWidth / gridTotalWidth;
+    final minZoomH = _viewportHeight / gridTotalHeight;
+    return math.max(minZoomW, minZoomH);
+  }
+
+  /// 줌 클램핑 (뷰포트 최소 줌 보장)
+  double _clampZoom(double zoom) {
+    return zoom.clamp(_minZoomForViewport, AppConstants.maxZoom);
+  }
+
+  /// pan 클램핑 (게임판이 항상 뷰포트를 채우도록)
+  double _clampPanX(double panX, double zoom) {
+    if (_viewportWidth <= 0) return panX;
+    final gridRenderedWidth = state.gridWidth * AppConstants.cellSize * zoom;
+    // panX <= 0 (왼쪽 가장자리), panX >= viewportWidth - gridRenderedWidth (오른쪽 가장자리)
+    final minPanX = _viewportWidth - gridRenderedWidth;
+    return panX.clamp(minPanX, 0.0);
+  }
+
+  double _clampPanY(double panY, double zoom) {
+    if (_viewportHeight <= 0) return panY;
+    final gridRenderedHeight = state.gridHeight * AppConstants.cellSize * zoom;
+    final minPanY = _viewportHeight - gridRenderedHeight;
+    return panY.clamp(minPanY, 0.0);
+  }
+
   /// 줌 설정
   void setZoom(double zoom) {
-    final clampedZoom = zoom.clamp(AppConstants.minZoom, AppConstants.maxZoom);
-    state = state.copyWith(zoom: clampedZoom);
+    final clampedZoom = _clampZoom(zoom);
+    // 줌 변경 후 pan도 재클램핑
+    state = state.copyWith(
+      zoom: clampedZoom,
+      panX: _clampPanX(state.panX, clampedZoom),
+      panY: _clampPanY(state.panY, clampedZoom),
+    );
   }
 
   /// 줌 인 (스마트 단계별 줌 - 화면 중앙 기준)
@@ -271,8 +317,8 @@ class GridStateNotifier extends StateNotifier<GridState> {
     final centerX = (screenWidth / 2 - state.panX) / oldZoom;
     final centerY = (screenHeight / 2 - state.panY) / oldZoom;
 
-    // 줌 변경
-    final clampedZoom = newZoom.clamp(AppConstants.minZoom, AppConstants.maxZoom);
+    // 줌 변경 (뷰포트 최소 줌 보장)
+    final clampedZoom = _clampZoom(newZoom);
 
     // 같은 그리드 좌표가 화면 중앙에 오도록 pan 조정
     final newPanX = screenWidth / 2 - centerX * clampedZoom;
@@ -280,8 +326,8 @@ class GridStateNotifier extends StateNotifier<GridState> {
 
     state = state.copyWith(
       zoom: clampedZoom,
-      panX: newPanX,
-      panY: newPanY,
+      panX: _clampPanX(newPanX, clampedZoom),
+      panY: _clampPanY(newPanY, clampedZoom),
     );
   }
 
@@ -298,8 +344,8 @@ class GridStateNotifier extends StateNotifier<GridState> {
     final gridX = (focalPointX - state.panX) / oldZoom;
     final gridY = (focalPointY - state.panY) / oldZoom;
 
-    // 줌 변경
-    final clampedZoom = newZoom.clamp(AppConstants.minZoom, AppConstants.maxZoom);
+    // 줌 변경 (뷰포트 최소 줌 보장)
+    final clampedZoom = _clampZoom(newZoom);
 
     // focal point가 같은 그리드 좌표를 가리키도록 pan 조정
     final newPanX = focalPointX - gridX * clampedZoom;
@@ -307,21 +353,26 @@ class GridStateNotifier extends StateNotifier<GridState> {
 
     state = state.copyWith(
       zoom: clampedZoom,
-      panX: newPanX,
-      panY: newPanY,
+      panX: _clampPanX(newPanX, clampedZoom),
+      panY: _clampPanY(newPanY, clampedZoom),
     );
   }
 
   /// 팬 설정
   void setPan(double x, double y) {
-    state = state.copyWith(panX: x, panY: y);
+    state = state.copyWith(
+      panX: _clampPanX(x, state.zoom),
+      panY: _clampPanY(y, state.zoom),
+    );
   }
 
   /// 팬 추가
   void addPan(double dx, double dy) {
+    final newPanX = state.panX + dx;
+    final newPanY = state.panY + dy;
     state = state.copyWith(
-      panX: state.panX + dx,
-      panY: state.panY + dy,
+      panX: _clampPanX(newPanX, state.zoom),
+      panY: _clampPanY(newPanY, state.zoom),
     );
   }
 
@@ -374,23 +425,28 @@ class GridStateNotifier extends StateNotifier<GridState> {
 
   /// 뷰 리셋
   void resetView() {
+    final clampedZoom = _clampZoom(AppConstants.defaultZoom);
     state = state.copyWith(
-      zoom: AppConstants.defaultZoom,
-      panX: 0.0,
-      panY: 0.0,
+      zoom: clampedZoom,
+      panX: _clampPanX(0.0, clampedZoom),
+      panY: _clampPanY(0.0, clampedZoom),
     );
   }
 
   /// 특정 블록으로 줌 및 이동
   void focusOnBlock(BlockModel block, {double targetZoom = 2.0}) {
+    final clampedZoom = _clampZoom(targetZoom);
     // 블록 중심으로 팬 이동
     final blockCenterX = (block.col - 1) * AppConstants.cellSize;
     final blockCenterY = (block.row - 1) * AppConstants.cellSize;
 
+    final panX = -blockCenterX * clampedZoom;
+    final panY = -blockCenterY * clampedZoom;
+
     state = state.copyWith(
-      zoom: targetZoom,
-      panX: -blockCenterX * targetZoom,
-      panY: -blockCenterY * targetZoom,
+      zoom: clampedZoom,
+      panX: _clampPanX(panX, clampedZoom),
+      panY: _clampPanY(panY, clampedZoom),
       centerCell: block,
     );
   }
@@ -409,23 +465,21 @@ class GridStateNotifier extends StateNotifier<GridState> {
     }
 
     // 목표 줌 레벨 설정 (지정되지 않으면 현재 줌 유지하되, 너무 작으면 적당히 확대)
-    final newZoom = targetZoom ?? (state.zoom < 0.5 ? 0.8 : state.zoom);
+    final rawZoom = targetZoom ?? (state.zoom < 0.5 ? 0.8 : state.zoom);
+    final clampedZoom = _clampZoom(rawZoom);
 
     // 블록의 중심 좌표 계산 (그리드 좌표계)
     final blockCenterX = (block.col - 0.5) * AppConstants.cellSize;
     final blockCenterY = (block.row - 0.5) * AppConstants.cellSize;
 
     // 블록이 화면 중앙에 오도록 pan 계산
-    // 화면 중앙 = screenWidth/2, screenHeight/2
-    // pan + blockCenter * zoom = screenCenter
-    // pan = screenCenter - blockCenter * zoom
-    final newPanX = screenWidth / 2 - blockCenterX * newZoom;
-    final newPanY = screenHeight / 2 - blockCenterY * newZoom;
+    final newPanX = screenWidth / 2 - blockCenterX * clampedZoom;
+    final newPanY = screenHeight / 2 - blockCenterY * clampedZoom;
 
     state = state.copyWith(
-      zoom: newZoom.clamp(AppConstants.minZoom, AppConstants.maxZoom),
-      panX: newPanX,
-      panY: newPanY,
+      zoom: clampedZoom,
+      panX: _clampPanX(newPanX, clampedZoom),
+      panY: _clampPanY(newPanY, clampedZoom),
       centerCell: block,
       focusedBlockId: block.id, // 포커스 설정
     );
@@ -475,18 +529,18 @@ class GridStateNotifier extends StateNotifier<GridState> {
     final zoomToFitWidth = screenWidth / sectionWidth * 0.8; // 80% 여유
     final zoomToFitHeight = screenHeight / sectionHeight * 0.8;
 
-    final newZoom = targetZoom ??
-        (zoomToFitWidth < zoomToFitHeight ? zoomToFitWidth : zoomToFitHeight)
-            .clamp(AppConstants.minZoom, AppConstants.maxZoom);
+    final rawZoom = targetZoom ??
+        (zoomToFitWidth < zoomToFitHeight ? zoomToFitWidth : zoomToFitHeight);
+    final clampedZoom = _clampZoom(rawZoom);
 
     // 섹션이 화면 중앙에 오도록 pan 계산
-    final newPanX = screenWidth / 2 - sectionCenterX * newZoom;
-    final newPanY = screenHeight / 2 - sectionCenterY * newZoom;
+    final newPanX = screenWidth / 2 - sectionCenterX * clampedZoom;
+    final newPanY = screenHeight / 2 - sectionCenterY * clampedZoom;
 
     state = state.copyWith(
-      zoom: newZoom,
-      panX: newPanX,
-      panY: newPanY,
+      zoom: clampedZoom,
+      panX: _clampPanX(newPanX, clampedZoom),
+      panY: _clampPanY(newPanY, clampedZoom),
       clearFocusedBlock: true, // 섹션 이동 시 블록 포커스 해제
     );
   }

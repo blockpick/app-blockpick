@@ -235,6 +235,12 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
 
     return LayoutBuilder(
       builder: (context, constraints) {
+        // 뷰포트 크기를 GridStateNotifier에 전달 (pan/zoom 클램핑용)
+        gridNotifier.setViewportSize(
+          constraints.biggest.width,
+          constraints.biggest.height,
+        );
+
         return GestureDetector(
           // 탭 처리 (블록 선택)
           onTapUp: (details) => _handleTap(
@@ -397,9 +403,21 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
           top: y + iconOffset,
           width: iconSize,
           height: iconSize,
-          child: SvgPicture.asset(
-            iconPath,
-            fit: BoxFit.contain,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(iconSize * 0.2),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.blue.withValues(alpha: 0.5),
+                  blurRadius: iconSize * 0.4,
+                  spreadRadius: iconSize * 0.1,
+                ),
+              ],
+            ),
+            child: SvgPicture.asset(
+              iconPath,
+              fit: BoxFit.contain,
+            ),
           ),
         ),
       );

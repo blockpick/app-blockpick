@@ -36,6 +36,16 @@ class ZoomControls extends StatelessWidget {
     this.opacity = 0.75,
   });
 
+  /// currentLevel과 minLevel을 기반으로 사용자 친화적 배율 텍스트 계산
+  String _getZoomLabel() {
+    if (currentLevel == null || minLevel == null) return '';
+    final relativeLevel = currentLevel! - minLevel!;
+    // 배율 매핑: 레벨 0=×1, 1=×2, 2=×5, 3=×10, 4=×20, 5=×50, ...
+    const multipliers = [1, 2, 5, 10, 20, 50, 100, 200, 500];
+    final idx = relativeLevel.clamp(0, multipliers.length - 1);
+    return '×${multipliers[idx]}';
+  }
+
   @override
   Widget build(BuildContext context) {
     final canZoomIn = maxLevel == null || currentLevel == null || currentLevel! < maxLevel!;
@@ -43,11 +53,11 @@ class ZoomControls extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.white.withOpacity(opacity),
+        color: const Color(0xFF0A1128).withValues(alpha: 0.75),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withOpacity(0.1),
+            color: AppColors.black.withValues(alpha: 0.2),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -60,21 +70,21 @@ class ZoomControls extends StatelessWidget {
           IconButton(
             onPressed: canZoomIn ? onZoomIn : null,
             icon: const Icon(LucideIcons.plus),
-            color: canZoomIn ? AppColors.darkBlue : AppColors.disable,
+            color: canZoomIn ? Colors.white : Colors.white38,
             iconSize: 24,
             padding: const EdgeInsets.all(12),
           ),
 
-          // LOD 레벨 표시 (숫자만)
-          if (lodLevel != null)
+          // 배율 텍스트 표시
+          if (currentLevel != null && minLevel != null)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
               child: Text(
-                '$lodLevel',
+                _getZoomLabel(),
                 style: const TextStyle(
-                  fontSize: 14,
+                  fontSize: 13,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.darkBlue,
+                  color: Colors.white,
                 ),
               ),
             ),
@@ -83,14 +93,14 @@ class ZoomControls extends StatelessWidget {
           Container(
             width: 40,
             height: 1,
-            color: AppColors.buleGray,
+            color: Colors.white.withValues(alpha: 0.15),
           ),
 
           // Zoom Out
           IconButton(
             onPressed: canZoomOut ? onZoomOut : null,
             icon: const Icon(LucideIcons.minus),
-            color: canZoomOut ? AppColors.darkBlue : AppColors.disable,
+            color: canZoomOut ? Colors.white : Colors.white38,
             iconSize: 24,
             padding: const EdgeInsets.all(12),
           ),

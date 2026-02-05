@@ -269,58 +269,124 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     );
   }
 
-  /// 토스 스타일 선택 수량 배지 (왼쪽 상단)
+  /// 선택 수량 배지 (왼쪽 상단) - 글래스 스타일 + 진행 도트
   Widget _buildSelectionBadge(int selected, int max) {
     final isComplete = selected >= max;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.1),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          decoration: BoxDecoration(
+            color: const Color(0xFF0A1128).withValues(alpha: 0.75),
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.black.withValues(alpha: 0.2),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
-        ],
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // 체크 아이콘
+              Container(
+                width: 20,
+                height: 20,
+                decoration: BoxDecoration(
+                  color: isComplete
+                      ? AppColors.green.withValues(alpha: 0.3)
+                      : AppColors.blue.withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Icon(
+                  isComplete ? Icons.check_rounded : Icons.touch_app_rounded,
+                  size: 14,
+                  color: isComplete ? AppColors.green : Colors.white,
+                ),
+              ),
+              const SizedBox(width: 8),
+              // 카운트
+              Text(
+                '$selected',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: isComplete ? AppColors.green : Colors.white,
+                ),
+              ),
+              Text(
+                '/$max',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white.withValues(alpha: 0.6),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 6),
+        // 진행 도트 (●●●○○)
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: List.generate(max, (index) {
+            final isFilled = index < selected;
+            return Container(
+              width: 8,
+              height: 8,
+              margin: const EdgeInsets.symmetric(horizontal: 2),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isComplete
+                    ? AppColors.green
+                    : (isFilled ? AppColors.blue : AppColors.gray300),
+              ),
+            );
+          }),
+        ),
+      ],
+    );
+  }
+
+  /// 안내 바 (인스트럭션) - 상단 중앙
+  Widget _buildInstructionBar(int selected, int max) {
+    String text;
+    IconData? icon;
+
+    if (selected == 0) {
+      text = '원하는 블록 ${max}개를 선택하세요';
+      icon = Icons.touch_app_rounded;
+    } else if (selected < max) {
+      text = '$selected/${max}개 선택됨 — 더 선택해주세요';
+      icon = null;
+    } else {
+      text = '선택 완료! 참가하기를 눌러주세요';
+      icon = Icons.check_circle_rounded;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        color: const Color(0xFF0A1128).withValues(alpha: 0.75),
+        borderRadius: BorderRadius.circular(24),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // 체크 아이콘
-          Container(
-            width: 20,
-            height: 20,
-            decoration: BoxDecoration(
-              color: isComplete
-                  ? AppColors.green.withValues(alpha: 0.15)
-                  : AppColors.blue.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Icon(
-              isComplete ? Icons.check_rounded : Icons.touch_app_rounded,
-              size: 14,
-              color: isComplete ? AppColors.green : AppColors.blue,
-            ),
-          ),
-          const SizedBox(width: 8),
-          // 카운트
+          if (icon != null) ...[
+            Icon(icon, size: 16, color: Colors.white.withValues(alpha: 0.9)),
+            const SizedBox(width: 6),
+          ],
           Text(
-            '$selected',
+            text,
             style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: isComplete ? AppColors.green : AppColors.blue,
-            ),
-          ),
-          Text(
-            '/$max',
-            style: TextStyle(
-              fontSize: 14,
+              fontSize: 13,
               fontWeight: FontWeight.w500,
-              color: AppColors.gray500,
+              color: Colors.white.withValues(alpha: 0.9),
             ),
           ),
         ],
@@ -785,9 +851,19 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
           // 바텀시트는 showModalBottomSheet로 표시
 
-          // 선택 수량 배지 (왼쪽 상단) - 탭하면 바텀시트 열림
+          // 안내 바 (상단 중앙)
           Positioned(
             top: 16,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: _buildInstructionBar(selectedCount, _pickMax),
+            ),
+          ),
+
+          // 선택 수량 배지 (왼쪽 상단, 안내 바 아래) - 탭하면 바텀시트 열림
+          Positioned(
+            top: 56,
             left: 16,
             child: GestureDetector(
               onTap: selectedCount > 0 ? _showSelectedBlocksModal : null,
@@ -795,13 +871,13 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             ),
           ),
 
-          // 상품 선택 버튼 (우상단) - SELECT 게임인 경우
+          // 상품 선택 버튼 (우상단, 안내 바 아래) - SELECT 게임인 경우
           if (_fullGame != null &&
               _fullGame!.gameType?.toUpperCase() == 'SELECT' &&
               _fullGame!.gameProducts != null &&
               _fullGame!.gameProducts!.isNotEmpty)
             Positioned(
-              top: 16,
+              top: 56,
               right: 16,
               child: _buildCompactProductSelector(),
             ),
@@ -1012,18 +1088,28 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     );
   }
 
-  /// 토스 스타일 FAB - 선택된 블록 보기
+  /// FAB - 선택 미완료 시 "N개 선택됨", 완료 시 "참가하기"
   Widget _buildSelectionFAB(int selected, int max) {
+    final isComplete = selected >= max;
+
     return GestureDetector(
       onTap: _showSelectedBlocksModal,
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         decoration: BoxDecoration(
-          color: AppColors.darkBlue,
+          gradient: isComplete
+              ? const LinearGradient(
+                  colors: [Color(0xFF10B981), Color(0xFF059669)],
+                )
+              : null,
+          color: isComplete ? null : const Color(0xFF0A1128).withValues(alpha: 0.85),
           borderRadius: BorderRadius.circular(32),
           boxShadow: [
             BoxShadow(
-              color: AppColors.darkBlue.withValues(alpha: 0.4),
+              color: isComplete
+                  ? AppColors.green.withValues(alpha: 0.4)
+                  : AppColors.black.withValues(alpha: 0.3),
               blurRadius: 16,
               offset: const Offset(0, 6),
             ),
@@ -1031,39 +1117,53 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          children: [
-            // 체크 아이콘
-            Container(
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                color: AppColors.white.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Icon(
-                Icons.check_rounded,
-                size: 16,
-                color: AppColors.white,
-              ),
-            ),
-            const SizedBox(width: 12),
-            // 텍스트
-            Text(
-              '$selected개 선택됨',
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-                color: AppColors.white,
-              ),
-            ),
-            const SizedBox(width: 8),
-            // 화살표
-            const Icon(
-              Icons.keyboard_arrow_up_rounded,
-              size: 20,
-              color: AppColors.white,
-            ),
-          ],
+          children: isComplete
+              ? [
+                  const Icon(
+                    Icons.check_circle_rounded,
+                    size: 20,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(width: 8),
+                  const Text(
+                    '참가하기',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
+                ]
+              : [
+                  Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(
+                      Icons.check_rounded,
+                      size: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    '$selected개 선택됨',
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  const Icon(
+                    Icons.keyboard_arrow_up_rounded,
+                    size: 20,
+                    color: Colors.white,
+                  ),
+                ],
         ),
       ),
     );
@@ -1098,7 +1198,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     });
   }
 
-  /// 토스 스타일 상품 선택 버튼 (우상단)
+  /// 상품 선택 버튼 (우상단) - 글래스 스타일 + 상품명
   Widget _buildCompactProductSelector() {
     if (_fullGame == null ||
         _fullGame!.gameProducts == null ||
@@ -1108,17 +1208,18 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
     final productCount = _fullGame!.gameProducts!.length;
     final selectedProduct = _fullGame!.gameProducts![_selectedProductIndex];
+    final productName = selectedProduct.product.name ?? '';
 
     return GestureDetector(
       onTap: _showProductSelector,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: const Color(0xFF0A1128).withValues(alpha: 0.75),
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: AppColors.black.withValues(alpha: 0.1),
+              color: AppColors.black.withValues(alpha: 0.2),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -1127,13 +1228,13 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // 상품 썸네일
+            // 상품 썸네일 (40x40)
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Container(
-                width: 32,
-                height: 32,
-                color: AppColors.gray100,
+                width: 40,
+                height: 40,
+                color: Colors.white.withValues(alpha: 0.1),
                 child: selectedProduct.product.defaultImage != null
                     ? Image.network(
                         selectedProduct.product.defaultImage!.replaceAll(' ', '%20'),
@@ -1141,34 +1242,54 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                         errorBuilder: (context, error, stackTrace) {
                           return const Icon(
                             Icons.inventory_2_outlined,
-                            size: 16,
-                            color: AppColors.gray400,
+                            size: 20,
+                            color: Colors.white54,
                           );
                         },
                       )
                     : const Icon(
                         Icons.inventory_2_outlined,
-                        size: 16,
-                        color: AppColors.gray400,
+                        size: 20,
+                        color: Colors.white54,
                       ),
               ),
             ),
             const SizedBox(width: 8),
-            // 선택 인덱스
-            Text(
-              '${_selectedProductIndex + 1}/$productCount',
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: AppColors.darkBlue,
-              ),
+            // 상품명 + 인덱스
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (productName.isNotEmpty)
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 72),
+                    child: Text(
+                      productName,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white70,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                Text(
+                  '${_selectedProductIndex + 1}/$productCount',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
             const SizedBox(width: 4),
             // 변경 아이콘
             Icon(
               Icons.swap_horiz_rounded,
               size: 18,
-              color: AppColors.gray500,
+              color: Colors.white.withValues(alpha: 0.6),
             ),
           ],
         ),
