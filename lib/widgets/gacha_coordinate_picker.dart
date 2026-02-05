@@ -466,7 +466,9 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
 
   /// 게임 캔버스 (1:1 비율)
   Widget _buildGameCanvas() {
-    return ClipRRect(
+    return GestureDetector(
+      onTap: _phase < 2 ? _onButtonPressed : null,
+      child: ClipRRect(
       borderRadius: BorderRadius.circular(0),
       child: Stack(
         children: [
@@ -528,6 +530,7 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
           ),
         ],
       ),
+    ),
     );
   }
 
