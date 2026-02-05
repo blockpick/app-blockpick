@@ -140,7 +140,10 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
           radius: 12,
           contents: [
             TargetContent(
-              align: ContentAlign.top,
+              align: ContentAlign.custom,
+              customPosition: CustomTargetContentPosition(
+                top: MediaQuery.of(context).size.height * 0.35,
+              ),
               builder: (context, controller) {
                 return _tutorialContent(
                   '좌표 선택',
