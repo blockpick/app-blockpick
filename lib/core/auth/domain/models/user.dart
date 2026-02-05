@@ -9,18 +9,12 @@ class User with _$User {
     String? id,
     required String email,
     String? nickname,
-    // 새 스키마 필드
-    String? avatar,
-    double? balance,
-    int? totalGamesPlayed,
-    int? totalWins,
-    double? winRate,
-    String? createdAt,
-    String? updatedAt,
-    // 레거시 필드 (하위 호환성)
     String? profileImageUrl,
-    @Default(0) int point,
-    @Default(0) int cash,
+    // 재화 필드 (GraphQL 스키마)
+    @Default(0) double shoppingCash,
+    @Default(0) double eventPoint,
+    @Default(0) double participationPoint,
+    // 설정 필드
     @Default(true) bool isPushNotification,
     @Default(true) bool isMarketingNotification,
     @Default(false) bool isBan,
@@ -28,9 +22,6 @@ class User with _$User {
     @Default(false) bool isSocialAccount,
     String? socialProvider,
     String? socialName,
-    String? name,
-    String? role,
-    String? phone,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

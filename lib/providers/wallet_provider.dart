@@ -15,29 +15,28 @@ final userProfileProvider = Provider<UserProfile?>((ref) {
     userId: user.id ?? '',
     nickname: user.nickname ?? '사용자',
     email: user.email,
-    profileImageUrl: user.avatar,
+    profileImageUrl: user.profileImageUrl,
     tier: UserTier.bronze, // TODO: 백엔드에서 tier 정보 추가 필요
     createdAt: DateTime.now(), // TODO: createdAt 백엔드에서 제공 필요
     updatedAt: DateTime.now(),
   );
 });
 
-/// 사용자 지갑 Provider (실제 사용자 balance 기반)
+/// 사용자 지갑 Provider (GraphQL 스키마 User 필드 기반)
 final userWalletProvider = Provider<UserWallet?>((ref) {
   final authState = ref.watch(authProvider);
   final user = authState.valueOrNull?.user;
 
   if (user == null) return null;
 
-  final totalBalance = (user.balance ?? 0.0).toInt();
-  // TODO: 백엔드에서 캐시 타입별 분리 데이터 제공 필요
-  // 현재는 총 balance를 이벤트 캐시와 쇼핑 캐시로 임의 분할
-  final eventCash = (totalBalance * 0.6).toInt();
-  final shoppingCash = (totalBalance * 0.4).toInt();
+  final shoppingCash = user.shoppingCash.toInt();
+  final eventCash = user.eventPoint.toInt();
+  final participationPoint = user.participationPoint.toInt();
+  final totalBalance = shoppingCash + eventCash + participationPoint;
 
   return UserWallet(
     userId: user.id ?? '',
-    fundingCash: 0, // 충전캐시는 제거되었으므로 0
+    fundingCash: 0,
     eventCash: eventCash,
     shoppingCash: shoppingCash,
     totalEventCashUsed: 0, // TODO: 백엔드 데이터 필요

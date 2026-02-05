@@ -77,7 +77,7 @@ class _TossHomeScreenState extends ConsumerState<TossHomeScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: TossBalanceCard(
-                        balance: user?.balance ?? 0,
+                        balance: user?.eventPoint ?? 0,
                         isAuthenticated: isAuthenticated,
                         onTap: () {
                           if (!isAuthenticated) {

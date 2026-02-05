@@ -74,7 +74,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
-    final userBalance = authState.valueOrNull?.user?.balance?.toInt() ?? 0;
+    final userBalance = authState.valueOrNull?.user?.eventPoint.toInt() ?? 0;
 
     final pendingTx = ref.watch(pendingTransactionNotifierProvider);
 

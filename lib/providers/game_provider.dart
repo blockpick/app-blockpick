@@ -19,18 +19,28 @@ const String _getGamesQuery = r'''
         id
         title
         description
+        mainProductName
         gameType
-        gameMethod
+        category
         status
-        maxEntries
-        minEntries
         entryFee
+        currency
+        minEntries
+        maxEntries
+        maxEntriesPerUser
         rewardPoint
-        startTime
-        endTime
-        customRules
         gridRows
         gridCols
+        visibleFrom
+        startTime
+        endTime
+        allowDuplicate
+        enableNotification
+        isRecommended
+        hasInstantPrize
+        customRules
+        autoEndOnMax
+        autoEndOnTime
         onchainTxHash
         onchainContractAddr
         createdAt
@@ -74,17 +84,22 @@ const String _getActiveGamesQuery = r'''
         id
         title
         description
+        mainProductName
         gameType
-        gameMethod
+        category
         status
-        maxEntries
-        minEntries
         entryFee
+        currency
+        minEntries
+        maxEntries
+        maxEntriesPerUser
         rewardPoint
-        startTime
-        endTime
         gridRows
         gridCols
+        startTime
+        endTime
+        isRecommended
+        hasInstantPrize
         onchainTxHash
         onchainContractAddr
         createdAt
@@ -118,18 +133,28 @@ const String _getGameQuery = r'''
         id
         title
         description
+        mainProductName
         gameType
-        gameMethod
+        category
         status
-        maxEntries
-        minEntries
         entryFee
+        currency
+        minEntries
+        maxEntries
+        maxEntriesPerUser
         rewardPoint
-        startTime
-        endTime
-        customRules
         gridRows
         gridCols
+        visibleFrom
+        startTime
+        endTime
+        allowDuplicate
+        enableNotification
+        isRecommended
+        hasInstantPrize
+        customRules
+        autoEndOnMax
+        autoEndOnTime
         onchainTxHash
         onchainContractAddr
         createdAt
@@ -397,7 +422,7 @@ Game _convertGameRoundToGame(GameRound gameRound) {
     title: gameRound.title,
     description: gameRound.description,
     gameType: gameRound.type.toString().split('.').last.toUpperCase(),
-    gameMethod: gameRound.gameMethod,
+    category: gameRound.category,
     status: 'IN_PROGRESS',
     maxEntries: gameRound.maxParticipants,
     minEntries: 1,

@@ -11,18 +11,28 @@ class Game with _$Game {
     required String id,
     required String title,
     String? description,
-    String? gameType, // DAILY, SELECT, VIBE, PRIME
-    String? gameMethod, // GACHA, BLOCK_PICK (VIBE 타입에서 관리자 선택)
+    String? mainProductName,
+    String? gameType, // DAILY, SELECT, VIBE
+    String? category,
     String? status, // SCHEDULED, IN_PROGRESS, PAUSED, SETTLING, ENDED, FAILED
-    int? maxEntries,
-    int? minEntries,
     int? entryFee,
+    String? currency,
+    int? minEntries,
+    int? maxEntries,
+    int? maxEntriesPerUser,
     int? rewardPoint,
     int? gridRows,
     int? gridCols,
+    String? visibleFrom,
     String? startTime,
     String? endTime,
+    @Default(false) bool allowDuplicate,
+    @Default(false) bool enableNotification,
+    @Default(false) bool isRecommended,
+    @Default(false) bool hasInstantPrize,
     String? customRules,
+    @Default(false) bool autoEndOnMax,
+    @Default(false) bool autoEndOnTime,
     String? onchainTxHash,
     String? onchainContractAddr,
     String? createdAt,
@@ -76,13 +86,16 @@ extension GameX on Game {
 
     // 첫 번째 상품의 이미지 사용
     String imageUrl = '';
-    String category = 'Digital';
+    // Game의 category 필드를 우선 사용, 없으면 상품 카테고리, 기본값 'Digital'
+    String productCategory = this.category ?? 'Digital';
     int originalPrice = 0;
 
     if (gameProducts != null && gameProducts!.isNotEmpty) {
       final product = gameProducts!.first.product;
       imageUrl = product.defaultImage ?? product.imageUrl ?? '';
-      category = product.category ?? 'Digital';
+      if (this.category == null) {
+        productCategory = product.category ?? 'Digital';
+      }
       originalPrice = product.originalPrice ?? product.price ?? 0;
 
       // 이미지 URL 디버깅
@@ -129,12 +142,12 @@ extension GameX on Game {
       timeLeft: timeLeft,
       type: type,
       status: gameStatus,
-      category: category,
+      category: productCategory,
       gridSize: null, // 정사각형이 아니므로 null
       gridWidth: gridCols,
       gridHeight: gridRows,
       vibeImageUrl: null,
-      gameMethod: gameMethod,
+      gameMethod: null, // 스키마에서 제거됨
     );
   }
 
@@ -222,6 +235,7 @@ class GameItem with _$GameItem {
     required String startTime,
     required String endTime,
     required bool isRecommended,
+    @Default(false) bool hasInstantPrize,
     String? onchainTxHash,
     String? onchainContractAddr,
     required String createdAt,

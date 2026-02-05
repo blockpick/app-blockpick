@@ -24,21 +24,30 @@ mixin _$Game {
   String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
+  String? get mainProductName => throw _privateConstructorUsedError;
   String? get gameType =>
-      throw _privateConstructorUsedError; // DAILY, SELECT, VIBE, PRIME
-  String? get gameMethod =>
-      throw _privateConstructorUsedError; // GACHA, BLOCK_PICK (VIBE 타입에서 관리자 선택)
+      throw _privateConstructorUsedError; // DAILY, SELECT, VIBE
+  String? get category => throw _privateConstructorUsedError;
   String? get status =>
       throw _privateConstructorUsedError; // SCHEDULED, IN_PROGRESS, PAUSED, SETTLING, ENDED, FAILED
-  int? get maxEntries => throw _privateConstructorUsedError;
-  int? get minEntries => throw _privateConstructorUsedError;
   int? get entryFee => throw _privateConstructorUsedError;
+  String? get currency => throw _privateConstructorUsedError;
+  int? get minEntries => throw _privateConstructorUsedError;
+  int? get maxEntries => throw _privateConstructorUsedError;
+  int? get maxEntriesPerUser => throw _privateConstructorUsedError;
   int? get rewardPoint => throw _privateConstructorUsedError;
   int? get gridRows => throw _privateConstructorUsedError;
   int? get gridCols => throw _privateConstructorUsedError;
+  String? get visibleFrom => throw _privateConstructorUsedError;
   String? get startTime => throw _privateConstructorUsedError;
   String? get endTime => throw _privateConstructorUsedError;
+  bool get allowDuplicate => throw _privateConstructorUsedError;
+  bool get enableNotification => throw _privateConstructorUsedError;
+  bool get isRecommended => throw _privateConstructorUsedError;
+  bool get hasInstantPrize => throw _privateConstructorUsedError;
   String? get customRules => throw _privateConstructorUsedError;
+  bool get autoEndOnMax => throw _privateConstructorUsedError;
+  bool get autoEndOnTime => throw _privateConstructorUsedError;
   String? get onchainTxHash => throw _privateConstructorUsedError;
   String? get onchainContractAddr => throw _privateConstructorUsedError;
   String? get createdAt => throw _privateConstructorUsedError;
@@ -63,18 +72,28 @@ abstract class $GameCopyWith<$Res> {
     String id,
     String title,
     String? description,
+    String? mainProductName,
     String? gameType,
-    String? gameMethod,
+    String? category,
     String? status,
-    int? maxEntries,
-    int? minEntries,
     int? entryFee,
+    String? currency,
+    int? minEntries,
+    int? maxEntries,
+    int? maxEntriesPerUser,
     int? rewardPoint,
     int? gridRows,
     int? gridCols,
+    String? visibleFrom,
     String? startTime,
     String? endTime,
+    bool allowDuplicate,
+    bool enableNotification,
+    bool isRecommended,
+    bool hasInstantPrize,
     String? customRules,
+    bool autoEndOnMax,
+    bool autoEndOnTime,
     String? onchainTxHash,
     String? onchainContractAddr,
     String? createdAt,
@@ -101,18 +120,28 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
     Object? id = null,
     Object? title = null,
     Object? description = freezed,
+    Object? mainProductName = freezed,
     Object? gameType = freezed,
-    Object? gameMethod = freezed,
+    Object? category = freezed,
     Object? status = freezed,
-    Object? maxEntries = freezed,
-    Object? minEntries = freezed,
     Object? entryFee = freezed,
+    Object? currency = freezed,
+    Object? minEntries = freezed,
+    Object? maxEntries = freezed,
+    Object? maxEntriesPerUser = freezed,
     Object? rewardPoint = freezed,
     Object? gridRows = freezed,
     Object? gridCols = freezed,
+    Object? visibleFrom = freezed,
     Object? startTime = freezed,
     Object? endTime = freezed,
+    Object? allowDuplicate = null,
+    Object? enableNotification = null,
+    Object? isRecommended = null,
+    Object? hasInstantPrize = null,
     Object? customRules = freezed,
+    Object? autoEndOnMax = null,
+    Object? autoEndOnTime = null,
     Object? onchainTxHash = freezed,
     Object? onchainContractAddr = freezed,
     Object? createdAt = freezed,
@@ -133,29 +162,41 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
                 ? _value.description
                 : description // ignore: cast_nullable_to_non_nullable
                       as String?,
+            mainProductName: freezed == mainProductName
+                ? _value.mainProductName
+                : mainProductName // ignore: cast_nullable_to_non_nullable
+                      as String?,
             gameType: freezed == gameType
                 ? _value.gameType
                 : gameType // ignore: cast_nullable_to_non_nullable
                       as String?,
-            gameMethod: freezed == gameMethod
-                ? _value.gameMethod
-                : gameMethod // ignore: cast_nullable_to_non_nullable
+            category: freezed == category
+                ? _value.category
+                : category // ignore: cast_nullable_to_non_nullable
                       as String?,
             status: freezed == status
                 ? _value.status
                 : status // ignore: cast_nullable_to_non_nullable
                       as String?,
-            maxEntries: freezed == maxEntries
-                ? _value.maxEntries
-                : maxEntries // ignore: cast_nullable_to_non_nullable
+            entryFee: freezed == entryFee
+                ? _value.entryFee
+                : entryFee // ignore: cast_nullable_to_non_nullable
                       as int?,
+            currency: freezed == currency
+                ? _value.currency
+                : currency // ignore: cast_nullable_to_non_nullable
+                      as String?,
             minEntries: freezed == minEntries
                 ? _value.minEntries
                 : minEntries // ignore: cast_nullable_to_non_nullable
                       as int?,
-            entryFee: freezed == entryFee
-                ? _value.entryFee
-                : entryFee // ignore: cast_nullable_to_non_nullable
+            maxEntries: freezed == maxEntries
+                ? _value.maxEntries
+                : maxEntries // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            maxEntriesPerUser: freezed == maxEntriesPerUser
+                ? _value.maxEntriesPerUser
+                : maxEntriesPerUser // ignore: cast_nullable_to_non_nullable
                       as int?,
             rewardPoint: freezed == rewardPoint
                 ? _value.rewardPoint
@@ -169,6 +210,10 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
                 ? _value.gridCols
                 : gridCols // ignore: cast_nullable_to_non_nullable
                       as int?,
+            visibleFrom: freezed == visibleFrom
+                ? _value.visibleFrom
+                : visibleFrom // ignore: cast_nullable_to_non_nullable
+                      as String?,
             startTime: freezed == startTime
                 ? _value.startTime
                 : startTime // ignore: cast_nullable_to_non_nullable
@@ -177,10 +222,34 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
                 ? _value.endTime
                 : endTime // ignore: cast_nullable_to_non_nullable
                       as String?,
+            allowDuplicate: null == allowDuplicate
+                ? _value.allowDuplicate
+                : allowDuplicate // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            enableNotification: null == enableNotification
+                ? _value.enableNotification
+                : enableNotification // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            isRecommended: null == isRecommended
+                ? _value.isRecommended
+                : isRecommended // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            hasInstantPrize: null == hasInstantPrize
+                ? _value.hasInstantPrize
+                : hasInstantPrize // ignore: cast_nullable_to_non_nullable
+                      as bool,
             customRules: freezed == customRules
                 ? _value.customRules
                 : customRules // ignore: cast_nullable_to_non_nullable
                       as String?,
+            autoEndOnMax: null == autoEndOnMax
+                ? _value.autoEndOnMax
+                : autoEndOnMax // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            autoEndOnTime: null == autoEndOnTime
+                ? _value.autoEndOnTime
+                : autoEndOnTime // ignore: cast_nullable_to_non_nullable
+                      as bool,
             onchainTxHash: freezed == onchainTxHash
                 ? _value.onchainTxHash
                 : onchainTxHash // ignore: cast_nullable_to_non_nullable
@@ -219,18 +288,28 @@ abstract class _$$GameImplCopyWith<$Res> implements $GameCopyWith<$Res> {
     String id,
     String title,
     String? description,
+    String? mainProductName,
     String? gameType,
-    String? gameMethod,
+    String? category,
     String? status,
-    int? maxEntries,
-    int? minEntries,
     int? entryFee,
+    String? currency,
+    int? minEntries,
+    int? maxEntries,
+    int? maxEntriesPerUser,
     int? rewardPoint,
     int? gridRows,
     int? gridCols,
+    String? visibleFrom,
     String? startTime,
     String? endTime,
+    bool allowDuplicate,
+    bool enableNotification,
+    bool isRecommended,
+    bool hasInstantPrize,
     String? customRules,
+    bool autoEndOnMax,
+    bool autoEndOnTime,
     String? onchainTxHash,
     String? onchainContractAddr,
     String? createdAt,
@@ -254,18 +333,28 @@ class __$$GameImplCopyWithImpl<$Res>
     Object? id = null,
     Object? title = null,
     Object? description = freezed,
+    Object? mainProductName = freezed,
     Object? gameType = freezed,
-    Object? gameMethod = freezed,
+    Object? category = freezed,
     Object? status = freezed,
-    Object? maxEntries = freezed,
-    Object? minEntries = freezed,
     Object? entryFee = freezed,
+    Object? currency = freezed,
+    Object? minEntries = freezed,
+    Object? maxEntries = freezed,
+    Object? maxEntriesPerUser = freezed,
     Object? rewardPoint = freezed,
     Object? gridRows = freezed,
     Object? gridCols = freezed,
+    Object? visibleFrom = freezed,
     Object? startTime = freezed,
     Object? endTime = freezed,
+    Object? allowDuplicate = null,
+    Object? enableNotification = null,
+    Object? isRecommended = null,
+    Object? hasInstantPrize = null,
     Object? customRules = freezed,
+    Object? autoEndOnMax = null,
+    Object? autoEndOnTime = null,
     Object? onchainTxHash = freezed,
     Object? onchainContractAddr = freezed,
     Object? createdAt = freezed,
@@ -286,29 +375,41 @@ class __$$GameImplCopyWithImpl<$Res>
             ? _value.description
             : description // ignore: cast_nullable_to_non_nullable
                   as String?,
+        mainProductName: freezed == mainProductName
+            ? _value.mainProductName
+            : mainProductName // ignore: cast_nullable_to_non_nullable
+                  as String?,
         gameType: freezed == gameType
             ? _value.gameType
             : gameType // ignore: cast_nullable_to_non_nullable
                   as String?,
-        gameMethod: freezed == gameMethod
-            ? _value.gameMethod
-            : gameMethod // ignore: cast_nullable_to_non_nullable
+        category: freezed == category
+            ? _value.category
+            : category // ignore: cast_nullable_to_non_nullable
                   as String?,
         status: freezed == status
             ? _value.status
             : status // ignore: cast_nullable_to_non_nullable
                   as String?,
-        maxEntries: freezed == maxEntries
-            ? _value.maxEntries
-            : maxEntries // ignore: cast_nullable_to_non_nullable
+        entryFee: freezed == entryFee
+            ? _value.entryFee
+            : entryFee // ignore: cast_nullable_to_non_nullable
                   as int?,
+        currency: freezed == currency
+            ? _value.currency
+            : currency // ignore: cast_nullable_to_non_nullable
+                  as String?,
         minEntries: freezed == minEntries
             ? _value.minEntries
             : minEntries // ignore: cast_nullable_to_non_nullable
                   as int?,
-        entryFee: freezed == entryFee
-            ? _value.entryFee
-            : entryFee // ignore: cast_nullable_to_non_nullable
+        maxEntries: freezed == maxEntries
+            ? _value.maxEntries
+            : maxEntries // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        maxEntriesPerUser: freezed == maxEntriesPerUser
+            ? _value.maxEntriesPerUser
+            : maxEntriesPerUser // ignore: cast_nullable_to_non_nullable
                   as int?,
         rewardPoint: freezed == rewardPoint
             ? _value.rewardPoint
@@ -322,6 +423,10 @@ class __$$GameImplCopyWithImpl<$Res>
             ? _value.gridCols
             : gridCols // ignore: cast_nullable_to_non_nullable
                   as int?,
+        visibleFrom: freezed == visibleFrom
+            ? _value.visibleFrom
+            : visibleFrom // ignore: cast_nullable_to_non_nullable
+                  as String?,
         startTime: freezed == startTime
             ? _value.startTime
             : startTime // ignore: cast_nullable_to_non_nullable
@@ -330,10 +435,34 @@ class __$$GameImplCopyWithImpl<$Res>
             ? _value.endTime
             : endTime // ignore: cast_nullable_to_non_nullable
                   as String?,
+        allowDuplicate: null == allowDuplicate
+            ? _value.allowDuplicate
+            : allowDuplicate // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        enableNotification: null == enableNotification
+            ? _value.enableNotification
+            : enableNotification // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        isRecommended: null == isRecommended
+            ? _value.isRecommended
+            : isRecommended // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        hasInstantPrize: null == hasInstantPrize
+            ? _value.hasInstantPrize
+            : hasInstantPrize // ignore: cast_nullable_to_non_nullable
+                  as bool,
         customRules: freezed == customRules
             ? _value.customRules
             : customRules // ignore: cast_nullable_to_non_nullable
                   as String?,
+        autoEndOnMax: null == autoEndOnMax
+            ? _value.autoEndOnMax
+            : autoEndOnMax // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        autoEndOnTime: null == autoEndOnTime
+            ? _value.autoEndOnTime
+            : autoEndOnTime // ignore: cast_nullable_to_non_nullable
+                  as bool,
         onchainTxHash: freezed == onchainTxHash
             ? _value.onchainTxHash
             : onchainTxHash // ignore: cast_nullable_to_non_nullable
@@ -366,18 +495,28 @@ class _$GameImpl implements _Game {
     required this.id,
     required this.title,
     this.description,
+    this.mainProductName,
     this.gameType,
-    this.gameMethod,
+    this.category,
     this.status,
-    this.maxEntries,
-    this.minEntries,
     this.entryFee,
+    this.currency,
+    this.minEntries,
+    this.maxEntries,
+    this.maxEntriesPerUser,
     this.rewardPoint,
     this.gridRows,
     this.gridCols,
+    this.visibleFrom,
     this.startTime,
     this.endTime,
+    this.allowDuplicate = false,
+    this.enableNotification = false,
+    this.isRecommended = false,
+    this.hasInstantPrize = false,
     this.customRules,
+    this.autoEndOnMax = false,
+    this.autoEndOnTime = false,
     this.onchainTxHash,
     this.onchainContractAddr,
     this.createdAt,
@@ -395,20 +534,25 @@ class _$GameImpl implements _Game {
   @override
   final String? description;
   @override
-  final String? gameType;
-  // DAILY, SELECT, VIBE, PRIME
+  final String? mainProductName;
   @override
-  final String? gameMethod;
-  // GACHA, BLOCK_PICK (VIBE 타입에서 관리자 선택)
+  final String? gameType;
+  // DAILY, SELECT, VIBE
+  @override
+  final String? category;
   @override
   final String? status;
   // SCHEDULED, IN_PROGRESS, PAUSED, SETTLING, ENDED, FAILED
   @override
-  final int? maxEntries;
+  final int? entryFee;
+  @override
+  final String? currency;
   @override
   final int? minEntries;
   @override
-  final int? entryFee;
+  final int? maxEntries;
+  @override
+  final int? maxEntriesPerUser;
   @override
   final int? rewardPoint;
   @override
@@ -416,11 +560,31 @@ class _$GameImpl implements _Game {
   @override
   final int? gridCols;
   @override
+  final String? visibleFrom;
+  @override
   final String? startTime;
   @override
   final String? endTime;
   @override
+  @JsonKey()
+  final bool allowDuplicate;
+  @override
+  @JsonKey()
+  final bool enableNotification;
+  @override
+  @JsonKey()
+  final bool isRecommended;
+  @override
+  @JsonKey()
+  final bool hasInstantPrize;
+  @override
   final String? customRules;
+  @override
+  @JsonKey()
+  final bool autoEndOnMax;
+  @override
+  @JsonKey()
+  final bool autoEndOnTime;
   @override
   final String? onchainTxHash;
   @override
@@ -442,7 +606,7 @@ class _$GameImpl implements _Game {
 
   @override
   String toString() {
-    return 'Game(id: $id, title: $title, description: $description, gameType: $gameType, gameMethod: $gameMethod, status: $status, maxEntries: $maxEntries, minEntries: $minEntries, entryFee: $entryFee, rewardPoint: $rewardPoint, gridRows: $gridRows, gridCols: $gridCols, startTime: $startTime, endTime: $endTime, customRules: $customRules, onchainTxHash: $onchainTxHash, onchainContractAddr: $onchainContractAddr, createdAt: $createdAt, updatedAt: $updatedAt, gameProducts: $gameProducts)';
+    return 'Game(id: $id, title: $title, description: $description, mainProductName: $mainProductName, gameType: $gameType, category: $category, status: $status, entryFee: $entryFee, currency: $currency, minEntries: $minEntries, maxEntries: $maxEntries, maxEntriesPerUser: $maxEntriesPerUser, rewardPoint: $rewardPoint, gridRows: $gridRows, gridCols: $gridCols, visibleFrom: $visibleFrom, startTime: $startTime, endTime: $endTime, allowDuplicate: $allowDuplicate, enableNotification: $enableNotification, isRecommended: $isRecommended, hasInstantPrize: $hasInstantPrize, customRules: $customRules, autoEndOnMax: $autoEndOnMax, autoEndOnTime: $autoEndOnTime, onchainTxHash: $onchainTxHash, onchainContractAddr: $onchainContractAddr, createdAt: $createdAt, updatedAt: $updatedAt, gameProducts: $gameProducts)';
   }
 
   @override
@@ -454,28 +618,48 @@ class _$GameImpl implements _Game {
             (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description) &&
+            (identical(other.mainProductName, mainProductName) ||
+                other.mainProductName == mainProductName) &&
             (identical(other.gameType, gameType) ||
                 other.gameType == gameType) &&
-            (identical(other.gameMethod, gameMethod) ||
-                other.gameMethod == gameMethod) &&
+            (identical(other.category, category) ||
+                other.category == category) &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.maxEntries, maxEntries) ||
-                other.maxEntries == maxEntries) &&
-            (identical(other.minEntries, minEntries) ||
-                other.minEntries == minEntries) &&
             (identical(other.entryFee, entryFee) ||
                 other.entryFee == entryFee) &&
+            (identical(other.currency, currency) ||
+                other.currency == currency) &&
+            (identical(other.minEntries, minEntries) ||
+                other.minEntries == minEntries) &&
+            (identical(other.maxEntries, maxEntries) ||
+                other.maxEntries == maxEntries) &&
+            (identical(other.maxEntriesPerUser, maxEntriesPerUser) ||
+                other.maxEntriesPerUser == maxEntriesPerUser) &&
             (identical(other.rewardPoint, rewardPoint) ||
                 other.rewardPoint == rewardPoint) &&
             (identical(other.gridRows, gridRows) ||
                 other.gridRows == gridRows) &&
             (identical(other.gridCols, gridCols) ||
                 other.gridCols == gridCols) &&
+            (identical(other.visibleFrom, visibleFrom) ||
+                other.visibleFrom == visibleFrom) &&
             (identical(other.startTime, startTime) ||
                 other.startTime == startTime) &&
             (identical(other.endTime, endTime) || other.endTime == endTime) &&
+            (identical(other.allowDuplicate, allowDuplicate) ||
+                other.allowDuplicate == allowDuplicate) &&
+            (identical(other.enableNotification, enableNotification) ||
+                other.enableNotification == enableNotification) &&
+            (identical(other.isRecommended, isRecommended) ||
+                other.isRecommended == isRecommended) &&
+            (identical(other.hasInstantPrize, hasInstantPrize) ||
+                other.hasInstantPrize == hasInstantPrize) &&
             (identical(other.customRules, customRules) ||
                 other.customRules == customRules) &&
+            (identical(other.autoEndOnMax, autoEndOnMax) ||
+                other.autoEndOnMax == autoEndOnMax) &&
+            (identical(other.autoEndOnTime, autoEndOnTime) ||
+                other.autoEndOnTime == autoEndOnTime) &&
             (identical(other.onchainTxHash, onchainTxHash) ||
                 other.onchainTxHash == onchainTxHash) &&
             (identical(other.onchainContractAddr, onchainContractAddr) ||
@@ -497,18 +681,28 @@ class _$GameImpl implements _Game {
     id,
     title,
     description,
+    mainProductName,
     gameType,
-    gameMethod,
+    category,
     status,
-    maxEntries,
-    minEntries,
     entryFee,
+    currency,
+    minEntries,
+    maxEntries,
+    maxEntriesPerUser,
     rewardPoint,
     gridRows,
     gridCols,
+    visibleFrom,
     startTime,
     endTime,
+    allowDuplicate,
+    enableNotification,
+    isRecommended,
+    hasInstantPrize,
     customRules,
+    autoEndOnMax,
+    autoEndOnTime,
     onchainTxHash,
     onchainContractAddr,
     createdAt,
@@ -535,18 +729,28 @@ abstract class _Game implements Game {
     required final String id,
     required final String title,
     final String? description,
+    final String? mainProductName,
     final String? gameType,
-    final String? gameMethod,
+    final String? category,
     final String? status,
-    final int? maxEntries,
-    final int? minEntries,
     final int? entryFee,
+    final String? currency,
+    final int? minEntries,
+    final int? maxEntries,
+    final int? maxEntriesPerUser,
     final int? rewardPoint,
     final int? gridRows,
     final int? gridCols,
+    final String? visibleFrom,
     final String? startTime,
     final String? endTime,
+    final bool allowDuplicate,
+    final bool enableNotification,
+    final bool isRecommended,
+    final bool hasInstantPrize,
     final String? customRules,
+    final bool autoEndOnMax,
+    final bool autoEndOnTime,
     final String? onchainTxHash,
     final String? onchainContractAddr,
     final String? createdAt,
@@ -563,17 +767,23 @@ abstract class _Game implements Game {
   @override
   String? get description;
   @override
-  String? get gameType; // DAILY, SELECT, VIBE, PRIME
+  String? get mainProductName;
   @override
-  String? get gameMethod; // GACHA, BLOCK_PICK (VIBE 타입에서 관리자 선택)
+  String? get gameType; // DAILY, SELECT, VIBE
+  @override
+  String? get category;
   @override
   String? get status; // SCHEDULED, IN_PROGRESS, PAUSED, SETTLING, ENDED, FAILED
   @override
-  int? get maxEntries;
+  int? get entryFee;
+  @override
+  String? get currency;
   @override
   int? get minEntries;
   @override
-  int? get entryFee;
+  int? get maxEntries;
+  @override
+  int? get maxEntriesPerUser;
   @override
   int? get rewardPoint;
   @override
@@ -581,11 +791,25 @@ abstract class _Game implements Game {
   @override
   int? get gridCols;
   @override
+  String? get visibleFrom;
+  @override
   String? get startTime;
   @override
   String? get endTime;
   @override
+  bool get allowDuplicate;
+  @override
+  bool get enableNotification;
+  @override
+  bool get isRecommended;
+  @override
+  bool get hasInstantPrize;
+  @override
   String? get customRules;
+  @override
+  bool get autoEndOnMax;
+  @override
+  bool get autoEndOnTime;
   @override
   String? get onchainTxHash;
   @override
@@ -1361,6 +1585,7 @@ mixin _$GameItem {
   String get startTime => throw _privateConstructorUsedError;
   String get endTime => throw _privateConstructorUsedError;
   bool get isRecommended => throw _privateConstructorUsedError;
+  bool get hasInstantPrize => throw _privateConstructorUsedError;
   String? get onchainTxHash => throw _privateConstructorUsedError;
   String? get onchainContractAddr => throw _privateConstructorUsedError;
   String get createdAt => throw _privateConstructorUsedError;
@@ -1400,6 +1625,7 @@ abstract class $GameItemCopyWith<$Res> {
     String startTime,
     String endTime,
     bool isRecommended,
+    bool hasInstantPrize,
     String? onchainTxHash,
     String? onchainContractAddr,
     String createdAt,
@@ -1440,6 +1666,7 @@ class _$GameItemCopyWithImpl<$Res, $Val extends GameItem>
     Object? startTime = null,
     Object? endTime = null,
     Object? isRecommended = null,
+    Object? hasInstantPrize = null,
     Object? onchainTxHash = freezed,
     Object? onchainContractAddr = freezed,
     Object? createdAt = null,
@@ -1519,6 +1746,10 @@ class _$GameItemCopyWithImpl<$Res, $Val extends GameItem>
                 ? _value.isRecommended
                 : isRecommended // ignore: cast_nullable_to_non_nullable
                       as bool,
+            hasInstantPrize: null == hasInstantPrize
+                ? _value.hasInstantPrize
+                : hasInstantPrize // ignore: cast_nullable_to_non_nullable
+                      as bool,
             onchainTxHash: freezed == onchainTxHash
                 ? _value.onchainTxHash
                 : onchainTxHash // ignore: cast_nullable_to_non_nullable
@@ -1569,6 +1800,7 @@ abstract class _$$GameItemImplCopyWith<$Res>
     String startTime,
     String endTime,
     bool isRecommended,
+    bool hasInstantPrize,
     String? onchainTxHash,
     String? onchainContractAddr,
     String createdAt,
@@ -1608,6 +1840,7 @@ class __$$GameItemImplCopyWithImpl<$Res>
     Object? startTime = null,
     Object? endTime = null,
     Object? isRecommended = null,
+    Object? hasInstantPrize = null,
     Object? onchainTxHash = freezed,
     Object? onchainContractAddr = freezed,
     Object? createdAt = null,
@@ -1687,6 +1920,10 @@ class __$$GameItemImplCopyWithImpl<$Res>
             ? _value.isRecommended
             : isRecommended // ignore: cast_nullable_to_non_nullable
                   as bool,
+        hasInstantPrize: null == hasInstantPrize
+            ? _value.hasInstantPrize
+            : hasInstantPrize // ignore: cast_nullable_to_non_nullable
+                  as bool,
         onchainTxHash: freezed == onchainTxHash
             ? _value.onchainTxHash
             : onchainTxHash // ignore: cast_nullable_to_non_nullable
@@ -1730,6 +1967,7 @@ class _$GameItemImpl implements _GameItem {
     required this.startTime,
     required this.endTime,
     required this.isRecommended,
+    this.hasInstantPrize = false,
     this.onchainTxHash,
     this.onchainContractAddr,
     required this.createdAt,
@@ -1777,6 +2015,9 @@ class _$GameItemImpl implements _GameItem {
   @override
   final bool isRecommended;
   @override
+  @JsonKey()
+  final bool hasInstantPrize;
+  @override
   final String? onchainTxHash;
   @override
   final String? onchainContractAddr;
@@ -1793,7 +2034,7 @@ class _$GameItemImpl implements _GameItem {
 
   @override
   String toString() {
-    return 'GameItem(id: $id, title: $title, description: $description, type: $type, category: $category, status: $status, entryFee: $entryFee, currency: $currency, minEntries: $minEntries, maxEntries: $maxEntries, currentEntries: $currentEntries, maxEntriesPerUser: $maxEntriesPerUser, rewardPoint: $rewardPoint, gridRows: $gridRows, gridCols: $gridCols, startTime: $startTime, endTime: $endTime, isRecommended: $isRecommended, onchainTxHash: $onchainTxHash, onchainContractAddr: $onchainContractAddr, createdAt: $createdAt, gameProducts: $gameProducts)';
+    return 'GameItem(id: $id, title: $title, description: $description, type: $type, category: $category, status: $status, entryFee: $entryFee, currency: $currency, minEntries: $minEntries, maxEntries: $maxEntries, currentEntries: $currentEntries, maxEntriesPerUser: $maxEntriesPerUser, rewardPoint: $rewardPoint, gridRows: $gridRows, gridCols: $gridCols, startTime: $startTime, endTime: $endTime, isRecommended: $isRecommended, hasInstantPrize: $hasInstantPrize, onchainTxHash: $onchainTxHash, onchainContractAddr: $onchainContractAddr, createdAt: $createdAt, gameProducts: $gameProducts)';
   }
 
   @override
@@ -1832,6 +2073,8 @@ class _$GameItemImpl implements _GameItem {
             (identical(other.endTime, endTime) || other.endTime == endTime) &&
             (identical(other.isRecommended, isRecommended) ||
                 other.isRecommended == isRecommended) &&
+            (identical(other.hasInstantPrize, hasInstantPrize) ||
+                other.hasInstantPrize == hasInstantPrize) &&
             (identical(other.onchainTxHash, onchainTxHash) ||
                 other.onchainTxHash == onchainTxHash) &&
             (identical(other.onchainContractAddr, onchainContractAddr) ||
@@ -1866,6 +2109,7 @@ class _$GameItemImpl implements _GameItem {
     startTime,
     endTime,
     isRecommended,
+    hasInstantPrize,
     onchainTxHash,
     onchainContractAddr,
     createdAt,
@@ -1906,6 +2150,7 @@ abstract class _GameItem implements GameItem {
     required final String startTime,
     required final String endTime,
     required final bool isRecommended,
+    final bool hasInstantPrize,
     final String? onchainTxHash,
     final String? onchainContractAddr,
     required final String createdAt,
@@ -1951,6 +2196,8 @@ abstract class _GameItem implements GameItem {
   String get endTime;
   @override
   bool get isRecommended;
+  @override
+  bool get hasInstantPrize;
   @override
   String? get onchainTxHash;
   @override

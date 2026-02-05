@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../providers/game_provider.dart';
-import '../optimal/optimal_game_screen.dart';
 import 'gacha_game_screen.dart';
 import 'game_screen.dart';
 
@@ -11,8 +10,7 @@ import 'game_screen.dart';
 ///
 /// - DAILY  → GachaGameScreen (가차방식)
 /// - SELECT → GameScreen (블록선택)
-/// - VIBE   → gameMethod에 따라 분기 (기본: 가차)
-/// - PRIME  → OptimalGameScreen (최저가 입찰)
+/// - VIBE   → GachaGameScreen (가차방식)
 class GameDispatcherScreen extends ConsumerWidget {
   final String gameId;
 
@@ -55,12 +53,7 @@ class GameDispatcherScreen extends ConsumerWidget {
           case 'SELECT':
             return GameScreen(gameId: gameId);
           case 'VIBE':
-            if (game.gameMethod?.toUpperCase() == 'BLOCK_PICK') {
-              return GameScreen(gameId: gameId);
-            }
             return GachaGameScreen(gameId: gameId);
-          case 'PRIME':
-            return OptimalGameScreen(gameId: gameId);
           case 'DAILY':
           default:
             return GachaGameScreen(gameId: gameId);

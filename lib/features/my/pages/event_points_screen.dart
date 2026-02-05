@@ -15,7 +15,7 @@ class EventPointsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authProvider);
     final user = authState.valueOrNull?.user;
-    final balance = user?.balance?.toInt() ?? 0;
+    final balance = user?.eventPoint.toInt() ?? 0;
     final formatter = NumberFormat('#,###');
 
     // TODO: 실제 API 연동

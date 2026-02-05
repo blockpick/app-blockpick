@@ -246,7 +246,7 @@ class MyScreen extends ConsumerWidget {
   /// 참여 내역 & 이벤트 포인트 카드
   Widget _buildStatsCards(BuildContext context, dynamic user) {
     final formatter = NumberFormat('#,###');
-    final eventPoints = user?.balance?.toInt() ?? 0;
+    final eventPoints = user?.eventPoint.toInt() ?? 0;
     final participationCount = 4; // TODO: 실제 참여 횟수 데이터 연결
 
     return Row(

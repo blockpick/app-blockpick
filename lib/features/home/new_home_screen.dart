@@ -230,7 +230,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
 
   /// ② 이벤트 포인트 버튼
   Widget _buildEventPointButton(bool isAuthenticated, dynamic user) {
-    final points = user?.point ?? 0;
+    final points = user?.eventPoint.toInt() ?? 0;
 
     return SliverToBoxAdapter(
       child: GestureDetector(

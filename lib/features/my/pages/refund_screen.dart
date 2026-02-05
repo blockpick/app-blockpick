@@ -69,7 +69,7 @@ class _RefundScreenState extends ConsumerState<RefundScreen> {
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
-    final balance = authState.valueOrNull?.user?.balance?.toInt() ?? 0;
+    final balance = authState.valueOrNull?.user?.shoppingCash.toInt() ?? 0;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark.copyWith(

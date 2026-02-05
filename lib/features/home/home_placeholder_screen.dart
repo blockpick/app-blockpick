@@ -24,7 +24,7 @@ class HomePlaceholderScreen extends ConsumerWidget {
 
     // 사용자 실제 데이터로 EventCashModel 생성
     final eventCashData = EventCashModel(
-      totalAmount: user?.balance ?? 0.0,
+      totalAmount: user?.eventPoint ?? 0.0,
       currency: 'KRW',
       todayChange: 0.0, // TODO: 백엔드에서 제공되면 변경
       todayChangePercent: 0.0, // TODO: 백엔드에서 제공되면 변경

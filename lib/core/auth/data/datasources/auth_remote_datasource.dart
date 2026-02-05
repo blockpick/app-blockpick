@@ -20,6 +20,17 @@ class AuthRemoteDataSource {
           id
           email
           nickname
+          profileImageUrl
+          shoppingCash
+          eventPoint
+          participationPoint
+          isPushNotification
+          isMarketingNotification
+          isBan
+          userRole
+          isSocialAccount
+          socialProvider
+          socialName
         }
       }
     }
@@ -58,7 +69,6 @@ class AuthRemoteDataSource {
           id
           email
           nickname
-          phoneNumber
         }
       }
     }
@@ -88,6 +98,17 @@ class AuthRemoteDataSource {
           id
           email
           nickname
+          profileImageUrl
+          shoppingCash
+          eventPoint
+          participationPoint
+          isPushNotification
+          isMarketingNotification
+          isBan
+          userRole
+          isSocialAccount
+          socialProvider
+          socialName
         }
       }
     }
@@ -128,6 +149,17 @@ class AuthRemoteDataSource {
           id
           email
           nickname
+          profileImageUrl
+          shoppingCash
+          eventPoint
+          participationPoint
+          isPushNotification
+          isMarketingNotification
+          isBan
+          userRole
+          isSocialAccount
+          socialProvider
+          socialName
         }
       }
     }
@@ -144,6 +176,17 @@ class AuthRemoteDataSource {
           id
           email
           nickname
+          profileImageUrl
+          shoppingCash
+          eventPoint
+          participationPoint
+          isPushNotification
+          isMarketingNotification
+          isBan
+          userRole
+          isSocialAccount
+          socialProvider
+          socialName
         }
       }
     }

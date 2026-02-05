@@ -133,7 +133,8 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
   Widget _buildMenuList(BuildContext context, dynamic user) {
     final email = user?.email ?? '';
     // 휴대폰 번호 마스킹 처리
-    final phone = _maskPhoneNumber(user?.phone);
+    // TODO: 휴대폰 번호는 User 스키마에서 제거됨 - 별도 API 필요
+    final phone = _maskPhoneNumber(null);
 
     return Column(
       children: [
