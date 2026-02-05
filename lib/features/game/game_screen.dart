@@ -516,31 +516,6 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       );
     }
 
-    // 그리드 - 블록 선택 실습
-    if (_gridKey.currentContext != null) {
-      targets.add(
-        TargetFocus(
-          identify: "grid_select",
-          keyTarget: _gridKey,
-          alignSkip: Alignment.topRight,
-          shape: ShapeLightFocus.RRect,
-          enableOverlayTab: true, // 오버레이를 통해 탭 가능하게
-          contents: [
-            TargetContent(
-              align: ContentAlign.bottom,
-              builder: (context, controller) {
-                return _tutorialContent(
-                  '블록 선택 실습',
-                  '화면 중앙에 노란색으로 표시된 셀을 탭해보세요!\n이 셀을 선택하면 다음 단계로 진행됩니다.',
-                  LucideIcons.target,
-                );
-              },
-            ),
-          ],
-        ),
-      );
-    }
-
     // HUD
     if (_hudKey.currentContext != null) {
       targets.add(
