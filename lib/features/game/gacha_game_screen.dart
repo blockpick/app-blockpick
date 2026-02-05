@@ -1121,6 +1121,24 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
             onTap: _showGuideLineModal,
           ),
           const Spacer(),
+          // 튜토리얼 버튼
+          GestureDetector(
+            onTap: _showTutorial,
+            child: Container(
+              width: 28,
+              height: 28,
+              decoration: BoxDecoration(
+                color: AppColors.gray100,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.school_outlined,
+                size: 16,
+                color: AppColors.gray500,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
           // 정보 버튼
           GestureDetector(
             onTap: _showHelpSheet,
