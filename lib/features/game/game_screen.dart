@@ -68,6 +68,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   final GlobalKey _zoomControlKey = GlobalKey();
   final GlobalKey _gridKey = GlobalKey();
   final GlobalKey _hudKey = GlobalKey();
+  final GlobalKey _tutorialBlockKey = GlobalKey();
 
   // 상품 선택 (SELECT 게임용)
   int _selectedProductIndex = 0;
@@ -394,19 +395,10 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
     final gridNotifier = ref.read(gridStateProvider(_gridConfig!).notifier);
 
-    // 그리드 중앙 근처의 블록을 목표로 설정 (예: 50행 50열)
     final targetRow = (_gridHeight / 2).floor();
     final targetCol = (_gridWidth / 2).floor();
-    final targetBlock = BlockModel.fromPosition(
-      targetRow,
-      targetCol,
-      state: BlockState.selected,
-    );
 
     debugPrint('🎯 Tutorial zoom-in to block: Row $targetRow, Col $targetCol');
-
-    // 튜토리얼 목표 블록 설정
-    gridNotifier.setTutorialTargetBlock(targetBlock);
 
     // 그리드 위젯의 실제 렌더박스 가져오기
     final RenderBox? gridBox =
@@ -464,6 +456,20 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
   /// 튜토리얼 표시
   void _showTutorial() {
+    // 튜토리얼 시작 시 목표 블록을 미리 설정 (블록 위젯이 렌더링되어야 키가 유효)
+    if (_gridConfig != null) {
+      final targetRow = (_gridHeight / 2).floor();
+      final targetCol = (_gridWidth / 2).floor();
+      final targetBlock = BlockModel.fromPosition(
+        targetRow,
+        targetCol,
+        state: BlockState.selected,
+      );
+      ref
+          .read(gridStateProvider(_gridConfig!).notifier)
+          .setTutorialTargetBlock(targetBlock);
+    }
+
     final targets = <TargetFocus>[];
 
     // 미니맵
@@ -516,6 +522,31 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       );
     }
 
+    // 블록 선택 (특정 블록 셀을 스포트라이트)
+    // 줌 단계 완료 시 자동 줌인 후 표시됨 → _tutorialBlockKey에 해당 블록 위젯이 할당됨
+    targets.add(
+      TargetFocus(
+        identify: "block_select",
+        keyTarget: _tutorialBlockKey,
+        alignSkip: Alignment.topRight,
+        shape: ShapeLightFocus.RRect,
+        radius: 8,
+        enableOverlayTab: true,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return _tutorialContent(
+                '블록 선택',
+                '이 블록을 탭하여 선택해보세요!\n원하는 블록을 골라 게임에 참가합니다.',
+                LucideIcons.fingerprint,
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
     // HUD
     if (_hudKey.currentContext != null) {
       targets.add(
@@ -548,7 +579,12 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       colorShadow: AppColors.darkBlue,
       paddingFocus: 10,
       opacityShadow: 0.8,
-      onClickTarget: (target) {},
+      onClickTarget: (target) {
+        // 줌 컨트롤 단계 완료 → 즉시 줌인하여 목표 블록으로 이동
+        if (target.identify == "zoom") {
+          _performTutorialZoomIn();
+        }
+      },
       onFinish: () async {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('game_tutorial_completed', true);
@@ -743,6 +779,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                   gridWidth: _gridWidth,
                   gridHeight: _gridHeight,
                   backgroundImagePath: backgroundImagePath,
+                  tutorialBlockKey: _tutorialBlockKey,
                   onBlockTap: (block) {
                     debugPrint('Block tapped: ${block.row}, ${block.col}');
 

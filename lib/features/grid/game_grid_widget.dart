@@ -32,6 +32,9 @@ class GameGridWidget extends ConsumerStatefulWidget {
   /// 배경 이미지 경로 (제품 이미지)
   final String? backgroundImagePath;
 
+  /// 튜토리얼 목표 블록에 할당할 GlobalKey (튜토리얼 스포트라이트용)
+  final GlobalKey? tutorialBlockKey;
+
   const GameGridWidget({
     super.key,
     required this.gameId,
@@ -39,6 +42,7 @@ class GameGridWidget extends ConsumerStatefulWidget {
     required this.gridHeight,
     this.onBlockTap,
     this.backgroundImagePath,
+    this.tutorialBlockKey,
   });
 
   @override
@@ -311,7 +315,7 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
 
       // 화면 밖 블록은 렌더링하지 않음
       if (x + cellSize >= 0 && x <= size.width && y + cellSize >= 0 && y <= size.height) {
-        // 튜토리얼 목표 블록은 깜빡이는 애니메이션 효과
+        // 튜토리얼 목표 블록 하이라이트 (스포트라이트 대상)
         icons.add(
           Positioned(
             left: x,
@@ -319,18 +323,27 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
             width: cellSize,
             height: cellSize,
             child: Container(
+              key: widget.tutorialBlockKey,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: Colors.yellow,
+                  color: AppColors.blue,
                   width: 3.0,
                 ),
-                color: Colors.yellow.withOpacity(0.3),
+                color: AppColors.blue.withValues(alpha: 0.3),
+                borderRadius: BorderRadius.circular(4),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.blue.withValues(alpha: 0.6),
+                    blurRadius: 12,
+                    spreadRadius: 2,
+                  ),
+                ],
               ),
               child: Center(
                 child: Icon(
-                  Icons.touch_app,
-                  size: cellSize * 0.6,
-                  color: Colors.yellow,
+                  Icons.touch_app_rounded,
+                  size: cellSize * 0.5,
+                  color: Colors.white,
                 ),
               ),
             ),
