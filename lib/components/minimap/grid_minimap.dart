@@ -244,14 +244,11 @@ class _MinimapPainter extends CustomPainter {
         imagePaint,
       );
 
-      // 반투명 다크 오버레이 (글래스 효과)
-      final overlayPaint = Paint()
-        ..color = const Color(0xFF0A1128).withValues(alpha: 0.5);
-      canvas.drawRect(gridRect, overlayPaint);
+      // 오버레이 없음 → 상품 이미지 원본 그대로
     } else {
-      // 배경 이미지가 없으면 반투명 다크 블루
+      // 배경 이미지가 없으면 밝은 배경
       final gridPaint = Paint()
-        ..color = const Color(0xFF0A1128).withValues(alpha: 0.5)
+        ..color = AppColors.blueWhite
         ..style = PaintingStyle.fill;
 
       canvas.drawRect(gridRect, gridPaint);
