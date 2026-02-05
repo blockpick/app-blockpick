@@ -5,8 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:lucide_icons/lucide_icons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 import '../../models/game_model.dart';
 import '../../models/game_round_model.dart';
 import '../../providers/game_provider.dart';
@@ -40,6 +44,12 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
   final _priceFormatter = NumberFormat('#,###');
   final _random = Random();
 
+  // 튜토리얼
+  TutorialCoachMark? _tutorialCoachMark;
+  final GlobalKey _infoBarKey = GlobalKey();
+  final GlobalKey _optionButtonsKey = GlobalKey();
+  final GlobalKey _coordinatePickerKey = GlobalKey();
+
   // 이벤트 모드 설정
   bool _eventMode = false;
   bool _showTarget = true;
@@ -68,12 +78,170 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
   void initState() {
     super.initState();
     _startCountdown();
+    _checkAndShowTutorial();
   }
 
   @override
   void dispose() {
     _countdownTimer?.cancel();
     super.dispose();
+  }
+
+  /// 튜토리얼 체크 및 표시
+  Future<void> _checkAndShowTutorial() async {
+    final prefs = await SharedPreferences.getInstance();
+    final hasSeenTutorial =
+        prefs.getBool('gacha_tutorial_completed') ?? false;
+
+    if (!hasSeenTutorial && mounted) {
+      Future.delayed(const Duration(milliseconds: 800), () {
+        if (mounted) _showTutorial();
+      });
+    }
+  }
+
+  /// 튜토리얼 표시
+  void _showTutorial() {
+    final targets = <TargetFocus>[];
+
+    // 1. 이벤트 정보 바
+    if (_infoBarKey.currentContext != null) {
+      targets.add(
+        TargetFocus(
+          identify: "info_bar",
+          keyTarget: _infoBarKey,
+          alignSkip: Alignment.topRight,
+          shape: ShapeLightFocus.RRect,
+          radius: 12,
+          contents: [
+            TargetContent(
+              align: ContentAlign.bottom,
+              builder: (context, controller) {
+                return _tutorialContent(
+                  '이벤트 정보',
+                  '참여 포인트, 참여자 수, 그리드 크기, 남은 시간을 확인할 수 있습니다.',
+                  LucideIcons.info,
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
+    // 2. 좌표 선택기 (메인 게임 영역)
+    if (_coordinatePickerKey.currentContext != null) {
+      targets.add(
+        TargetFocus(
+          identify: "picker",
+          keyTarget: _coordinatePickerKey,
+          alignSkip: Alignment.topRight,
+          shape: ShapeLightFocus.RRect,
+          radius: 12,
+          contents: [
+            TargetContent(
+              align: ContentAlign.top,
+              builder: (context, controller) {
+                return _tutorialContent(
+                  '좌표 선택',
+                  '화면을 탭하여 좌표를 선택하세요!\n첫 번째 탭 → 행(ROW) 결정\n두 번째 탭 → 열(COL) 결정',
+                  LucideIcons.crosshair,
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
+    // 3. 옵션 버튼
+    if (_optionButtonsKey.currentContext != null) {
+      targets.add(
+        TargetFocus(
+          identify: "options",
+          keyTarget: _optionButtonsKey,
+          alignSkip: Alignment.topRight,
+          shape: ShapeLightFocus.RRect,
+          radius: 12,
+          contents: [
+            TargetContent(
+              align: ContentAlign.bottom,
+              builder: (context, controller) {
+                return _tutorialContent(
+                  '옵션 기능',
+                  '즉석 결품으로 보너스 상품에 도전하거나\n가이드 라인으로 원하는 좌표를 조준할 수 있습니다.',
+                  LucideIcons.settings2,
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (targets.isEmpty) return;
+
+    _tutorialCoachMark = TutorialCoachMark(
+      targets: targets,
+      colorShadow: AppColors.darkBlue,
+      paddingFocus: 10,
+      opacityShadow: 0.8,
+      onClickTarget: (target) {},
+      onFinish: () async {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('gacha_tutorial_completed', true);
+      },
+      onSkip: () {
+        SharedPreferences.getInstance().then((prefs) {
+          prefs.setBool('gacha_tutorial_completed', true);
+        });
+        return true;
+      },
+    );
+
+    _tutorialCoachMark!.show(context: context);
+  }
+
+  /// 튜토리얼 콘텐츠 위젯
+  Widget _tutorialContent(String title, String description, IconData icon) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withValues(alpha: 0.2),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: AppColors.blue, size: 24),
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style: AppTextStyles.large.copyWith(
+                  color: AppColors.darkBlue,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            description,
+            style: AppTextStyles.bodySmall.copyWith(color: AppColors.navy),
+          ),
+        ],
+      ),
+    );
   }
 
   void _startCountdown() {
@@ -579,16 +747,23 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
       body: Column(
         children: [
           // 상품 정보 바
-          _buildEventInfoBar(game),
+          KeyedSubtree(
+            key: _infoBarKey,
+            child: _buildEventInfoBar(game),
+          ),
 
           // 옵션 토글 버튼
-          _buildOptionButtons(),
+          KeyedSubtree(
+            key: _optionButtonsKey,
+            child: _buildOptionButtons(),
+          ),
 
           // 구분선
           Container(height: 1, color: AppColors.gray200),
 
           // Gacha 좌표 선택기
           Expanded(
+            key: _coordinatePickerKey,
             child: Container(
               color: AppColors.white,
               child: GachaCoordinatePicker(
