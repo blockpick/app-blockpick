@@ -44,7 +44,7 @@ final activeGamesProvider = AutoDisposeFutureProvider<List<Game>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef ActiveGamesRef = AutoDisposeFutureProviderRef<List<Game>>;
-String _$gamesByTypeHash() => r'3d41e31862b80af0a1bb10ebd5da42b7140a5558';
+String _$gamesByTypeHash() => r'5e6e5321b558ac2442eeb9e040eaf434f03b9be1';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -196,7 +196,7 @@ class _GamesByTypeProviderElement
   GameType get gameType => (origin as GamesByTypeProvider).gameType;
 }
 
-String _$gameHash() => r'0d45ff37252a2bd0d3be7f118f8e38728102884c';
+String _$gameHash() => r'b2a9275f3f90aeb4a4b2aa401740f4787e955c8e';
 
 /// 특정 게임 상세 조회 Provider
 ///

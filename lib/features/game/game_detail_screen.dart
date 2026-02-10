@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/auth/domain/providers/auth_provider.dart';
+import '../auth/presentation/dialogs/auth_dialogs.dart';
 import '../../models/game_model.dart';
 import '../../models/game_round_model.dart';
 import '../../providers/game_provider.dart';
@@ -156,6 +158,12 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                     backgroundImagePath: imageUrl,
                     onBlockTap: (block) {
                       debugPrint('Block tapped: ${block.row}, ${block.col}');
+                      // 로그인 체크
+                      final isAuthenticated = ref.read(isAuthenticatedProvider);
+                      if (!isAuthenticated) {
+                        showLoginDialog(context);
+                        return;
+                      }
                     },
                   );
                 },
@@ -633,6 +641,12 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
+            // 로그인 체크
+            final isAuthenticated = ref.read(isAuthenticatedProvider);
+            if (!isAuthenticated) {
+              showLoginDialog(context);
+              return;
+            }
             // TODO: 참가 로직
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(

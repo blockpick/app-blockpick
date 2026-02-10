@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,13 +10,18 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
+import 'package:webview_flutter/webview_flutter.dart';
+
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../models/game_model.dart';
 import '../../models/game_round_model.dart';
+import '../../core/auth/domain/providers/auth_provider.dart';
+import '../auth/presentation/dialogs/auth_dialogs.dart';
 import '../../providers/game_provider.dart';
 import '../../providers/game_participation_provider.dart';
 import '../../providers/game_join_progress_provider.dart';
+import '../../providers/instant_prize_provider.dart';
 import '../../providers/pending_transaction_provider.dart';
 import '../../widgets/gacha_coordinate_picker.dart';
 import '../../widgets/confetti_celebration.dart';
@@ -42,7 +48,6 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
 
   final GlobalKey<GachaCoordinatePickerState> _pickerKey = GlobalKey();
   final _priceFormatter = NumberFormat('#,###');
-  final _random = Random();
 
   // 튜토리얼
   TutorialCoachMark? _tutorialCoachMark;
@@ -54,10 +59,10 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
   bool _eventMode = false;
   bool _showTarget = true;
   List<EventTarget> _eventTargets = [];
-  int _targetCount = 3;
   int _allowedRange = 50;
   int _rowSpeed = 2500;
   int _colSpeed = 2200;
+  bool _instantPrizesLoading = false;
 
   // 가이드선 설정
   bool _showGuideLine = false;
@@ -66,9 +71,6 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
 
   // 전체 화면 모드
   bool _isFullScreenMode = false;
-
-  // 상품군 설정 (나중에 게임별로 API에서 가져올 예정)
-  EventPrizePool _selectedPrizePool = EventPrizePool.defaultPool;
 
   // 카운트다운 타이머
   Timer? _countdownTimer;
@@ -364,20 +366,37 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
     );
   }
 
-  /// 랜덤 타겟 좌표들 생성 (각각 랜덤 상품 포함)
-  void _generateRandomTargets() {
-    final gridWidth = _game?.gridCols ?? 10000;
-    final gridHeight = _game?.gridRows ?? 10000;
-    // targetCount는 최대 상품 수를 초과할 수 없음
-    final actualCount = _targetCount.clamp(1, _selectedPrizePool.maxPrizeCount);
-    setState(() {
-      _eventTargets = List.generate(actualCount, (index) => EventTarget(
-        id: '${DateTime.now().millisecondsSinceEpoch}_$index',
-        row: _random.nextInt(gridHeight) + 1,
-        col: _random.nextInt(gridWidth) + 1,
-        prize: _selectedPrizePool.getRandomPrize(),
-      ));
-    });
+  /// 서버에서 즉석경품 로드
+  Future<void> _loadInstantPrizes() async {
+    if (_game == null) return;
+    setState(() => _instantPrizesLoading = true);
+
+    try {
+      final targets = await ref.read(
+        gameInstantPrizesProvider(_game!.id).future,
+      );
+      if (mounted) {
+        setState(() {
+          _eventTargets = targets;
+          if (targets.isNotEmpty) {
+            _eventMode = true;
+          }
+          _instantPrizesLoading = false;
+        });
+      }
+    } catch (e) {
+      print('❌ 즉석경품 로드 에러: $e');
+      if (mounted) {
+        setState(() => _instantPrizesLoading = false);
+      }
+    }
+  }
+
+  /// 서버에서 즉석경품 새로고침
+  Future<void> _refreshInstantPrizes() async {
+    if (_game == null) return;
+    ref.invalidate(gameInstantPrizesProvider(_game!.id));
+    await _loadInstantPrizes();
   }
 
   /// 당첨된 타겟 제거
@@ -402,25 +421,166 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
     return null;
   }
 
+  /// 좌표 선택 가능 여부 (로그인 + 포인트 체크)
+  bool get _canPlay {
+    final authState = ref.read(authProvider);
+    final isAuthenticated = authState.valueOrNull?.isAuthenticated ?? false;
+    if (!isAuthenticated) return false;
+
+    final user = authState.valueOrNull?.user;
+    final entryFee = _gameRound?.currentPrice ?? 0;
+    final userPoints = user?.eventPoint.toInt() ?? 0;
+    if (userPoints < entryFee) return false;
+
+    return true;
+  }
+
+  /// 게임 조작 차단 시 메시지 표시
+  void _showPlayBlockedMessage() {
+    final authState = ref.read(authProvider);
+    final isAuthenticated = authState.valueOrNull?.isAuthenticated ?? false;
+
+    if (!isAuthenticated) {
+      showLoginDialog(context);
+      return;
+    }
+
+    final user = authState.valueOrNull?.user;
+    final entryFee = _gameRound?.currentPrice ?? 0;
+    final userPoints = user?.eventPoint.toInt() ?? 0;
+    if (userPoints < entryFee) {
+      _showInsufficientPointsDialog(userPoints, entryFee);
+      return;
+    }
+  }
+
+  /// 포인트 부족 팝업
+  void _showInsufficientPointsDialog(int userPoints, int entryFee) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: AppColors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  color: AppColors.yellow.withValues(alpha: 0.15),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.monetization_on_outlined,
+                  color: AppColors.yellow,
+                  size: 28,
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                '포인트가 부족합니다',
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.darkBlue,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                '보유 ${userPoints}P / 필요 ${entryFee}P',
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: AppColors.gray600,
+                ),
+              ),
+              const SizedBox(height: 24),
+              GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  decoration: BoxDecoration(
+                    color: AppColors.darkBlue,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      '확인',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   /// 이벤트 성공 시 축하 효과 (레거시 - picker에서 호출)
   void _onEventSuccess() {
     // 이제 _onCoordinateSelected에서 처리하므로 여기서는 아무것도 안 함
   }
 
-  void _onCoordinateSelected(int row, int col) {
-    // 이벤트 당첨 체크
+  void _onCoordinateSelected(int row, int col) async {
+    // 이벤트 당첨 체크 (클라이언트 매칭 - UI 피드백용)
     final wonTarget = _checkEventWin(row, col);
 
     if (wonTarget != null) {
-      // 당첨된 타겟 제거 (화면에서 사라짐)
-      _removeWonTarget(wonTarget);
-
-      // 당첨! → 축하 효과 + 확인 시트에 당첨 정보 포함
+      // 즉석경품 당첨 → 축하 효과 + 경품받기 포함 바텀시트
       ConfettiCelebration.show(context);
-      _showCoordinateConfirmDialog(row, col, wonTarget: wonTarget);
+    }
+
+    _showCoordinateConfirmDialog(row, col, wonTarget: wonTarget);
+  }
+
+  /// 즉석경품 수령 API 호출
+  Future<void> _claimInstantPrize(EventTarget target) async {
+    if (_game == null) return;
+
+    // 로그인 체크
+    final isAuthenticated = ref.read(isAuthenticatedProvider);
+    if (!isAuthenticated) {
+      if (mounted) showLoginDialog(context);
+      return;
+    }
+
+    final claimNotifier = ref.read(instantPrizeClaimProvider.notifier);
+    final result = await claimNotifier.claimPrize(
+      _game!.id,
+      target.col,
+      target.row,
+    );
+
+    if (result.success) {
+      _removeWonTarget(target);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('메시지로 당첨되신 경품을 보냈어요!\n잊지 말고 꼭 받아가세요.'),
+            behavior: SnackBarBehavior.floating,
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
     } else {
-      // 미당첨 → 바로 확인 시트
-      _showCoordinateConfirmDialog(row, col);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(result.message ?? '경품 수령에 실패했습니다.'),
+            backgroundColor: Colors.orange,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
     }
   }
 
@@ -438,6 +598,9 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
         entryFee: entryFee,
         retryFee: retryFee,
         wonTarget: wonTarget,
+        onClaimPrize: wonTarget != null
+            ? () => _claimInstantPrize(wonTarget)
+            : null,
         onConfirm: () {
           context.pop();
           _joinGame(row, col);
@@ -452,6 +615,13 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
 
   Future<void> _joinGame(int row, int col) async {
     if (_game == null || _gameRound == null) return;
+
+    // 로그인 체크
+    final isAuthenticated = ref.read(isAuthenticatedProvider);
+    if (!isAuthenticated) {
+      if (mounted) showLoginDialog(context);
+      return;
+    }
 
     final contractAddress = _game!.onchainContractAddr;
     final gameProducts = _game!.gameProducts;
@@ -676,6 +846,12 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
         _game = game;
         final gameRound = game.toGameRound();
         _gameRound = gameRound;
+        // 즉석경품이 있으면 서버에서 로드
+        if (game.hasInstantPrize == true && _eventTargets.isEmpty && !_instantPrizesLoading) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _loadInstantPrizes();
+          });
+        }
         return _buildGameContent(gameRound);
       },
     );
@@ -786,6 +962,8 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                 showGuideLine: _showGuideLine,
                 guideX: _guideX,
                 guideY: _guideY,
+                enabled: _canPlay,
+                onAuthRequired: _showPlayBlockedMessage,
               ),
             ),
           ),
@@ -820,6 +998,8 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
               guideX: _guideX,
               guideY: _guideY,
               fullScreenMode: true,
+              enabled: _canPlay,
+              onAuthRequired: _showPlayBlockedMessage,
             ),
           ),
 
@@ -1103,60 +1283,67 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
   /// 옵션 토글 버튼
   Widget _buildOptionButtons() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       color: AppColors.white,
-      child: Row(
-        children: [
-          // 즉석 결품 토글
-          _buildOptionChip(
-            label: '즉석 결품',
-            isActive: _eventMode,
-            onTap: _showInstantPrizeModal,
-          ),
-          const SizedBox(width: 8),
-          // 가이드 라인 토글
-          _buildOptionChip(
-            label: '가이드 라인',
-            isActive: _showGuideLine,
-            onTap: _showGuideLineModal,
-          ),
-          const Spacer(),
-          // 튜토리얼 버튼
-          GestureDetector(
-            onTap: _showTutorial,
-            child: Container(
-              width: 28,
-              height: 28,
-              decoration: BoxDecoration(
-                color: AppColors.gray100,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.school_outlined,
-                size: 16,
-                color: AppColors.gray500,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Row(
+          children: [
+            // 즉석 결품 토글
+            _buildOptionChip(
+              label: '즉석 결품',
+              isActive: _eventMode,
+              onTap: _showInstantPrizeModal,
+            ),
+            const SizedBox(width: 8),
+            // 가이드 라인 토글
+            _buildOptionChip(
+              label: '가이드 라인',
+              isActive: _showGuideLine,
+              onTap: _showGuideLineModal,
+            ),
+            const SizedBox(width: 8),
+            // 튜토리얼 버튼
+            GestureDetector(
+              onTap: _showTutorial,
+              child: Container(
+                width: 28,
+                height: 28,
+                decoration: BoxDecoration(
+                  color: AppColors.gray100,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.school_outlined,
+                  size: 16,
+                  color: AppColors.gray500,
+                ),
               ),
             ),
-          ),
-          const SizedBox(width: 8),
-          // 정보 버튼
-          GestureDetector(
-            onTap: _showHelpSheet,
-            child: Container(
-              width: 28,
-              height: 28,
-              decoration: BoxDecoration(
-                color: AppColors.gray100,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.info_outline_rounded,
-                size: 16,
-                color: AppColors.gray500,
+            const SizedBox(width: 8),
+            // 정보 버튼
+            GestureDetector(
+              onTap: _showHelpSheet,
+              child: Container(
+                width: 28,
+                height: 28,
+                decoration: BoxDecoration(
+                  color: AppColors.gray100,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.info_outline_rounded,
+                  size: 16,
+                  color: AppColors.gray500,
+                ),
               ),
             ),
-          ),
-        ],
+            const SizedBox(width: 8),
+            // 상품 정보 버튼
+            _buildProductInfoChip(),
+          ],
+        ),
       ),
     );
   }
@@ -1206,12 +1393,89 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
     );
   }
 
+  /// 상품 정보 칩 버튼
+  Widget _buildProductInfoChip() {
+    final productCount = _game?.gameProducts?.length ?? 0;
+    return GestureDetector(
+      onTap: _showProductInfoSheet,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          color: AppColors.darkBlue.withValues(alpha: 0.06),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: AppColors.darkBlue.withValues(alpha: 0.2),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // 상품 개수 뱃지
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+              decoration: BoxDecoration(
+                color: AppColors.darkBlue,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                '$productCount',
+                style: const TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.white,
+                ),
+              ),
+            ),
+            const SizedBox(width: 4),
+            const Text(
+              '상품 정보',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: AppColors.darkBlue,
+              ),
+            ),
+            const SizedBox(width: 2),
+            const Icon(
+              Icons.chevron_right_rounded,
+              size: 14,
+              color: AppColors.darkBlue,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 상품 정보 바텀시트 표시
+  void _showProductInfoSheet() {
+    if (_game == null) return;
+    final products = _game!.gameProducts;
+    if (products == null || products.isEmpty) return;
+
+    // 선택된 상품 (기본: 첫 번째)
+    final product = products[_selectedProductIndex].product;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => _ProductInfoSheet(
+        product: product,
+        gameTitle: _game!.title,
+      ),
+    );
+  }
+
   /// 즉석 경품 모달
   void _showInstantPrizeModal() {
-    // 경품이 없으면 타겟 생성
-    if (_eventTargets.isEmpty && _eventMode) {
-      _generateRandomTargets();
+    // 경품이 없으면 서버에서 로드
+    if (_eventTargets.isEmpty && _eventMode && _game != null) {
+      _loadInstantPrizes();
     }
+
+    // 개발자 모드: 경품 10번 탭 시 해당 좌표로 자동 선택
+    final devTapCounts = <int, int>{};
 
     showDialog(
       context: context,
@@ -1245,9 +1509,10 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                         onChanged: (value) {
                           setState(() => _eventMode = value);
                           setDialogState(() {});
-                          if (value && _eventTargets.isEmpty) {
-                            _generateRandomTargets();
-                            setDialogState(() {});
+                          if (value && _eventTargets.isEmpty && _game != null) {
+                            _loadInstantPrizes().then((_) {
+                              setDialogState(() {});
+                            });
                           }
                         },
                         activeTrackColor: AppColors.darkBlue,
@@ -1277,50 +1542,95 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                         separatorBuilder: (context, index) => const Divider(height: 1),
                         itemBuilder: (context, index) {
                           final target = _eventTargets[index];
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            child: Row(
-                              children: [
-                                // 경품 아이콘
-                                Container(
-                                  width: 40,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.gray100,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      target.prize.emoji,
-                                      style: const TextStyle(fontSize: 20),
+                          final tapCount = devTapCounts[index] ?? 0;
+                          return GestureDetector(
+                            onTap: !kDebugMode ? null : () {
+                              devTapCounts[index] = (devTapCounts[index] ?? 0) + 1;
+                              final count = devTapCounts[index]!;
+                              setDialogState(() {});
+                              if (count >= 10) {
+                                // 모달 닫고 해당 좌표로 자동 선택
+                                Navigator.pop(context);
+                                _onCoordinateSelected(target.row, target.col);
+                              }
+                            },
+                            behavior: HitTestBehavior.opaque,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              child: Row(
+                                children: [
+                                  // 경품 아이콘 (이미지 또는 이모지 폴백)
+                                  Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.gray100,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Center(
+                                      child: target.prize.hasImage
+                                          ? ClipRRect(
+                                              borderRadius: BorderRadius.circular(8),
+                                              child: Image.network(
+                                                target.prize.displayImageUrl!,
+                                                width: 36,
+                                                height: 36,
+                                                fit: BoxFit.cover,
+                                                errorBuilder: (_, __, ___) => Text(
+                                                  target.prize.emoji,
+                                                  style: const TextStyle(fontSize: 20),
+                                                ),
+                                              ),
+                                            )
+                                          : Text(
+                                              target.prize.emoji,
+                                              style: const TextStyle(fontSize: 20),
+                                            ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        target.prize.name,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                          color: AppColors.darkBlue,
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          target.prize.name,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                            color: AppColors.darkBlue,
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(height: 2),
-                                      Text(
-                                        'X,Y 좌표 (${target.col},${target.row})',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: AppColors.gray500,
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          'X,Y 좌표 (${target.col},${target.row})',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: AppColors.gray500,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                  // 디버그 모드: 탭 카운트 표시
+                                  if (kDebugMode && tapCount > 0)
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                      decoration: BoxDecoration(
+                                        color: tapCount >= 7 ? AppColors.red : AppColors.gray300,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Text(
+                                        '$tapCount/10',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w700,
+                                          color: tapCount >= 7 ? AppColors.white : AppColors.gray700,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
                             ),
                           );
                         },
@@ -1616,13 +1926,11 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
         eventMode: _eventMode,
         showTarget: _showTarget,
         eventTargets: _eventTargets,
-        targetCount: _targetCount,
         allowedRange: _allowedRange,
         rowSpeed: _rowSpeed,
         colSpeed: _colSpeed,
         gridWidth: _game?.gridCols ?? 10000,
         gridHeight: _game?.gridRows ?? 10000,
-        selectedPrizePool: _selectedPrizePool,
         showGuideLine: _showGuideLine,
         guideX: _guideX,
         guideY: _guideY,
@@ -1631,11 +1939,9 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
             _eventMode = settings.eventMode;
             _showTarget = settings.showTarget;
             _eventTargets = settings.eventTargets;
-            _targetCount = settings.targetCount;
             _allowedRange = settings.allowedRange;
             _rowSpeed = settings.rowSpeed;
             _colSpeed = settings.colSpeed;
-            _selectedPrizePool = settings.selectedPrizePool;
             _showGuideLine = settings.showGuideLine;
             _guideX = settings.guideX;
             _guideY = settings.guideY;
@@ -1644,7 +1950,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
           _pickerKey.currentState?.setRowSpeed(settings.rowSpeed);
           _pickerKey.currentState?.setColSpeed(settings.colSpeed);
         },
-        onGenerateTargets: _generateRandomTargets,
+        onRefreshPrizes: _refreshInstantPrizes,
       ),
     );
   }
@@ -1771,12 +2077,13 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
 }
 
 /// 참여하기 확인 바텀시트
-class _TossStyleConfirmSheet extends StatelessWidget {
+class _TossStyleConfirmSheet extends StatefulWidget {
   final int row;
   final int col;
   final int entryFee;
   final int retryFee;
   final EventTarget? wonTarget;
+  final Future<void> Function()? onClaimPrize;
   final VoidCallback onConfirm;
   final VoidCallback onRetry;
 
@@ -1786,13 +2093,23 @@ class _TossStyleConfirmSheet extends StatelessWidget {
     required this.entryFee,
     required this.retryFee,
     this.wonTarget,
+    this.onClaimPrize,
     required this.onConfirm,
     required this.onRetry,
   });
 
   @override
+  State<_TossStyleConfirmSheet> createState() => _TossStyleConfirmSheetState();
+}
+
+class _TossStyleConfirmSheetState extends State<_TossStyleConfirmSheet> {
+  bool _prizeClaimed = false;
+  bool _claiming = false;
+
+  @override
   Widget build(BuildContext context) {
-    final hasPrize = wonTarget != null;
+    final hasPrize = widget.wonTarget != null;
+    final prize = widget.wonTarget?.prize;
 
     return Container(
       decoration: const BoxDecoration(
@@ -1815,7 +2132,7 @@ class _TossStyleConfirmSheet extends StatelessWidget {
           const SizedBox(height: 24),
 
           if (hasPrize) ...[
-            // 당첨 경품 표시
+            // 당첨 경품 표시 (이미지 또는 이모지 폴백)
             Container(
               width: 80,
               height: 80,
@@ -1824,21 +2141,78 @@ class _TossStyleConfirmSheet extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Center(
-                child: Text(
-                  wonTarget!.prize.emoji,
-                  style: const TextStyle(fontSize: 40),
-                ),
+                child: prize!.hasImage
+                    ? ClipOval(
+                        child: Image.network(
+                          prize.displayImageUrl!,
+                          width: 60,
+                          height: 60,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Text(
+                            prize.emoji,
+                            style: const TextStyle(fontSize: 40),
+                          ),
+                        ),
+                      )
+                    : Text(
+                        prize.emoji,
+                        style: const TextStyle(fontSize: 40),
+                      ),
               ),
             ),
             const SizedBox(height: 12),
             Text(
-              wonTarget!.prize.name,
+              prize.name,
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: AppColors.darkBlue,
               ),
             ),
+
+            // 경품받기 버튼
+            const SizedBox(height: 12),
+            GestureDetector(
+              onTap: (_claiming || _prizeClaimed) ? null : () async {
+                setState(() => _claiming = true);
+                await widget.onClaimPrize?.call();
+                if (mounted) {
+                  setState(() {
+                    _claiming = false;
+                    _prizeClaimed = true;
+                  });
+                }
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: BoxDecoration(
+                  color: _prizeClaimed
+                      ? AppColors.gray300
+                      : const Color(0xFFFFD43B),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: _claiming
+                    ? const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF664D03)),
+                        ),
+                      )
+                    : Text(
+                        _prizeClaimed ? '경품 수령 완료' : '경품받기',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: _prizeClaimed
+                              ? AppColors.gray500
+                              : const Color(0xFF664D03),
+                        ),
+                      ),
+              ),
+            ),
+
             const SizedBox(height: 16),
             const Text(
               '방금 선택한 곳에서 경품이 나왔어요!\n이 행운으로 본 이벤트에 참여하시겠어요?',
@@ -1909,7 +2283,7 @@ class _TossStyleConfirmSheet extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  col.toString().padLeft(4, '0'),
+                  widget.col.toString().padLeft(4, '0'),
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
@@ -1933,7 +2307,7 @@ class _TossStyleConfirmSheet extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  row.toString().padLeft(4, '0'),
+                  widget.row.toString().padLeft(4, '0'),
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
@@ -1949,7 +2323,7 @@ class _TossStyleConfirmSheet extends StatelessWidget {
 
           // 참여하기 버튼
           GestureDetector(
-            onTap: onConfirm,
+            onTap: widget.onConfirm,
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 16),
@@ -1959,7 +2333,7 @@ class _TossStyleConfirmSheet extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  '참여하기 (${entryFee}P)',
+                  '참여하기 (${widget.entryFee}P)',
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -1974,7 +2348,7 @@ class _TossStyleConfirmSheet extends StatelessWidget {
 
           // 재시도 링크
           GestureDetector(
-            onTap: onRetry,
+            onTap: widget.onRetry,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Row(
@@ -1987,7 +2361,7 @@ class _TossStyleConfirmSheet extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    '재시도 (${retryFee}P)',
+                    '재시도 (${widget.retryFee}P)',
                     style: TextStyle(
                       fontSize: 14,
                       color: AppColors.gray500,
@@ -2010,11 +2384,9 @@ class _EventSettings {
   final bool eventMode;
   final bool showTarget;
   final List<EventTarget> eventTargets;
-  final int targetCount;
   final int allowedRange;
   final int rowSpeed;
   final int colSpeed;
-  final EventPrizePool selectedPrizePool;
   final bool showGuideLine;
   final int? guideX;
   final int? guideY;
@@ -2023,11 +2395,9 @@ class _EventSettings {
     required this.eventMode,
     required this.showTarget,
     required this.eventTargets,
-    required this.targetCount,
     required this.allowedRange,
     required this.rowSpeed,
     required this.colSpeed,
-    required this.selectedPrizePool,
     required this.showGuideLine,
     this.guideX,
     this.guideY,
@@ -2039,15 +2409,13 @@ class _EventSettingsSheet extends StatefulWidget {
   final bool eventMode;
   final bool showTarget;
   final List<EventTarget> eventTargets;
-  final int targetCount;
   final int allowedRange;
   final int rowSpeed;
   final int colSpeed;
   final int gridWidth;
   final int gridHeight;
-  final EventPrizePool selectedPrizePool;
   final Function(_EventSettings) onSettingsChanged;
-  final VoidCallback onGenerateTargets;
+  final Future<void> Function() onRefreshPrizes;
   final bool showGuideLine;
   final int? guideX;
   final int? guideY;
@@ -2056,15 +2424,13 @@ class _EventSettingsSheet extends StatefulWidget {
     required this.eventMode,
     required this.showTarget,
     required this.eventTargets,
-    required this.targetCount,
     required this.allowedRange,
     required this.rowSpeed,
     required this.colSpeed,
     required this.gridWidth,
     required this.gridHeight,
-    required this.selectedPrizePool,
     required this.onSettingsChanged,
-    required this.onGenerateTargets,
+    required this.onRefreshPrizes,
     required this.showGuideLine,
     this.guideX,
     this.guideY,
@@ -2078,12 +2444,11 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
   late bool _eventMode;
   late bool _showTarget;
   late List<EventTarget> _eventTargets;
-  late int _targetCount;
   late int _allowedRange;
   late int _rowSpeed;
   late int _colSpeed;
-  late EventPrizePool _selectedPrizePool;
   late bool _showGuideLine;
+  bool _isRefreshing = false;
   int? _guideX;
   int? _guideY;
 
@@ -2097,11 +2462,9 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
     _eventMode = widget.eventMode;
     _showTarget = widget.showTarget;
     _eventTargets = List.from(widget.eventTargets);
-    _targetCount = widget.targetCount;
     _allowedRange = widget.allowedRange;
     _rowSpeed = widget.rowSpeed;
     _colSpeed = widget.colSpeed;
-    _selectedPrizePool = widget.selectedPrizePool;
     _showGuideLine = widget.showGuideLine;
     _guideX = widget.guideX;
     _guideY = widget.guideY;
@@ -2122,29 +2485,25 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
       eventMode: _eventMode,
       showTarget: _showTarget,
       eventTargets: _eventTargets,
-      targetCount: _targetCount,
       allowedRange: _allowedRange,
       rowSpeed: _rowSpeed,
       colSpeed: _colSpeed,
-      selectedPrizePool: _selectedPrizePool,
       showGuideLine: _showGuideLine,
       guideX: _guideX,
       guideY: _guideY,
     ));
   }
 
-  void _generateRandomTargets() {
-    final random = Random();
-    final actualCount = _targetCount.clamp(1, _selectedPrizePool.maxPrizeCount);
-    setState(() {
-      _eventTargets = List.generate(actualCount, (index) => EventTarget(
-        id: '${DateTime.now().millisecondsSinceEpoch}_$index',
-        row: random.nextInt(widget.gridHeight) + 1,
-        col: random.nextInt(widget.gridWidth) + 1,
-        prize: _selectedPrizePool.getRandomPrize(),
-      ));
-    });
-    _notifyChange();
+  Future<void> _refreshPrizes() async {
+    setState(() => _isRefreshing = true);
+    await widget.onRefreshPrizes();
+    if (mounted) {
+      setState(() {
+        _eventTargets = List.from(widget.eventTargets);
+        _isRefreshing = false;
+      });
+      _notifyChange();
+    }
   }
 
   @override
@@ -2224,97 +2583,6 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
             ),
             const SizedBox(height: 20),
 
-            // 상품군 선택
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  '상품군 선택',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.gray700,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: AppColors.gray100,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppColors.gray200),
-                  ),
-                  child: DropdownButton<EventPrizePool>(
-                    value: _selectedPrizePool,
-                    isExpanded: true,
-                    underline: const SizedBox(),
-                    icon: const Icon(Icons.keyboard_arrow_down_rounded),
-                    items: EventPrizePool.availablePools.map((pool) {
-                      return DropdownMenuItem(
-                        value: pool,
-                        child: Row(
-                          children: [
-                            Text(
-                              pool.name,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.darkBlue,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: AppColors.blue.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: Text(
-                                '최대 ${pool.maxPrizeCount}개',
-                                style: const TextStyle(
-                                  fontSize: 10,
-                                  color: AppColors.blue,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (pool) {
-                      if (pool != null) {
-                        setState(() {
-                          _selectedPrizePool = pool;
-                          // 개수가 새 풀의 최대를 초과하면 조정
-                          if (_targetCount > pool.maxPrizeCount) {
-                            _targetCount = pool.maxPrizeCount;
-                          }
-                          // 기존 타겟 초기화
-                          _eventTargets = [];
-                        });
-                        _notifyChange();
-                      }
-                    },
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-
-            // 타겟 개수 슬라이더 (최대값은 선택된 상품군의 maxPrizeCount)
-            _buildSliderRow(
-              '타겟 좌표 개수',
-              '$_targetCount개 (최대 ${_selectedPrizePool.maxPrizeCount}개)',
-              _targetCount.toDouble(),
-              1,
-              _selectedPrizePool.maxPrizeCount.toDouble(),
-              (value) {
-                setState(() => _targetCount = value.round());
-                _notifyChange();
-              },
-            ),
-            const SizedBox(height: 16),
-
             // 현재 타겟 좌표 및 상품
             Container(
               padding: const EdgeInsets.all(16),
@@ -2354,21 +2622,33 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: _generateRandomTargets,
+                        onTap: _isRefreshing ? null : _refreshPrizes,
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFFD700),
+                            color: _isRefreshing
+                                ? const Color(0xFFFFD700).withValues(alpha: 0.5)
+                                : const Color(0xFFFFD700),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Row(
+                          child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.shuffle_rounded, size: 18, color: Colors.white),
-                              SizedBox(width: 6),
+                              if (_isRefreshing)
+                                const SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              else
+                                const Icon(Icons.refresh_rounded, size: 18, color: Colors.white),
+                              const SizedBox(width: 6),
                               Text(
-                                '랜덤',
-                                style: TextStyle(
+                                _isRefreshing ? '로딩...' : '새로고침',
+                                style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white,
@@ -2387,26 +2667,39 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                       spacing: 8,
                       runSpacing: 8,
                       children: _eventTargets.map((target) {
-                        final (r, g, b) = EventPrize.getGradeColor(target.prize.grade);
-                        final gradeColor = Color.fromRGBO(r, g, b, 1);
                         return Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                           decoration: BoxDecoration(
-                            color: gradeColor.withValues(alpha: 0.15),
+                            color: const Color(0xFFFFD700).withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: gradeColor.withValues(alpha: 0.3)),
+                            border: Border.all(color: const Color(0xFFFFD700).withValues(alpha: 0.3)),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(target.prize.emoji, style: const TextStyle(fontSize: 14)),
+                              if (target.prize.hasImage)
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(4),
+                                  child: Image.network(
+                                    target.prize.displayImageUrl!,
+                                    width: 18,
+                                    height: 18,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (_, __, ___) => Text(
+                                      target.prize.emoji,
+                                      style: const TextStyle(fontSize: 14),
+                                    ),
+                                  ),
+                                )
+                              else
+                                Text(target.prize.emoji, style: const TextStyle(fontSize: 14)),
                               const SizedBox(width: 6),
                               Text(
                                 target.prize.name,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
-                                  color: gradeColor,
+                                  color: Color(0xFFB8860B),
                                 ),
                               ),
                             ],
@@ -2818,6 +3111,308 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
             activeColor: AppColors.darkBlue,
             inactiveColor: AppColors.gray200,
             onChanged: onChanged,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// 상품 정보 바텀시트 위젯
+class _ProductInfoSheet extends StatefulWidget {
+  final Product product;
+  final String gameTitle;
+
+  const _ProductInfoSheet({
+    required this.product,
+    required this.gameTitle,
+  });
+
+  @override
+  State<_ProductInfoSheet> createState() => _ProductInfoSheetState();
+}
+
+class _ProductInfoSheetState extends State<_ProductInfoSheet> {
+  WebViewController? _webViewController;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.product.detailUrl != null) {
+      _webViewController = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..loadRequest(Uri.parse(widget.product.detailUrl!));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.75,
+      decoration: const BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      child: Column(
+        children: [
+          // 핸들 바
+          Center(
+            child: Container(
+              margin: const EdgeInsets.only(top: 12),
+              width: 36,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppColors.gray300,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ),
+
+          // 헤더
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 16, 8, 12),
+            child: Row(
+              children: [
+                const Text(
+                  '상품 정보',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.darkBlue,
+                  ),
+                ),
+                const Spacer(),
+                IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(
+                    Icons.close_rounded,
+                    color: AppColors.gray500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const Divider(height: 1, color: AppColors.gray200),
+
+          // 스크롤 가능한 콘텐츠 영역
+          Expanded(
+            child: widget.product.detailUrl != null
+                ? _buildWebViewContent()
+                : _buildNativeContent(),
+          ),
+
+          // 하단 확인 버튼
+          Container(
+            padding: EdgeInsets.fromLTRB(20, 12, 20, 12 + bottomPadding),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              border: Border(
+                top: BorderSide(color: AppColors.gray200),
+              ),
+            ),
+            child: SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.darkBlue,
+                  foregroundColor: AppColors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 0,
+                ),
+                child: const Text(
+                  '확인',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// WebView 콘텐츠 (detailUrl이 있을 때)
+  Widget _buildWebViewContent() {
+    return WebViewWidget(controller: _webViewController!);
+  }
+
+  /// 네이티브 UI 콘텐츠 (detailUrl이 없을 때)
+  Widget _buildNativeContent() {
+    final product = widget.product;
+    final imageUrl = product.defaultImage ?? product.imageUrl;
+    final priceFormatter = NumberFormat('#,###');
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // 상품명
+          Text(
+            product.name,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: AppColors.darkBlue,
+            ),
+          ),
+
+          // 브랜드
+          if (product.brand != null && product.brand!.isNotEmpty) ...[
+            const SizedBox(height: 4),
+            Text(
+              product.brand!,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: AppColors.gray500,
+              ),
+            ),
+          ],
+
+          const SizedBox(height: 16),
+
+          // 상품 이미지
+          if (imageUrl != null && imageUrl.isNotEmpty)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.network(
+                imageUrl,
+                width: double.infinity,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stack) => Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    color: AppColors.gray100,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.image_not_supported_outlined,
+                      size: 48,
+                      color: AppColors.gray400,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+          const SizedBox(height: 20),
+
+          // 가격 정보
+          if (product.originalPrice != null || product.price != null)
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.gray50,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.sell_outlined,
+                    size: 18,
+                    color: AppColors.gray500,
+                  ),
+                  const SizedBox(width: 8),
+                  const Text(
+                    '정가',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: AppColors.gray600,
+                    ),
+                  ),
+                  const Spacer(),
+                  Text(
+                    '${priceFormatter.format(product.originalPrice ?? product.price ?? 0)}원',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.darkBlue,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+          // 상품 설명
+          if (product.description != null &&
+              product.description!.isNotEmpty) ...[
+            const SizedBox(height: 20),
+            const Text(
+              '상품 설명',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: AppColors.gray700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              product.description!,
+              style: const TextStyle(
+                fontSize: 14,
+                height: 1.6,
+                color: AppColors.gray600,
+              ),
+            ),
+          ],
+
+          // 상품 카테고리 / SKU 정보
+          if (product.category != null || product.sku != null) ...[
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.gray50,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                children: [
+                  if (product.category != null)
+                    _buildInfoRow('카테고리', product.category!),
+                  if (product.category != null && product.sku != null)
+                    const SizedBox(height: 8),
+                  if (product.sku != null)
+                    _buildInfoRow('SKU', product.sku!),
+                ],
+              ),
+            ),
+          ],
+
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Row(
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 13,
+            color: AppColors.gray500,
+          ),
+        ),
+        const Spacer(),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            color: AppColors.gray700,
           ),
         ),
       ],

@@ -114,6 +114,7 @@ _$ProductImpl _$$ProductImplFromJson(Map<String, dynamic> json) =>
       originalPrice: (json['originalPrice'] as num?)?.toInt(),
       countryCode: json['countryCode'] as String?,
       active: json['active'] as bool?,
+      detailUrl: json['detailUrl'] as String?,
     );
 
 Map<String, dynamic> _$$ProductImplToJson(_$ProductImpl instance) =>
@@ -131,6 +132,7 @@ Map<String, dynamic> _$$ProductImplToJson(_$ProductImpl instance) =>
       'originalPrice': instance.originalPrice,
       'countryCode': instance.countryCode,
       'active': instance.active,
+      'detailUrl': instance.detailUrl,
     };
 
 _$GameItemImpl _$$GameItemImplFromJson(Map<String, dynamic> json) =>

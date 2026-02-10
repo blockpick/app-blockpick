@@ -54,6 +54,12 @@ class GachaCoordinatePicker extends StatefulWidget {
   /// 전체 화면 모드 (플로팅 UI 사용)
   final bool fullScreenMode;
 
+  /// 인증 필요 콜백 (미로그인 시 버튼 탭하면 호출)
+  final VoidCallback? onAuthRequired;
+
+  /// 게임 조작 가능 여부
+  final bool enabled;
+
   const GachaCoordinatePicker({
     super.key,
     this.imageUrl,
@@ -72,6 +78,8 @@ class GachaCoordinatePicker extends StatefulWidget {
     this.guideX,
     this.guideY,
     this.fullScreenMode = false,
+    this.onAuthRequired,
+    this.enabled = true,
   });
 
   @override
@@ -170,6 +178,12 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
   }
 
   void _onButtonPressed() {
+    // 미인증 시 로그인 유도
+    if (!widget.enabled) {
+      widget.onAuthRequired?.call();
+      return;
+    }
+
     HapticFeedback.mediumImpact();
 
     if (_phase == 0) {

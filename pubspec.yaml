@@ -90,6 +90,9 @@ dependencies:
   noise_meter: ^5.0.2           # Voice mode (microphone)
   intl_phone_number_input: ^0.7.5
 
+  # WebView
+  webview_flutter: ^4.10.0
+
   # AdMob
   google_mobile_ads: ^5.3.0
 

@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/auth/domain/providers/auth_provider.dart';
+import '../../auth/presentation/dialogs/auth_dialogs.dart';
 import '../../../providers/game_participation_provider.dart';
 import '../../../providers/game_join_progress_provider.dart';
 import 'game_join_result_overlay.dart';
@@ -114,6 +116,13 @@ class _GameJoinButtonState extends ConsumerState<GameJoinButton> {
   }
 
   Future<void> _handleJoinGame() async {
+    // 로그인 체크
+    final isAuthenticated = ref.read(isAuthenticatedProvider);
+    if (!isAuthenticated) {
+      if (mounted) await showLoginDialog(context);
+      return;
+    }
+
     OverlayEntry? progressOverlay;
 
     try {

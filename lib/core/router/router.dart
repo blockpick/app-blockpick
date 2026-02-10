@@ -54,6 +54,7 @@ import '../../features/notification/notification_screen.dart';
 import '../../features/winners/winners_screen.dart';
 import '../../features/winners/winner_detail_screen.dart';
 import '../../features/home/widgets/daily_checkin_modal.dart';
+import '../../features/common/webview_screen.dart';
 import '../auth/domain/providers/auth_provider.dart';
 // More modes
 import '../../features/more/modes/gravity_pick_screen.dart';
@@ -471,6 +472,18 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/checkin',
         builder: (context, state) => const DailyCheckinScreen(),
+      ),
+
+      // ============ WebView ============
+      GoRoute(
+        path: '/webview',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return WebViewScreen(
+            url: extra?['url'] as String? ?? '',
+            title: extra?['title'] as String?,
+          );
+        },
       ),
 
       // ============ E2E 테스트 ============

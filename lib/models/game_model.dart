@@ -207,6 +207,7 @@ class Product with _$Product {
     int? originalPrice,
     String? countryCode,
     bool? active,
+    String? detailUrl,
   }) = _Product;
 
   factory Product.fromJson(Map<String, dynamic> json) =>

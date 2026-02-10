@@ -9,6 +9,8 @@ import '../../components/minimap/grid_minimap.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/auth/domain/providers/auth_provider.dart';
+import '../auth/presentation/dialogs/auth_dialogs.dart';
 import '../../models/block_model.dart';
 import '../../models/game_model.dart';
 import '../../models/game_round_model.dart';
@@ -782,6 +784,13 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                   tutorialBlockKey: _tutorialBlockKey,
                   onBlockTap: (block) {
                     debugPrint('Block tapped: ${block.row}, ${block.col}');
+
+                    // 로그인 체크
+                    final isAuthenticated = ref.read(isAuthenticatedProvider);
+                    if (!isAuthenticated) {
+                      showLoginDialog(context);
+                      return;
+                    }
 
                     // 튜토리얼 목표 블록을 탭했는지 확인
                     final gridState = ref.read(gridStateProvider(_gridConfig!));

@@ -242,28 +242,30 @@ class _EventPrizePopupState extends State<EventPrizePopup>
                   ),
                   child: Column(
                     children: [
-                      // 등급 배지
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: _gradeColor,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          EventPrize.getGradeName(widget.prize.grade),
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
+                      // 등급 배지 (기본값 common이 아닌 경우에만 표시)
+                      if (widget.prize.grade != PrizeGrade.common) ...[
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: _gradeColor,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            EventPrize.getGradeName(widget.prize.grade),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
+                        const SizedBox(height: 20),
+                      ],
 
-                      // 이모지
+                      // 상품 이미지 또는 이모지 (폴백)
                       Container(
                         width: 100,
                         height: 100,
@@ -276,10 +278,23 @@ class _EventPrizePopupState extends State<EventPrizePopup>
                           ),
                         ),
                         child: Center(
-                          child: Text(
-                            widget.prize.emoji,
-                            style: const TextStyle(fontSize: 48),
-                          ),
+                          child: widget.prize.hasImage
+                              ? ClipOval(
+                                  child: Image.network(
+                                    widget.prize.displayImageUrl!,
+                                    width: 80,
+                                    height: 80,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (_, __, ___) => Text(
+                                      widget.prize.emoji,
+                                      style: const TextStyle(fontSize: 48),
+                                    ),
+                                  ),
+                                )
+                              : Text(
+                                  widget.prize.emoji,
+                                  style: const TextStyle(fontSize: 48),
+                                ),
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -296,46 +311,49 @@ class _EventPrizePopupState extends State<EventPrizePopup>
                       const SizedBox(height: 8),
 
                       // 설명
-                      Text(
-                        widget.prize.description,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: AppColors.gray600,
+                      if (widget.prize.description.isNotEmpty)
+                        Text(
+                          widget.prize.description,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: AppColors.gray600,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 16),
+                      if (widget.prize.description.isNotEmpty)
+                        const SizedBox(height: 16),
 
-                      // 가치
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 10,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.gray100,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.monetization_on_rounded,
-                              size: 20,
-                              color: _gradeColor,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              '${_priceFormatter.format(widget.prize.value)}원 상당',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
+                      // 가치 (0보다 클 때만 표시)
+                      if (widget.prize.value > 0)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.gray100,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.monetization_on_rounded,
+                                size: 20,
                                 color: _gradeColor,
                               ),
-                            ),
-                          ],
+                              const SizedBox(width: 8),
+                              Text(
+                                '${_priceFormatter.format(widget.prize.value)}원 상당',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: _gradeColor,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ),
