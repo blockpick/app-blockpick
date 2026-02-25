@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/auth/data/repositories/auth_repository.dart';
+import '../../../../core/auth/domain/providers/auth_provider.dart';
 import '../../../../core/auth/domain/providers/verification_state_provider.dart';
 
 /// SC-005-02, SC-005-03: 휴대폰 번호 인증 화면
@@ -18,10 +19,20 @@ class PhoneVerifyScreen extends ConsumerStatefulWidget {
   final String? signupType; // 'email', 'google', 'apple'
   final String? flowType; // 'signup', 'find-email', 'withdrawal'
 
+  // SNS 가입 시 OAuth에서 받은 정보
+  final String? socialId;
+  final String? socialEmail;
+  final String? socialName;
+  final String? socialPhotoUrl;
+
   const PhoneVerifyScreen({
     super.key,
     this.signupType,
     this.flowType,
+    this.socialId,
+    this.socialEmail,
+    this.socialName,
+    this.socialPhotoUrl,
   });
 
   @override
@@ -405,14 +416,21 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
     final flowType = widget.flowType ?? 'signup';
     // 표시용 전화번호 (국가코드 제외)
     final displayPhone = _phoneController.text;
+    final signupType = widget.signupType ?? 'email';
 
     switch (flowType) {
       case 'signup':
-        context.push('/email-password-setup', extra: {
-          'phone': displayPhone,
-          'phoneE164': e164Phone,
-          'agreeMarketing': _agreeMarketing,
-        });
+        if (signupType == 'google' || signupType == 'apple') {
+          // SNS 가입: socialLogin API 호출 후 홈으로 이동
+          _completeSocialSignup(e164Phone);
+        } else {
+          // 이메일 가입: 이메일/비밀번호 설정 화면으로
+          context.push('/email-password-setup', extra: {
+            'phone': displayPhone,
+            'phoneE164': e164Phone,
+            'agreeMarketing': _agreeMarketing,
+          });
+        }
         break;
       case 'find-email':
         context.push('/find-email-result', extra: {
@@ -423,6 +441,137 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
       default:
         context.pop();
     }
+  }
+
+  /// SNS 가입 완료: socialLogin API 호출
+  Future<void> _completeSocialSignup(String e164Phone) async {
+    setState(() => _isLoading = true);
+
+    try {
+      await ref.read(authProvider.notifier).socialSignIn(
+        provider: widget.signupType!.toUpperCase(),
+        socialId: widget.socialId!,
+        email: widget.socialEmail!,
+        name: widget.socialName,
+        profileImageUrl: widget.socialPhotoUrl,
+      );
+
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+
+      // 가입 완료 → 홈으로 이동
+      context.go('/');
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+
+      _showSocialSignupErrorDialog(e.toString());
+    }
+  }
+
+  /// SNS 가입 실패 다이얼로그
+  void _showSocialSignupErrorDialog(String error) {
+    String title = '가입에 실패했어요';
+    String message = '다시 시도해 주세요.';
+
+    if (error.contains('already exists') || error.contains('DUPLICATE')) {
+      title = '이미 가입된 계정이에요';
+      message = '해당 SNS 계정으로 이미 가입되어 있어요.\n로그인을 시도해 주세요.';
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  color: AppColors.red.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: const Icon(
+                  Icons.error_outline_rounded,
+                  size: 28,
+                  color: AppColors.red,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.darkBlue,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                message,
+                style: TextStyle(fontSize: 14, color: AppColors.gray600, height: 1.4),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        side: BorderSide(color: AppColors.gray300),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        '닫기',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.gray600,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        context.go('/login');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.darkBlue,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        '로그인하기',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   void _showCodeMismatchDialog() {

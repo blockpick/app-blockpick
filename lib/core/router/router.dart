@@ -190,6 +190,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           return PhoneVerifyScreen(
             signupType: extra?['signupType'] as String?,
             flowType: extra?['flowType'] as String?,
+            socialId: extra?['socialId'] as String?,
+            socialEmail: extra?['socialEmail'] as String?,
+            socialName: extra?['socialName'] as String?,
+            socialPhotoUrl: extra?['socialPhotoUrl'] as String?,
           );
         },
       ),
