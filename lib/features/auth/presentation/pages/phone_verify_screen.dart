@@ -34,6 +34,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
   final _codeFocusNode = FocusNode();
 
   // 국제 전화번호 입력
+  final PhoneNumber _initialPhoneNumber = PhoneNumber(isoCode: 'KR');
   PhoneNumber _phoneNumber = PhoneNumber(isoCode: 'KR');
   bool _isPhoneValid = false;
   String? _e164PhoneNumber;
@@ -850,16 +851,16 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
           ),
           child: InternationalPhoneNumberInput(
             onInputChanged: (PhoneNumber number) {
-              setState(() {
-                _phoneNumber = number;
-                _e164PhoneNumber = number.phoneNumber;
-                _phoneError = null;
-              });
+              _phoneNumber = number;
+              _e164PhoneNumber = number.phoneNumber;
+              if (_phoneError != null) {
+                setState(() => _phoneError = null);
+              }
             },
             onInputValidated: (bool isValid) {
-              setState(() {
-                _isPhoneValid = isValid;
-              });
+              if (_isPhoneValid != isValid) {
+                setState(() => _isPhoneValid = isValid);
+              }
             },
             selectorConfig: const SelectorConfig(
               selectorType: PhoneInputSelectorType.DIALOG,
@@ -875,7 +876,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
               fontWeight: FontWeight.w600,
               color: AppColors.darkBlue,
             ),
-            initialValue: _phoneNumber,
+            initialValue: _initialPhoneNumber,
             textFieldController: _phoneController,
             formatInput: true,
             isEnabled: !_codeSent,

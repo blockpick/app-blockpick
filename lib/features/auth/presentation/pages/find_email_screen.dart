@@ -26,7 +26,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
   final _codeFocusNode = FocusNode();
 
   // 국제 전화번호 입력
-  PhoneNumber _phoneNumber = PhoneNumber(isoCode: 'KR');
+  final PhoneNumber _initialPhoneNumber = PhoneNumber(isoCode: 'KR');
   bool _isPhoneValid = false;
   String? _e164PhoneNumber;
 
@@ -388,16 +388,15 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
           ),
           child: InternationalPhoneNumberInput(
             onInputChanged: (PhoneNumber number) {
-              setState(() {
-                _phoneNumber = number;
-                _e164PhoneNumber = number.phoneNumber;
-                _phoneError = null;
-              });
+              _e164PhoneNumber = number.phoneNumber;
+              if (_phoneError != null) {
+                setState(() => _phoneError = null);
+              }
             },
             onInputValidated: (bool isValid) {
-              setState(() {
-                _isPhoneValid = isValid;
-              });
+              if (_isPhoneValid != isValid) {
+                setState(() => _isPhoneValid = isValid);
+              }
             },
             selectorConfig: const SelectorConfig(
               selectorType: PhoneInputSelectorType.DIALOG,
@@ -413,7 +412,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
               fontWeight: FontWeight.w600,
               color: AppColors.darkBlue,
             ),
-            initialValue: _phoneNumber,
+            initialValue: _initialPhoneNumber,
             textFieldController: _phoneController,
             formatInput: true,
             isEnabled: !_codeSent,
