@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../models/block_model.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_text_styles.dart';
 
-/// 선택된 블록 아이템 카드 컴포넌트
+/// 선택된 블록 아이템 카드 (기획 SC-009-17)
 ///
-/// 바텀시트나 리스트에서 선택된 블록을 표시할 때 재사용
+/// 체크박스(○/✓) + "X NNNN | Y NNNN" 좌표 + 삭제 아이콘
 class BlockItemCard extends StatelessWidget {
   final BlockModel block;
   final VoidCallback onRemove;
   final VoidCallback? onTap;
   final bool isFocused;
+  final bool isChecked;
+  final ValueChanged<bool>? onCheckedChanged;
 
   const BlockItemCard({
     super.key,
@@ -19,6 +19,8 @@ class BlockItemCard extends StatelessWidget {
     required this.onRemove,
     this.onTap,
     this.isFocused = false,
+    this.isChecked = false,
+    this.onCheckedChanged,
   });
 
   @override
@@ -31,68 +33,68 @@ class BlockItemCard extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
-            color: AppColors.blueWhite,
+            color: isChecked
+                ? AppColors.blue.withValues(alpha: 0.05)
+                : AppColors.blueWhite,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.buleGray),
+            border: Border.all(
+              color: isChecked
+                  ? AppColors.blue.withValues(alpha: 0.3)
+                  : AppColors.buleGray,
+            ),
           ),
           child: Row(
             children: [
-              // 블록 아이콘 (상태별)
-              _buildBlockIcon(block.state),
+              // 체크박스 (원형)
+              GestureDetector(
+                onTap: () => onCheckedChanged?.call(!isChecked),
+                child: Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: isChecked ? AppColors.blue : Colors.transparent,
+                    border: Border.all(
+                      color: isChecked ? AppColors.blue : AppColors.gray400,
+                      width: 2,
+                    ),
+                  ),
+                  child: isChecked
+                      ? const Icon(Icons.check, size: 16, color: AppColors.white)
+                      : null,
+                ),
+              ),
 
               const SizedBox(width: 12),
 
-              // 블록 위치 정보
+              // 좌표 정보 "X NNNN | Y NNNN"
               Expanded(
                 child: Text(
-                  '${block.row} Row, ${block.col} Column',
-                  style: AppTextStyles.body.copyWith(
+                  'X ${block.col.toString().padLeft(4, '0')}  |  Y ${block.row.toString().padLeft(4, '0')}',
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.darkBlue,
-                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0.5,
                   ),
                 ),
               ),
 
-              // 삭제 버튼
-              IconButton(
-                icon: const Icon(Icons.close, size: 20),
-                color: AppColors.medium,
-                onPressed: onRemove,
+              // 삭제 버튼 (휴지통 아이콘)
+              GestureDetector(
+                onTap: onRemove,
+                child: const Padding(
+                  padding: EdgeInsets.all(4),
+                  child: Icon(
+                    Icons.delete_outline_rounded,
+                    size: 20,
+                    color: AppColors.gray400,
+                  ),
+                ),
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  /// 블록 상태별 아이콘
-  Widget _buildBlockIcon(BlockState state) {
-    String iconPath;
-
-    // 🎯 포커스된 블록이면 list-selected.svg 사용
-    if (isFocused) {
-      iconPath = 'assets/icons/pick/list-selected.svg';
-    } else {
-      switch (state) {
-        case BlockState.selected:
-          iconPath = 'assets/icons/pick/selected.svg';
-          break;
-        case BlockState.past:
-          iconPath = 'assets/icons/pick/past.svg';
-          break;
-        default:
-          iconPath = 'assets/icons/pick/selected.svg';
-      }
-    }
-
-    return SizedBox(
-      width: 24,
-      height: 24,
-      child: SvgPicture.asset(
-        iconPath,
-        width: 24,
-        height: 24,
       ),
     );
   }

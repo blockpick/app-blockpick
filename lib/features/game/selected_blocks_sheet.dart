@@ -12,11 +12,16 @@ import '../auth/presentation/dialogs/auth_dialogs.dart';
 import 'widgets/game_join_loading_overlay.dart';
 import 'widgets/game_join_result_overlay.dart';
 
-/// 선택된 블록 목록을 보여주는 바텀시트 (토스 스타일 애니메이션)
+/// 참여하기 모달 바텀시트 (기획 SC-009-17)
+///
+/// - 헤더: 체크 아이콘 + "선택한 좌표로 이벤트에 참여하시겠어요?"
+/// - 컨트롤: "N개 좌표" 배지 + "전체선택 | 선택삭제"
+/// - 블록 리스트: 체크박스 + "X NNNN | Y NNNN" + 삭제 아이콘
+/// - 하단: "참여하기 (NNNP)" 버튼 + "취소"
 class SelectedBlocksSheet extends ConsumerStatefulWidget {
   final GridConfig gridConfig;
   final GameRound? game;
-  final Game? fullGame; // 전체 게임 정보 (contract address, gameProducts)
+  final Game? fullGame;
 
   const SelectedBlocksSheet({
     super.key,
@@ -30,12 +35,16 @@ class SelectedBlocksSheet extends ConsumerStatefulWidget {
 }
 
 class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
+  /// 체크된 블록 ID 목록
+  final Set<String> _checkedBlockIds = {};
+
   @override
   Widget build(BuildContext context) {
     final selectedBlocks = ref.watch(gridStateProvider(widget.gridConfig)).selectedBlocks;
     final gridNotifier = ref.read(gridStateProvider(widget.gridConfig).notifier);
-    final screenSize = MediaQuery.of(context).size;
     final isAuthenticated = ref.watch(isAuthenticatedProvider);
+    final entryFee = widget.fullGame?.entryFee ?? 0;
+    final totalCost = entryFee * selectedBlocks.length;
 
     // 블록이 비었으면 모달 닫기
     if (selectedBlocks.isEmpty) {
@@ -45,12 +54,17 @@ class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
       return const SizedBox.shrink();
     }
 
+    // 현재 유효한 체크 수 (삭제된 블록 제외)
+    final checkedCount = _checkedBlockIds.where(
+      (id) => selectedBlocks.any((b) => b.id == id),
+    ).length;
+
     return DraggableScrollableSheet(
-      initialChildSize: 0.4,
-      minChildSize: 0.2,
-      maxChildSize: 0.7,
+      initialChildSize: 0.55,
+      minChildSize: 0.3,
+      maxChildSize: 0.8,
       snap: true,
-      snapSizes: const [0.4, 0.7],
+      snapSizes: const [0.55, 0.8],
       builder: (context, scrollController) {
         return Container(
           decoration: BoxDecoration(
@@ -82,80 +96,157 @@ class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
                 ),
               ),
 
-              // 토스 스타일 헤더: 선택된 블록 수 + CLEAR 버튼
+              // 헤더: 체크 아이콘 + 안내 문구
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: [
-                        Text(
-                          '${selectedBlocks.length}',
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.darkBlue,
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          '블록 선택됨',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.gray600,
-                          ),
-                        ),
-                      ],
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: AppColors.blue.withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.check_circle_rounded,
+                        color: AppColors.blue,
+                        size: 28,
+                      ),
                     ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      '선택한 좌표로 이벤트에\n참여하시겠어요?',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.darkBlue,
+                        height: 1.4,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // 좌표 개수 배지 + 전체선택/선택삭제 컨트롤
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    // N개 좌표 배지
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: AppColors.blue.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        '${selectedBlocks.length}개 좌표',
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.blue,
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                    // 전체선택
                     GestureDetector(
                       onTap: () {
-                        gridNotifier.clearBlocks();
+                        setState(() {
+                          if (checkedCount == selectedBlocks.length) {
+                            _checkedBlockIds.clear();
+                          } else {
+                            _checkedBlockIds.clear();
+                            for (final block in selectedBlocks) {
+                              _checkedBlockIds.add(block.id);
+                            }
+                          }
+                        });
                       },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: AppColors.red.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(8),
+                      child: Text(
+                        '전체선택',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.gray600,
                         ),
-                        child: Text(
-                          '전체 삭제',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.red,
-                          ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(
+                        '|',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: AppColors.gray300,
+                        ),
+                      ),
+                    ),
+                    // 선택삭제
+                    GestureDetector(
+                      onTap: checkedCount > 0
+                          ? () {
+                              // 체크된 블록을 선택 해제 (그리드에서 제거)
+                              final blocksToRemove = selectedBlocks
+                                  .where((b) => _checkedBlockIds.contains(b.id))
+                                  .toList();
+                              for (final block in blocksToRemove) {
+                                gridNotifier.toggleBlock(block);
+                              }
+                              setState(() {
+                                _checkedBlockIds.clear();
+                              });
+                            }
+                          : null,
+                      child: Text(
+                        '선택삭제',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: checkedCount > 0 ? AppColors.red : AppColors.gray400,
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
+              const SizedBox(height: 8),
 
               // 스크롤 가능한 블록 리스트
               Expanded(
                 child: ListView.builder(
                   controller: scrollController,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   itemCount: selectedBlocks.length,
                   itemBuilder: (context, index) {
                     final block = selectedBlocks[index];
+                    final isChecked = _checkedBlockIds.contains(block.id);
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: BlockItemCard(
                         block: block,
+                        isChecked: isChecked,
+                        onCheckedChanged: (checked) {
+                          setState(() {
+                            if (checked) {
+                              _checkedBlockIds.add(block.id);
+                            } else {
+                              _checkedBlockIds.remove(block.id);
+                            }
+                          });
+                        },
                         onRemove: () => gridNotifier.toggleBlock(block),
-                        isFocused: ref.watch(gridStateProvider(widget.gridConfig)).focusedBlockId == block.id,
                         onTap: () {
-                          // 블록 위치로 이동 (토글)
-                          gridNotifier.navigateToBlock(
-                            block,
-                            screenWidth: screenSize.width,
-                            screenHeight: screenSize.height,
-                          );
+                          setState(() {
+                            if (isChecked) {
+                              _checkedBlockIds.remove(block.id);
+                            } else {
+                              _checkedBlockIds.add(block.id);
+                            }
+                          });
                         },
                       ),
                     );
@@ -163,11 +254,11 @@ class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
                 ),
               ),
 
-              // 토스 스타일 하단 제출 버튼
+              // 하단 버튼 영역
               SafeArea(
                 top: false,
                 child: Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
                   decoration: BoxDecoration(
                     color: AppColors.white,
                     border: Border(
@@ -177,50 +268,66 @@ class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
                       ),
                     ),
                   ),
-                  child: GestureDetector(
-                    onTap: () async {
-                      // 로그인 체크
-                      if (!isAuthenticated) {
-                        await showLoginDialog(context);
-                        return;
-                      }
-                      // 게임 참가 프로세스 시작
-                      await _handleJoinGame(context, ref, selectedBlocks);
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(vertical: 18),
-                      decoration: BoxDecoration(
-                        color: AppColors.darkBlue,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.darkBlue.withValues(alpha: 0.3),
-                            blurRadius: 12,
-                            offset: const Offset(0, 4),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // 참여하기 버튼
+                      GestureDetector(
+                        onTap: () async {
+                          if (!isAuthenticated) {
+                            await showLoginDialog(context);
+                            return;
+                          }
+                          await _handleJoinGame(context, ref, selectedBlocks);
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          decoration: BoxDecoration(
+                            color: AppColors.darkBlue,
+                            borderRadius: BorderRadius.circular(14),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.darkBlue.withValues(alpha: 0.3),
+                                blurRadius: 12,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.check_circle_outline_rounded,
-                            size: 22,
-                            color: AppColors.white,
-                          ),
-                          const SizedBox(width: 10),
-                          Text(
-                            '${selectedBlocks.length}개 블록으로 참가하기',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.white,
+                          child: Center(
+                            child: Text(
+                              totalCost > 0
+                                  ? '참여하기 (${_formatNumber(totalCost)}P)'
+                                  : '참여하기',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.white,
+                              ),
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                      const SizedBox(height: 8),
+                      // 취소 버튼
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: Center(
+                            child: Text(
+                              '취소',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.gray600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -229,6 +336,20 @@ class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
         );
       },
     );
+  }
+
+  /// 숫자 포맷 (천 단위 콤마)
+  String _formatNumber(int number) {
+    if (number < 1000) return number.toString();
+    final str = number.toString();
+    final buffer = StringBuffer();
+    for (int i = 0; i < str.length; i++) {
+      if (i > 0 && (str.length - i) % 3 == 0) {
+        buffer.write(',');
+      }
+      buffer.write(str[i]);
+    }
+    return buffer.toString();
   }
 
   /// 게임 참가 처리 (Toss 스타일 애니메이션)
@@ -271,7 +392,7 @@ class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
       return;
     }
 
-    print('\\n🎮 게임 참가 시작:');
+    print('\n🎮 게임 참가 시작:');
     print('   • 게임 ID: ${widget.game!.id}');
     print('   • 선택 블록: ($row, $col)');
     print('   • 컨트랙트: $contractAddress');
