@@ -1,4 +1,5 @@
 import 'dart:ui';
+import '../../../../core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../widgets/coordinate_result_dialog.dart';
@@ -14,7 +15,7 @@ class DrawPickScreen extends StatefulWidget {
 
 class _DrawPickScreenState extends State<DrawPickScreen>
     with TickerProviderStateMixin {
-  static const Color modeColor = Color(0xFFEC4899);
+  static const Color modeColor = AppColors.pink;
   static const int gridSize = 1000;
 
   final List<List<Offset>> _strokes = [];

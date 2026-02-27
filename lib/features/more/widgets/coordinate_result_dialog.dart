@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../../core/theme/app_colors.dart';
 
 /// 게임 스타일 좌표 결과 다이얼로그
 class CoordinateResultDialog extends StatefulWidget {
@@ -37,7 +38,7 @@ class CoordinateResultDialog extends StatefulWidget {
     return showGeneralDialog(
       context: context,
       barrierDismissible: false,
-      barrierColor: Colors.black.withValues(alpha: 0.85),
+      barrierColor: AppColors.textBlack.withValues(alpha: 0.85),
       transitionDuration: const Duration(milliseconds: 400),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         return ScaleTransition(
@@ -148,7 +149,7 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
                       spreadRadius: 5,
                     ),
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.5),
+                      color: AppColors.textBlack.withValues(alpha: 0.5),
                       blurRadius: 30,
                       offset: const Offset(0, 15),
                     ),
@@ -170,7 +171,7 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
                                   end: Alignment(_shineAnimation.value, 0.5),
                                   colors: [
                                     Colors.transparent,
-                                    Colors.white.withValues(alpha: 0.08),
+                                    AppColors.white.withValues(alpha: 0.08),
                                     Colors.transparent,
                                   ],
                                 ).createShader(bounds);
@@ -178,7 +179,7 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
                               blendMode: BlendMode.srcATop,
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withValues(alpha: 0.05),
+                                  color: AppColors.white.withValues(alpha: 0.05),
                                 ),
                               ),
                             ),
@@ -248,7 +249,7 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
                           Text(
                             'COORDINATE',
                             style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.5),
+                              color: AppColors.white.withValues(alpha: 0.5),
                               fontSize: 11,
                               fontWeight: FontWeight.w600,
                               letterSpacing: 5,
@@ -259,7 +260,7 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
                             shaderCallback: (bounds) {
                               return LinearGradient(
                                 colors: [
-                                  Colors.white,
+                                  AppColors.white,
                                   widget.modeColor.withValues(alpha: 0.8),
                                 ],
                               ).createShader(bounds);
@@ -267,7 +268,7 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
                             child: const Text(
                               'LOCKED IN',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: AppColors.white,
                                 fontSize: 32,
                                 fontWeight: FontWeight.w900,
                                 letterSpacing: 3,
@@ -284,7 +285,7 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
                               vertical: 20,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.black.withValues(alpha: 0.4),
+                              color: AppColors.textBlack.withValues(alpha: 0.4),
                               borderRadius: BorderRadius.circular(20),
                               border: Border.all(
                                 color: widget.modeColor.withValues(alpha: 0.2),
@@ -341,7 +342,7 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
                               widget.subtitle!,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.6),
+                                color: AppColors.white.withValues(alpha: 0.6),
                                 fontSize: 14,
                                 height: 1.5,
                               ),
@@ -409,7 +410,7 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
         Text(
           value.toString().padLeft(4, '0'),
           style: const TextStyle(
-            color: Colors.white,
+            color: AppColors.white,
             fontSize: 36,
             fontWeight: FontWeight.w800,
             fontFamily: 'monospace',
@@ -444,12 +445,12 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
                   ],
                 )
               : null,
-          color: isPrimary ? null : Colors.white.withValues(alpha: 0.08),
+          color: isPrimary ? null : AppColors.white.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
             color: isPrimary
                 ? widget.modeColor.withValues(alpha: 0.6)
-                : Colors.white.withValues(alpha: 0.15),
+                : AppColors.white.withValues(alpha: 0.15),
           ),
           boxShadow: isPrimary
               ? [
@@ -466,14 +467,14 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
           children: [
             Icon(
               icon,
-              color: Colors.white.withValues(alpha: isPrimary ? 1 : 0.8),
+              color: AppColors.white.withValues(alpha: isPrimary ? 1 : 0.8),
               size: 20,
             ),
             const SizedBox(width: 8),
             Text(
               label,
               style: TextStyle(
-                color: Colors.white.withValues(alpha: isPrimary ? 1 : 0.8),
+                color: AppColors.white.withValues(alpha: isPrimary ? 1 : 0.8),
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1.5,

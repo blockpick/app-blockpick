@@ -28,7 +28,7 @@ class TutorialButtonWidget extends StatelessWidget {
             gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [Color(0xFFEFF6FF), Color(0xFFF9F5FF)],
+              colors: [AppColors.primaryBg, AppColors.primaryBg],
             ),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(

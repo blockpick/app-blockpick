@@ -64,7 +64,7 @@ class AnnouncementsWidget extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF5F5F5),
+                  color: AppColors.gray100,
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: Center(

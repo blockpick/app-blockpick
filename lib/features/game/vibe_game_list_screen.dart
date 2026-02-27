@@ -28,7 +28,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF5F0),
+      backgroundColor: AppColors.gray100,
       body: CustomScrollView(
         slivers: [
           // 테마 필터
@@ -50,7 +50,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
   Widget _buildThemeFilter() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
-      color: const Color(0xFFFFF5F0),
+      color: AppColors.gray100,
       child: Row(
         children: _themes.map((theme) {
           final isSelected = _selectedTheme == theme['value'];
@@ -70,13 +70,13 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? const Color(0xFFFF6B6B)
+                      ? AppColors.red
                       : Colors.white,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: isSelected
                       ? [
                           BoxShadow(
-                            color: const Color(0xFFFF6B6B).withValues(alpha: 0.3),
+                            color: AppColors.red.withValues(alpha: 0.3),
                             blurRadius: 12,
                             offset: const Offset(0, 4),
                           ),
@@ -136,7 +136,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
       loading: () => const SliverFillRemaining(
         child: Center(
           child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFF6B6B)),
+            valueColor: AlwaysStoppedAnimation<Color>(AppColors.red),
           ),
         ),
       ),
@@ -195,7 +195,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFFF6B6B),
+                          color: AppColors.red,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
@@ -285,8 +285,8 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
                             colors: [
-                              Color(0xFFFF6B6B),
-                              Color(0xFFFFB347),
+                              AppColors.red,
+                              AppColors.yellow,
                             ],
                           ),
                           borderRadius: BorderRadius.circular(12),
@@ -399,7 +399,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
               ref.invalidate(gamesByTypeProvider);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFF6B6B),
+              backgroundColor: AppColors.red,
               foregroundColor: AppColors.white,
             ),
             child: const Text('Retry'),

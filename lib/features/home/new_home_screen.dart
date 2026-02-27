@@ -144,10 +144,10 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
           margin: const EdgeInsets.fromLTRB(20, 8, 20, 0),
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
+            gradient: LinearGradient(
               colors: [
-                Color(0xFFFFF3CD),
-                Color(0xFFFFE69C),
+                AppColors.yellow.withValues(alpha: 0.35),
+                AppColors.yellow.withValues(alpha: 0.6),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -155,7 +155,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFFFFD43B).withValues(alpha: 0.3),
+                color: AppColors.yellow.withValues(alpha: 0.3),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -212,7 +212,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                 width: 56,
                 height: 56,
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.6),
+                  color: AppColors.white.withValues(alpha: 0.6),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: const Icon(
@@ -342,15 +342,15 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
           margin: const EdgeInsets.fromLTRB(20, 12, 20, 0),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Color(0xFFFFF9E6), Color(0xFFFFF3CD)],
+            gradient: LinearGradient(
+              colors: [AppColors.yellow.withValues(alpha: 0.15), AppColors.yellow.withValues(alpha: 0.35)],
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
             ),
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFFFFD43B).withValues(alpha: 0.2),
+                color: AppColors.yellow.withValues(alpha: 0.2),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -365,7 +365,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                     width: 32,
                     height: 32,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFFD43B),
+                      color: AppColors.yellow,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Icon(
@@ -1268,7 +1268,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
       case 'select':
         return AppColors.green;
       case 'vibe':
-        return const Color(0xFF9C27B0);
+        return AppColors.primaryLight;
       case 'prime':
         return AppColors.darkBlue;
       default:

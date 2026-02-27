@@ -17,7 +17,7 @@ class PickSectionPremiumWidget extends StatelessWidget {
           end: Alignment.bottomCenter,
           colors: [
             AppColors.white,
-            const Color(0xFFFAFBFF),
+            AppColors.gray100,
           ],
         ),
       ),

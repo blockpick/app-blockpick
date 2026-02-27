@@ -276,7 +276,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
-            color: const Color(0xFF0A1128).withValues(alpha: 0.75),
+            color: AppColors.textBlack.withValues(alpha: 0.75),
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
@@ -368,7 +368,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
-        color: const Color(0xFF0A1128).withValues(alpha: 0.75),
+        color: AppColors.textBlack.withValues(alpha: 0.75),
         borderRadius: BorderRadius.circular(24),
       ),
       child: Row(
@@ -785,11 +785,11 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                   onBlockTap: (block) {
                     debugPrint('Block tapped: ${block.row}, ${block.col}');
 
-                    // 로그인 체크
+                    // 로그인 체크 — false 반환 시 블록 선택 안 됨
                     final isAuthenticated = ref.read(isAuthenticatedProvider);
                     if (!isAuthenticated) {
                       showLoginDialog(context);
-                      return;
+                      return false;
                     }
 
                     // 튜토리얼 목표 블록을 탭했는지 확인
@@ -804,7 +804,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                       _tutorialCoachMark?.next();
                     }
 
-                    // 블록 선택만 하고, 바텀시트는 배지/FAB 탭으로 열림
+                    // 블록 선택 허용
+                    return true;
                   },
                 );
               },
@@ -1014,10 +1015,10 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         decoration: BoxDecoration(
           gradient: isComplete
               ? const LinearGradient(
-                  colors: [Color(0xFF10B981), Color(0xFF059669)],
+                  colors: [AppColors.mint, AppColors.mint],
                 )
               : null,
-          color: isComplete ? null : const Color(0xFF0A1128).withValues(alpha: 0.85),
+          color: isComplete ? null : AppColors.textBlack.withValues(alpha: 0.85),
           borderRadius: BorderRadius.circular(32),
           boxShadow: [
             BoxShadow(
@@ -1129,7 +1130,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: const Color(0xFF0A1128).withValues(alpha: 0.75),
+          color: AppColors.textBlack.withValues(alpha: 0.75),
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(

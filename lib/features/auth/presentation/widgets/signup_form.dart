@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/auth/domain/providers/auth_provider.dart';
 import '../../../../core/auth/domain/exceptions/auth_exception.dart';
 
@@ -270,19 +271,19 @@ class _SignupFormState extends ConsumerState<SignupForm> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.red.shade50,
+                color: AppColors.red.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.red.shade200),
+                border: Border.all(color: AppColors.red.withValues(alpha: 0.2)),
               ),
               child: Row(
                 children: [
-                  Icon(Icons.error_outline, color: Colors.red.shade700, size: 20),
+                  const Icon(Icons.error_outline, color: AppColors.red, size: 20),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       _errorMessage!,
-                      style: TextStyle(
-                        color: Colors.red.shade700,
+                      style: const TextStyle(
+                        color: AppColors.red,
                         fontSize: 13,
                       ),
                     ),
@@ -298,11 +299,11 @@ class _SignupFormState extends ConsumerState<SignupForm> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 'Already have an account?',
                 style: TextStyle(
                   fontSize: 13,
-                  color: Colors.grey[600],
+                  color: AppColors.gray600,
                 ),
               ),
               TextButton(
@@ -320,7 +321,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                   'Sign in',
                   style: TextStyle(
                     fontSize: 13,
-                    color: Color(0xFF4F46E5),
+                    color: AppColors.primaryMain,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -350,13 +351,13 @@ class _SignupFormState extends ConsumerState<SignupForm> {
       height: 32,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: isActive ? const Color(0xFF4F46E5) : Colors.grey[300],
+        color: isActive ? AppColors.primaryMain : AppColors.gray200,
       ),
       child: Center(
         child: Text(
           '$step',
           style: TextStyle(
-            color: isActive ? Colors.white : Colors.grey[600],
+            color: isActive ? AppColors.white : AppColors.gray600,
             fontWeight: FontWeight.bold,
             fontSize: 14,
           ),
@@ -368,7 +369,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
   Widget _buildStepLine(bool isActive) {
     return Container(
       height: 2,
-      color: isActive ? const Color(0xFF4F46E5) : Colors.grey[300],
+      color: isActive ? AppColors.primaryMain : AppColors.gray200,
     );
   }
 
@@ -377,11 +378,11 @@ class _SignupFormState extends ConsumerState<SignupForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
+        const Text(
           'Enter your email address',
           style: TextStyle(
             fontSize: 12,
-            color: Colors.grey[600],
+            color: AppColors.gray600,
           ),
         ),
         const SizedBox(height: 16),
@@ -397,24 +398,24 @@ class _SignupFormState extends ConsumerState<SignupForm> {
           controller: _emailController,
           decoration: InputDecoration(
             hintText: 'Enter email',
-            hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
+            hintStyle: const TextStyle(color: AppColors.gray400, fontSize: 14),
             filled: true,
-            fillColor: Colors.grey[50],
+            fillColor: AppColors.gray100,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey[300]!),
+              borderSide: const BorderSide(color: AppColors.gray200),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey[300]!),
+              borderSide: const BorderSide(color: AppColors.gray200),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Color(0xFF4F46E5)),
+              borderSide: const BorderSide(color: AppColors.primaryMain),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Colors.red),
+              borderSide: const BorderSide(color: AppColors.red),
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           ),
@@ -439,8 +440,8 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                 child: ElevatedButton(
                   onPressed: _handleSendCode,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF4F46E5),
-                    foregroundColor: Colors.white,
+                    backgroundColor: AppColors.primaryMain,
+                    foregroundColor: AppColors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -463,9 +464,9 @@ class _SignupFormState extends ConsumerState<SignupForm> {
       children: [
         Text(
           'Enter the verification code sent to ${_emailController.text}',
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 12,
-            color: Colors.grey[600],
+            color: AppColors.gray600,
           ),
         ),
         const SizedBox(height: 16),
@@ -481,24 +482,24 @@ class _SignupFormState extends ConsumerState<SignupForm> {
           controller: _codeController,
           decoration: InputDecoration(
             hintText: 'Enter 6-digit code',
-            hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
+            hintStyle: const TextStyle(color: AppColors.gray400, fontSize: 14),
             filled: true,
-            fillColor: Colors.grey[50],
+            fillColor: AppColors.gray100,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey[300]!),
+              borderSide: const BorderSide(color: AppColors.gray200),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey[300]!),
+              borderSide: const BorderSide(color: AppColors.gray200),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Color(0xFF4F46E5)),
+              borderSide: const BorderSide(color: AppColors.primaryMain),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Colors.red),
+              borderSide: const BorderSide(color: AppColors.red),
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           ),
@@ -518,7 +519,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
             'Resend Code',
             style: TextStyle(
               fontSize: 13,
-              color: Color(0xFF4F46E5),
+              color: AppColors.primaryMain,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -536,8 +537,8 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                 child: ElevatedButton(
                   onPressed: _handleVerifyCode,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF4F46E5),
-                    foregroundColor: Colors.white,
+                    backgroundColor: AppColors.primaryMain,
+                    foregroundColor: AppColors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -558,11 +559,11 @@ class _SignupFormState extends ConsumerState<SignupForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
+        const Text(
           'Complete your profile',
           style: TextStyle(
             fontSize: 12,
-            color: Colors.grey[600],
+            color: AppColors.gray600,
           ),
         ),
         const SizedBox(height: 16),
@@ -577,24 +578,24 @@ class _SignupFormState extends ConsumerState<SignupForm> {
           controller: _nicknameController,
           decoration: InputDecoration(
             hintText: 'Enter your nickname',
-            hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
+            hintStyle: const TextStyle(color: AppColors.gray400, fontSize: 14),
             filled: true,
-            fillColor: Colors.grey[50],
+            fillColor: AppColors.gray100,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey[300]!),
+              borderSide: const BorderSide(color: AppColors.gray200),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey[300]!),
+              borderSide: const BorderSide(color: AppColors.gray200),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Color(0xFF4F46E5)),
+              borderSide: const BorderSide(color: AppColors.primaryMain),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Colors.red),
+              borderSide: const BorderSide(color: AppColors.red),
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           ),
@@ -618,24 +619,24 @@ class _SignupFormState extends ConsumerState<SignupForm> {
           obscureText: !_isPasswordVisible,
           decoration: InputDecoration(
             hintText: '••••••••••••',
-            hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
+            hintStyle: const TextStyle(color: AppColors.gray400, fontSize: 14),
             filled: true,
-            fillColor: Colors.grey[50],
+            fillColor: AppColors.gray100,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey[300]!),
+              borderSide: const BorderSide(color: AppColors.gray200),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey[300]!),
+              borderSide: const BorderSide(color: AppColors.gray200),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Color(0xFF4F46E5)),
+              borderSide: const BorderSide(color: AppColors.primaryMain),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Colors.red),
+              borderSide: const BorderSide(color: AppColors.red),
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             suffixIcon: IconButton(
@@ -643,7 +644,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                 _isPasswordVisible
                     ? Icons.visibility_outlined
                     : Icons.visibility_off_outlined,
-                color: Colors.grey[600],
+                color: AppColors.gray600,
                 size: 20,
               ),
               onPressed: () {
@@ -673,24 +674,24 @@ class _SignupFormState extends ConsumerState<SignupForm> {
           obscureText: !_isConfirmPasswordVisible,
           decoration: InputDecoration(
             hintText: 'Confirm Password',
-            hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
+            hintStyle: const TextStyle(color: AppColors.gray400, fontSize: 14),
             filled: true,
-            fillColor: Colors.grey[50],
+            fillColor: AppColors.gray100,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey[300]!),
+              borderSide: const BorderSide(color: AppColors.gray200),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey[300]!),
+              borderSide: const BorderSide(color: AppColors.gray200),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Color(0xFF4F46E5)),
+              borderSide: const BorderSide(color: AppColors.primaryMain),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Colors.red),
+              borderSide: const BorderSide(color: AppColors.red),
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             suffixIcon: IconButton(
@@ -698,7 +699,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                 _isConfirmPasswordVisible
                     ? Icons.visibility_outlined
                     : Icons.visibility_off_outlined,
-                color: Colors.grey[600],
+                color: AppColors.gray600,
                 size: 20,
               ),
               onPressed: () {
@@ -730,8 +731,8 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                 child: ElevatedButton(
                   onPressed: _handleSignup,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF4F46E5),
-                    foregroundColor: Colors.white,
+                    backgroundColor: AppColors.primaryMain,
+                    foregroundColor: AppColors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),

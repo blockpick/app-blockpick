@@ -299,7 +299,7 @@ class PromotionCard extends StatelessWidget {
       case 'select':
         return AppColors.green;
       case 'vibe':
-        return const Color(0xFF9C27B0);
+        return AppColors.primaryLight;
       case 'prime':
         return AppColors.darkBlue;
       default:
@@ -510,7 +510,7 @@ class PromotionCardSmall extends StatelessWidget {
       case 'select':
         return AppColors.green;
       case 'vibe':
-        return const Color(0xFF9C27B0);
+        return AppColors.primaryLight;
       case 'prime':
         return AppColors.darkBlue;
       default:

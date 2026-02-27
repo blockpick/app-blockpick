@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
+import '../../../../core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:noise_meter/noise_meter.dart';
@@ -18,7 +19,7 @@ class VoicePickScreen extends StatefulWidget {
 
 class _VoicePickScreenState extends State<VoicePickScreen>
     with TickerProviderStateMixin {
-  static const Color modeColor = Color(0xFF8B5CF6);
+  static const Color modeColor = AppColors.primaryLight;
   static const int gridSize = 1000;
 
   NoiseMeter? _noiseMeter;

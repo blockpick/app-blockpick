@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
+import '../../../../core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../widgets/coordinate_result_dialog.dart';
@@ -16,7 +17,7 @@ class WavePickScreen extends StatefulWidget {
 
 class _WavePickScreenState extends State<WavePickScreen>
     with TickerProviderStateMixin {
-  static const Color modeColor = Color(0xFF06B6D4);
+  static const Color modeColor = AppColors.blue;
   static const int gridSize = 1000;
 
   final List<_Wave> _waves = [];

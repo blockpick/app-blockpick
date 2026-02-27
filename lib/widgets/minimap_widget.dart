@@ -203,12 +203,12 @@ class _MinimapPainter extends CustomPainter {
 
     // 채우기 페인트 (반투명 분홍색)
     final fillPaint = Paint()
-      ..color = const Color(0xFFFF69B4).withOpacity(0.4)
+      ..color = AppColors.primaryMain.withOpacity(0.4)
       ..style = PaintingStyle.fill;
 
     // 테두리 페인트 (진한 분홍색)
     final borderPaint = Paint()
-      ..color = const Color(0xFFFF1493).withOpacity(0.8)
+      ..color = AppColors.primaryMain.withOpacity(0.8)
       ..strokeWidth = 1.5 // 미니맵에서는 얇은 선
       ..style = PaintingStyle.stroke;
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
+import '../../../../core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../widgets/coordinate_result_dialog.dart';
@@ -16,7 +17,7 @@ class PredictPickScreen extends StatefulWidget {
 
 class _PredictPickScreenState extends State<PredictPickScreen>
     with TickerProviderStateMixin {
-  static const Color modeColor = Color(0xFF14B8A6);
+  static const Color modeColor = AppColors.mint;
   static const int gridSize = 1000;
 
   final _rowController = TextEditingController();

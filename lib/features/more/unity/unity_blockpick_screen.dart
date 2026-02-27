@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_embed_unity/flutter_embed_unity.dart';
+import '../../../core/theme/app_colors.dart';
 
 /// Unity BlockPick 게임 화면
 /// Unity에서 빌드한 3D 블록 선택 게임을 표시
@@ -136,7 +137,7 @@ class _UnityBlockpickScreenState extends State<UnityBlockpickScreen> {
       backgroundColor: Colors.transparent,
       builder: (context) => Container(
         decoration: const BoxDecoration(
-          color: Color(0xFF1E1E1E),
+          color: AppColors.textBlack,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
         padding: const EdgeInsets.all(20),
@@ -277,7 +278,7 @@ class _UnityBlockpickScreenState extends State<UnityBlockpickScreen> {
       builder: (context) => StatefulBuilder(
         builder: (context, setModalState) => Container(
           decoration: const BoxDecoration(
-            color: Color(0xFF1E1E1E),
+            color: AppColors.textBlack,
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           padding: const EdgeInsets.all(20),

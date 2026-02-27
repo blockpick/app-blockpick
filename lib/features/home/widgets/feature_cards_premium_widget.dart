@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../../../core/theme/app_colors.dart';
 
 /// 프리미엄 피처 카드들 (STAGE & VIBE)
 class FeatureCardsPremiumWidget extends StatelessWidget {
@@ -15,10 +16,10 @@ class FeatureCardsPremiumWidget extends StatelessWidget {
             subtitle: 'Join the world',
             icon: Icons.card_giftcard,
             colors: const [
-              Color(0xFF9B7EFF),
-              Color(0xFF6E5AE9),
+              AppColors.primaryLight,
+              AppColors.primaryMain,
             ],
-            particleColor: const Color(0xFFB794FF),
+            particleColor: AppColors.primaryLight,
           ),
         ),
         const SizedBox(width: 12),
@@ -28,10 +29,10 @@ class FeatureCardsPremiumWidget extends StatelessWidget {
             subtitle: 'Play with Purpose',
             icon: Icons.music_note,
             colors: const [
-              Color(0xFF75C9FF),
-              Color(0xFF5C9DFF),
+              AppColors.blue,
+              AppColors.blue,
             ],
-            particleColor: const Color(0xFF8ED5FF),
+            particleColor: AppColors.blue,
           ),
         ),
       ],
@@ -198,8 +199,8 @@ class _PremiumFeatureCardState extends State<_PremiumFeatureCard>
                             ShaderMask(
                               shaderCallback: (bounds) => const LinearGradient(
                                 colors: [
-                                  Colors.white,
-                                  Color(0xFFF0F0F0),
+                                  AppColors.white,
+                                  AppColors.gray100,
                                 ],
                               ).createShader(bounds),
                               child: Text(

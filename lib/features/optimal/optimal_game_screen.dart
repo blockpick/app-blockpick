@@ -618,7 +618,7 @@ class _CountdownTimerState extends State<_CountdownTimer>
   Color _getTimeColor() {
     final minutes = _remainingTime.inMinutes;
     if (minutes < 30) return AppColors.red;
-    if (minutes < 60) return const Color(0xFFFF8C00); // 주황색
+    if (minutes < 60) return AppColors.yellow; // 주황색
     return AppColors.yellow;
   }
 

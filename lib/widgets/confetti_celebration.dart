@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import '../core/theme/app_colors.dart';
 
 /// 팡팡 터지는 축하 효과 위젯
 class ConfettiCelebration extends StatefulWidget {
@@ -77,14 +78,14 @@ class _ConfettiCelebrationState extends State<ConfettiCelebration>
   }
 
   static const _colors = [
-    Color(0xFFFF6B6B),
-    Color(0xFFFFE66D),
-    Color(0xFF4ECDC4),
-    Color(0xFF45B7D1),
-    Color(0xFF96CEB4),
-    Color(0xFFDDA0DD),
-    Color(0xFFFF9F43),
-    Color(0xFF00D2D3),
+    AppColors.red,
+    AppColors.yellow,
+    AppColors.mint,
+    AppColors.blue,
+    AppColors.mint,
+    AppColors.primaryLight,
+    AppColors.yellow,
+    AppColors.mint,
   ];
 
   @override

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
+import '../../../../core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../widgets/coordinate_result_dialog.dart';
@@ -15,7 +16,7 @@ class TimePickScreen extends StatefulWidget {
 
 class _TimePickScreenState extends State<TimePickScreen>
     with TickerProviderStateMixin {
-  static const Color modeColor = Color(0xFFF59E0B);
+  static const Color modeColor = AppColors.yellow;
   static const int gridSize = 1000;
 
   Timer? _timer;

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'dart:ui';
+import '../../../../core/theme/app_colors.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +18,7 @@ class FortunePickScreen extends StatefulWidget {
 
 class _FortunePickScreenState extends State<FortunePickScreen>
     with TickerProviderStateMixin {
-  static const Color modeColor = Color(0xFFA855F7);
+  static const Color modeColor = AppColors.primaryLight;
   static const int gridSize = 1000;
 
   int _currentQuestion = 0;
@@ -371,7 +372,7 @@ class _FortunePickScreenState extends State<FortunePickScreen>
                 gradient: LinearGradient(
                   colors: [
                     modeColor,
-                    const Color(0xFFEC4899),
+                    AppColors.pink,
                   ],
                 ),
                 borderRadius: BorderRadius.circular(2),
@@ -402,7 +403,7 @@ class _FortunePickScreenState extends State<FortunePickScreen>
               end: Alignment.bottomRight,
               colors: [
                 modeColor.withValues(alpha: 0.2),
-                const Color(0xFFEC4899).withValues(alpha: 0.1),
+                AppColors.pink.withValues(alpha: 0.1),
               ],
             ),
             borderRadius: BorderRadius.circular(28),
@@ -514,7 +515,7 @@ class _FortunePickScreenState extends State<FortunePickScreen>
               ? LinearGradient(
                   colors: [
                     modeColor,
-                    const Color(0xFFEC4899),
+                    AppColors.pink,
                   ],
                 )
               : null,

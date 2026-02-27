@@ -559,7 +559,7 @@ class _GoogleLogoPainter extends CustomPainter {
       paint,
     );
 
-    paint.color = Colors.white;
+    paint.color = AppColors.white;
     final rect = Rect.fromLTWH(
       size.width * 0.45,
       size.height * 0.35,

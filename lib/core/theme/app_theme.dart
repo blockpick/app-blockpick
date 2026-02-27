@@ -13,31 +13,31 @@ class AppTheme {
 
       // Color Scheme
       colorScheme: ColorScheme.light(
-        primary: AppColors.blue,
-        secondary: AppColors.purple,
-        tertiary: AppColors.pink,
+        primary: AppColors.primaryMain,
+        secondary: AppColors.primaryLight,
+        tertiary: AppColors.primaryDark,
         error: AppColors.red,
         surface: AppColors.white,
         onPrimary: AppColors.white,
         onSecondary: AppColors.white,
-        onSurface: AppColors.darkBlue,
+        onSurface: AppColors.textBlack,
         onError: AppColors.white,
       ),
 
       // Scaffold
-      scaffoldBackgroundColor: AppColors.deepWhite,
+      scaffoldBackgroundColor: AppColors.white,
 
       // AppBar Theme
       appBarTheme: const AppBarTheme(
         elevation: 0,
         centerTitle: false,
         backgroundColor: AppColors.white,
-        foregroundColor: AppColors.darkBlue,
+        foregroundColor: AppColors.textBlack,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         titleTextStyle: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.w600,
-          color: AppColors.darkBlue,
+          color: AppColors.textBlack,
         ),
       ),
 
@@ -47,7 +47,7 @@ class AppTheme {
         color: AppColors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: AppColors.buleGray, width: 1),
+          side: const BorderSide(color: AppColors.gray200, width: 1),
         ),
       ),
 
@@ -68,7 +68,7 @@ class AppTheme {
         style: TextButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           textStyle: AppTextStyles.button,
-          foregroundColor: AppColors.blue,
+          foregroundColor: AppColors.primaryMain,
         ),
       ),
 
@@ -77,7 +77,7 @@ class AppTheme {
         style: OutlinedButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           textStyle: AppTextStyles.button,
-          side: const BorderSide(color: AppColors.buleGray, width: 1),
+          side: const BorderSide(color: AppColors.gray200, width: 1),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -87,27 +87,27 @@ class AppTheme {
       // Icon Button Theme
       iconButtonTheme: IconButtonThemeData(
         style: IconButton.styleFrom(
-          foregroundColor: AppColors.navyWhite,
-          highlightColor: AppColors.blueWhite,
+          foregroundColor: AppColors.gray600,
+          highlightColor: AppColors.primaryBg,
         ),
       ),
 
       // Input Decoration Theme
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.blueWhite,
+        fillColor: AppColors.gray100,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.buleGray, width: 1),
+          borderSide: const BorderSide(color: AppColors.gray200, width: 1),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.buleGray, width: 1),
+          borderSide: const BorderSide(color: AppColors.gray200, width: 1),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.blue, width: 2),
+          borderSide: const BorderSide(color: AppColors.primaryMain, width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -119,7 +119,7 @@ class AppTheme {
 
       // Divider Theme
       dividerTheme: const DividerThemeData(
-        color: AppColors.buleGray,
+        color: AppColors.gray200,
         thickness: 1,
         space: 1,
       ),
@@ -155,7 +155,7 @@ class AppTheme {
 
       // Icon Theme
       iconTheme: const IconThemeData(
-        color: AppColors.navyWhite,
+        color: AppColors.gray600,
         size: 24,
       ),
     );
@@ -168,9 +168,9 @@ class AppTheme {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          AppColors.deepWhite,
-          AppColors.blueWhite,
-          AppColors.blueWhite,
+          AppColors.white,
+          AppColors.primaryBg,
+          AppColors.primaryBg,
         ],
         stops: [0.0, 0.5, 1.0],
       ),
@@ -183,7 +183,7 @@ class AppTheme {
       color: color ?? AppColors.white,
       borderRadius: BorderRadius.circular(16),
       border: Border.all(
-        color: borderColor ?? AppColors.buleGray,
+        color: borderColor ?? AppColors.gray200,
         width: 1,
       ),
     );
@@ -204,7 +204,7 @@ class AppTheme {
   static List<BoxShadow> get buttonShadow {
     return [
       BoxShadow(
-        color: AppColors.blue.withOpacity(0.3),
+        color: AppColors.primaryMain.withOpacity(0.3),
         blurRadius: 20,
         offset: const Offset(0, 10),
       ),

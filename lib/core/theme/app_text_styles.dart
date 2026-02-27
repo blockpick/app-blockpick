@@ -12,7 +12,7 @@ class AppTextStyles {
     fontSize: 32,
     fontWeight: FontWeight.w700,
     height: 1.2,
-    color: AppColors.darkBlue,
+    color: AppColors.textBlack,
   );
 
   /// Large / H2 - 24px (font-bold)
@@ -20,7 +20,7 @@ class AppTextStyles {
     fontSize: 24,
     fontWeight: FontWeight.w700,
     height: 1.3,
-    color: AppColors.darkBlue,
+    color: AppColors.textBlack,
   );
 
   /// Medium / H3 - 18px (font-semibold)
@@ -28,7 +28,7 @@ class AppTextStyles {
     fontSize: 18,
     fontWeight: FontWeight.w600,
     height: 1.4,
-    color: AppColors.darkBlue,
+    color: AppColors.textBlack,
   );
 
   /// Body Large - 16px (font-medium)
@@ -36,7 +36,7 @@ class AppTextStyles {
     fontSize: 16,
     fontWeight: FontWeight.w500,
     height: 1.5,
-    color: AppColors.navy,
+    color: AppColors.gray800,
   );
 
   /// Body - 14px (font-normal)
@@ -44,7 +44,7 @@ class AppTextStyles {
     fontSize: 14,
     fontWeight: FontWeight.w400,
     height: 1.5,
-    color: AppColors.navy,
+    color: AppColors.gray800,
   );
 
   /// Body Small - 12px (font-normal)
@@ -52,7 +52,7 @@ class AppTextStyles {
     fontSize: 12,
     fontWeight: FontWeight.w400,
     height: 1.4,
-    color: AppColors.medium,
+    color: AppColors.gray600,
   );
 
   /// Caption - 10px (font-normal)
@@ -60,7 +60,7 @@ class AppTextStyles {
     fontSize: 10,
     fontWeight: FontWeight.w400,
     height: 1.4,
-    color: AppColors.light,
+    color: AppColors.gray400,
   );
 
   // ========== Alias Styles (다른 파일 호환용) ==========
@@ -94,7 +94,7 @@ class AppTextStyles {
     fontSize: 12,
     fontWeight: FontWeight.w500,
     height: 1.3,
-    color: AppColors.medium,
+    color: AppColors.gray600,
   );
 
   /// Hint - 14px normal
@@ -102,7 +102,7 @@ class AppTextStyles {
     fontSize: 14,
     fontWeight: FontWeight.w400,
     height: 1.5,
-    color: AppColors.hint,
+    color: AppColors.gray400,
   );
 
   // ========== Gradient Text Support ==========

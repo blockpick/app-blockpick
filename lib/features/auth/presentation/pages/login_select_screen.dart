@@ -340,7 +340,7 @@ class LoginSelectScreen extends ConsumerWidget {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: Colors.red,
+        backgroundColor: AppColors.red,
       ),
     );
   }
@@ -496,7 +496,7 @@ class _GoogleLogoPainter extends CustomPainter {
       paint,
     );
 
-    paint.color = Colors.white;
+    paint.color = AppColors.white;
     final rect = Rect.fromLTWH(
       size.width * 0.45,
       size.height * 0.35,

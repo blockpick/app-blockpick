@@ -22,19 +22,19 @@ class _SelectCarouselWidgetState extends State<SelectCarouselWidget> {
       productName: 'GUCCI SMALL TOP HANDLE BAG',
       price: 5.00,
       imageAsset: 'assets/images/home/gucci-bag-hero.png',
-      accentColor: Color(0xFF7359F7),
+      accentColor: AppColors.primaryMain,
     ),
     SelectGameData(
       productName: 'LOUIS VUITTON POCHETTE',
       price: 4.50,
       imageAsset: 'assets/images/home/louis-vuitton-bag.png',
-      accentColor: Color(0xFF6E5AE9),
+      accentColor: AppColors.primaryMain,
     ),
     SelectGameData(
       productName: 'NIKE AIR JORDAN RETRO',
       price: 3.50,
       imageAsset: 'assets/images/home/nike-air-jordan.png',
-      accentColor: Color(0xFF5C9DFF),
+      accentColor: AppColors.blue,
     ),
   ];
 
@@ -67,7 +67,7 @@ class _SelectCarouselWidgetState extends State<SelectCarouselWidget> {
                     right: 0,
                     child: ShaderMask(
                       shaderCallback: (bounds) => const LinearGradient(
-                        colors: [Color(0xFF7455FF), Color(0xFF8F7CFF)],
+                        colors: [AppColors.primaryMain, AppColors.primaryLight],
                       ).createShader(bounds),
                       child: const Text(
                         'SELECT',
@@ -147,7 +147,7 @@ class _SelectCarouselWidgetState extends State<SelectCarouselWidget> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: index == _currentPage
-                              ? const Color(0xFF6E5AE9)
+                              ? AppColors.primaryMain
                               : AppColors.gray300,
                         ),
                       );
@@ -166,14 +166,12 @@ class _SelectCarouselWidgetState extends State<SelectCarouselWidget> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(30),
                       border: Border.all(
-                        color: const Color(0xFF6E5AE9),
+                        color: AppColors.primaryMain,
                         width: 2,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(
-                            0xFF6E5AE9,
-                          ).withValues(alpha: 0.18),
+                          color: AppColors.primaryMain.withValues(alpha: 0.18),
                           blurRadius: 18,
                           offset: const Offset(0, 8),
                         ),
@@ -185,7 +183,7 @@ class _SelectCarouselWidgetState extends State<SelectCarouselWidget> {
                         const Text(
                           'JOIN NOW',
                           style: TextStyle(
-                            color: Color(0xFF1F2140),
+                            color: AppColors.textBlack,
                             fontSize: 15,
                             fontWeight: FontWeight.w800,
                             letterSpacing: 0.6,
@@ -198,7 +196,7 @@ class _SelectCarouselWidgetState extends State<SelectCarouselWidget> {
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             gradient: LinearGradient(
-                              colors: [Color(0xFF6E5AE9), Color(0xFF9B7EFF)],
+                              colors: [AppColors.primaryMain, AppColors.primaryLight],
                             ),
                           ),
                           child: const Icon(
@@ -319,7 +317,7 @@ class _SelectHeroItem extends StatelessWidget {
                   height: 64,
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [Color(0xFF7C4DFF), Color(0xFF9B7EFF)],
+                      colors: [AppColors.primaryMain, AppColors.primaryLight],
                     ),
                   ),
                   child: Center(

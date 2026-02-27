@@ -146,7 +146,7 @@ class PickSectionWidget extends StatelessWidget {
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFFEFF6FF), Color(0xFFE0E7FF)],
+            colors: [AppColors.primaryBg, AppColors.primaryBg],
           ),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: AppColors.blue.withOpacity(0.2)),
@@ -201,10 +201,10 @@ class PickSectionWidget extends StatelessWidget {
       child: Container(
         height: 180,
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
+          gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFFFCE7F3), Color(0xFFF3E8FF)],
+            colors: [AppColors.pink.withValues(alpha: 0.15), AppColors.primaryBg],
           ),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: AppColors.pink.withOpacity(0.2)),

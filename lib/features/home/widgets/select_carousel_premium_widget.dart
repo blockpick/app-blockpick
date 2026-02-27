@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../../../core/theme/app_colors.dart';
 
 /// SELECT 게임 캐러셀 위젯 (프리미엄 디자인)
 class SelectCarouselPremiumWidget extends StatefulWidget {
@@ -20,20 +21,20 @@ class _SelectCarouselPremiumWidgetState extends State<SelectCarouselPremiumWidge
     SelectGameData(
       productName: 'GUCCI SMALL TOP HANDLE BAG',
       price: 5.00,
-      accentColor1: Color(0xFF6E5AE9),
-      accentColor2: Color(0xFF9B7EFF),
+      accentColor1: AppColors.primaryMain,
+      accentColor2: AppColors.primaryLight,
     ),
     SelectGameData(
       productName: 'LOUIS VUITTON POCHETTE',
       price: 4.50,
-      accentColor1: Color(0xFFFF58BB),
-      accentColor2: Color(0xFFE33FF4),
+      accentColor1: AppColors.pink,
+      accentColor2: AppColors.primaryLight,
     ),
     SelectGameData(
       productName: 'NIKE AIR JORDAN RETRO',
       price: 3.50,
-      accentColor1: Color(0xFF5C9DFF),
-      accentColor2: Color(0xFF75C9FF),
+      accentColor1: AppColors.blue,
+      accentColor2: AppColors.blue,
     ),
   ];
 
@@ -72,19 +73,19 @@ class _SelectCarouselPremiumWidgetState extends State<SelectCarouselPremiumWidge
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Colors.white,
-              const Color(0xFFF8F9FF),
+              AppColors.white,
+              AppColors.gray100,
             ],
           ),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF6E5AE9).withValues(alpha: 0.08),
+              color: AppColors.primaryMain.withValues(alpha: 0.08),
               blurRadius: 30,
               offset: const Offset(0, 15),
               spreadRadius: -5,
             ),
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.03),
+              color: AppColors.textBlack.withValues(alpha: 0.03),
               blurRadius: 10,
               offset: const Offset(0, 5),
             ),
@@ -248,8 +249,8 @@ class _SelectCarouselPremiumWidgetState extends State<SelectCarouselPremiumWidge
                         ShaderMask(
                           shaderCallback: (bounds) => LinearGradient(
                             colors: [
-                              const Color(0xFF1A1D3F),
-                              const Color(0xFF2D3154),
+                              AppColors.textBlack,
+                              AppColors.gray800,
                             ],
                           ).createShader(bounds),
                           child: Text(
@@ -272,7 +273,7 @@ class _SelectCarouselPremiumWidgetState extends State<SelectCarouselPremiumWidge
                           'Join now and claim yours!',
                           style: TextStyle(
                             fontSize: 14,
-                            color: const Color(0xFF6B7088),
+                            color: AppColors.gray600,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -299,7 +300,7 @@ class _SelectCarouselPremiumWidgetState extends State<SelectCarouselPremiumWidge
                                         ],
                                       )
                                     : null,
-                                color: isActive ? null : const Color(0xFFE1E4F0),
+                                color: isActive ? null : AppColors.gray200,
                                 boxShadow: isActive
                                     ? [
                                         BoxShadow(
@@ -569,7 +570,7 @@ class _BackgroundPatternPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = const Color(0xFF6E5AE9).withValues(alpha: 0.02)
+      ..color = AppColors.primaryMain.withValues(alpha: 0.02)
       ..style = PaintingStyle.fill;
 
     // 도트 패턴

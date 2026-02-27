@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/app_colors.dart';
 
 /// 프리미엄 상품 쇼케이스 위젯
 class ProductShowcasePremiumWidget extends StatelessWidget {
@@ -12,20 +13,20 @@ class ProductShowcasePremiumWidget extends StatelessWidget {
         label: 'Select Block',
         icon: Icons.shopping_bag,
         colors: const [
-          Color(0xFF2D3561),
-          Color(0xFF404865),
+          AppColors.gray800,
+          AppColors.gray800,
         ],
-        accentColor: const Color(0xFF6E5AE9),
+        accentColor: AppColors.primaryMain,
       ),
       _ProductData(
         name: 'IPHONE 16',
         label: 'Stage Block',
         icon: Icons.phone_iphone,
         colors: const [
-          Color(0xFF404865),
-          Color(0xFF555E78),
+          AppColors.gray700,
+          AppColors.gray600,
         ],
-        accentColor: const Color(0xFF75C9FF),
+        accentColor: AppColors.blue,
       ),
     ];
 
@@ -260,8 +261,8 @@ class _PremiumProductCardState extends State<_PremiumProductCard>
                             ShaderMask(
                               shaderCallback: (bounds) => const LinearGradient(
                                 colors: [
-                                  Colors.white,
-                                  Color(0xFFE8E8E8),
+                                  AppColors.white,
+                                  AppColors.gray200,
                                 ],
                               ).createShader(bounds),
                               child: Text(

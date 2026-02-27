@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'dart:ui';
 import 'block_model.dart';
+import '../core/theme/app_colors.dart';
 
 /// 그리드 섹션 (구역)
 ///
@@ -82,15 +83,15 @@ class GridSectionManager {
 
     // 섹션 색상 (시각적 구분을 위해)
     final colors = [
-      const Color(0xFF3B82F6), // blue
-      const Color(0xFF8B5CF6), // purple
-      const Color(0xFFEC4899), // pink
-      const Color(0xFFF59E0B), // amber
-      const Color(0xFF10B981), // green
-      const Color(0xFF06B6D4), // cyan
-      const Color(0xFFEF4444), // red
-      const Color(0xFF6366F1), // indigo
-      const Color(0xFF84CC16), // lime
+      AppColors.blue, // blue
+      AppColors.primaryLight, // purple
+      AppColors.red, // pink
+      AppColors.yellow, // amber
+      AppColors.mint, // green
+      AppColors.blue, // cyan
+      AppColors.red, // red
+      AppColors.primaryMain, // indigo
+      AppColors.mint, // lime
     ];
 
     // 섹션 이름 생성 (A1, A2, ... B1, B2, ...)

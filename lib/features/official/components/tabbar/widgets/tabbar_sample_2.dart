@@ -19,10 +19,10 @@ class _TabBarSample2State extends State<TabBarSample2>
   Offset? _ripplePosition;
 
   final List<_Tab3D> _tabs = [
-    _Tab3D(icon: Icons.dashboard, label: '대시보드', color: Color(0xFF6366F1)),
-    _Tab3D(icon: Icons.bar_chart, label: '통계', color: Color(0xFFEC4899)),
-    _Tab3D(icon: Icons.notifications, label: '알림', color: Color(0xFFF59E0B)),
-    _Tab3D(icon: Icons.settings, label: '설정', color: Color(0xFF10B981)),
+    _Tab3D(icon: Icons.dashboard, label: '대시보드', color: AppColors.primaryMain),
+    _Tab3D(icon: Icons.bar_chart, label: '통계', color: AppColors.pink),
+    _Tab3D(icon: Icons.notifications, label: '알림', color: AppColors.yellow),
+    _Tab3D(icon: Icons.settings, label: '설정', color: AppColors.mint),
   ];
 
   @override
@@ -61,14 +61,14 @@ class _TabBarSample2State extends State<TabBarSample2>
         backgroundColor: const Color(0xFF1A1A2E),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: AppColors.white),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           '3D Floating TabBar',
           style: AppTextStyles.large.copyWith(
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: AppColors.white,
           ),
         ),
       ),
@@ -87,7 +87,7 @@ class _TabBarSample2State extends State<TabBarSample2>
                     width: 4,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.1),
+                      color: AppColors.white.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -162,7 +162,7 @@ class _TabBarSample2State extends State<TabBarSample2>
                       borderRadius: BorderRadius.circular(45),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.3),
+                          color: AppColors.textBlack.withValues(alpha: 0.3),
                           blurRadius: 30,
                           spreadRadius: 10,
                         ),
@@ -184,12 +184,12 @@ class _TabBarSample2State extends State<TabBarSample2>
                     ),
                     borderRadius: BorderRadius.circular(40),
                     border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.1),
+                      color: AppColors.white.withValues(alpha: 0.1),
                       width: 1.5,
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.5),
+                        color: AppColors.textBlack.withValues(alpha: 0.5),
                         blurRadius: 20,
                         offset: const Offset(0, 10),
                       ),
@@ -266,14 +266,14 @@ class _TabBarSample2State extends State<TabBarSample2>
                   Icon(
                     tab.icon,
                     size: 28,
-                    color: isSelected ? Colors.white : Colors.grey,
+                    color: isSelected ? AppColors.white : Colors.grey,
                   ),
                   const SizedBox(height: 4),
                   Text(
                     tab.label,
                     style: TextStyle(
                       fontSize: 11,
-                      color: isSelected ? Colors.white : Colors.grey,
+                      color: isSelected ? AppColors.white : Colors.grey,
                       fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                     ),
                   ),
@@ -320,14 +320,14 @@ class _TabBarSample2State extends State<TabBarSample2>
               child: Icon(
                 _tabs[_selectedIndex].icon,
                 size: 70,
-                color: Colors.white,
+                color: AppColors.white,
               ),
             ),
             const SizedBox(height: 32),
             Text(
               _tabs[_selectedIndex].label,
               style: AppTextStyles.display.copyWith(
-                color: Colors.white,
+                color: AppColors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),

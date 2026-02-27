@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 
 /// TabBar 샘플 #3 - Liquid Swipe + 입자 효과
@@ -101,14 +102,14 @@ class _TabBarSample3State extends State<TabBarSample3>
                     child: Row(
                       children: [
                         IconButton(
-                          icon: const Icon(Icons.arrow_back, color: Colors.white),
+                          icon: const Icon(Icons.arrow_back, color: AppColors.white),
                           onPressed: () => Navigator.pop(context),
                         ),
                         Text(
                           'Liquid Swipe TabBar',
                           style: AppTextStyles.large.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: AppColors.white,
                           ),
                         ),
                       ],
@@ -137,15 +138,15 @@ class _TabBarSample3State extends State<TabBarSample3>
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
+              color: AppColors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(45),
               border: Border.all(
-                color: Colors.white.withValues(alpha: 0.3),
+                color: AppColors.white.withValues(alpha: 0.3),
                 width: 1.5,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.2),
+                  color: AppColors.textBlack.withValues(alpha: 0.2),
                   blurRadius: 30,
                   offset: const Offset(0, 10),
                 ),
@@ -156,7 +157,7 @@ class _TabBarSample3State extends State<TabBarSample3>
               child: BackdropFilter(
                 filter: ui.ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                 child: Container(
-                  color: Colors.white.withValues(alpha: 0.1),
+                  color: AppColors.white.withValues(alpha: 0.1),
                 ),
               ),
             ),
@@ -170,7 +171,7 @@ class _TabBarSample3State extends State<TabBarSample3>
                   selectedIndex: _selectedIndex,
                   tabCount: _tabs.length,
                   animation: _liquidController.value,
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
               );
             },
@@ -217,7 +218,7 @@ class _TabBarSample3State extends State<TabBarSample3>
                     size: 32,
                     color: isSelected
                         ? _tabs[_selectedIndex].colors.first
-                        : Colors.white.withValues(alpha: 0.6),
+                        : AppColors.white.withValues(alpha: 0.6),
                   ),
                 );
               },
@@ -230,7 +231,7 @@ class _TabBarSample3State extends State<TabBarSample3>
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 color: isSelected
                     ? _tabs[_selectedIndex].colors.first
-                    : Colors.white.withValues(alpha: 0.6),
+                    : AppColors.white.withValues(alpha: 0.6),
               ),
               child: Text(tab.label),
             ),
@@ -262,10 +263,10 @@ class _TabBarSample3State extends State<TabBarSample3>
               width: 160,
               height: 160,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
+                color: AppColors.white.withValues(alpha: 0.2),
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.5),
+                  color: AppColors.white.withValues(alpha: 0.5),
                   width: 3,
                 ),
               ),
@@ -273,11 +274,11 @@ class _TabBarSample3State extends State<TabBarSample3>
                 child: BackdropFilter(
                   filter: ui.ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                   child: Container(
-                    color: Colors.white.withValues(alpha: 0.1),
+                    color: AppColors.white.withValues(alpha: 0.1),
                     child: Icon(
                       _tabs[_selectedIndex].icon,
                       size: 80,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ),
                 ),
@@ -289,7 +290,7 @@ class _TabBarSample3State extends State<TabBarSample3>
               style: const TextStyle(
                 fontSize: 48,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: AppColors.white,
               ),
             ),
           ],
@@ -420,7 +421,7 @@ class ParticlePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.3)
+      ..color = AppColors.white.withValues(alpha: 0.3)
       ..style = PaintingStyle.fill;
 
     for (var particle in particles) {

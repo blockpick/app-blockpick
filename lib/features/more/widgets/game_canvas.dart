@@ -25,7 +25,7 @@ class GameCanvas extends StatelessWidget {
     this.showCoordinate = true,
     this.currentRow,
     this.currentCol,
-    this.accentColor = const Color(0xFF6366F1),
+    this.accentColor = AppColors.primaryMain,
     this.overlay,
     this.bottomHUD,
   });
@@ -39,7 +39,7 @@ class GameCanvas extends StatelessWidget {
           end: Alignment.bottomCenter,
           colors: [
             accentColor.withValues(alpha: 0.1),
-            Colors.black.withValues(alpha: 0.9),
+            AppColors.textBlack.withValues(alpha: 0.9),
           ],
         ),
       ),
@@ -65,8 +65,8 @@ class GameCanvas extends StatelessWidget {
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    Colors.black.withValues(alpha: 0.3),
-                    Colors.black.withValues(alpha: 0.7),
+                    AppColors.textBlack.withValues(alpha: 0.3),
+                    AppColors.textBlack.withValues(alpha: 0.7),
                   ],
                   stops: const [0.0, 0.6, 1.0],
                 ),
@@ -162,7 +162,7 @@ class _CoordinateHUD extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.4),
+              color: AppColors.textBlack.withValues(alpha: 0.4),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: accentColor.withValues(alpha: 0.3),
@@ -200,7 +200,7 @@ class _CoordinateHUD extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.5),
+            color: AppColors.white.withValues(alpha: 0.5),
             fontSize: 10,
             fontWeight: FontWeight.w600,
             letterSpacing: 2,
@@ -210,7 +210,7 @@ class _CoordinateHUD extends StatelessWidget {
         Text(
           value.toString().padLeft(4, '0'),
           style: const TextStyle(
-            color: Colors.white,
+            color: AppColors.white,
             fontSize: 24,
             fontWeight: FontWeight.w700,
             fontFamily: 'monospace',
@@ -289,7 +289,7 @@ class GlassButton extends StatelessWidget {
     this.icon,
     this.emoji,
     required this.onPressed,
-    this.accentColor = const Color(0xFF6366F1),
+    this.accentColor = AppColors.primaryMain,
     this.isPrimary = false,
     this.isLarge = false,
   });
@@ -320,12 +320,12 @@ class GlassButton extends StatelessWidget {
                       ],
                     )
                   : null,
-              color: isPrimary ? null : Colors.white.withValues(alpha: 0.1),
+              color: isPrimary ? null : AppColors.white.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(isLarge ? 20 : 14),
               border: Border.all(
                 color: isPrimary
                     ? accentColor.withValues(alpha: 0.5)
-                    : Colors.white.withValues(alpha: 0.2),
+                    : AppColors.white.withValues(alpha: 0.2),
                 width: 1,
               ),
               boxShadow: isPrimary
@@ -349,7 +349,7 @@ class GlassButton extends StatelessWidget {
                 if (icon != null) ...[
                   Icon(
                     icon,
-                    color: Colors.white,
+                    color: AppColors.white,
                     size: isLarge ? 24 : 20,
                   ),
                   SizedBox(width: isLarge ? 12 : 8),
@@ -357,7 +357,7 @@ class GlassButton extends StatelessWidget {
                 Text(
                   label,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontSize: isLarge ? 18 : 15,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 0.5,
@@ -380,7 +380,7 @@ class BottomControlPanel extends StatelessWidget {
   const BottomControlPanel({
     super.key,
     required this.children,
-    this.accentColor = const Color(0xFF6366F1),
+    this.accentColor = AppColors.primaryMain,
   });
 
   @override
@@ -401,8 +401,8 @@ class BottomControlPanel extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.black.withValues(alpha: 0.6),
-                Colors.black.withValues(alpha: 0.8),
+                AppColors.textBlack.withValues(alpha: 0.6),
+                AppColors.textBlack.withValues(alpha: 0.8),
               ],
             ),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
@@ -434,7 +434,7 @@ class GameAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     required this.title,
     required this.emoji,
-    this.accentColor = const Color(0xFF6366F1),
+    this.accentColor = AppColors.primaryMain,
     this.actions,
   });
 
@@ -450,8 +450,8 @@ class GameAppBar extends StatelessWidget implements PreferredSizeWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.black.withValues(alpha: 0.8),
-                Colors.black.withValues(alpha: 0.4),
+                AppColors.textBlack.withValues(alpha: 0.8),
+                AppColors.textBlack.withValues(alpha: 0.4),
                 Colors.transparent,
               ],
             ),
@@ -464,7 +464,7 @@ class GameAppBar extends StatelessWidget implements PreferredSizeWidget {
                   onPressed: () => Navigator.of(context).pop(),
                   icon: const Icon(
                     Icons.arrow_back_ios_new_rounded,
-                    color: Colors.white,
+                    color: AppColors.white,
                     size: 22,
                   ),
                 ),
@@ -473,7 +473,7 @@ class GameAppBar extends StatelessWidget implements PreferredSizeWidget {
                 Text(
                   title,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1,
@@ -501,7 +501,7 @@ class TargetCrosshair extends StatelessWidget {
 
   const TargetCrosshair({
     super.key,
-    this.color = Colors.white,
+    this.color = AppColors.white,
     this.size = 60,
     this.animated = true,
   });

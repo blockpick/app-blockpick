@@ -2137,7 +2137,7 @@ class _TossStyleConfirmSheetState extends State<_TossStyleConfirmSheet> {
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                color: const Color(0xFFFFF3CD),
+                color: AppColors.primaryBg,
                 shape: BoxShape.circle,
               ),
               child: Center(
@@ -2188,7 +2188,7 @@ class _TossStyleConfirmSheetState extends State<_TossStyleConfirmSheet> {
                 decoration: BoxDecoration(
                   color: _prizeClaimed
                       ? AppColors.gray300
-                      : const Color(0xFFFFD43B),
+                      : AppColors.yellow,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: _claiming
@@ -2197,7 +2197,7 @@ class _TossStyleConfirmSheetState extends State<_TossStyleConfirmSheet> {
                         height: 16,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF664D03)),
+                          valueColor: AlwaysStoppedAnimation<Color>(AppColors.gray800),
                         ),
                       )
                     : Text(
@@ -2206,8 +2206,8 @@ class _TossStyleConfirmSheetState extends State<_TossStyleConfirmSheet> {
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                           color: _prizeClaimed
-                              ? AppColors.gray500
-                              : const Color(0xFF664D03),
+                              ? AppColors.gray400
+                              : AppColors.gray800,
                         ),
                       ),
               ),
@@ -2587,9 +2587,9 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFD700).withValues(alpha: 0.1),
+                color: AppColors.yellow.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFFFD700).withValues(alpha: 0.3)),
+                border: Border.all(color: AppColors.yellow.withValues(alpha: 0.3)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -2627,8 +2627,8 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                           decoration: BoxDecoration(
                             color: _isRefreshing
-                                ? const Color(0xFFFFD700).withValues(alpha: 0.5)
-                                : const Color(0xFFFFD700),
+                                ? AppColors.yellow.withValues(alpha: 0.5)
+                                : AppColors.yellow,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Row(
@@ -2670,9 +2670,9 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                         return Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFFD700).withValues(alpha: 0.15),
+                            color: AppColors.yellow.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: const Color(0xFFFFD700).withValues(alpha: 0.3)),
+                            border: Border.all(color: AppColors.yellow.withValues(alpha: 0.3)),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -2699,7 +2699,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                                 style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
-                                  color: Color(0xFFB8860B),
+                                  color: AppColors.yellow,
                                 ),
                               ),
                             ],
@@ -2802,9 +2802,9 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFD700).withValues(alpha: 0.1),
+                color: AppColors.yellow.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFFFD700).withValues(alpha: 0.3)),
+                border: Border.all(color: AppColors.yellow.withValues(alpha: 0.3)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -2814,7 +2814,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                       const Icon(
                         Icons.grid_on_rounded,
                         size: 18,
-                        color: Color(0xFFFFD700),
+                        color: AppColors.yellow,
                       ),
                       const SizedBox(width: 8),
                       const Text(
@@ -2877,7 +2877,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(color: Color(0xFFFFD700), width: 2),
+                                  borderSide: const BorderSide(color: AppColors.yellow, width: 2),
                                 ),
                               ),
                               style: const TextStyle(
@@ -2938,7 +2938,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(color: Color(0xFFFFD700), width: 2),
+                                  borderSide: const BorderSide(color: AppColors.yellow, width: 2),
                                 ),
                               ),
                               style: const TextStyle(

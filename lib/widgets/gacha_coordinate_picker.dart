@@ -998,9 +998,9 @@ class _TossCrosshairPainter extends CustomPainter {
     final rangeY = (allowedRange / gridHeight) * size.height;
 
     // 색상 정의
-    const primaryColor = Color(0xFFFF6B9D); // 핑크
-    const secondaryColor = Color(0xFFFF9E4F); // 오렌지
-    const sparkleColor = Color(0xFFFFFFFF); // 화이트
+    const primaryColor = AppColors.red; // 핑크
+    const secondaryColor = AppColors.yellow; // 오렌지
+    const sparkleColor = AppColors.white; // 화이트
 
     // 1. 허용 범위 영역 (그라데이션 원형)
     final rangeRect = Rect.fromCenter(
@@ -1124,7 +1124,7 @@ class _TossCrosshairPainter extends CustomPainter {
 
   /// 가이드선 그리기
   void _drawGuideLine(Canvas canvas, Size size) {
-    const guideColor = Color(0xFFFFD700); // 골드 색상
+    const guideColor = AppColors.yellow; // 골드 색상
 
     // 가로 가이드선 (Y 좌표 - ROW)
     if (guideY != null) {

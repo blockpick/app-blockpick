@@ -138,7 +138,7 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
       width: 72,
       height: 72,
       decoration: BoxDecoration(
-        color: const Color(0xFFE0F2F1), // 민트색 배경
+        color: AppColors.primaryBg, // 민트색 배경
         borderRadius: BorderRadius.circular(10),
       ),
       child: ClipRRect(
@@ -158,12 +158,12 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
 
   Widget _buildPlaceholderImage() {
     return Container(
-      color: const Color(0xFFE0F2F1),
+      color: AppColors.primaryBg,
       child: Center(
         child: Icon(
           Icons.card_giftcard_rounded,
           size: 32,
-          color: const Color(0xFF80CBC4),
+          color: AppColors.mint,
         ),
       ),
     );
@@ -196,7 +196,7 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: const Color(0xFFFFEBEE),
+              color: AppColors.primaryBg,
               borderRadius: BorderRadius.circular(4),
             ),
             child: const Text(
@@ -204,7 +204,7 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
               style: TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFFE91E63),
+                color: AppColors.red,
                 letterSpacing: 0.3,
               ),
             ),
@@ -221,7 +221,7 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
       style: const TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w600,
-        color: Color(0xFF212121),
+        color: AppColors.textBlack,
         height: 1.3,
       ),
       maxLines: 1,
@@ -296,7 +296,7 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
               widthFactor: _progress.clamp(0.0, 1.0),
               child: Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFF26A69A),
+                  color: AppColors.mint,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -329,13 +329,13 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
   Color _getTypeBadgeColor() {
     switch (widget.gameType.toLowerCase()) {
       case 'daily':
-        return const Color(0xFF2196F3);
+        return AppColors.blue;
       case 'select':
-        return const Color(0xFF4CAF50);
+        return AppColors.mint;
       case 'vibe':
-        return const Color(0xFF9C27B0);
+        return AppColors.primaryLight;
       case 'prime':
-        return const Color(0xFF1A237E);
+        return AppColors.primaryDark;
       default:
         return AppColors.gray500;
     }

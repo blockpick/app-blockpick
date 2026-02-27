@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
+import '../../../../core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sensors_plus/sensors_plus.dart';
@@ -17,7 +18,7 @@ class GravityPickScreen extends StatefulWidget {
 
 class _GravityPickScreenState extends State<GravityPickScreen>
     with TickerProviderStateMixin {
-  static const Color modeColor = Color(0xFF6366F1);
+  static const Color modeColor = AppColors.primaryMain;
   static const int gridSize = 1000;
 
   // 물리 시뮬레이션 변수

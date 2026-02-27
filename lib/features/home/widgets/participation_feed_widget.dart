@@ -62,7 +62,7 @@ class ParticipationFeedWidget extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF5F5F5),
+                  color: AppColors.gray100,
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: Center(
@@ -86,11 +86,11 @@ class ParticipationFeedWidget extends StatelessWidget {
   Widget _buildParticipationItem(ParticipationFeedModel participation) {
     // 각 게임마다 다른 색상 지정
     final colors = [
-      const Color(0xFF5B6FED),
-      const Color(0xFF9D4EDD),
-      const Color(0xFFFF6B6B),
-      const Color(0xFF20C997),
-      const Color(0xFFFFA94D),
+      AppColors.primaryMain,
+      AppColors.primaryLight,
+      AppColors.red,
+      AppColors.mint,
+      AppColors.yellow,
     ];
     final colorIndex = participation.id.hashCode % colors.length;
 
@@ -147,13 +147,13 @@ class ParticipationFeedWidget extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: const Color(0xFFE8F5E9),
+              color: AppColors.mint.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(6),
             ),
             child: Text(
               participation.relativeTime,
               style: AppTextStyles.bodySmall.copyWith(
-                color: const Color(0xFF2E7D32),
+                color: AppColors.mint,
                 fontWeight: FontWeight.w600,
                 fontSize: 12,
               ),

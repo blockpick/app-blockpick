@@ -208,11 +208,11 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
       height: 80,
       decoration: BoxDecoration(
         color: isToday
-            ? const Color(0xFFFFF9E6)
+            ? AppColors.yellow.withValues(alpha: 0.15)
             : AppColors.gray100,
         borderRadius: BorderRadius.circular(12),
         border: isToday
-            ? Border.all(color: const Color(0xFFFFD43B), width: 2)
+            ? Border.all(color: AppColors.yellow, width: 2)
             : null,
       ),
       child: Column(
@@ -224,7 +224,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
               fontSize: 11,
               fontWeight: FontWeight.w600,
               color: isToday
-                  ? const Color(0xFFB8860B)
+                  ? AppColors.yellow
                   : isCompleted
                       ? AppColors.gray500
                       : AppColors.gray400,
@@ -241,7 +241,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFD43B),
+                color: AppColors.yellow,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Text(
@@ -310,15 +310,15 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
             width: 56,
             height: 56,
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFFFFD700), Color(0xFFFFA500)],
+              gradient: LinearGradient(
+                colors: [AppColors.yellow, AppColors.yellow.withValues(alpha: 0.7)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFFFFD700).withValues(alpha: 0.4),
+                  color: AppColors.yellow.withValues(alpha: 0.4),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -330,7 +330,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w900,
-                  color: Colors.white,
+                  color: AppColors.white,
                   shadows: [
                     Shadow(
                       color: Colors.orange.shade700,
@@ -394,15 +394,15 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
             width: 120,
             height: 120,
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFFFFD700), Color(0xFFFFA500)],
+              gradient: LinearGradient(
+                colors: [AppColors.yellow, AppColors.yellow.withValues(alpha: 0.7)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFFFFD700).withValues(alpha: 0.5),
+                  color: AppColors.yellow.withValues(alpha: 0.5),
                   blurRadius: 30,
                   offset: const Offset(0, 10),
                 ),
@@ -414,7 +414,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
                 style: TextStyle(
                   fontSize: 56,
                   fontWeight: FontWeight.w900,
-                  color: Colors.white,
+                  color: AppColors.white,
                   shadows: [
                     Shadow(
                       color: Colors.orange.shade700,

@@ -151,7 +151,7 @@ class GridPainter extends CustomPainter {
     } else {
       // 배경 이미지 없음: 반투명 다크 블루 단색 배경 (셰이더가 비침)
       final paint = Paint()
-        ..color = const Color(0xFF0A1128).withValues(alpha: 0.75);
+        ..color = AppColors.textBlack.withValues(alpha: 0.75);
       canvas.drawRect(dstRect, paint);
     }
   }
@@ -207,15 +207,15 @@ class GridPainter extends CustomPainter {
   Color _getRegionColor(int regionRow, int regionCol) {
     // 9개 색상 팔레트 (파스텔 톤)
     final colors = [
-      const Color(0xFFE8F4F8), // 연한 파랑
-      const Color(0xFFF0E8F4), // 연한 보라
-      const Color(0xFFFFF0F0), // 연한 분홍
-      const Color(0xFFFFF8E8), // 연한 노랑
-      const Color(0xFFE8F8E8), // 연한 초록
-      const Color(0xFFF8F0E8), // 연한 주황
-      const Color(0xFFE8F0FF), // 연한 하늘색
-      const Color(0xFFF8E8FF), // 연한 라벤더
-      const Color(0xFFFFE8F0), // 연한 핑크
+      AppColors.primaryBg, // 연한 파랑
+      AppColors.primaryBg, // 연한 보라
+      AppColors.primaryBg, // 연한 분홍
+      AppColors.primaryBg, // 연한 노랑
+      AppColors.primaryBg, // 연한 초록
+      AppColors.primaryBg, // 연한 주황
+      AppColors.primaryBg, // 연한 하늘색
+      AppColors.primaryBg, // 연한 라벤더
+      AppColors.primaryBg, // 연한 핑크
     ];
 
     // 체스판 패턴으로 색상 배치

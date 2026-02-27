@@ -147,7 +147,7 @@ class _GridMinimapState extends State<GridMinimap> {
       width: widget.minimapSize,
       height: widget.minimapSize,
       decoration: BoxDecoration(
-        color: const Color(0xFF0A1128).withValues(alpha: 0.75),
+        color: AppColors.textBlack.withValues(alpha: 0.75),
         borderRadius: BorderRadius.circular(AppConstants.radiusMd),
         border: Border.all(color: Colors.white.withValues(alpha: 0.15), width: 1),
         boxShadow: [

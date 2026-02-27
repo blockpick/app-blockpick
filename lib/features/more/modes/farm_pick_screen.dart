@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
+import '../../../../core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,7 +18,7 @@ class FarmPickScreen extends StatefulWidget {
 
 class _FarmPickScreenState extends State<FarmPickScreen>
     with TickerProviderStateMixin {
-  static const Color modeColor = Color(0xFF22C55E);
+  static const Color modeColor = AppColors.mint;
   static const int gridSize = 1000;
   static const int visualGridSize = 8; // 시각화용 8x8 그리드
 
@@ -248,7 +249,7 @@ class _FarmPickScreenState extends State<FarmPickScreen>
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      backgroundColor: Colors.black,
+      backgroundColor: AppColors.textBlack,
       appBar: GameAppBar(
         title: 'FARM',
         emoji: '🌱',
@@ -260,21 +261,21 @@ class _FarmPickScreenState extends State<FarmPickScreen>
               margin: const EdgeInsets.only(right: 16),
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.1),
+                color: AppColors.white.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.2),
+                  color: AppColors.white.withValues(alpha: 0.2),
                 ),
               ),
               child: const Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.refresh_rounded, color: Colors.white, size: 18),
+                  Icon(Icons.refresh_rounded, color: AppColors.white, size: 18),
                   SizedBox(width: 6),
                   Text(
                     'RESET',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: AppColors.white,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 1,
@@ -365,13 +366,13 @@ class _FarmPickScreenState extends State<FarmPickScreen>
                               Icon(
                                 Icons.eco_rounded,
                                 size: 64,
-                                color: Colors.white.withValues(alpha: 0.2),
+                                color: AppColors.white.withValues(alpha: 0.2),
                               ),
                               const SizedBox(height: 16),
                               Text(
                                 'Plant your first seed',
                                 style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.3),
+                                  color: AppColors.white.withValues(alpha: 0.3),
                                   fontSize: 18,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -398,10 +399,10 @@ class _FarmPickScreenState extends State<FarmPickScreen>
       margin: const EdgeInsets.fromLTRB(16, 100, 16, 8),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.1),
+        color: AppColors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.1),
+          color: AppColors.white.withValues(alpha: 0.1),
         ),
       ),
       child: Row(
@@ -411,13 +412,13 @@ class _FarmPickScreenState extends State<FarmPickScreen>
           Container(
             width: 1,
             height: 30,
-            color: Colors.white.withValues(alpha: 0.2),
+            color: AppColors.white.withValues(alpha: 0.2),
           ),
           _buildStatusItem('🌿', 'PLOTS', '${_plantedCells.length}'),
           Container(
             width: 1,
             height: 30,
-            color: Colors.white.withValues(alpha: 0.2),
+            color: AppColors.white.withValues(alpha: 0.2),
           ),
           _buildStatusItem(
             '🌾',
@@ -439,7 +440,7 @@ class _FarmPickScreenState extends State<FarmPickScreen>
           style: TextStyle(
             fontSize: 10,
             fontWeight: FontWeight.w600,
-            color: Colors.white.withValues(alpha: 0.5),
+            color: AppColors.white.withValues(alpha: 0.5),
             letterSpacing: 1,
           ),
         ),
@@ -448,7 +449,7 @@ class _FarmPickScreenState extends State<FarmPickScreen>
           style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w700,
-            color: Colors.white,
+            color: AppColors.white,
           ),
         ),
       ],
@@ -472,8 +473,8 @@ class _FarmPickScreenState extends State<FarmPickScreen>
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.black.withValues(alpha: 0.5),
-                Colors.black.withValues(alpha: 0.8),
+                AppColors.textBlack.withValues(alpha: 0.5),
+                AppColors.textBlack.withValues(alpha: 0.8),
               ],
             ),
             border: Border(
@@ -504,7 +505,7 @@ class _FarmPickScreenState extends State<FarmPickScreen>
                       icon: Icons.water_drop_rounded,
                       label: 'WATER',
                       emoji: '💧',
-                      color: const Color(0xFF3B82F6),
+                      color: AppColors.blue,
                       onTap: _waterPlant,
                       enabled: _waterCount > 0 && _hasPlanted,
                       badge: _waterCount.toString(),
@@ -526,20 +527,20 @@ class _FarmPickScreenState extends State<FarmPickScreen>
                     gradient: _plantedCells.isNotEmpty
                         ? LinearGradient(
                             colors: [
-                              const Color(0xFFF59E0B),
-                              const Color(0xFFF59E0B).withValues(alpha: 0.7),
+                              AppColors.yellow,
+                              AppColors.yellow.withValues(alpha: 0.7),
                             ],
                           )
                         : null,
                     color: _plantedCells.isEmpty
-                        ? Colors.white.withValues(alpha: 0.1)
+                        ? AppColors.white.withValues(alpha: 0.1)
                         : null,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: _plantedCells.isNotEmpty
                         ? [
                             BoxShadow(
                               color:
-                                  const Color(0xFFF59E0B).withValues(alpha: 0.4),
+                                  AppColors.yellow.withValues(alpha: 0.4),
                               blurRadius: 20,
                               offset: const Offset(0, 8),
                             ),
@@ -555,8 +556,8 @@ class _FarmPickScreenState extends State<FarmPickScreen>
                         'HARVEST',
                         style: TextStyle(
                           color: _plantedCells.isNotEmpty
-                              ? Colors.white
-                              : Colors.white.withValues(alpha: 0.3),
+                              ? AppColors.white
+                              : AppColors.white.withValues(alpha: 0.3),
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 2,
@@ -596,7 +597,7 @@ class _FarmPickScreenState extends State<FarmPickScreen>
                   ],
                 )
               : null,
-          color: enabled ? null : Colors.white.withValues(alpha: 0.1),
+          color: enabled ? null : AppColors.white.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(14),
           boxShadow: enabled
               ? [
@@ -619,8 +620,8 @@ class _FarmPickScreenState extends State<FarmPickScreen>
                   label,
                   style: TextStyle(
                     color: enabled
-                        ? Colors.white
-                        : Colors.white.withValues(alpha: 0.3),
+                        ? AppColors.white
+                        : AppColors.white.withValues(alpha: 0.3),
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1,
@@ -638,15 +639,15 @@ class _FarmPickScreenState extends State<FarmPickScreen>
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
+                      color: AppColors.white.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
                       badge,
                       style: TextStyle(
                         color: enabled
-                            ? Colors.white
-                            : Colors.white.withValues(alpha: 0.3),
+                            ? AppColors.white
+                            : AppColors.white.withValues(alpha: 0.3),
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                       ),
@@ -770,12 +771,12 @@ class _IsometricFarmPainter extends CustomPainter {
         } else {
           // 빈 셀
           final bgPaint = Paint()
-            ..color = Colors.white.withValues(alpha: 0.05);
+            ..color = AppColors.white.withValues(alpha: 0.05);
 
           canvas.drawRRect(cellRect, bgPaint);
 
           final borderPaint = Paint()
-            ..color = Colors.white.withValues(alpha: 0.1)
+            ..color = AppColors.white.withValues(alpha: 0.1)
             ..style = PaintingStyle.stroke
             ..strokeWidth = 1;
 
@@ -818,7 +819,7 @@ class _IsometricFarmPainter extends CustomPainter {
       final sparkleY = sparkle.y * size.height;
 
       final sparklePaint = Paint()
-        ..color = Colors.white.withValues(alpha: sparkle.opacity * 0.8)
+        ..color = AppColors.white.withValues(alpha: sparkle.opacity * 0.8)
         ..style = PaintingStyle.fill;
 
       canvas.drawCircle(Offset(sparkleX, sparkleY), sparkle.size, sparklePaint);
@@ -840,7 +841,7 @@ class _IsometricFarmPainter extends CustomPainter {
 
       // 중심 글로우
       final centerGlow = Paint()
-        ..color = const Color(0xFFF59E0B).withValues(alpha: 0.3 * pulseValue)
+        ..color = AppColors.yellow.withValues(alpha: 0.3 * pulseValue)
         ..style = PaintingStyle.fill
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 15);
 
@@ -848,14 +849,14 @@ class _IsometricFarmPainter extends CustomPainter {
 
       // 중심 원
       final centerPaint = Paint()
-        ..color = const Color(0xFFF59E0B)
+        ..color = AppColors.yellow
         ..style = PaintingStyle.fill;
 
       canvas.drawCircle(Offset(centerX, centerY), 8, centerPaint);
 
       // 중심 테두리
       final centerBorder = Paint()
-        ..color = Colors.white
+        ..color = AppColors.white
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2;
 

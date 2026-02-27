@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import '../../../../core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -17,7 +18,7 @@ class GachaPickScreen extends StatefulWidget {
 
 class _GachaPickScreenState extends State<GachaPickScreen>
     with TickerProviderStateMixin {
-  static const Color modeColor = Color(0xFFEC4899); // Pink
+  static const Color modeColor = AppColors.pink; // Pink
   static const int gridSize = 1000;
 
   // 샘플 경품 이미지 (실제로는 게임에서 동적으로 받아옴)

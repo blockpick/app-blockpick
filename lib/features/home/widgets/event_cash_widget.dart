@@ -79,13 +79,13 @@ class _EventCashWidgetState extends State<EventCashWidget> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFFF0F5),
+                    color: AppColors.pink.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Icon(
                     Icons.show_chart,
                     size: 20,
-                    color: Color(0xFFFF69B4),
+                    color: AppColors.pink,
                   ),
                 ),
               ],
@@ -129,7 +129,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
                 Text(
                   '${isPositive ? '+' : ''}${_formatCurrency(widget.cashData.todayChange)}',
                   style: AppTextStyles.bodySmall.copyWith(
-                    color: isPositive ? const Color(0xFF00C853) : const Color(0xFFFF1744),
+                    color: isPositive ? AppColors.mint : AppColors.red,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -137,7 +137,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
                 Text(
                   '(${isPositive ? '+' : ''}${widget.cashData.todayChangePercent.toStringAsFixed(1)}%)',
                   style: AppTextStyles.bodySmall.copyWith(
-                    color: isPositive ? const Color(0xFF00C853) : const Color(0xFFFF1744),
+                    color: isPositive ? AppColors.mint : AppColors.red,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -157,7 +157,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            const Color(0xFFFFF5F8),
+            AppColors.pink.withValues(alpha: 0.05),
             AppColors.white,
           ],
         ),
@@ -253,7 +253,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFFF5F5F5),
+        color: AppColors.gray100,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -300,19 +300,19 @@ class _EventCashWidgetState extends State<EventCashWidget> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
           gradient: isSelected
-              ? const LinearGradient(
+              ? LinearGradient(
                   colors: [
-                    Color(0xFFFF6B9D),
-                    Color(0xFFC44569),
+                    AppColors.pink,
+                    AppColors.red,
                   ],
                 )
               : null,
-          color: isSelected ? null : const Color(0xFFF5F5F5),
+          color: isSelected ? null : AppColors.gray100,
           borderRadius: BorderRadius.circular(20),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: const Color(0xFFFF6B9D).withOpacity(0.3),
+                    color: AppColors.pink.withValues(alpha: 0.3),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -347,22 +347,22 @@ class _EventCashWidgetState extends State<EventCashWidget> {
       _ChartData(
         '참가\n${latestData.participationCount}회',
         latestData.participationCount.toDouble(),
-        const Color(0xFF2196F3),
+        AppColors.blue,
       ),
       _ChartData(
         '당첨\n${latestData.winCount}회',
         latestData.winCount.toDouble(),
-        const Color(0xFF4CAF50),
+        AppColors.mint,
       ),
       _ChartData(
         '당첨률\n${latestData.winRate.toStringAsFixed(1)}%',
         latestData.winRate * 0.5, // 당첨률을 시각적으로 조정
-        const Color(0xFFFF6B9D),
+        AppColors.pink,
       ),
       _ChartData(
         'ROI\n${latestData.roi.toStringAsFixed(0)}%',
         latestData.roi * 0.2, // ROI를 시각적으로 조정
-        const Color(0xFF9C27B0),
+        AppColors.primaryLight,
       ),
     ];
 

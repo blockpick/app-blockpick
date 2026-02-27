@@ -30,8 +30,8 @@ class PickSectionRedesignWidget extends StatelessWidget {
                   backgroundImage: 'assets/images/home/stage-card-bg.png',
                   foregroundArt: 'assets/images/home/stage-card.png',
                   gradient: const [
-                    Color(0xFF8D72FF),
-                    Color(0xFF6E5AE9),
+                    AppColors.primaryLight,
+                    AppColors.primaryMain,
                   ],
                   onTap: () {
                     // TODO: DAILY 탭으로 이동
@@ -47,8 +47,8 @@ class PickSectionRedesignWidget extends StatelessWidget {
                   backgroundImage: 'assets/images/home/vibe-card-bg.png',
                   foregroundArt: 'assets/images/home/vibe-card.png',
                   gradient: const [
-                    Color(0xFF75C9FF),
-                    Color(0xFF5C9DFF),
+                    AppColors.blue,
+                    AppColors.blue,
                   ],
                   onTap: () {
                     // TODO: VIBE 탭으로 이동
@@ -189,8 +189,8 @@ class PickSectionRedesignWidget extends StatelessWidget {
         label: 'Select Block',
         name: 'Dior Book Tote',
         gradient: const [
-          Color(0xFF323952),
-          Color(0xFF404865),
+          AppColors.gray800,
+          AppColors.gray800,
         ],
       ),
       (
@@ -198,8 +198,8 @@ class PickSectionRedesignWidget extends StatelessWidget {
         label: 'Stage Block',
         name: 'IPHONE 16',
         gradient: const [
-          Color(0xFF4A516A),
-          Color(0xFF555E78),
+          AppColors.gray700,
+          AppColors.gray600,
         ],
       ),
     ];

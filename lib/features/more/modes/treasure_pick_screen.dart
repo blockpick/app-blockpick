@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import '../../../../core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -40,7 +41,7 @@ class TreasurePickScreen extends StatefulWidget {
 
 class _TreasurePickScreenState extends State<TreasurePickScreen>
     with TickerProviderStateMixin {
-  static const Color modeColor = Color(0xFFFFD700); // Gold
+  static const Color modeColor = AppColors.yellow; // Gold
   static const Color accentColor = Color(0xFFFF6B35); // Orange accent
   static const int gridSize = 100; // 100x100 그리드
   static const int treasureCount = 15; // 숨겨진 보물 개수
@@ -402,7 +403,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
             modeColor,
             Colors.orange,
             Colors.yellow,
-            Colors.white,
+            AppColors.white,
           ][random.nextInt(4)],
           size: 4 + random.nextDouble() * 8,
         );
@@ -438,7 +439,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
     showGeneralDialog(
       context: context,
       barrierDismissible: false,
-      barrierColor: Colors.black.withValues(alpha: 0.85),
+      barrierColor: AppColors.textBlack.withValues(alpha: 0.85),
       transitionDuration: const Duration(milliseconds: 500),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         return ScaleTransition(
@@ -502,21 +503,21 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
                   vertical: 8,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.1),
+                  color: AppColors.white.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.2),
+                    color: AppColors.white.withValues(alpha: 0.2),
                   ),
                 ),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.refresh_rounded, color: Colors.white, size: 18),
+                    Icon(Icons.refresh_rounded, color: AppColors.white, size: 18),
                     SizedBox(width: 6),
                     Text(
                       'RESET',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppColors.white,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 1,
@@ -601,19 +602,19 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
                                 decoration: BoxDecoration(
                                   color: _showDevPanel
                                       ? modeColor.withValues(alpha: 0.3)
-                                      : Colors.white.withValues(alpha: 0.1),
+                                      : AppColors.white.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
                                     color: _showDevPanel
                                         ? modeColor
-                                        : Colors.white.withValues(alpha: 0.2),
+                                        : AppColors.white.withValues(alpha: 0.2),
                                   ),
                                 ),
                                 child: Icon(
                                   Icons.tune_rounded,
                                   color: _showDevPanel
                                       ? modeColor
-                                      : Colors.white,
+                                      : AppColors.white,
                                   size: 20,
                                 ),
                               ),
@@ -787,7 +788,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
         const SizedBox(width: 10),
         Icon(
           Icons.arrow_forward_rounded,
-          color: Colors.white.withValues(alpha: 0.3),
+          color: AppColors.white.withValues(alpha: 0.3),
           size: 18,
         ),
         const SizedBox(width: 10),
@@ -795,7 +796,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
         const SizedBox(width: 10),
         Icon(
           Icons.arrow_forward_rounded,
-          color: Colors.white.withValues(alpha: 0.3),
+          color: AppColors.white.withValues(alpha: 0.3),
           size: 18,
         ),
         const SizedBox(width: 10),
@@ -824,14 +825,14 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
             ? null
             : isDone
             ? modeColor.withValues(alpha: 0.15)
-            : Colors.white.withValues(alpha: 0.05),
+            : AppColors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: isActive
               ? modeColor
               : isDone
               ? modeColor.withValues(alpha: 0.5)
-              : Colors.white.withValues(alpha: 0.1),
+              : AppColors.white.withValues(alpha: 0.1),
           width: isActive ? 2 : 1,
         ),
         boxShadow: isActive
@@ -850,20 +851,20 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
             isDone ? Icons.check_circle_rounded : icon,
             size: 16,
             color: isActive
-                ? Colors.white
+                ? AppColors.white
                 : isDone
                 ? modeColor
-                : Colors.white.withValues(alpha: 0.3),
+                : AppColors.white.withValues(alpha: 0.3),
           ),
           const SizedBox(width: 6),
           Text(
             label,
             style: TextStyle(
               color: isActive
-                  ? Colors.white
+                  ? AppColors.white
                   : isDone
                   ? modeColor
-                  : Colors.white.withValues(alpha: 0.3),
+                  : AppColors.white.withValues(alpha: 0.3),
               fontSize: 12,
               fontWeight: FontWeight.w700,
               letterSpacing: 1,
@@ -891,7 +892,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
         Text(
           value,
           style: TextStyle(
-            color: isActive ? Colors.white : Colors.white70,
+            color: isActive ? AppColors.white : Colors.white70,
             fontSize: 13,
             fontWeight: FontWeight.w700,
             fontFamily: 'monospace',
@@ -927,7 +928,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: 0.5),
+            color: AppColors.textBlack.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: modeColor.withValues(alpha: 0.4)),
           ),
@@ -969,7 +970,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.6),
+        color: AppColors.textBlack.withValues(alpha: 0.6),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.cyan.withValues(alpha: 0.4)),
       ),
@@ -1013,18 +1014,18 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
                   decoration: BoxDecoration(
                     color: isSelected
                         ? Colors.cyan.withValues(alpha: 0.3)
-                        : Colors.white.withValues(alpha: 0.05),
+                        : AppColors.white.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color: isSelected
                           ? Colors.cyan
-                          : Colors.white.withValues(alpha: 0.2),
+                          : AppColors.white.withValues(alpha: 0.2),
                     ),
                   ),
                   child: Text(
                     effect.label,
                     style: TextStyle(
-                      color: isSelected ? Colors.white : Colors.white70,
+                      color: isSelected ? AppColors.white : Colors.white70,
                       fontSize: 11,
                       fontWeight: isSelected
                           ? FontWeight.w600
@@ -1222,12 +1223,12 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
                   decoration: BoxDecoration(
                     color: isSelected
                         ? Colors.amber.withValues(alpha: 0.3)
-                        : Colors.white.withValues(alpha: 0.05),
+                        : AppColors.white.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color: isSelected
                           ? Colors.amber
-                          : Colors.white.withValues(alpha: 0.2),
+                          : AppColors.white.withValues(alpha: 0.2),
                     ),
                   ),
                   child: Column(
@@ -1236,7 +1237,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
                       Text(
                         '$size×$size',
                         style: TextStyle(
-                          color: isSelected ? Colors.white : Colors.white70,
+                          color: isSelected ? AppColors.white : Colors.white70,
                           fontSize: 12,
                           fontWeight: isSelected
                               ? FontWeight.w600
@@ -1363,7 +1364,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
       height: 50,
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.4),
+        color: AppColors.textBlack.withValues(alpha: 0.4),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: modeColor.withValues(alpha: 0.3)),
       ),
@@ -1438,7 +1439,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
                       child: Text(
                         '(${pos.$1}, ${pos.$2})',
                         style: TextStyle(
-                          color: isMarked ? Colors.white : Colors.amber,
+                          color: isMarked ? AppColors.white : Colors.amber,
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                           fontFamily: 'monospace',
@@ -1541,7 +1542,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
                             : _phase == 2
                             ? Icons.hourglass_top_rounded
                             : Icons.check_circle_rounded,
-                        color: Colors.white,
+                        color: AppColors.white,
                         size: 28,
                       ),
                       const SizedBox(width: 12),
@@ -1554,7 +1555,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
                             ? 'DIGGING...'
                             : 'COMPLETE!',
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.white,
                           fontSize: 18,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 2,
@@ -1577,7 +1578,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
                     ? '보물을 찾고 있어요...'
                     : '발굴 완료!',
                 style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.5),
+                  color: AppColors.white.withValues(alpha: 0.5),
                   fontSize: 13,
                 ),
               ),
@@ -1600,12 +1601,12 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
                 ],
               )
             : null,
-        color: isActive ? null : Colors.white.withValues(alpha: 0.05),
+        color: isActive ? null : AppColors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: isActive
               ? modeColor.withValues(alpha: 0.5)
-              : Colors.white.withValues(alpha: 0.1),
+              : AppColors.white.withValues(alpha: 0.1),
         ),
       ),
       child: Row(
@@ -1614,15 +1615,15 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
           Icon(
             icon,
             size: 18,
-            color: isActive ? modeColor : Colors.white.withValues(alpha: 0.3),
+            color: isActive ? modeColor : AppColors.white.withValues(alpha: 0.3),
           ),
           const SizedBox(width: 8),
           Text(
             text,
             style: TextStyle(
               color: isActive
-                  ? Colors.white
-                  : Colors.white.withValues(alpha: 0.5),
+                  ? AppColors.white
+                  : AppColors.white.withValues(alpha: 0.5),
               fontSize: 14,
               fontWeight: FontWeight.w700,
               fontFamily: 'monospace',
@@ -2000,7 +2001,7 @@ class _TreasureCrosshairPainter extends CustomPainter {
 
         // 중앙 점
         final centerPaint = Paint()
-          ..color = Colors.white
+          ..color = AppColors.white
           ..style = PaintingStyle.fill;
 
         canvas.drawCircle(crossPoint, 5, centerPaint);
@@ -2165,7 +2166,7 @@ class _TreasureCrosshairPainter extends CustomPainter {
           const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFFFFD700), Color(0xFFFFA500), Color(0xFFFF6B35)],
+            colors: [AppColors.yellow, Color(0xFFFFA500), Color(0xFFFF6B35)],
           ).createShader(
             Rect.fromCenter(
               center: center,
@@ -2184,7 +2185,7 @@ class _TreasureCrosshairPainter extends CustomPainter {
 
     // 그림자
     final shadowPaint = Paint()
-      ..color = Colors.black.withValues(alpha: 0.3)
+      ..color = AppColors.textBlack.withValues(alpha: 0.3)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
     canvas.drawPath(path.shift(const Offset(3, 3)), shadowPaint);
 
@@ -2193,7 +2194,7 @@ class _TreasureCrosshairPainter extends CustomPainter {
 
     // 하이라이트
     final highlightPaint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.6)
+      ..color = AppColors.white.withValues(alpha: 0.6)
       ..style = PaintingStyle.fill;
 
     final highlightPath = Path()
@@ -2252,7 +2253,7 @@ class _TreasureCrosshairPainter extends CustomPainter {
 
     // 내부 점
     final dotPaint = Paint()
-      ..color = Colors.white.withValues(alpha: alpha)
+      ..color = AppColors.white.withValues(alpha: alpha)
       ..style = PaintingStyle.fill;
 
     canvas.drawCircle(Offset(targetX, targetY), 6, dotPaint);
@@ -2401,7 +2402,7 @@ class _HighlightEffectPainter extends CustomPainter {
     if (progress < 0.5) {
       final markerAlpha = 1 - progress * 2;
       final markerPaint = Paint()
-        ..color = Colors.white.withValues(alpha: markerAlpha)
+        ..color = AppColors.white.withValues(alpha: markerAlpha)
         ..style = PaintingStyle.fill;
 
       canvas.drawCircle(center, 8, markerPaint);
@@ -2433,7 +2434,7 @@ class _HighlightEffectPainter extends CustomPainter {
 
     // 중앙 빛
     final centerPaint = Paint()
-      ..color = Colors.white.withValues(alpha: fadeOut * pulseValue)
+      ..color = AppColors.white.withValues(alpha: fadeOut * pulseValue)
       ..style = PaintingStyle.fill;
 
     canvas.drawCircle(center, 12, centerPaint);
@@ -2497,7 +2498,7 @@ class _HighlightEffectPainter extends CustomPainter {
 
       // 하이라이트
       final highlightPaint = Paint()
-        ..color = Colors.white.withValues(alpha: 0.6)
+        ..color = AppColors.white.withValues(alpha: 0.6)
         ..style = PaintingStyle.fill;
 
       canvas.drawCircle(Offset(x - 3, y - 11), 3, highlightPaint);
@@ -2527,7 +2528,7 @@ class _HighlightEffectPainter extends CustomPainter {
 
     // 배경
     final bgPaint = Paint()
-      ..color = Colors.black.withValues(alpha: 0.8 * fadeOut)
+      ..color = AppColors.textBlack.withValues(alpha: 0.8 * fadeOut)
       ..style = PaintingStyle.fill;
 
     final rrect = RRect.fromRectAndRadius(zoomRect, const Radius.circular(16));
@@ -2565,7 +2566,7 @@ class _HighlightEffectPainter extends CustomPainter {
       text: TextSpan(
         text: '($row, $col)',
         style: TextStyle(
-          color: Colors.white.withValues(alpha: fadeOut),
+          color: AppColors.white.withValues(alpha: fadeOut),
           fontSize: 16,
           fontWeight: FontWeight.bold,
           fontFamily: 'monospace',
@@ -2659,7 +2660,7 @@ class _HighlightEffectPainter extends CustomPainter {
       // 모서리 강조
       final cornerSize = blockSize * 0.3;
       final cornerPaint = Paint()
-        ..color = Colors.white.withValues(alpha: alpha)
+        ..color = AppColors.white.withValues(alpha: alpha)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2;
 
@@ -2713,7 +2714,7 @@ class _HighlightEffectPainter extends CustomPainter {
     if (progress < 0.6) {
       final centerAlpha = 1 - progress / 0.6;
       final centerPaint = Paint()
-        ..color = Colors.white.withValues(alpha: centerAlpha)
+        ..color = AppColors.white.withValues(alpha: centerAlpha)
         ..style = PaintingStyle.fill;
 
       canvas.drawRect(
@@ -2743,7 +2744,7 @@ class _HighlightEffectPainter extends CustomPainter {
 
       // 블록 그림자
       final shadowPaint = Paint()
-        ..color = Colors.black.withValues(alpha: alpha * 0.5)
+        ..color = AppColors.textBlack.withValues(alpha: alpha * 0.5)
         ..style = PaintingStyle.fill;
 
       canvas.drawRect(
@@ -2772,7 +2773,7 @@ class _HighlightEffectPainter extends CustomPainter {
 
       // 하이라이트
       final highlightPaint = Paint()
-        ..color = Colors.white.withValues(alpha: alpha * 0.6)
+        ..color = AppColors.white.withValues(alpha: alpha * 0.6)
         ..style = PaintingStyle.fill;
 
       canvas.drawRect(
@@ -2789,7 +2790,7 @@ class _HighlightEffectPainter extends CustomPainter {
     if (progress < 0.3) {
       final burstAlpha = 1 - progress / 0.3;
       final burstPaint = Paint()
-        ..color = Colors.white.withValues(alpha: burstAlpha)
+        ..color = AppColors.white.withValues(alpha: burstAlpha)
         ..style = PaintingStyle.fill
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10);
 
@@ -2865,7 +2866,7 @@ class _HighlightEffectPainter extends CustomPainter {
       text: TextSpan(
         text: '$treasureSize×$treasureSize',
         style: TextStyle(
-          color: Colors.white.withValues(alpha: fadeOut * appearProgress),
+          color: AppColors.white.withValues(alpha: fadeOut * appearProgress),
           fontSize: 14,
           fontWeight: FontWeight.bold,
           fontFamily: 'monospace',
@@ -3055,7 +3056,7 @@ class _HighlightEffectPainter extends CustomPainter {
 
       // 하이라이트
       final highlightPaint = Paint()
-        ..color = Colors.white.withValues(alpha: blockAlpha * 0.4)
+        ..color = AppColors.white.withValues(alpha: blockAlpha * 0.4)
         ..style = PaintingStyle.fill;
 
       canvas.drawRect(
@@ -3164,7 +3165,7 @@ class _HighlightEffectPainter extends CustomPainter {
 
     // 테두리
     final borderPaint = Paint()
-      ..color = Colors.white.withValues(alpha: fadeOut * 0.6)
+      ..color = AppColors.white.withValues(alpha: fadeOut * 0.6)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
 
@@ -3181,7 +3182,7 @@ class _HighlightEffectPainter extends CustomPainter {
 
     // 물음표 또는 보물 아이콘
     final iconPaint = Paint()
-      ..color = Colors.white.withValues(alpha: fadeOut)
+      ..color = AppColors.white.withValues(alpha: fadeOut)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3;
 
@@ -3399,7 +3400,7 @@ class _TreasureResultDialogState extends State<_TreasureResultDialog>
   @override
   Widget build(BuildContext context) {
     final color = widget.foundTreasure
-        ? const Color(0xFFFFD700)
+        ? AppColors.yellow
         : Colors.grey.shade600;
 
     return Center(
@@ -3472,7 +3473,7 @@ class _TreasureResultDialogState extends State<_TreasureResultDialog>
                                     end: Alignment(_shineAnimation.value, 0.5),
                                     colors: [
                                       Colors.transparent,
-                                      Colors.white.withValues(alpha: 0.15),
+                                      AppColors.white.withValues(alpha: 0.15),
                                       Colors.transparent,
                                     ],
                                   ).createShader(bounds);
@@ -3480,7 +3481,7 @@ class _TreasureResultDialogState extends State<_TreasureResultDialog>
                                 blendMode: BlendMode.srcATop,
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha: 0.05),
+                                    color: AppColors.white.withValues(alpha: 0.05),
                                   ),
                                 ),
                               ),
@@ -3538,8 +3539,8 @@ class _TreasureResultDialogState extends State<_TreasureResultDialog>
                             shaderCallback: (bounds) {
                               return LinearGradient(
                                 colors: widget.foundTreasure
-                                    ? [Colors.white, color]
-                                    : [Colors.white, Colors.grey],
+                                    ? [AppColors.white, color]
+                                    : [AppColors.white, Colors.grey],
                               ).createShader(bounds);
                             },
                             child: Text(
@@ -3547,7 +3548,7 @@ class _TreasureResultDialogState extends State<_TreasureResultDialog>
                                   ? 'TREASURE!'
                                   : 'NOT THIS TIME',
                               style: const TextStyle(
-                                color: Colors.white,
+                                color: AppColors.white,
                                 fontSize: 28,
                                 fontWeight: FontWeight.w900,
                                 letterSpacing: 3,
@@ -3562,7 +3563,7 @@ class _TreasureResultDialogState extends State<_TreasureResultDialog>
                                 ? '축하해요! 보물을 찾았어요!'
                                 : '아쉽지만 다음 기회에!',
                             style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.7),
+                              color: AppColors.white.withValues(alpha: 0.7),
                               fontSize: 15,
                             ),
                           ),
@@ -3576,7 +3577,7 @@ class _TreasureResultDialogState extends State<_TreasureResultDialog>
                               vertical: 18,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.black.withValues(alpha: 0.4),
+                              color: AppColors.textBlack.withValues(alpha: 0.4),
                               borderRadius: BorderRadius.circular(20),
                               border: Border.all(
                                 color: color.withValues(alpha: 0.3),
@@ -3727,7 +3728,7 @@ class _TreasureResultDialogState extends State<_TreasureResultDialog>
         Text(
           value.toString().padLeft(3, '0'),
           style: const TextStyle(
-            color: Colors.white,
+            color: AppColors.white,
             fontSize: 32,
             fontWeight: FontWeight.w800,
             fontFamily: 'monospace',
@@ -3760,12 +3761,12 @@ class _TreasureResultDialogState extends State<_TreasureResultDialog>
                   colors: [color, color.withValues(alpha: 0.7)],
                 )
               : null,
-          color: isPrimary ? null : Colors.white.withValues(alpha: 0.08),
+          color: isPrimary ? null : AppColors.white.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
             color: isPrimary
                 ? color.withValues(alpha: 0.6)
-                : Colors.white.withValues(alpha: 0.15),
+                : AppColors.white.withValues(alpha: 0.15),
           ),
           boxShadow: isPrimary
               ? [
@@ -3782,14 +3783,14 @@ class _TreasureResultDialogState extends State<_TreasureResultDialog>
           children: [
             Icon(
               icon,
-              color: Colors.white.withValues(alpha: isPrimary ? 1 : 0.8),
+              color: AppColors.white.withValues(alpha: isPrimary ? 1 : 0.8),
               size: 20,
             ),
             const SizedBox(width: 8),
             Text(
               label,
               style: TextStyle(
-                color: Colors.white.withValues(alpha: isPrimary ? 1 : 0.8),
+                color: AppColors.white.withValues(alpha: isPrimary ? 1 : 0.8),
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1.5,

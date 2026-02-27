@@ -53,7 +53,7 @@ class ZoomControls extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF0A1128).withValues(alpha: 0.75),
+        color: AppColors.textBlack.withValues(alpha: 0.75),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(

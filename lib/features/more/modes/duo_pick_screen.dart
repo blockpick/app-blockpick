@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
+import '../../../../core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../widgets/coordinate_result_dialog.dart';
@@ -15,8 +16,8 @@ class DuoPickScreen extends StatefulWidget {
 
 class _DuoPickScreenState extends State<DuoPickScreen>
     with TickerProviderStateMixin {
-  static const Color modeColor = Color(0xFF3B82F6);
-  static const Color friendColor = Color(0xFFA855F7);
+  static const Color modeColor = AppColors.blue;
+  static const Color friendColor = AppColors.primaryLight;
   static const int gridSize = 1000;
 
   final _myRowController = TextEditingController();

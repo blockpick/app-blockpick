@@ -26,8 +26,8 @@ class GameGridWidget extends ConsumerStatefulWidget {
   /// 그리드 세로 크기
   final int gridHeight;
 
-  /// 블록 클릭 콜백
-  final Function(BlockModel)? onBlockTap;
+  /// 블록 클릭 콜백 (false 반환 시 블록 선택 취소)
+  final bool Function(BlockModel)? onBlockTap;
 
   /// 배경 이미지 경로 (제품 이미지)
   final String? backgroundImagePath;
@@ -599,11 +599,13 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
     if (row >= 1 && row <= widget.gridHeight && col >= 1 && col <= widget.gridWidth) {
       final block = BlockModel.fromPosition(row, col, state: BlockState.selected);
 
+      // 콜백 호출 (로그인 체크 등) — false 반환 시 블록 선택 안 함
+      if (widget.onBlockTap != null && !widget.onBlockTap!(block)) {
+        return;
+      }
+
       // 블록 토글 (자동 줌인 제거 - 사용자가 원하는 줌 레벨에서 선택)
       gridNotifier.toggleBlock(block);
-
-      // 콜백 호출
-      widget.onBlockTap?.call(block);
     }
   }
 

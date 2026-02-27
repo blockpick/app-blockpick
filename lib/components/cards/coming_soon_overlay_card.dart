@@ -118,7 +118,7 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFFE8EAF6), Color(0xFFC5CAE9)],
+            colors: [AppColors.primaryBg, AppColors.gray200],
           ),
         ),
       );
@@ -133,7 +133,7 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [Color(0xFFE8EAF6), Color(0xFFC5CAE9)],
+              colors: [AppColors.primaryBg, AppColors.gray200],
             ),
           ),
         );
@@ -156,7 +156,7 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
             style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF37474F),
+              color: AppColors.textBlack,
               height: 1.2,
             ),
             maxLines: 1,
@@ -188,7 +188,7 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
         Icon(
           icon,
           size: 14,
-          color: const Color(0xFF78909C),
+          color: AppColors.gray600,
         ),
         const SizedBox(width: 4),
         Text(
@@ -196,7 +196,7 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
           style: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w500,
-            color: Color(0xFF607D8B),
+            color: AppColors.gray600,
           ),
         ),
       ],
@@ -275,7 +275,7 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF455A64).withValues(alpha: 0.8),
+              color: AppColors.gray800.withValues(alpha: 0.8),
               letterSpacing: 3,
             ),
           ),
@@ -286,7 +286,7 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
             style: const TextStyle(
               fontSize: 36,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF37474F),
+              color: AppColors.textBlack,
               letterSpacing: 2,
               fontFeatures: [FontFeature.tabularFigures()],
             ),
@@ -308,13 +308,13 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
   Color _getTypeBadgeColor() {
     switch (widget.gameType.toLowerCase()) {
       case 'daily':
-        return const Color(0xFF42A5F5);
+        return AppColors.blue;
       case 'select':
-        return const Color(0xFF66BB6A);
+        return AppColors.mint;
       case 'vibe':
-        return const Color(0xFFAB47BC);
+        return AppColors.primaryLight;
       case 'prime':
-        return const Color(0xFF5C6BC0);
+        return AppColors.primaryDark;
       default:
         return AppColors.gray500;
     }

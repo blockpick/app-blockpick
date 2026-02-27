@@ -54,14 +54,14 @@ class _TabBarSample1State extends State<TabBarSample1>
         backgroundColor: const Color(0xFF0A0E27),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: AppColors.white),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           'Neon Glow TabBar',
           style: AppTextStyles.large.copyWith(
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: AppColors.white,
           ),
         ),
       ),
@@ -93,7 +93,7 @@ class _TabBarSample1State extends State<TabBarSample1>
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.5),
+            color: AppColors.textBlack.withValues(alpha: 0.5),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -187,7 +187,7 @@ class _TabBarSample1State extends State<TabBarSample1>
                     child: Icon(
                       tab.icon,
                       size: 28,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ),
                 ),
@@ -208,7 +208,7 @@ class _TabBarSample1State extends State<TabBarSample1>
                     child: Text(
                       tab.label,
                       style: AppTextStyles.small.copyWith(
-                        color: Colors.white,
+                        color: AppColors.white,
                         fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                       ),
                     ),
@@ -237,7 +237,7 @@ class _TabBarSample1State extends State<TabBarSample1>
               child: Icon(
                 _tabs[_selectedIndex].icon,
                 size: 120,
-                color: Colors.white,
+                color: AppColors.white,
               ),
             ),
             const SizedBox(height: 24),
@@ -248,7 +248,7 @@ class _TabBarSample1State extends State<TabBarSample1>
               child: Text(
                 _tabs[_selectedIndex].label,
                 style: AppTextStyles.display.copyWith(
-                  color: Colors.white,
+                  color: AppColors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
