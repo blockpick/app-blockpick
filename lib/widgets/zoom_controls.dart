@@ -36,14 +36,16 @@ class ZoomControls extends StatelessWidget {
     this.opacity = 0.75,
   });
 
-  /// currentLevel과 minLevel을 기반으로 사용자 친화적 배율 텍스트 계산
+  /// 줌 라벨: MIN / MAX / NX (기획 SC-009-16)
   String _getZoomLabel() {
-    if (currentLevel == null || minLevel == null) return '';
+    if (currentLevel == null || minLevel == null || maxLevel == null) return '';
+    if (currentLevel! <= minLevel!) return 'MIN';
+    if (currentLevel! >= maxLevel!) return 'MAX';
     final relativeLevel = currentLevel! - minLevel!;
-    // 배율 매핑: 레벨 0=×1, 1=×2, 2=×5, 3=×10, 4=×20, 5=×50, ...
+    // 배율 매핑: 레벨 0=1X, 1=2X, 2=5X, 3=10X, 4=20X, 5=50X, ...
     const multipliers = [1, 2, 5, 10, 20, 50, 100, 200, 500];
     final idx = relativeLevel.clamp(0, multipliers.length - 1);
-    return '×${multipliers[idx]}';
+    return '${multipliers[idx]}X';
   }
 
   @override
@@ -53,11 +55,11 @@ class ZoomControls extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.textBlack.withValues(alpha: 0.75),
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.2),
+            color: AppColors.black.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -70,38 +72,31 @@ class ZoomControls extends StatelessWidget {
           IconButton(
             onPressed: canZoomIn ? onZoomIn : null,
             icon: const Icon(LucideIcons.plus),
-            color: canZoomIn ? Colors.white : Colors.white38,
-            iconSize: 24,
+            color: canZoomIn ? AppColors.darkBlue : AppColors.gray200,
+            iconSize: 22,
             padding: const EdgeInsets.all(12),
           ),
 
-          // 배율 텍스트 표시
-          if (currentLevel != null && minLevel != null)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+          // 배율 라벨 (MIN / MAX / NX)
+          if (currentLevel != null && minLevel != null && maxLevel != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               child: Text(
                 _getZoomLabel(),
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.darkBlue,
                 ),
               ),
             ),
-
-          // 구분선
-          Container(
-            width: 40,
-            height: 1,
-            color: Colors.white.withValues(alpha: 0.15),
-          ),
 
           // Zoom Out
           IconButton(
             onPressed: canZoomOut ? onZoomOut : null,
             icon: const Icon(LucideIcons.minus),
-            color: canZoomOut ? Colors.white : Colors.white38,
-            iconSize: 24,
+            color: canZoomOut ? AppColors.darkBlue : AppColors.gray200,
+            iconSize: 22,
             padding: const EdgeInsets.all(12),
           ),
         ],

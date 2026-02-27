@@ -24,7 +24,6 @@ import '../../widgets/grid_section_overlay.dart';
 import '../../widgets/zoom_controls.dart';
 import '../grid/game_grid_widget.dart';
 import 'selected_blocks_sheet.dart';
-import 'widgets/product_selector_overlay.dart';
 
 /// 게임 메인 화면
 class GameScreen extends ConsumerStatefulWidget {
@@ -262,131 +261,6 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         content: Text(message),
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
-      ),
-    );
-  }
-
-  /// 선택 수량 배지 (왼쪽 상단) - 글래스 스타일 + 진행 도트
-  Widget _buildSelectionBadge(int selected, int max) {
-    final isComplete = selected >= max;
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-          decoration: BoxDecoration(
-            color: AppColors.textBlack.withValues(alpha: 0.75),
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.black.withValues(alpha: 0.2),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // 체크 아이콘
-              Container(
-                width: 20,
-                height: 20,
-                decoration: BoxDecoration(
-                  color: isComplete
-                      ? AppColors.green.withValues(alpha: 0.3)
-                      : AppColors.blue.withValues(alpha: 0.3),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Icon(
-                  isComplete ? Icons.check_rounded : Icons.touch_app_rounded,
-                  size: 14,
-                  color: isComplete ? AppColors.green : Colors.white,
-                ),
-              ),
-              const SizedBox(width: 8),
-              // 카운트
-              Text(
-                '$selected',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: isComplete ? AppColors.green : Colors.white,
-                ),
-              ),
-              Text(
-                '/$max',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white.withValues(alpha: 0.6),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 6),
-        // 진행 도트 (●●●○○)
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: List.generate(max, (index) {
-            final isFilled = index < selected;
-            return Container(
-              width: 8,
-              height: 8,
-              margin: const EdgeInsets.symmetric(horizontal: 2),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: isComplete
-                    ? AppColors.green
-                    : (isFilled ? AppColors.blue : AppColors.gray300),
-              ),
-            );
-          }),
-        ),
-      ],
-    );
-  }
-
-  /// 안내 바 (인스트럭션) - 상단 중앙
-  Widget _buildInstructionBar(int selected, int max) {
-    String text;
-    IconData? icon;
-
-    if (selected == 0) {
-      text = '원하는 블록 ${max}개를 선택하세요';
-      icon = Icons.touch_app_rounded;
-    } else if (selected < max) {
-      text = '$selected/${max}개 선택됨 — 더 선택해주세요';
-      icon = null;
-    } else {
-      text = '선택 완료! 참가하기를 눌러주세요';
-      icon = Icons.check_circle_rounded;
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      decoration: BoxDecoration(
-        color: AppColors.textBlack.withValues(alpha: 0.75),
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (icon != null) ...[
-            Icon(icon, size: 16, color: Colors.white.withValues(alpha: 0.9)),
-            const SizedBox(width: 6),
-          ],
-          Text(
-            text,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
-              color: Colors.white.withValues(alpha: 0.9),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -816,53 +690,111 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           if (_sections.isNotEmpty)
             Positioned.fill(child: _buildSectionOverlay(gridState)),
 
-          // 바텀시트는 showModalBottomSheet로 표시
-
-          // 안내 바 (상단 중앙)
+          // (i) 정보 아이콘 (좌상단) - 튜토리얼 트리거
           Positioned(
             top: 16,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: _buildInstructionBar(selectedCount, _pickMax),
-            ),
-          ),
-
-          // 선택 수량 배지 (왼쪽 상단, 안내 바 아래) - 탭하면 바텀시트 열림
-          Positioned(
-            top: 56,
             left: 16,
             child: GestureDetector(
-              onTap: selectedCount > 0 ? _showSelectedBlocksModal : null,
-              child: _buildSelectionBadge(selectedCount, _pickMax),
+              onTap: () {
+                _tutorialCoachMark?.finish();
+                _showTutorial();
+              },
+              child: Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.black.withValues(alpha: 0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.info_outline_rounded,
+                  size: 18,
+                  color: AppColors.darkBlue,
+                ),
+              ),
             ),
           ),
 
-          // 상품 선택 버튼 (우상단, 안내 바 아래) - SELECT 게임인 경우
-          if (_fullGame != null &&
-              _fullGame!.gameType?.toUpperCase() == 'SELECT' &&
-              _fullGame!.gameProducts != null &&
-              _fullGame!.gameProducts!.isNotEmpty)
-            Positioned(
-              top: 56,
-              right: 16,
-              child: _buildCompactProductSelector(),
+          // 상품 정보 버튼 (우상단)
+          Positioned(
+            top: 16,
+            right: 16,
+            child: GestureDetector(
+              onTap: _showProductInfo,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.black.withValues(alpha: 0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '상품 정보',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.darkBlue,
+                      ),
+                    ),
+                    const SizedBox(width: 2),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      size: 18,
+                      color: AppColors.darkBlue,
+                    ),
+                  ],
+                ),
+              ),
             ),
+          ),
 
           // 미니맵 (좌하단)
           Positioned(
             bottom: 100 + bottomPadding + 16,
             left: 16,
-            child: GridMinimap(
-              key: _minimapKey,
-              gridWidth: _gridWidth,
-              gridHeight: _gridHeight,
-              zoom: gridState.zoom,
-              panX: gridState.panX,
-              panY: gridState.panY,
-              screenSize: MediaQuery.of(context).size,
-              backgroundImagePath: _game?.imageUrl,
-              selectedBlocks: gridState.selectedBlocks,
+            child: Builder(
+              builder: (context) {
+                // SELECT 게임인 경우 선택된 상품의 이미지 사용
+                String? minimapImage;
+                if (_fullGame != null &&
+                    _fullGame!.gameType?.toUpperCase() == 'SELECT' &&
+                    _fullGame!.gameProducts != null &&
+                    _fullGame!.gameProducts!.isNotEmpty) {
+                  final selectedProduct =
+                      _fullGame!.gameProducts![_selectedProductIndex];
+                  minimapImage = selectedProduct.product.defaultImage ??
+                      selectedProduct.product.imageUrl;
+                } else {
+                  minimapImage = _game?.imageUrl;
+                }
+                return GridMinimap(
+                  key: _minimapKey,
+                  gridWidth: _gridWidth,
+                  gridHeight: _gridHeight,
+                  zoom: gridState.zoom,
+                  panX: gridState.panX,
+                  panY: gridState.panY,
+                  screenSize: MediaQuery.of(context).size,
+                  backgroundImagePath: minimapImage,
+                  selectedBlocks: gridState.selectedBlocks,
+                );
+              },
             ),
           ),
 
@@ -882,16 +814,61 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               ),
             ),
 
-          // FAB - 선택된 블록 보기 (선택된 블록이 있을 때만)
-          if (selectedCount > 0)
-            Positioned(
-              bottom: bottomPadding + 24,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: _buildSelectionFAB(selectedCount, _pickMax),
+          // FAB - "N/5개 선택 >" (항상 표시)
+          Positioned(
+            bottom: bottomPadding + 24,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: GestureDetector(
+                onTap: selectedCount > 0 ? _showSelectedBlocksModal : null,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 20, vertical: 14),
+                  decoration: BoxDecoration(
+                    color: AppColors.textBlack.withValues(alpha: 0.85),
+                    borderRadius: BorderRadius.circular(32),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.black.withValues(alpha: 0.3),
+                        blurRadius: 16,
+                        offset: const Offset(0, 6),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        '$selectedCount',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: selectedCount > 0
+                              ? AppColors.blue
+                              : Colors.white,
+                        ),
+                      ),
+                      Text(
+                        '/$_pickMax개 선택',
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      const Icon(
+                        Icons.chevron_right_rounded,
+                        size: 20,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
+          ),
         ],
       ),
     );
@@ -916,64 +893,246 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     );
   }
 
-  /// 토스 스타일 AppBar 구성
+  /// AppBar 구성 (게임 타입 타이틀 + 알림 벨)
   PreferredSizeWidget _buildAppBar(BuildContext context) {
+    final isSelectGame = _fullGame != null &&
+        _fullGame!.gameType?.toUpperCase() == 'SELECT' &&
+        _fullGame!.gameProducts != null &&
+        _fullGame!.gameProducts!.isNotEmpty;
+
+    // 게임 타입 기반 타이틀
+    String appBarTitle;
+    switch (_fullGame?.gameType?.toUpperCase()) {
+      case 'SELECT':
+        appBarTitle = 'SELECT Events';
+        break;
+      case 'DAILY':
+        appBarTitle = 'DAILY Events';
+        break;
+      case 'VIBE':
+        appBarTitle = 'VIBE Events';
+        break;
+      case 'PRIME':
+        appBarTitle = 'PRIME Events';
+        break;
+      default:
+        appBarTitle = _game?.title ?? 'BlockPick Game';
+    }
+
     return PreferredSize(
-      preferredSize: const Size.fromHeight(56),
+      preferredSize: Size.fromHeight(isSelectGame ? 124 : 56),
       child: Container(
         color: AppColors.white,
         child: SafeArea(
           bottom: false,
-          child: Container(
-            height: 56,
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: Row(
-              children: [
-                // 뒤로가기
-                IconButton(
-                  onPressed: () => context.go('/'),
-                  icon: const Icon(
-                    Icons.arrow_back_ios_new_rounded,
-                    size: 22,
-                    color: AppColors.darkBlue,
-                  ),
-                ),
-
-                // 제목
-                Expanded(
-                  child: Text(
-                    _game?.title ?? 'BlockPick Game',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.darkBlue,
+          child: Column(
+            children: [
+              // AppBar 영역
+              Container(
+                height: 56,
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Row(
+                  children: [
+                    // 뒤로가기
+                    IconButton(
+                      onPressed: () => context.go('/'),
+                      icon: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 22,
+                        color: AppColors.darkBlue,
+                      ),
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
 
-                // 튜토리얼 다시 보기
-                IconButton(
-                  icon: Icon(
-                    Icons.help_outline_rounded,
-                    size: 22,
-                    color: AppColors.gray600,
-                  ),
-                  onPressed: () {
-                    _tutorialCoachMark?.finish();
-                    _showTutorial();
-                  },
+                    // 제목
+                    Expanded(
+                      child: Text(
+                        appBarTitle,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.darkBlue,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+
+                    // 공유하기 버튼
+                    IconButton(
+                      onPressed: () {
+                        // TODO: share_plus 패키지 추가 후 Share.share() 연동
+                        _showSnackBar('공유 기능 준비 중입니다');
+                      },
+                      icon: const Icon(
+                        LucideIcons.share2,
+                        size: 22,
+                        color: AppColors.darkBlue,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+
+              // 상품 정보 바 (SELECT 게임)
+              if (isSelectGame) _buildProductInfoBar(),
+            ],
           ),
         ),
       ),
     );
   }
 
-  /// 상품 선택 오버레이 표시
+  /// 상품 정보 바 (AppBar 아래 전폭 스트립, 2줄)
+  Widget _buildProductInfoBar() {
+    final products = _fullGame!.gameProducts!;
+    final selectedProduct = products[_selectedProductIndex];
+    final productName = selectedProduct.product.name ?? '';
+    final entryFee = _fullGame!.entryFee ?? 0;
+    final maxEntries = _fullGame!.maxEntries ?? 0;
+    final participants = _game?.participants ?? 0;
+
+    return GestureDetector(
+      onTap: _showProductSelector,
+      child: Container(
+        height: 68,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        decoration: const BoxDecoration(
+          color: AppColors.white,
+          border: Border(
+            bottom: BorderSide(color: AppColors.gray200, width: 1),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Row 1: 상품명 + 상품 변경 아이콘
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    productName,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.darkBlue,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Icon(
+                  Icons.tune_rounded,
+                  size: 20,
+                  color: AppColors.gray600,
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            // Row 2: 가격 + 참여수 + 그리드 크기
+            Row(
+              children: [
+                // 가격 (ⓟ)
+                _buildPointBadge(entryFee),
+                const SizedBox(width: 16),
+                // 참여수
+                _buildInfoChip(
+                  Icons.people_outline_rounded,
+                  '${_formatCount(participants)}/${_formatCount(maxEntries)}',
+                ),
+                const SizedBox(width: 16),
+                // 그리드 크기
+                _buildInfoChip(
+                  Icons.grid_view_rounded,
+                  '${_formatPrice(_gridWidth)}×${_formatPrice(_gridHeight)}',
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// ⓟ 포인트 뱃지
+  Widget _buildPointBadge(int value) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 16,
+          height: 16,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(color: AppColors.gray600, width: 1.2),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            'P',
+            style: TextStyle(
+              fontSize: 9,
+              fontWeight: FontWeight.w700,
+              color: AppColors.gray600,
+            ),
+          ),
+        ),
+        const SizedBox(width: 4),
+        Text(
+          _formatPrice(value),
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: AppColors.gray600,
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// 정보 칩 (아이콘 + 텍스트)
+  Widget _buildInfoChip(IconData icon, String text) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 16, color: AppColors.gray600),
+        const SizedBox(width: 4),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: AppColors.gray600,
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// 가격 포맷 (1000 → 1,000)
+  String _formatPrice(int price) {
+    return price.toString().replaceAllMapped(
+      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+      (Match m) => '${m[1]},',
+    );
+  }
+
+  /// 참여자 수 포맷 (만 단위 이상 K/M 표기, 소수점 1자리)
+  String _formatCount(int count) {
+    if (count >= 1000000) {
+      final value = count / 1000000;
+      return value == value.truncateToDouble()
+          ? '${value.toInt()}M'
+          : '${value.toStringAsFixed(1)}M';
+    } else if (count >= 10000) {
+      final value = count / 1000;
+      return value == value.truncateToDouble()
+          ? '${value.toInt()}K'
+          : '${value.toStringAsFixed(1)}K';
+    }
+    return _formatPrice(count);
+  }
+
+  /// 상품 선택 드롭다운 표시 (기획 SC-009-15 #3 스위치 버튼)
   void _showProductSelector() {
     if (_fullGame == null ||
         _fullGame!.gameProducts == null ||
@@ -981,104 +1140,326 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       return;
     }
 
+    final products = _fullGame!.gameProducts!;
+    final topOffset = MediaQuery.of(context).padding.top + 56;
+
     showDialog(
       context: context,
-      barrierDismissible: false,
-      builder: (context) => Dialog(
-        insetPadding: EdgeInsets.zero,
-        backgroundColor: Colors.transparent,
-        child: ProductSelectorOverlay(
-          products: _fullGame!.gameProducts!,
-          initialIndex: _selectedProductIndex,
-          onProductSelected: (index, product) {
-            setState(() {
-              _selectedProductIndex = index;
-            });
-            debugPrint(
-              '✅ Product selected: ${product.product.name} (index: $index)',
-            );
-          },
-        ),
-      ),
+      barrierColor: Colors.black.withValues(alpha: 0.2),
+      builder: (dialogContext) {
+        return Stack(
+          children: [
+            // 배경 탭 시 닫기
+            Positioned.fill(
+              child: GestureDetector(
+                onTap: () => Navigator.pop(dialogContext),
+              ),
+            ),
+            // 드롭다운 리스트
+            Positioned(
+              top: topOffset,
+              left: 16,
+              right: 16,
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.black.withValues(alpha: 0.15),
+                        blurRadius: 20,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: List.generate(products.length, (index) {
+                        final product = products[index].product;
+                        final isSelected = index == _selectedProductIndex;
+
+                        return InkWell(
+                          onTap: () {
+                            setState(() {
+                              _selectedProductIndex = index;
+                            });
+                            Navigator.pop(dialogContext);
+                          },
+                          borderRadius: BorderRadius.circular(12),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 10,
+                            ),
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: isSelected
+                                  ? Border.all(
+                                      color: AppColors.darkBlue, width: 1.5)
+                                  : null,
+                            ),
+                            child: Row(
+                              children: [
+                                // 썸네일
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Container(
+                                    width: 48,
+                                    height: 48,
+                                    color: AppColors.gray100,
+                                    child: product.defaultImage != null
+                                        ? Image.network(
+                                            product.defaultImage!
+                                                .replaceAll(' ', '%20'),
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (_, __, ___) =>
+                                                const Icon(
+                                              Icons.inventory_2_outlined,
+                                              size: 24,
+                                              color: AppColors.gray600,
+                                            ),
+                                          )
+                                        : const Icon(
+                                            Icons.inventory_2_outlined,
+                                            size: 24,
+                                            color: AppColors.gray600,
+                                          ),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                // 상품명 + 포인트
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        product.name,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: AppColors.darkBlue,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(height: 4),
+                                      // ⓟ 포인트
+                                      Row(
+                                        children: [
+                                          Container(
+                                            width: 14,
+                                            height: 14,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color: AppColors.gray600,
+                                                width: 1,
+                                              ),
+                                            ),
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              'P',
+                                              style: TextStyle(
+                                                fontSize: 8,
+                                                fontWeight: FontWeight.w700,
+                                                color: AppColors.gray600,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            _formatPrice(
+                                                product.price ?? 0),
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
+                                              color: AppColors.gray600,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
-  /// FAB - 선택 미완료 시 "N개 선택됨", 완료 시 "참가하기"
-  Widget _buildSelectionFAB(int selected, int max) {
-    final isComplete = selected >= max;
+  /// 상품 정보 보기 (SC-009-16 #1 상품정보 버튼)
+  void _showProductInfo() {
+    if (_fullGame == null ||
+        _fullGame!.gameProducts == null ||
+        _fullGame!.gameProducts!.isEmpty) {
+      return;
+    }
 
-    return GestureDetector(
-      onTap: _showSelectedBlocksModal,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        decoration: BoxDecoration(
-          gradient: isComplete
-              ? const LinearGradient(
-                  colors: [AppColors.mint, AppColors.mint],
-                )
-              : null,
-          color: isComplete ? null : AppColors.textBlack.withValues(alpha: 0.85),
-          borderRadius: BorderRadius.circular(32),
-          boxShadow: [
-            BoxShadow(
-              color: isComplete
-                  ? AppColors.green.withValues(alpha: 0.4)
-                  : AppColors.black.withValues(alpha: 0.3),
-              blurRadius: 16,
-              offset: const Offset(0, 6),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: isComplete
-              ? [
-                  const Icon(
-                    Icons.check_circle_rounded,
-                    size: 20,
-                    color: Colors.white,
-                  ),
-                  const SizedBox(width: 8),
-                  const Text(
-                    '참가하기',
+    final selectedProduct =
+        _fullGame!.gameProducts![_selectedProductIndex].product;
+    final detailUrl = selectedProduct.detailUrl;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.85,
+        minChildSize: 0.5,
+        maxChildSize: 0.95,
+        builder: (context, scrollController) => Container(
+          decoration: const BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            children: [
+              // 핸들 바
+              Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(top: 12, bottom: 16),
+                decoration: BoxDecoration(
+                  color: AppColors.gray200,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              // 타이틀
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '상품 정보',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 18,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                      color: AppColors.darkBlue,
                     ),
                   ),
-                ]
-              : [
-                  Container(
-                    width: 24,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Icon(
-                      Icons.check_rounded,
-                      size: 16,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Text(
-                    '$selected개 선택됨',
-                    style: const TextStyle(
+                ),
+              ),
+              const SizedBox(height: 16),
+              // 상품명 (전체 출력, 말줄임 없음)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    selectedProduct.name,
+                    style: TextStyle(
                       fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.darkBlue,
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  const Icon(
-                    Icons.keyboard_arrow_up_rounded,
-                    size: 20,
-                    color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 16),
+              // 상품 이미지
+              if (selectedProduct.defaultImage != null)
+                Expanded(
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.network(
+                            selectedProduct.defaultImage!
+                                .replaceAll(' ', '%20'),
+                            fit: BoxFit.fitWidth,
+                            width: double.infinity,
+                            errorBuilder: (_, __, ___) => Container(
+                              height: 200,
+                              color: AppColors.gray100,
+                              child: const Center(
+                                child: Icon(Icons.image_not_supported_outlined,
+                                    size: 48, color: AppColors.gray600),
+                              ),
+                            ),
+                          ),
+                        ),
+                        if (detailUrl != null && detailUrl.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16),
+                            child: Text(
+                              detailUrl,
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: AppColors.blue,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                        const SizedBox(height: 24),
+                      ],
+                    ),
                   ),
-                ],
+                )
+              else
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      '상품 상세 정보가 없습니다',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppColors.gray600,
+                      ),
+                    ),
+                  ),
+                ),
+              // 확인 버튼
+              SafeArea(
+                top: false,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.darkBlue,
+                        foregroundColor: AppColors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        '확인',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -1113,103 +1494,5 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     });
   }
 
-  /// 상품 선택 버튼 (우상단) - 글래스 스타일 + 상품명
-  Widget _buildCompactProductSelector() {
-    if (_fullGame == null ||
-        _fullGame!.gameProducts == null ||
-        _fullGame!.gameProducts!.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
-    final productCount = _fullGame!.gameProducts!.length;
-    final selectedProduct = _fullGame!.gameProducts![_selectedProductIndex];
-    final productName = selectedProduct.product.name ?? '';
-
-    return GestureDetector(
-      onTap: _showProductSelector,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(
-          color: AppColors.textBlack.withValues(alpha: 0.75),
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.black.withValues(alpha: 0.2),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // 상품 썸네일 (40x40)
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Container(
-                width: 40,
-                height: 40,
-                color: Colors.white.withValues(alpha: 0.1),
-                child: selectedProduct.product.defaultImage != null
-                    ? Image.network(
-                        selectedProduct.product.defaultImage!.replaceAll(' ', '%20'),
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Icon(
-                            Icons.inventory_2_outlined,
-                            size: 20,
-                            color: Colors.white54,
-                          );
-                        },
-                      )
-                    : const Icon(
-                        Icons.inventory_2_outlined,
-                        size: 20,
-                        color: Colors.white54,
-                      ),
-              ),
-            ),
-            const SizedBox(width: 8),
-            // 상품명 + 인덱스
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (productName.isNotEmpty)
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 72),
-                    child: Text(
-                      productName,
-                      style: const TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white70,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                Text(
-                  '${_selectedProductIndex + 1}/$productCount',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(width: 4),
-            // 변경 아이콘
-            Icon(
-              Icons.swap_horiz_rounded,
-              size: 18,
-              color: Colors.white.withValues(alpha: 0.6),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
 
