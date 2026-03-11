@@ -55,7 +55,7 @@ class EntryStatusPollingService {
           QueryOptions(
             document: gql(_entryStatusQuery),
             variables: {'entryId': entryId},
-            fetchPolicy: FetchPolicy.networkOnly, // 캐시 사용 안 함
+            fetchPolicy: FetchPolicy.noCache, // 캐시 정규화 우회 (__typename 미포함 응답 대응)
           ),
         );
 
