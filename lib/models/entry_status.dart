@@ -40,7 +40,7 @@ class TxIntentDetail {
 class EntryStatus {
   final bool success;
   final String entryId;
-  final String status; // PENDING, PROCESSING, CONFIRMED, FAILED
+  final String status; // PENDING, PROCESSING, CONFIRMED, COMPLETED, FAILED
   final List<TxIntentDetail> txIntents;
   final String? errorMessage;
 
@@ -68,9 +68,9 @@ class EntryStatus {
     );
   }
 
-  bool get isConfirmed => status == 'CONFIRMED';
+  bool get isConfirmed => status == 'CONFIRMED' || status == 'COMPLETED';
   bool get isFailed => status == 'FAILED';
-  bool get isProcessing => status == 'PROCESSING' || status == 'PENDING';
+  bool get isProcessing => status == 'PROCESSING' || status == 'PENDING' || status == 'QUEUED';
 
   @override
   String toString() {
