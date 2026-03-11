@@ -240,6 +240,7 @@ class GraphQLClientService {
         dataIdFromObject: (object) => null, // 캐시 정규화 비활성화
       ),
       link: linkWithErrorHandling,
+      queryRequestTimeout: const Duration(seconds: 60), // 블록체인 트랜잭션 대기 (기본 5초 → 60초)
       defaultPolicies: DefaultPolicies(
         query: Policies(
           fetch: FetchPolicy.networkOnly,
