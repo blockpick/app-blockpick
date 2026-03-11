@@ -332,8 +332,8 @@ class GameJoinResultOverlay extends StatelessWidget {
     if (success) {
       return ElevatedButton(
         onPressed: () {
-          onConfirm?.call();
           Navigator.of(context).pop();
+          onConfirm?.call();
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
@@ -370,8 +370,8 @@ class GameJoinResultOverlay extends StatelessWidget {
         children: [
           ElevatedButton(
             onPressed: () {
-              onRetry?.call();
               Navigator.of(context).pop();
+              onRetry?.call();
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
