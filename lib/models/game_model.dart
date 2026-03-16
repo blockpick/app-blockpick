@@ -70,16 +70,29 @@ extension GameX on Game {
     GameStatus gameStatus = GameStatus.active;
     if (status != null) {
       switch (status!.toUpperCase()) {
+        case 'ACTIVE':
         case 'IN_PROGRESS':
-        case 'SCHEDULED':
           gameStatus = GameStatus.active;
           break;
+        case 'SCHEDULED':
+        case 'READY':
+        case 'DRAFT':
+          gameStatus = GameStatus.scheduled;
+          break;
+        case 'PAUSED':
+          gameStatus = GameStatus.paused;
+          break;
         case 'SETTLING':
-          gameStatus = GameStatus.drawing;
+          gameStatus = GameStatus.settling;
           break;
         case 'ENDED':
-        case 'FAILED':
           gameStatus = GameStatus.ended;
+          break;
+        case 'COMPLETED':
+          gameStatus = GameStatus.completed;
+          break;
+        case 'FAILED':
+          gameStatus = GameStatus.failed;
           break;
       }
     }
@@ -162,14 +175,24 @@ extension GameX on Game {
     }
   }
 
+  /// 참여 가능 여부 (ACTIVE 또는 IN_PROGRESS)
+  bool get isJoinable {
+    return status == 'ACTIVE' || status == 'IN_PROGRESS';
+  }
+
   /// 진행중 여부
   bool get isActive {
-    return status == 'IN_PROGRESS' || status == 'SCHEDULED';
+    return status == 'ACTIVE' || status == 'IN_PROGRESS';
   }
 
   /// 종료 여부
   bool get isEnded {
-    return status == 'ENDED' || status == 'FAILED';
+    return status == 'ENDED' || status == 'COMPLETED' || status == 'FAILED';
+  }
+
+  /// 예정 여부
+  bool get isUpcoming {
+    return status == 'SCHEDULED' || status == 'READY' || status == 'DRAFT';
   }
 }
 
@@ -268,16 +291,29 @@ extension GameItemX on GameItem {
 
     GameStatus gameStatus = GameStatus.active;
     switch (status.toUpperCase()) {
+      case 'ACTIVE':
       case 'IN_PROGRESS':
-      case 'SCHEDULED':
         gameStatus = GameStatus.active;
         break;
+      case 'SCHEDULED':
+      case 'READY':
+      case 'DRAFT':
+        gameStatus = GameStatus.scheduled;
+        break;
+      case 'PAUSED':
+        gameStatus = GameStatus.paused;
+        break;
       case 'SETTLING':
-        gameStatus = GameStatus.drawing;
+        gameStatus = GameStatus.settling;
         break;
       case 'ENDED':
-      case 'FAILED':
         gameStatus = GameStatus.ended;
+        break;
+      case 'COMPLETED':
+        gameStatus = GameStatus.completed;
+        break;
+      case 'FAILED':
+        gameStatus = GameStatus.failed;
         break;
     }
 

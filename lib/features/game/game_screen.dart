@@ -74,6 +74,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   // 상품 선택 (SELECT 게임용)
   int _selectedProductIndex = 0;
 
+  // PRIME 게임용 입찰 가격
+  int? _selectedBidPrice;
+
   @override
   void initState() {
     super.initState();
@@ -609,6 +612,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     final gridState = ref.watch(gridStateProvider(_gridConfig!));
     final selectedCount = ref.watch(selectedBlockCountProvider(_gridConfig!));
     final bottomPadding = MediaQuery.of(context).padding.bottom;
+    final isPrimeGame = _fullGame != null &&
+        _fullGame!.gameType?.toUpperCase() == 'PRIME';
 
     // 현재 줌을 레벨로 변환 (핀치 줌과 버튼 줌 동기화)
     final currentZoomLevel =
@@ -658,6 +663,22 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                   tutorialBlockKey: _tutorialBlockKey,
                   onBlockTap: (block) {
                     debugPrint('Block tapped: ${block.row}, ${block.col}');
+
+                    // 게임 상태 체크 — 참여 불가 게임은 블록 선택 차단
+                    if (_fullGame != null && !_fullGame!.isJoinable) {
+                      final statusText = _game?.status.bannerMessage() ?? '참여할 수 없는 게임입니다.';
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(statusText),
+                          backgroundColor: AppColors.gray800,
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      );
+                      return false;
+                    }
 
                     // 로그인 체크 — false 반환 시 블록 선택 안 됨
                     final isAuthenticated = ref.read(isAuthenticatedProvider);
@@ -764,6 +785,44 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             ),
           ),
 
+          // 입찰 범위 칩 (PRIME 게임, 상단 중앙)
+          if (isPrimeGame)
+            Positioned(
+              top: 16,
+              left: 56,
+              right: 56,
+              child: Center(
+                child: Builder(
+                  builder: (context) {
+                    final bidRange = _getPrimeBidRange();
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.black.withValues(alpha: 0.1),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        '입찰가능 ${_formatBidPrice(bidRange.$1)}~${_formatBidPrice(bidRange.$2)}원',
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.darkBlue,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+
           // 미니맵 (좌하단)
           Positioned(
             bottom: 100 + bottomPadding + 16,
@@ -814,61 +873,71 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               ),
             ),
 
-          // FAB - "N/5개 선택 >" (항상 표시)
-          Positioned(
-            bottom: bottomPadding + 24,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: GestureDetector(
-                onTap: selectedCount > 0 ? _showSelectedBlocksModal : null,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20, vertical: 14),
-                  decoration: BoxDecoration(
-                    color: AppColors.textBlack.withValues(alpha: 0.85),
-                    borderRadius: BorderRadius.circular(32),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.black.withValues(alpha: 0.3),
-                        blurRadius: 16,
-                        offset: const Offset(0, 6),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        '$selectedCount',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: selectedCount > 0
-                              ? AppColors.blue
-                              : Colors.white,
+          // 하단 버튼
+          if (isPrimeGame)
+            // PRIME: 입찰하기 + 직접입력
+            Positioned(
+              bottom: bottomPadding + 24,
+              left: 16,
+              right: 16,
+              child: _buildPrimeBidButtons(),
+            )
+          else
+            // SELECT/기타: N/5개 선택 >
+            Positioned(
+              bottom: bottomPadding + 24,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: GestureDetector(
+                  onTap: selectedCount > 0 ? _showSelectedBlocksModal : null,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 14),
+                    decoration: BoxDecoration(
+                      color: AppColors.textBlack.withValues(alpha: 0.85),
+                      borderRadius: BorderRadius.circular(32),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.black.withValues(alpha: 0.3),
+                          blurRadius: 16,
+                          offset: const Offset(0, 6),
                         ),
-                      ),
-                      Text(
-                        '/$_pickMax개 선택',
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          '$selectedCount',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                            color: selectedCount > 0
+                                ? AppColors.blue
+                                : Colors.white,
+                          ),
+                        ),
+                        Text(
+                          '/$_pickMax개 선택',
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        const Icon(
+                          Icons.chevron_right_rounded,
+                          size: 20,
                           color: Colors.white,
                         ),
-                      ),
-                      const SizedBox(width: 4),
-                      const Icon(
-                        Icons.chevron_right_rounded,
-                        size: 20,
-                        color: Colors.white,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
         ],
       ),
     );
@@ -900,6 +969,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         _fullGame!.gameProducts != null &&
         _fullGame!.gameProducts!.isNotEmpty;
 
+    final isPrimeGame = _fullGame != null &&
+        _fullGame!.gameType?.toUpperCase() == 'PRIME';
+
     // 게임 타입 기반 타이틀
     String appBarTitle;
     switch (_fullGame?.gameType?.toUpperCase()) {
@@ -920,7 +992,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     }
 
     return PreferredSize(
-      preferredSize: Size.fromHeight(isSelectGame ? 124 : 56),
+      preferredSize: Size.fromHeight(isSelectGame ? 124 : isPrimeGame ? 140 : 56),
       child: Container(
         color: AppColors.white,
         child: SafeArea(
@@ -943,7 +1015,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                       ),
                     ),
 
-                    // 제목
+                    // 제목 (가운데 정렬)
                     Expanded(
                       child: Text(
                         appBarTitle,
@@ -952,6 +1024,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                           fontWeight: FontWeight.w700,
                           color: AppColors.darkBlue,
                         ),
+                        textAlign: TextAlign.center,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -975,6 +1048,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
               // 상품 정보 바 (SELECT 게임)
               if (isSelectGame) _buildProductInfoBar(),
+
+              // PRIME 정보 바 (상품명 + 참여수 + 남은시간 + 진행바)
+              if (isPrimeGame) _buildPrimeInfoBar(),
             ],
           ),
         ),
@@ -1050,6 +1126,92 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  /// PRIME 게임 정보 바 (상품명 + 참여수 + 그리드 + 남은시간 + 진행바)
+  Widget _buildPrimeInfoBar() {
+    final productName = (_fullGame!.gameProducts != null &&
+            _fullGame!.gameProducts!.isNotEmpty)
+        ? _fullGame!.gameProducts!.first.product.name
+        : _fullGame!.title;
+    final maxEntries = _fullGame!.maxEntries ?? 0;
+    final participants = _game?.participants ?? 0;
+    final remaining = _getRemainingDuration();
+    final progress = _getTimeProgress();
+
+    return Container(
+      height: 84,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: const BoxDecoration(
+        color: AppColors.white,
+        border: Border(
+          bottom: BorderSide(color: AppColors.gray200, width: 1),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Row 1: 상품명
+          Text(
+            productName,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.darkBlue,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 8),
+          // Row 2: 참여수 + 그리드 + 남은시간
+          Row(
+            children: [
+              _buildInfoChip(
+                Icons.people_outline_rounded,
+                '${_formatCount(participants)}/${_formatCount(maxEntries)}',
+              ),
+              const SizedBox(width: 16),
+              _buildInfoChip(
+                Icons.grid_view_rounded,
+                '${_formatPrice(_gridWidth)}×${_formatPrice(_gridHeight)}',
+              ),
+              const Spacer(),
+              Icon(
+                Icons.access_time_rounded,
+                size: 14,
+                color: remaining.inMinutes < 30
+                    ? AppColors.red
+                    : AppColors.gray600,
+              ),
+              const SizedBox(width: 4),
+              Text(
+                _formatRemainingTime(remaining),
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: remaining.inMinutes < 30
+                      ? AppColors.red
+                      : AppColors.gray600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          // Progress bar
+          ClipRRect(
+            borderRadius: BorderRadius.circular(2),
+            child: LinearProgressIndicator(
+              value: progress,
+              backgroundColor: AppColors.gray200,
+              valueColor: AlwaysStoppedAnimation<Color>(
+                progress > 0.8 ? AppColors.red : AppColors.blue,
+              ),
+              minHeight: 3,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -1130,6 +1292,305 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           : '${value.toStringAsFixed(1)}K';
     }
     return _formatPrice(count);
+  }
+
+  /// 남은 시간 계산
+  Duration _getRemainingDuration() {
+    if (_fullGame?.endTime == null) return Duration.zero;
+    try {
+      final end = DateTime.parse(_fullGame!.endTime!);
+      final remaining = end.difference(DateTime.now());
+      return remaining.isNegative ? Duration.zero : remaining;
+    } catch (e) {
+      return Duration.zero;
+    }
+  }
+
+  /// 남은 시간 포맷 (HH:MM:SS 남음)
+  String _formatRemainingTime(Duration remaining) {
+    if (remaining == Duration.zero) return '종료';
+    final hours = remaining.inHours.toString().padLeft(2, '0');
+    final minutes = (remaining.inMinutes % 60).toString().padLeft(2, '0');
+    final seconds = (remaining.inSeconds % 60).toString().padLeft(2, '0');
+    return '$hours:$minutes:$seconds 남음';
+  }
+
+  /// 시간 진행률 (0.0 ~ 1.0)
+  double _getTimeProgress() {
+    if (_fullGame?.startTime == null || _fullGame?.endTime == null) return 0.0;
+    try {
+      final start = DateTime.parse(_fullGame!.startTime!);
+      final end = DateTime.parse(_fullGame!.endTime!);
+      final now = DateTime.now();
+      final total = end.difference(start).inSeconds;
+      if (total <= 0) return 1.0;
+      final elapsed = now.difference(start).inSeconds;
+      return (elapsed / total).clamp(0.0, 1.0);
+    } catch (e) {
+      return 0.0;
+    }
+  }
+
+  /// PRIME 입찰 범위 파싱 (customRules에서 또는 기본값)
+  (int, int, int) _getPrimeBidRange() {
+    if (_fullGame?.customRules != null) {
+      try {
+        final rules = _fullGame!.customRules!;
+        final minMatch = RegExp(r'"minPrice"\s*:\s*(\d+)').firstMatch(rules);
+        final maxMatch = RegExp(r'"maxPrice"\s*:\s*(\d+)').firstMatch(rules);
+        final stepMatch =
+            RegExp(r'"priceStep"\s*:\s*(\d+)').firstMatch(rules);
+        if (minMatch != null && maxMatch != null) {
+          return (
+            int.parse(minMatch.group(1)!),
+            int.parse(maxMatch.group(1)!),
+            stepMatch != null ? int.parse(stepMatch.group(1)!) : 10000,
+          );
+        }
+      } catch (e) {
+        // 파싱 실패 시 기본값 사용
+      }
+    }
+    final basePrice = _fullGame?.entryFee ?? 1000000;
+    return (basePrice, (basePrice * 1.2).toInt(), 10000);
+  }
+
+  /// 입찰 가격 포맷 (만원 단위)
+  String _formatBidPrice(int price) {
+    if (price >= 100000000) {
+      final eok = price / 100000000;
+      return eok == eok.truncateToDouble()
+          ? '${eok.toInt()}억'
+          : '${eok.toStringAsFixed(1)}억';
+    }
+    if (price >= 10000) {
+      final man = price / 10000;
+      return man == man.truncateToDouble()
+          ? '${man.toInt()}만'
+          : '${man.toStringAsFixed(0)}만';
+    }
+    return _formatPrice(price);
+  }
+
+  /// PRIME 하단 입찰 버튼들
+  Widget _buildPrimeBidButtons() {
+    final hasBid = _selectedBidPrice != null;
+    return Row(
+      children: [
+        // 입찰하기 버튼 (메인)
+        Expanded(
+          child: GestureDetector(
+            onTap: hasBid ? _handleBidSubmit : null,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              decoration: BoxDecoration(
+                color: hasBid
+                    ? AppColors.textBlack.withValues(alpha: 0.85)
+                    : AppColors.gray400.withValues(alpha: 0.6),
+                borderRadius: BorderRadius.circular(32),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.black.withValues(alpha: 0.3),
+                    blurRadius: 16,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    hasBid
+                        ? '${_formatPrice(_selectedBidPrice!)}원에 입찰하기'
+                        : '가격을 선택하세요',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  const Icon(
+                    Icons.chevron_right_rounded,
+                    size: 20,
+                    color: Colors.white,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        // 직접입력 버튼
+        GestureDetector(
+          onTap: _showBidKeypad,
+          child: Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(32),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.black.withValues(alpha: 0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  '직접입력',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.darkBlue,
+                  ),
+                ),
+                const SizedBox(width: 2),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  size: 18,
+                  color: AppColors.darkBlue,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// PRIME 직접입력 키패드 표시
+  void _showBidKeypad() {
+    final bidRange = _getPrimeBidRange();
+    final controller = TextEditingController(
+      text: _selectedBidPrice?.toString() ?? '',
+    );
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (sheetContext) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(sheetContext).viewInsets.bottom,
+        ),
+        child: Container(
+          decoration: const BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 핸들 바
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppColors.gray200,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                '입찰 가격 입력',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.darkBlue,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                '입찰가능 ${_formatBidPrice(bidRange.$1)}~${_formatBidPrice(bidRange.$2)}원',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: AppColors.gray600,
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: controller,
+                keyboardType: TextInputType.number,
+                autofocus: true,
+                decoration: InputDecoration(
+                  hintText: '금액을 입력하세요',
+                  suffixText: '원',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: AppColors.gray200),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide:
+                        BorderSide(color: AppColors.darkBlue, width: 1.5),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    final price = int.tryParse(controller.text);
+                    if (price == null) {
+                      _showSnackBar('올바른 금액을 입력하세요');
+                      return;
+                    }
+                    if (price < bidRange.$1 || price > bidRange.$2) {
+                      _showSnackBar(
+                        '입찰 범위는 ${_formatBidPrice(bidRange.$1)}~${_formatBidPrice(bidRange.$2)}원입니다',
+                      );
+                      return;
+                    }
+                    if (price % bidRange.$3 != 0) {
+                      _showSnackBar(
+                        '${_formatPrice(bidRange.$3)}원 단위로 입력하세요',
+                      );
+                      return;
+                    }
+                    setState(() {
+                      _selectedBidPrice = price;
+                    });
+                    Navigator.pop(sheetContext);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.darkBlue,
+                    foregroundColor: AppColors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    '확인',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// PRIME 입찰 제출
+  void _handleBidSubmit() {
+    if (_selectedBidPrice == null) return;
+    // TODO: 실제 입찰 API 호출
+    _showSnackBar('${_formatPrice(_selectedBidPrice!)}원에 입찰되었습니다!');
   }
 
   /// 상품 선택 드롭다운 표시 (기획 SC-009-15 #3 스위치 버튼)

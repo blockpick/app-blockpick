@@ -287,25 +287,25 @@ class TossGameCard extends StatelessWidget {
   /// 상태 색상
   Color _getStatusColor() {
     switch (game.status) {
+      case GameStatus.scheduled:
+        return AppColors.blue;
       case GameStatus.active:
         return AppColors.green;
-      case GameStatus.drawing:
-        return AppColors.purple;
+      case GameStatus.paused:
+        return AppColors.yellow;
+      case GameStatus.settling:
+        return AppColors.orange;
       case GameStatus.ended:
+      case GameStatus.completed:
         return AppColors.gray500;
+      case GameStatus.failed:
+        return AppColors.red;
     }
   }
 
   /// 상태 텍스트
   String _getStatusText() {
-    switch (game.status) {
-      case GameStatus.active:
-        return '진행중';
-      case GameStatus.drawing:
-        return '추첨중';
-      case GameStatus.ended:
-        return '종료';
-    }
+    return game.status.badgeText;
   }
 
   /// 타입 색상

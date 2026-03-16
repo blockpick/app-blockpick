@@ -12,59 +12,65 @@ class GameCard extends StatelessWidget {
 
   const GameCard({super.key, required this.game, this.onTap});
 
+  /// 참여 불가 게임 여부
+  bool get _isInactive => !game.status.isJoinable;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.buleGray),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // 이미지 섹션
-            _buildImageSection(),
-
-            // 정보 섹션
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // 제목
-                  Text(
-                    game.title,
-                    style: AppTextStyles.medium.copyWith(
-                      color: AppColors.darkBlue,
-                      fontWeight: FontWeight.w700,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 12),
-
-                  // 통계
-                  _buildStatistics(),
-
-                  const SizedBox(height: 12),
-
-                  // 가격 및 시간
-                  _buildPriceAndTime(),
-                ],
+      child: Opacity(
+        opacity: _isInactive ? 0.6 : 1.0,
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.buleGray),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.black.withValues(alpha: 0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
               ),
-            ),
-          ],
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // 이미지 섹션
+              _buildImageSection(),
+
+              // 정보 섹션
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // 제목
+                    Text(
+                      game.title,
+                      style: AppTextStyles.medium.copyWith(
+                        color: AppColors.darkBlue,
+                        fontWeight: FontWeight.w700,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 12),
+
+                    // 통계
+                    _buildStatistics(),
+
+                    const SizedBox(height: 12),
+
+                    // 가격 및 시간
+                    _buildPriceAndTime(),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -288,25 +294,25 @@ class GameCard extends StatelessWidget {
   /// 상태 색상
   Color _getStatusColor() {
     switch (game.status) {
+      case GameStatus.scheduled:
+        return AppColors.blue;
       case GameStatus.active:
         return AppColors.green;
-      case GameStatus.drawing:
-        return AppColors.purple;
+      case GameStatus.paused:
+        return AppColors.yellow;
+      case GameStatus.settling:
+        return AppColors.orange;
       case GameStatus.ended:
+      case GameStatus.completed:
         return AppColors.medium;
+      case GameStatus.failed:
+        return AppColors.red;
     }
   }
 
   /// 상태 텍스트
   String _getStatusText() {
-    switch (game.status) {
-      case GameStatus.active:
-        return 'Active';
-      case GameStatus.drawing:
-        return 'Drawing';
-      case GameStatus.ended:
-        return 'Ended';
-    }
+    return game.status.badgeText;
   }
 
   /// 타입 색상

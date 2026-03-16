@@ -158,12 +158,28 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                     backgroundImagePath: imageUrl,
                     onBlockTap: (block) {
                       debugPrint('Block tapped: ${block.row}, ${block.col}');
+                      // 게임 상태 체크 — 참여 불가 게임은 블록 선택 차단
+                      if (!game.isJoinable) {
+                        final statusText = gameRound.status.bannerMessage();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(statusText.isNotEmpty ? statusText : '참여할 수 없는 게임입니다.'),
+                            backgroundColor: AppColors.gray800,
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        );
+                        return false;
+                      }
                       // 로그인 체크
                       final isAuthenticated = ref.read(isAuthenticatedProvider);
                       if (!isAuthenticated) {
                         showLoginDialog(context);
-                        return;
+                        return false;
                       }
+                      return true;
                     },
                   );
                 },
@@ -177,9 +193,18 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                 child: _buildTossHeader(gameRound),
               ),
 
+              // 게임 상태 안내 배너 (참여 불가 시)
+              if (!gameRound.status.isJoinable)
+                Positioned(
+                  top: MediaQuery.of(context).padding.top + 56,
+                  left: 16,
+                  right: 16,
+                  child: _buildStatusBanner(gameRound, game),
+                ),
+
               // 토스 스타일 정보 패널 (접기/펼치기 가능)
               Positioned(
-                top: MediaQuery.of(context).padding.top + 56,
+                top: MediaQuery.of(context).padding.top + 56 + (!gameRound.status.isJoinable ? 60 : 0),
                 left: 16,
                 right: 16,
                 child: _buildTossInfoPanel(gameRound, game),
@@ -687,6 +712,112 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
     );
   }
 
+  /// 게임 상태 안내 배너
+  Widget _buildStatusBanner(GameRound gameRound, Game game) {
+    final statusColor = _getStatusBannerColor(gameRound.status);
+    final message = gameRound.status.bannerMessage(startTime: game.startTime);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: statusColor.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: statusColor.withValues(alpha: 0.3)),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            _getStatusBannerIcon(gameRound.status),
+            size: 20,
+            color: statusColor,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              message,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: statusColor,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 비활성화된 참여 버튼
+  Widget _buildDisabledButton(GameStatus status) {
+    final buttonText = status.isEnded ? '종료된 게임' : status.badgeText;
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.gray200,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              _getStatusBannerIcon(status),
+              size: 22,
+              color: AppColors.gray500,
+            ),
+            const SizedBox(width: 10),
+            Text(
+              buttonText,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: AppColors.gray500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 상태 배너 색상
+  Color _getStatusBannerColor(GameStatus status) {
+    switch (status) {
+      case GameStatus.scheduled:
+        return AppColors.blue;
+      case GameStatus.active:
+        return AppColors.green;
+      case GameStatus.paused:
+        return AppColors.orange;
+      case GameStatus.settling:
+        return AppColors.orange;
+      case GameStatus.ended:
+      case GameStatus.completed:
+        return AppColors.gray600;
+      case GameStatus.failed:
+        return AppColors.red;
+    }
+  }
+
+  /// 상태 배너 아이콘
+  IconData _getStatusBannerIcon(GameStatus status) {
+    switch (status) {
+      case GameStatus.scheduled:
+        return Icons.schedule_rounded;
+      case GameStatus.active:
+        return Icons.play_circle_outline_rounded;
+      case GameStatus.paused:
+        return Icons.pause_circle_outline_rounded;
+      case GameStatus.settling:
+        return Icons.hourglass_top_rounded;
+      case GameStatus.ended:
+      case GameStatus.completed:
+        return Icons.check_circle_outline_rounded;
+      case GameStatus.failed:
+        return Icons.error_outline_rounded;
+    }
+  }
+
   /// 타입 색상
   Color _getTypeColor(GameType type) {
     switch (type) {
@@ -790,13 +921,16 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
       ),
     );
 
-    // 참가 버튼 (최하단)
+    // 참가 버튼 (최하단) — 참여 가능한 게임만 표시
+    final isJoinable = game.isJoinable;
     widgets.add(
       Positioned(
         bottom: 24,
         left: 16,
         right: 16,
-        child: _buildParticipateButton(),
+        child: isJoinable
+            ? _buildParticipateButton()
+            : _buildDisabledButton(gameRound.status),
       ),
     );
 

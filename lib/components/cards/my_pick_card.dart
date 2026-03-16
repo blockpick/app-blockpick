@@ -230,7 +230,7 @@ class MyPickCard extends StatelessWidget {
   /// 남은 시간
   Widget _buildTimeLeft() {
     Color timeColor;
-    if (game.status == GameStatus.ended) {
+    if (game.status.isEnded) {
       timeColor = AppColors.medium;
     } else if (game.timeLeft.contains('분') && !game.timeLeft.contains('시간')) {
       timeColor = AppColors.red;
@@ -247,7 +247,7 @@ class MyPickCard extends StatelessWidget {
         ),
         const SizedBox(width: 4),
         Text(
-          game.status == GameStatus.ended ? 'Ended' : 'Ends in ${game.timeLeft}',
+          game.status.isEnded ? 'Ended' : 'Ends in ${game.timeLeft}',
           style: AppTextStyles.body.copyWith(
             color: timeColor,
             fontWeight: FontWeight.w500,

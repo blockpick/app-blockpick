@@ -8,9 +8,69 @@ enum GameType {
 
 /// 게임 상태
 enum GameStatus {
-  active,
-  drawing,
-  ended,
+  scheduled, // 예정 (SCHEDULED, READY, DRAFT)
+  active, // 진행중 (ACTIVE, IN_PROGRESS)
+  paused, // 일시중지 (PAUSED)
+  settling, // 정산중 (SETTLING)
+  ended, // 종료 (ENDED)
+  completed, // 완료 (COMPLETED)
+  failed, // 실패 (FAILED)
+}
+
+/// GameStatus 확장 메서드
+extension GameStatusX on GameStatus {
+  /// 참여 가능 여부
+  bool get isJoinable => this == GameStatus.active;
+
+  /// 종료된 게임 여부
+  bool get isEnded =>
+      this == GameStatus.ended ||
+      this == GameStatus.completed ||
+      this == GameStatus.failed;
+
+  /// 예정된 게임 여부
+  bool get isUpcoming => this == GameStatus.scheduled;
+
+  /// 상태 뱃지 텍스트 (한국어)
+  String get badgeText {
+    switch (this) {
+      case GameStatus.scheduled:
+        return '예정';
+      case GameStatus.active:
+        return '진행중';
+      case GameStatus.paused:
+        return '일시중지';
+      case GameStatus.settling:
+        return '정산중';
+      case GameStatus.ended:
+        return '종료됨';
+      case GameStatus.completed:
+        return '완료';
+      case GameStatus.failed:
+        return '실패';
+    }
+  }
+
+  /// 상태 안내 문구 (게임 상세 화면용)
+  String bannerMessage({String? startTime}) {
+    switch (this) {
+      case GameStatus.scheduled:
+        final timeStr = startTime != null ? ' 시작 시간: $startTime' : '';
+        return '게임이 아직 시작되지 않았습니다.$timeStr';
+      case GameStatus.active:
+        return '';
+      case GameStatus.paused:
+        return '게임이 일시 중지되었습니다.';
+      case GameStatus.settling:
+        return '게임이 정산 중입니다. 잠시만 기다려주세요.';
+      case GameStatus.ended:
+        return '이 게임은 종료되었습니다.';
+      case GameStatus.completed:
+        return '이 게임은 완료되었습니다. 결과를 확인해보세요.';
+      case GameStatus.failed:
+        return '이 게임은 진행이 불가합니다.';
+    }
+  }
 }
 
 /// 게임 라운드 모델
@@ -163,13 +223,24 @@ class GameRound {
 
   /// 게임 상태 파싱
   static GameStatus _parseGameStatus(String? status) {
-    switch (status?.toLowerCase()) {
-      case 'active':
+    switch (status?.toUpperCase()) {
+      case 'ACTIVE':
+      case 'IN_PROGRESS':
         return GameStatus.active;
-      case 'drawing':
-        return GameStatus.drawing;
-      case 'ended':
+      case 'SCHEDULED':
+      case 'READY':
+      case 'DRAFT':
+        return GameStatus.scheduled;
+      case 'PAUSED':
+        return GameStatus.paused;
+      case 'SETTLING':
+        return GameStatus.settling;
+      case 'ENDED':
         return GameStatus.ended;
+      case 'COMPLETED':
+        return GameStatus.completed;
+      case 'FAILED':
+        return GameStatus.failed;
       default:
         return GameStatus.active;
     }
