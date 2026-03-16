@@ -79,33 +79,78 @@ class _GameResultScreen extends StatelessWidget {
 
   const _GameResultScreen({required this.game});
 
+  String _getGameTypeTitle(String? gameType) {
+    switch (gameType?.toUpperCase()) {
+      case 'DAILY':
+        return 'Daily Events';
+      case 'SELECT':
+        return 'Select Events';
+      case 'VIBE':
+        return 'Vibe Events';
+      case 'PRIME':
+        return 'Prime Events';
+      default:
+        return 'Events';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final gameRound = game.toGameRound();
 
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: AppBar(
-        backgroundColor: AppColors.white,
-        elevation: 0,
-        leading: IconButton(
-          onPressed: () => context.pop(),
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-            size: 22,
-            color: AppColors.darkBlue,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(56),
+        child: Container(
+          color: AppColors.white,
+          child: SafeArea(
+            bottom: false,
+            child: Container(
+              height: 56,
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      if (context.canPop()) {
+                        context.pop();
+                      } else {
+                        context.go('/');
+                      }
+                    },
+                    icon: const Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      size: 22,
+                      color: AppColors.darkBlue,
+                    ),
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        _getGameTypeTitle(game.gameType),
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.darkBlue,
+                        ),
+                      ),
+                    ),
+                  ),
+                  // 공유 버튼 (placeholder)
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.share_outlined,
+                      size: 22,
+                      color: AppColors.darkBlue,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
-        title: Text(
-          game.title,
-          style: AppTextStyles.medium.copyWith(
-            fontWeight: FontWeight.w700,
-            color: AppColors.darkBlue,
-          ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        centerTitle: true,
       ),
       body: GameResultView(game: game, gameRound: gameRound),
     );

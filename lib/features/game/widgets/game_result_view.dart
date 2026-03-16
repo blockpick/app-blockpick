@@ -24,52 +24,67 @@ class GameResultView extends ConsumerWidget {
     final resultsAsync = ref.watch(gameResultsProvider(game.id));
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: Column(
         children: [
-          const SizedBox(height: 60),
-
-          // 상태 아이콘
+          // 상태 안내 배너
           Container(
-            width: 80,
-            height: 80,
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
-              color: gameRound.status == GameStatus.completed
-                  ? AppColors.green.withValues(alpha: 0.1)
-                  : AppColors.gray200,
-              shape: BoxShape.circle,
+              color: AppColors.gray100,
+              borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(
-              gameRound.status == GameStatus.completed
-                  ? LucideIcons.trophy
-                  : LucideIcons.flagTriangleRight,
-              size: 40,
-              color: gameRound.status == GameStatus.completed
-                  ? AppColors.green
-                  : AppColors.gray500,
+            child: Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: gameRound.status == GameStatus.completed
+                        ? AppColors.green.withValues(alpha: 0.15)
+                        : AppColors.gray200,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    gameRound.status == GameStatus.completed
+                        ? LucideIcons.trophy
+                        : LucideIcons.flagTriangleRight,
+                    size: 20,
+                    color: gameRound.status == GameStatus.completed
+                        ? AppColors.green
+                        : AppColors.gray500,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        gameRound.title,
+                        style: AppTextStyles.body.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.darkBlue,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        gameRound.status.bannerMessage(),
+                        style: AppTextStyles.caption.copyWith(
+                          color: AppColors.gray600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
+
           const SizedBox(height: 20),
-
-          // 상태 문구
-          Text(
-            gameRound.status.bannerMessage(),
-            style: AppTextStyles.large.copyWith(
-              color: AppColors.darkBlue,
-              fontWeight: FontWeight.w700,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            gameRound.title,
-            style: AppTextStyles.body.copyWith(
-              color: AppColors.gray600,
-            ),
-            textAlign: TextAlign.center,
-          ),
-
-          const SizedBox(height: 32),
 
           // 게임 정보 요약
           _buildGameSummary(),
