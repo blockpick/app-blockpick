@@ -42,6 +42,8 @@ const String _getGamesQuery = r'''
         autoEndOnTime
         onchainTxHash
         onchainContractAddr
+        winningCell
+        winnerUserId
         createdAt
         updatedAt
         gameProducts {
@@ -157,6 +159,8 @@ const String _getGameQuery = r'''
         autoEndOnTime
         onchainTxHash
         onchainContractAddr
+        winningCell
+        winnerUserId
         createdAt
         updatedAt
         gameProducts {

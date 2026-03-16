@@ -35,6 +35,8 @@ class Game with _$Game {
     @Default(false) bool autoEndOnTime,
     String? onchainTxHash,
     String? onchainContractAddr,
+    String? winningCell,
+    String? winnerUserId,
     String? createdAt,
     String? updatedAt,
     @Default([]) List<GameProduct>? gameProducts,

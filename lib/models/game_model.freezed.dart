@@ -50,6 +50,8 @@ mixin _$Game {
   bool get autoEndOnTime => throw _privateConstructorUsedError;
   String? get onchainTxHash => throw _privateConstructorUsedError;
   String? get onchainContractAddr => throw _privateConstructorUsedError;
+  String? get winningCell => throw _privateConstructorUsedError;
+  String? get winnerUserId => throw _privateConstructorUsedError;
   String? get createdAt => throw _privateConstructorUsedError;
   String? get updatedAt => throw _privateConstructorUsedError;
   List<GameProduct>? get gameProducts => throw _privateConstructorUsedError;
@@ -96,6 +98,8 @@ abstract class $GameCopyWith<$Res> {
     bool autoEndOnTime,
     String? onchainTxHash,
     String? onchainContractAddr,
+    String? winningCell,
+    String? winnerUserId,
     String? createdAt,
     String? updatedAt,
     List<GameProduct>? gameProducts,
@@ -144,6 +148,8 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
     Object? autoEndOnTime = null,
     Object? onchainTxHash = freezed,
     Object? onchainContractAddr = freezed,
+    Object? winningCell = freezed,
+    Object? winnerUserId = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? gameProducts = freezed,
@@ -258,6 +264,14 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
                 ? _value.onchainContractAddr
                 : onchainContractAddr // ignore: cast_nullable_to_non_nullable
                       as String?,
+            winningCell: freezed == winningCell
+                ? _value.winningCell
+                : winningCell // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            winnerUserId: freezed == winnerUserId
+                ? _value.winnerUserId
+                : winnerUserId // ignore: cast_nullable_to_non_nullable
+                      as String?,
             createdAt: freezed == createdAt
                 ? _value.createdAt
                 : createdAt // ignore: cast_nullable_to_non_nullable
@@ -312,6 +326,8 @@ abstract class _$$GameImplCopyWith<$Res> implements $GameCopyWith<$Res> {
     bool autoEndOnTime,
     String? onchainTxHash,
     String? onchainContractAddr,
+    String? winningCell,
+    String? winnerUserId,
     String? createdAt,
     String? updatedAt,
     List<GameProduct>? gameProducts,
@@ -357,6 +373,8 @@ class __$$GameImplCopyWithImpl<$Res>
     Object? autoEndOnTime = null,
     Object? onchainTxHash = freezed,
     Object? onchainContractAddr = freezed,
+    Object? winningCell = freezed,
+    Object? winnerUserId = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? gameProducts = freezed,
@@ -471,6 +489,14 @@ class __$$GameImplCopyWithImpl<$Res>
             ? _value.onchainContractAddr
             : onchainContractAddr // ignore: cast_nullable_to_non_nullable
                   as String?,
+        winningCell: freezed == winningCell
+            ? _value.winningCell
+            : winningCell // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        winnerUserId: freezed == winnerUserId
+            ? _value.winnerUserId
+            : winnerUserId // ignore: cast_nullable_to_non_nullable
+                  as String?,
         createdAt: freezed == createdAt
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
@@ -519,6 +545,8 @@ class _$GameImpl implements _Game {
     this.autoEndOnTime = false,
     this.onchainTxHash,
     this.onchainContractAddr,
+    this.winningCell,
+    this.winnerUserId,
     this.createdAt,
     this.updatedAt,
     final List<GameProduct>? gameProducts = const [],
@@ -590,6 +618,10 @@ class _$GameImpl implements _Game {
   @override
   final String? onchainContractAddr;
   @override
+  final String? winningCell;
+  @override
+  final String? winnerUserId;
+  @override
   final String? createdAt;
   @override
   final String? updatedAt;
@@ -606,7 +638,7 @@ class _$GameImpl implements _Game {
 
   @override
   String toString() {
-    return 'Game(id: $id, title: $title, description: $description, mainProductName: $mainProductName, gameType: $gameType, category: $category, status: $status, entryFee: $entryFee, currency: $currency, minEntries: $minEntries, maxEntries: $maxEntries, maxEntriesPerUser: $maxEntriesPerUser, rewardPoint: $rewardPoint, gridRows: $gridRows, gridCols: $gridCols, visibleFrom: $visibleFrom, startTime: $startTime, endTime: $endTime, allowDuplicate: $allowDuplicate, enableNotification: $enableNotification, isRecommended: $isRecommended, hasInstantPrize: $hasInstantPrize, customRules: $customRules, autoEndOnMax: $autoEndOnMax, autoEndOnTime: $autoEndOnTime, onchainTxHash: $onchainTxHash, onchainContractAddr: $onchainContractAddr, createdAt: $createdAt, updatedAt: $updatedAt, gameProducts: $gameProducts)';
+    return 'Game(id: $id, title: $title, description: $description, mainProductName: $mainProductName, gameType: $gameType, category: $category, status: $status, entryFee: $entryFee, currency: $currency, minEntries: $minEntries, maxEntries: $maxEntries, maxEntriesPerUser: $maxEntriesPerUser, rewardPoint: $rewardPoint, gridRows: $gridRows, gridCols: $gridCols, visibleFrom: $visibleFrom, startTime: $startTime, endTime: $endTime, allowDuplicate: $allowDuplicate, enableNotification: $enableNotification, isRecommended: $isRecommended, hasInstantPrize: $hasInstantPrize, customRules: $customRules, autoEndOnMax: $autoEndOnMax, autoEndOnTime: $autoEndOnTime, onchainTxHash: $onchainTxHash, onchainContractAddr: $onchainContractAddr, winningCell: $winningCell, winnerUserId: $winnerUserId, createdAt: $createdAt, updatedAt: $updatedAt, gameProducts: $gameProducts)';
   }
 
   @override
@@ -664,6 +696,10 @@ class _$GameImpl implements _Game {
                 other.onchainTxHash == onchainTxHash) &&
             (identical(other.onchainContractAddr, onchainContractAddr) ||
                 other.onchainContractAddr == onchainContractAddr) &&
+            (identical(other.winningCell, winningCell) ||
+                other.winningCell == winningCell) &&
+            (identical(other.winnerUserId, winnerUserId) ||
+                other.winnerUserId == winnerUserId) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -705,6 +741,8 @@ class _$GameImpl implements _Game {
     autoEndOnTime,
     onchainTxHash,
     onchainContractAddr,
+    winningCell,
+    winnerUserId,
     createdAt,
     updatedAt,
     const DeepCollectionEquality().hash(_gameProducts),
@@ -753,6 +791,8 @@ abstract class _Game implements Game {
     final bool autoEndOnTime,
     final String? onchainTxHash,
     final String? onchainContractAddr,
+    final String? winningCell,
+    final String? winnerUserId,
     final String? createdAt,
     final String? updatedAt,
     final List<GameProduct>? gameProducts,
@@ -814,6 +854,10 @@ abstract class _Game implements Game {
   String? get onchainTxHash;
   @override
   String? get onchainContractAddr;
+  @override
+  String? get winningCell;
+  @override
+  String? get winnerUserId;
   @override
   String? get createdAt;
   @override

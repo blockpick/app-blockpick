@@ -15,6 +15,7 @@ import 'widgets/product_selector_overlay.dart';
 import '../../components/minimap/grid_minimap.dart';
 import '../../widgets/zoom_controls.dart';
 import '../../utils/zoom_calculator.dart';
+import 'widgets/game_result_view.dart';
 
 /// 게임 상세 화면 (토스 스타일)
 class GameDetailScreen extends ConsumerStatefulWidget {
@@ -112,6 +113,27 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
         debugPrint('   - gameRound.imageUrl: ${gameRound.imageUrl}');
         debugPrint('   - gameRound.imageUrl.isEmpty: ${gameRound.imageUrl.isEmpty}');
 
+        // 종료된 게임은 결과 화면 표시
+        if (gameRound.status.isEnded) {
+          return Scaffold(
+            backgroundColor: AppColors.white,
+            body: Stack(
+              children: [
+                // 결과 화면
+                GameResultView(game: game, gameRound: gameRound),
+
+                // 토스 스타일 커스텀 헤더
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: _buildTossHeader(gameRound),
+                ),
+              ],
+            ),
+          );
+        }
+
         return Scaffold(
           backgroundColor: AppColors.white,
           body: Stack(
@@ -145,19 +167,12 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                     imageUrl = gameRound.imageUrl.isEmpty ? null : gameRound.imageUrl;
                   }
 
-                  debugPrint('🎮 GameGrid 빌드:');
-                  debugPrint('   - gameType: ${game.gameType}');
-                  debugPrint('   - selectedProductIndex: $_selectedProductIndex');
-                  debugPrint('   - backgroundImagePath: $imageUrl');
-                  debugPrint('   - gridWidth: ${gameRound.gridWidth}');
-                  debugPrint('   - gridHeight: ${gameRound.gridHeight}');
                   return GameGridWidget(
                     gameId: widget.gameId,
                     gridWidth: gameRound.gridWidth ?? 10,
                     gridHeight: gameRound.gridHeight ?? 10,
                     backgroundImagePath: imageUrl,
                     onBlockTap: (block) {
-                      debugPrint('Block tapped: ${block.row}, ${block.col}');
                       // 게임 상태 체크 — 참여 불가 게임은 블록 선택 차단
                       if (!game.isJoinable) {
                         final statusText = gameRound.status.bannerMessage();

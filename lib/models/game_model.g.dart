@@ -34,6 +34,8 @@ _$GameImpl _$$GameImplFromJson(Map<String, dynamic> json) => _$GameImpl(
   autoEndOnTime: json['autoEndOnTime'] as bool? ?? false,
   onchainTxHash: json['onchainTxHash'] as String?,
   onchainContractAddr: json['onchainContractAddr'] as String?,
+  winningCell: json['winningCell'] as String?,
+  winnerUserId: json['winnerUserId'] as String?,
   createdAt: json['createdAt'] as String?,
   updatedAt: json['updatedAt'] as String?,
   gameProducts:
@@ -72,6 +74,8 @@ Map<String, dynamic> _$$GameImplToJson(_$GameImpl instance) =>
       'autoEndOnTime': instance.autoEndOnTime,
       'onchainTxHash': instance.onchainTxHash,
       'onchainContractAddr': instance.onchainContractAddr,
+      'winningCell': instance.winningCell,
+      'winnerUserId': instance.winnerUserId,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
       'gameProducts': instance.gameProducts,
