@@ -71,11 +71,6 @@ class GameResultView extends ConsumerWidget {
 
           const SizedBox(height: 32),
 
-          // 당첨 위치 카드
-          if (game.winningCell != null) _buildWinningCellCard(),
-
-          const SizedBox(height: 20),
-
           // 게임 정보 요약
           _buildGameSummary(),
 
@@ -102,71 +97,6 @@ class GameResultView extends ConsumerWidget {
         ],
       ),
     );
-  }
-
-  /// 당첨 위치 카드
-  Widget _buildWinningCellCard() {
-    // winningCell 파싱 (예: "50,30" 또는 "1530" 등)
-    final cellInfo = _parseWinningCell(game.winningCell!);
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFFFFF9C4), Color(0xFFFFE082)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.yellow.withValues(alpha: 0.3),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          const Icon(
-            LucideIcons.mapPin,
-            size: 28,
-            color: AppColors.orange,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            '당첨 위치',
-            style: AppTextStyles.bodySmall.copyWith(
-              color: AppColors.gray800,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            cellInfo,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textBlack,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// winningCell 문자열 파싱
-  String _parseWinningCell(String cell) {
-    // "row,col" 형식
-    if (cell.contains(',')) {
-      final parts = cell.split(',');
-      if (parts.length == 2) {
-        return 'X ${parts[0].trim()}  |  Y ${parts[1].trim()}';
-      }
-    }
-    // 단일 셀 번호
-    return '셀 #$cell';
   }
 
   /// 게임 정보 요약
@@ -248,7 +178,8 @@ class GameResultView extends ConsumerWidget {
   }
 
   Widget _buildResultItem(GameResultItem result) {
-    final isWinner = result.rank == 1;
+    final isWinner = result.isWinner;
+    final displayName = result.nickname ?? '참가자 ${result.id.substring(0, 6)}';
 
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
@@ -283,18 +214,21 @@ class GameResultView extends ConsumerWidget {
           ),
           const SizedBox(width: 12),
 
-          // 닉네임
+          // 닉네임 + txHash
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
-                    Text(
-                      result.nickname,
-                      style: AppTextStyles.body.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.darkBlue,
+                    Flexible(
+                      child: Text(
+                        displayName,
+                        style: AppTextStyles.body.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.darkBlue,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     if (isWinner) ...[
@@ -317,9 +251,17 @@ class GameResultView extends ConsumerWidget {
                     ],
                   ],
                 ),
+                if (result.txHash != null)
+                  Text(
+                    'tx: ${result.txHash!.substring(0, 14)}...',
+                    style: AppTextStyles.caption.copyWith(
+                      color: AppColors.gray400,
+                      fontSize: 10,
+                    ),
+                  ),
                 if (result.reward != null && result.reward! > 0)
                   Text(
-                    '보상: ${result.reward!.toInt()} P',
+                    '보상: ${result.reward!} P',
                     style: AppTextStyles.caption.copyWith(
                       color: AppColors.gray500,
                     ),
@@ -328,14 +270,12 @@ class GameResultView extends ConsumerWidget {
             ),
           ),
 
-          // 점수
-          if (result.score != null)
-            Text(
-              '${result.score}점',
-              style: AppTextStyles.body.copyWith(
-                fontWeight: FontWeight.w600,
-                color: AppColors.blue,
-              ),
+          // 당첨 아이콘
+          if (result.isWinner)
+            const Icon(
+              LucideIcons.trophy,
+              size: 20,
+              color: AppColors.orange,
             ),
         ],
       ),

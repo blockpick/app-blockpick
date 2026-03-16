@@ -24,7 +24,9 @@ class PromotionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
+      child: Opacity(
+        opacity: _isInactive ? 0.7 : 1.0,
+        child: Container(
         height: 220,
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
@@ -54,7 +56,7 @@ class PromotionCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // 상단: 뱃지들 + 숫자
+                    // 상단: 뱃지들 + 숫자 + 상태
                     _buildTopRow(),
 
                     const Spacer(),
@@ -67,6 +69,7 @@ class PromotionCard extends StatelessWidget {
             ],
           ),
         ),
+      ),
       ),
     );
   }
@@ -134,16 +137,22 @@ class PromotionCard extends StatelessWidget {
     );
   }
 
-  /// 상단 행: LIVE + DAILY 뱃지, 우측 숫자 뱃지
+  /// 참여 불가 게임 여부
+  bool get _isInactive => !game.status.isJoinable;
+
+  /// 상단 행: LIVE + DAILY 뱃지, 우측 상태/숫자 뱃지
   Widget _buildTopRow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // 좌측: LIVE + 타입 뱃지
+        // 좌측: 상태 뱃지 + 타입 뱃지
         Row(
           children: [
-            if (isLive) ...[
+            if (_isInactive) ...[
+              _buildStatusBadge(),
+              const SizedBox(width: 8),
+            ] else if (isLive) ...[
               _buildLiveBadge(),
               const SizedBox(width: 8),
             ],
@@ -154,6 +163,26 @@ class PromotionCard extends StatelessWidget {
         // 우측: 숫자 뱃지
         if (rankNumber != null) _buildRankBadge(),
       ],
+    );
+  }
+
+  /// 상태 뱃지 (종료됨, 예정 등)
+  Widget _buildStatusBadge() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppColors.black.withValues(alpha: 0.6),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Text(
+        game.status.badgeText,
+        style: const TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w700,
+          color: AppColors.white,
+          letterSpacing: 0.5,
+        ),
+      ),
     );
   }
 
@@ -271,7 +300,7 @@ class PromotionCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                '${game.currentPrice}P PLAY',
+                _isInactive ? '결과 보기' : '${game.currentPrice}P PLAY',
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w800,
@@ -280,8 +309,8 @@ class PromotionCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 6),
-              const Icon(
-                Icons.arrow_forward_rounded,
+              Icon(
+                _isInactive ? Icons.visibility_outlined : Icons.arrow_forward_rounded,
                 size: 16,
                 color: AppColors.darkBlue,
               ),

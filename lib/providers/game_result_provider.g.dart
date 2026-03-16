@@ -6,7 +6,7 @@ part of 'game_result_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$gameResultsHash() => r'5e0af3fbb2791b098544c310dcc108654b5b3ab8';
+String _$gameResultsHash() => r'9b441be9149fd162ff76b6699d83399203dbec0d';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,22 +29,22 @@ class _SystemHash {
   }
 }
 
-/// 게임 결과 목록 Provider
+/// 게임 결과 목록 Provider (참가자 + 결과 병합)
 ///
 /// Copied from [gameResults].
 @ProviderFor(gameResults)
 const gameResultsProvider = GameResultsFamily();
 
-/// 게임 결과 목록 Provider
+/// 게임 결과 목록 Provider (참가자 + 결과 병합)
 ///
 /// Copied from [gameResults].
 class GameResultsFamily extends Family<AsyncValue<List<GameResultItem>>> {
-  /// 게임 결과 목록 Provider
+  /// 게임 결과 목록 Provider (참가자 + 결과 병합)
   ///
   /// Copied from [gameResults].
   const GameResultsFamily();
 
-  /// 게임 결과 목록 Provider
+  /// 게임 결과 목록 Provider (참가자 + 결과 병합)
   ///
   /// Copied from [gameResults].
   GameResultsProvider call(String gameId) {
@@ -73,12 +73,12 @@ class GameResultsFamily extends Family<AsyncValue<List<GameResultItem>>> {
   String? get name => r'gameResultsProvider';
 }
 
-/// 게임 결과 목록 Provider
+/// 게임 결과 목록 Provider (참가자 + 결과 병합)
 ///
 /// Copied from [gameResults].
 class GameResultsProvider
     extends AutoDisposeFutureProvider<List<GameResultItem>> {
-  /// 게임 결과 목록 Provider
+  /// 게임 결과 목록 Provider (참가자 + 결과 병합)
   ///
   /// Copied from [gameResults].
   GameResultsProvider(String gameId)

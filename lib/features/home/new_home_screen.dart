@@ -443,7 +443,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                     return PromotionCard(
                       game: game,
                       gameType: _getGameTypeString(game),
-                      isLive: index == 0, // 첫 번째 카드만 LIVE
+                      isLive: index == 0 && game.status.isJoinable, // 진행중인 첫 번째 카드만 LIVE
                       rankNumber: index < 5 ? index + 1 : null, // 1~5까지 숫자 뱃지
                       onTap: () => context.go('/game/${game.id}'),
                     );
