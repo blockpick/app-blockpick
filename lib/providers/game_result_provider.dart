@@ -16,9 +16,6 @@ class GameParticipant {
   final int? rank;
   final int? reward;
   final String? txHash;
-  // TODO: 백엔드에서 좌표 복호화 후 추가 예정
-  // final int? coordX;
-  // final int? coordY;
 
   const GameParticipant({
     required this.id,
@@ -77,7 +74,7 @@ const String _getGameParticipantsQuery = r'''
   }
 ''';
 
-/// 게임 결과 조회 쿼리 (닉네임 포함)
+/// 게임 결과 조회 쿼리 (닉네임 + 점수 + 참여시각 포함)
 const String _getGameResultsQuery = r'''
   query GetGameResults($gameId: String!, $page: Int, $size: Int) {
     getGameResults(gameId: $gameId, page: $page, size: $size) {
@@ -96,6 +93,12 @@ const String _getGameResultsQuery = r'''
         reward
         createdAt
       }
+      pageInfo {
+        currentPage
+        totalElements
+        totalPages
+        hasNext
+      }
     }
   }
 ''';
@@ -106,19 +109,18 @@ class GameResultItem {
   final String? nickname;
   final String? profileImageUrl;
   final int? rank;
-  final int? reward;
+  final int? score;
+  final double? reward;
   final bool isWinner;
   final String? txHash;
   final String joinedAt;
-  // TODO: 백엔드에서 좌표 복호화 API 추가 시 활성화
-  // final int? coordX;
-  // final int? coordY;
 
   const GameResultItem({
     required this.id,
     this.nickname,
     this.profileImageUrl,
     this.rank,
+    this.score,
     this.reward,
     this.isWinner = false,
     this.txHash,
@@ -126,9 +128,20 @@ class GameResultItem {
   });
 }
 
-/// 게임 결과 목록 Provider (참가자 + 결과 병합)
+/// 게임 결과 응답 (결과 목록 + 총 참여 건수)
+class GameResultsData {
+  final List<GameResultItem> results;
+  final int totalElements;
+
+  const GameResultsData({
+    required this.results,
+    required this.totalElements,
+  });
+}
+
+/// 게임 결과 목록 Provider (참가자 + 결과 병합, 총 참여 건수 포함)
 @riverpod
-Future<List<GameResultItem>> gameResults(
+Future<GameResultsData> gameResults(
   GameResultsRef ref,
   String gameId,
 ) async {
@@ -136,73 +149,95 @@ Future<List<GameResultItem>> gameResults(
     final client = ref.watch(publicGraphqlClientProvider);
 
     // 참가자 + 결과를 병렬 조회
-    final participantsResult = await client.query(
-      QueryOptions(
-        document: gql(_getGameParticipantsQuery),
-        variables: {'gameId': gameId, 'page': 0, 'size': 50},
-        fetchPolicy: FetchPolicy.noCache,
+    final futures = await Future.wait([
+      client.query(
+        QueryOptions(
+          document: gql(_getGameParticipantsQuery),
+          variables: {'gameId': gameId, 'page': 0, 'size': 50},
+          fetchPolicy: FetchPolicy.noCache,
+        ),
       ),
-    );
-
-    final resultsResult = await client.query(
-      QueryOptions(
-        document: gql(_getGameResultsQuery),
-        variables: {'gameId': gameId, 'page': 0, 'size': 50},
-        fetchPolicy: FetchPolicy.noCache,
+      client.query(
+        QueryOptions(
+          document: gql(_getGameResultsQuery),
+          variables: {'gameId': gameId, 'page': 0, 'size': 50},
+          fetchPolicy: FetchPolicy.noCache,
+        ),
       ),
-    );
+    ]);
 
-    // 참가자 파싱
+    final participantsResult = futures[0];
+    final resultsResult = futures[1];
+
+    // 참가자 파싱 (txHash, isWinner 정보)
     final participantsData = participantsResult.data?['getGameParticipants'];
-    final participants = <GameParticipant>[];
+    final participantMap = <String, GameParticipant>{};
     if (participantsData != null && participantsData['success'] == true) {
       final list = participantsData['participants'] as List?;
       if (list != null) {
         for (final item in list) {
           try {
-            participants.add(GameParticipant.fromJson(item as Map<String, dynamic>));
+            final p = GameParticipant.fromJson(item as Map<String, dynamic>);
+            participantMap[p.id] = p;
           } catch (e) {
             print('❌ 참가자 파싱 에러: $e');
           }
         }
       }
-      print('✅ 게임 참가자 ${participants.length}명 조회');
-    } else {
-      print('⚠️ 참가자 조회 실패: ${participantsData?['message']}');
+      print('✅ 게임 참가자 ${participantMap.length}명 조회');
     }
 
-    // 결과 파싱 (닉네임 매칭용)
+    // 결과 파싱 (getGameResults 기반 — 닉네임, 프로필, 점수, 참여시각 포함)
     final resultsData = resultsResult.data?['getGameResults'];
-    final nicknameMap = <String, Map<String, String?>>{}; // id -> {nickname, profileImageUrl}
+    int totalElements = 0;
+    final results = <GameResultItem>[];
+
     if (resultsData != null && resultsData['success'] == true) {
+      // pageInfo에서 총 참여 건수 추출
+      final pageInfo = resultsData['pageInfo'] as Map<String, dynamic>?;
+      totalElements = pageInfo?['totalElements'] as int? ?? 0;
+
       final list = resultsData['results'] as List?;
       if (list != null) {
         for (final item in list) {
           final id = item['id'] as String;
           final user = item['user'] as Map<String, dynamic>?;
-          nicknameMap[id] = {
-            'nickname': user?['nickname'] as String?,
-            'profileImageUrl': user?['profileImageUrl'] as String?,
-          };
+          final participant = participantMap[id];
+
+          results.add(GameResultItem(
+            id: id,
+            nickname: user?['nickname'] as String?,
+            profileImageUrl: user?['profileImageUrl'] as String?,
+            rank: item['rank'] as int?,
+            score: item['score'] as int?,
+            reward: (item['reward'] as num?)?.toDouble(),
+            isWinner: participant?.isWinner ?? false,
+            txHash: participant?.txHash,
+            joinedAt: item['createdAt'] as String? ??
+                participant?.joinedAt ??
+                '',
+          ));
         }
       }
-      print('✅ 게임 결과 ${nicknameMap.length}건 조회 (닉네임 매칭용)');
+      print('✅ 게임 결과 ${results.length}건 조회 (totalElements: $totalElements)');
+    } else {
+      // getGameResults 실패 시 참가자 데이터로 폴백
+      totalElements = participantMap.length;
+      for (final p in participantMap.values) {
+        results.add(GameResultItem(
+          id: p.id,
+          nickname: null,
+          profileImageUrl: null,
+          rank: p.rank,
+          score: null,
+          reward: p.reward?.toDouble(),
+          isWinner: p.isWinner,
+          txHash: p.txHash,
+          joinedAt: p.joinedAt,
+        ));
+      }
+      print('⚠️ 결과 조회 실패, 참가자 데이터로 폴백: ${results.length}건');
     }
-
-    // 병합: 참가자 데이터 + 닉네임
-    final results = participants.map((p) {
-      final userInfo = nicknameMap[p.id];
-      return GameResultItem(
-        id: p.id,
-        nickname: userInfo?['nickname'],
-        profileImageUrl: userInfo?['profileImageUrl'],
-        rank: p.rank,
-        reward: p.reward,
-        isWinner: p.isWinner,
-        txHash: p.txHash,
-        joinedAt: p.joinedAt,
-      );
-    }).toList();
 
     // 당첨자 우선, 순위순 정렬
     results.sort((a, b) {
@@ -210,17 +245,14 @@ Future<List<GameResultItem>> gameResults(
       return (a.rank ?? 999).compareTo(b.rank ?? 999);
     });
 
-    print('📊 게임 결과 병합 완료: ${results.length}건');
-    for (final r in results) {
-      print('   • rank: ${r.rank}, winner: ${r.isWinner}, nickname: ${r.nickname ?? "미확인"}, txHash: ${r.txHash?.substring(0, 10) ?? "없음"}...');
-    }
-    // TODO: 백엔드에서 좌표 복호화 API가 추가되면
-    // participants에 coordX/coordY 필드를 추가하고 여기서 로그 출력
-    print('ℹ️ 좌표 데이터: 백엔드에서 복호화 API 추가 필요 (현재 on-chain 암호문만 존재)');
+    print('📊 게임 결과 병합 완료: ${results.length}건 (총 참여: $totalElements건)');
 
-    return results;
+    return GameResultsData(
+      results: results,
+      totalElements: totalElements,
+    );
   } catch (e) {
     print('❌ gameResults provider 에러: $e');
-    return [];
+    return const GameResultsData(results: [], totalElements: 0);
   }
 }

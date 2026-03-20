@@ -6,7 +6,7 @@ part of 'game_result_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$gameResultsHash() => r'9b441be9149fd162ff76b6699d83399203dbec0d';
+String _$gameResultsHash() => r'0428c85e21ec6e766ebf86ba242a195c4dde8923';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,22 +29,22 @@ class _SystemHash {
   }
 }
 
-/// 게임 결과 목록 Provider (참가자 + 결과 병합)
+/// 게임 결과 목록 Provider (참가자 + 결과 병합, 총 참여 건수 포함)
 ///
 /// Copied from [gameResults].
 @ProviderFor(gameResults)
 const gameResultsProvider = GameResultsFamily();
 
-/// 게임 결과 목록 Provider (참가자 + 결과 병합)
+/// 게임 결과 목록 Provider (참가자 + 결과 병합, 총 참여 건수 포함)
 ///
 /// Copied from [gameResults].
-class GameResultsFamily extends Family<AsyncValue<List<GameResultItem>>> {
-  /// 게임 결과 목록 Provider (참가자 + 결과 병합)
+class GameResultsFamily extends Family<AsyncValue<GameResultsData>> {
+  /// 게임 결과 목록 Provider (참가자 + 결과 병합, 총 참여 건수 포함)
   ///
   /// Copied from [gameResults].
   const GameResultsFamily();
 
-  /// 게임 결과 목록 Provider (참가자 + 결과 병합)
+  /// 게임 결과 목록 Provider (참가자 + 결과 병합, 총 참여 건수 포함)
   ///
   /// Copied from [gameResults].
   GameResultsProvider call(String gameId) {
@@ -73,12 +73,11 @@ class GameResultsFamily extends Family<AsyncValue<List<GameResultItem>>> {
   String? get name => r'gameResultsProvider';
 }
 
-/// 게임 결과 목록 Provider (참가자 + 결과 병합)
+/// 게임 결과 목록 Provider (참가자 + 결과 병합, 총 참여 건수 포함)
 ///
 /// Copied from [gameResults].
-class GameResultsProvider
-    extends AutoDisposeFutureProvider<List<GameResultItem>> {
-  /// 게임 결과 목록 Provider (참가자 + 결과 병합)
+class GameResultsProvider extends AutoDisposeFutureProvider<GameResultsData> {
+  /// 게임 결과 목록 Provider (참가자 + 결과 병합, 총 참여 건수 포함)
   ///
   /// Copied from [gameResults].
   GameResultsProvider(String gameId)
@@ -108,7 +107,7 @@ class GameResultsProvider
 
   @override
   Override overrideWith(
-    FutureOr<List<GameResultItem>> Function(GameResultsRef provider) create,
+    FutureOr<GameResultsData> Function(GameResultsRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -125,7 +124,7 @@ class GameResultsProvider
   }
 
   @override
-  AutoDisposeFutureProviderElement<List<GameResultItem>> createElement() {
+  AutoDisposeFutureProviderElement<GameResultsData> createElement() {
     return _GameResultsProviderElement(this);
   }
 
@@ -145,13 +144,13 @@ class GameResultsProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin GameResultsRef on AutoDisposeFutureProviderRef<List<GameResultItem>> {
+mixin GameResultsRef on AutoDisposeFutureProviderRef<GameResultsData> {
   /// The parameter `gameId` of this provider.
   String get gameId;
 }
 
 class _GameResultsProviderElement
-    extends AutoDisposeFutureProviderElement<List<GameResultItem>>
+    extends AutoDisposeFutureProviderElement<GameResultsData>
     with GameResultsRef {
   _GameResultsProviderElement(super.provider);
 
