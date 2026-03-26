@@ -3,17 +3,16 @@ import 'package:http/http.dart' as http;
 
 /// 스마트 컨트랙트 서비스
 ///
-/// - Polygon Amoy Testnet RPC 연결
+/// - Ronin Mainnet RPC 연결
 /// - requestEncryptionKey() 호출
 /// - 트랜잭션 서명 및 전송
 class SmartContractService {
-  // Polygon Amoy Testnet RPC URLs (fallback 포함)
+  // Ronin Mainnet RPC URL
   static const List<String> _rpcUrls = [
-    'https://rpc-amoy.polygon.technology/',
-    'https://polygon-amoy.g.alchemy.com/v2/demo', // Fallback
+    'https://api.roninchain.com/rpc',
   ];
 
-  static const int _chainId = 80002; // Polygon Amoy Testnet
+  static const int _chainId = 2020; // Ronin Mainnet
 
   late Web3Client _client;
   late String _currentRpcUrl;

@@ -191,7 +191,7 @@ class _GameJoinTestScreenState extends ConsumerState<GameJoinTestScreen> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'Polygon Amoy Testnet 사용 (테스트넷)',
+                    'Ronin Mainnet 사용',
                     style: AppTextStyles.bodySmall.copyWith(
                       color: Colors.orange.shade800,
                     ),
@@ -402,7 +402,7 @@ class _GameJoinTestScreenState extends ConsumerState<GameJoinTestScreen> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    can ? 'Polygon Amoy 연결됨' : '연결 실패',
+                    can ? 'Ronin Mainnet 연결됨' : '연결 실패',
                     style: AppTextStyles.body.copyWith(
                       color: can ? AppColors.green : AppColors.red,
                     ),
