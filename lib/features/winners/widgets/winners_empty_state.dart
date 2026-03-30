@@ -29,7 +29,7 @@ class WinnersEmptyState extends StatelessWidget {
             // 메인 메시지
             Text(
               message,
-              style: AppTextStyles.medium.copyWith(
+              style: AppTextStyles.title1.copyWith(
                 color: AppColors.darkBlue,
                 fontWeight: FontWeight.w600,
               ),
@@ -40,7 +40,7 @@ class WinnersEmptyState extends StatelessWidget {
             // 서브 메시지
             Text(
               subMessage,
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 color: AppColors.medium,
                 height: 1.5,
               ),
@@ -62,7 +62,7 @@ class WinnersEmptyState extends StatelessWidget {
                 ),
                 child: Text(
                   buttonText,
-                  style: AppTextStyles.body.copyWith(
+                  style: AppTextStyles.body3.copyWith(
                     color: AppColors.white,
                     fontWeight: FontWeight.w600,
                   ),

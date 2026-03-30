@@ -142,15 +142,22 @@ class AppTheme {
         ),
       ),
 
-      // Text Theme
+      // Text Theme — Figma 디자인 시스템 매핑
       textTheme: const TextTheme(
-        displayLarge: AppTextStyles.display,
-        displayMedium: AppTextStyles.large,
-        displaySmall: AppTextStyles.medium,
-        bodyLarge: AppTextStyles.bodyLarge,
-        bodyMedium: AppTextStyles.body,
-        bodySmall: AppTextStyles.bodySmall,
-        labelSmall: AppTextStyles.caption,
+        displayLarge: AppTextStyles.display1,
+        displayMedium: AppTextStyles.display2,
+        displaySmall: AppTextStyles.heading1,
+        headlineLarge: AppTextStyles.heading2,
+        headlineMedium: AppTextStyles.heading3,
+        headlineSmall: AppTextStyles.title1,
+        titleLarge: AppTextStyles.title2,
+        titleMedium: AppTextStyles.title3,
+        bodyLarge: AppTextStyles.body1,
+        bodyMedium: AppTextStyles.body3,
+        bodySmall: AppTextStyles.body4,
+        labelLarge: AppTextStyles.caption2,
+        labelMedium: AppTextStyles.caption1,
+        labelSmall: AppTextStyles.caption4,
       ),
 
       // Icon Theme
@@ -193,7 +200,7 @@ class AppTheme {
   static List<BoxShadow> get defaultShadow {
     return [
       BoxShadow(
-        color: AppColors.black.withOpacity(0.1),
+        color: AppColors.black.withValues(alpha: 0.1),
         blurRadius: 10,
         offset: const Offset(0, 4),
       ),
@@ -204,7 +211,7 @@ class AppTheme {
   static List<BoxShadow> get buttonShadow {
     return [
       BoxShadow(
-        color: AppColors.primaryMain.withOpacity(0.3),
+        color: AppColors.primaryMain.withValues(alpha: 0.3),
         blurRadius: 20,
         offset: const Offset(0, 10),
       ),

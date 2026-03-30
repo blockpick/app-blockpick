@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 
 /// 쇼핑 주문 내역 화면
 class OrderHistoryScreen extends ConsumerWidget {
@@ -21,11 +22,7 @@ class OrderHistoryScreen extends ConsumerWidget {
         appBar: AppBar(
           title: const Text(
             '쇼핑 주문 내역',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           backgroundColor: AppColors.gray100,
           foregroundColor: AppColors.darkBlue,
@@ -59,11 +56,7 @@ class OrderHistoryScreen extends ConsumerWidget {
           const SizedBox(height: 16),
           Text(
             '주문 내역이 없습니다',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: AppColors.gray500,
-            ),
+            style: AppTextStyles.body2.copyWith(color: AppColors.gray500),
           ),
           const SizedBox(height: 8),
           Text(
@@ -96,7 +89,7 @@ class _OrderItem extends StatelessWidget {
         statusText = '배송중';
         break;
       case 'delivered':
-        statusColor = AppColors.green;
+        statusColor = AppColors.green500;
         statusText = '배송완료';
         break;
       case 'preparing':
@@ -137,11 +130,7 @@ class _OrderItem extends StatelessWidget {
                   ),
                   child: Text(
                     statusText,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: statusColor,
-                    ),
+                    style: AppTextStyles.caption2.copyWith(color: statusColor),
                   ),
                 ),
               ],
@@ -174,11 +163,7 @@ class _OrderItem extends StatelessWidget {
                     children: [
                       Text(
                         order['productName'] as String,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.darkBlue,
-                        ),
+                        style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 import '../../core/auth/domain/providers/auth_provider.dart';
 import '../../features/auth/presentation/dialogs/auth_dialogs.dart';
 import '../../models/platform_mode.dart';
@@ -282,10 +283,7 @@ class AppDrawer extends ConsumerWidget {
                 ),
                 child: const Text(
                   'Login',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: AppTextStyles.title3,
                 ),
               ),
             ),
@@ -344,11 +342,7 @@ class AppDrawer extends ConsumerWidget {
                       ),
                       child: const Text(
                         'Level 5',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.blue,
-                        ),
+                        style: AppTextStyles.caption4.copyWith(color: AppColors.blue),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -364,11 +358,7 @@ class AppDrawer extends ConsumerWidget {
                       ),
                       child: const Text(
                         'Regular user',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.purple,
-                        ),
+                        style: AppTextStyles.caption4.copyWith(color: AppColors.purple),
                       ),
                     ),
                   ],
@@ -393,12 +383,7 @@ class AppDrawer extends ConsumerWidget {
       padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
       child: Text(
         title,
-        style: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-          color: AppColors.medium,
-          letterSpacing: 0.5,
-        ),
+        style: AppTextStyles.caption2.copyWith(color: AppColors.medium),
       ),
     );
   }

@@ -88,7 +88,7 @@ class _GameJoinButtonState extends ConsumerState<GameJoinButton> {
                       const SizedBox(width: 12),
                       Text(
                         '게임 참가하기',
-                        style: AppTextStyles.bodyLarge.copyWith(
+                        style: AppTextStyles.body2.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
@@ -304,7 +304,7 @@ class GameJoinInfoCard extends StatelessWidget {
                 children: [
                   Text(
                     '선택한 위치',
-                    style: AppTextStyles.bodySmall.copyWith(
+                    style: AppTextStyles.body4.copyWith(
                       color: AppColors.gray500,
                     ),
                   ),
@@ -313,7 +313,7 @@ class GameJoinInfoCard extends StatelessWidget {
                     hasSelection
                         ? '($selectedRow, $selectedCol)'
                         : '위치를 선택해주세요',
-                    style: AppTextStyles.bodyLarge.copyWith(
+                    style: AppTextStyles.body2.copyWith(
                       fontWeight: FontWeight.bold,
                       color: hasSelection ? AppColors.gray900 : AppColors.gray400,
                     ),
@@ -337,7 +337,7 @@ class GameJoinInfoCard extends StatelessWidget {
                 icon: LucideIcons.coins,
                 label: '참가 비용',
                 value: '$entryFee P',
-                color: AppColors.yellow,
+                color: AppColors.yellow500,
               ),
               _buildInfoItem(
                 icon: LucideIcons.users,
@@ -381,13 +381,13 @@ class GameJoinInfoCard extends StatelessWidget {
           children: [
             Text(
               label,
-              style: AppTextStyles.caption.copyWith(
+              style: AppTextStyles.caption1.copyWith(
                 color: AppColors.gray500,
               ),
             ),
             Text(
               value,
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),

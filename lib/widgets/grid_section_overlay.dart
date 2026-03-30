@@ -105,7 +105,7 @@ class GridSectionOverlay extends StatelessWidget {
             children: [
               Text(
                 section.name,
-                style: AppTextStyles.bodySmall.copyWith(
+                style: AppTextStyles.body4.copyWith(
                   color: AppColors.white,
                   fontWeight: FontWeight.w700,
                 ),
@@ -113,7 +113,7 @@ class GridSectionOverlay extends StatelessWidget {
               const SizedBox(height: 2),
               Text(
                 '$pickCount picks',
-                style: AppTextStyles.caption.copyWith(
+                style: AppTextStyles.caption1.copyWith(
                   color: AppColors.white.withOpacity(0.9),
                   fontWeight: FontWeight.w600,
                 ),
@@ -156,7 +156,7 @@ class SectionListWidget extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Text(
             '구역별 분포',
-            style: AppTextStyles.bodyLarge.copyWith(
+            style: AppTextStyles.body2.copyWith(
               color: AppColors.darkBlue,
               fontWeight: FontWeight.w700,
             ),
@@ -179,7 +179,7 @@ class SectionListWidget extends StatelessWidget {
               child: Center(
                 child: Text(
                   section.name,
-                  style: AppTextStyles.bodySmall.copyWith(
+                  style: AppTextStyles.body4.copyWith(
                     color: AppColors.white,
                     fontWeight: FontWeight.w700,
                   ),
@@ -188,14 +188,14 @@ class SectionListWidget extends StatelessWidget {
             ),
             title: Text(
               GridSectionManager.getSimpleLocation(section, 3),
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 color: AppColors.darkBlue,
                 fontWeight: FontWeight.w600,
               ),
             ),
             subtitle: Text(
               '${picks.length}개 픽 ($percentage%)',
-              style: AppTextStyles.bodySmall.copyWith(
+              style: AppTextStyles.body4.copyWith(
                 color: AppColors.medium,
               ),
             ),
@@ -234,7 +234,7 @@ class SectionMiniGrid extends StatelessWidget {
         children: [
           Text(
             '구역 맵',
-            style: AppTextStyles.bodyLarge.copyWith(
+            style: AppTextStyles.body2.copyWith(
               color: AppColors.darkBlue,
               fontWeight: FontWeight.w700,
             ),
@@ -276,7 +276,7 @@ class SectionMiniGrid extends StatelessWidget {
                         children: [
                           Text(
                             section.name,
-                            style: AppTextStyles.bodySmall.copyWith(
+                            style: AppTextStyles.body4.copyWith(
                               color: pickCount > 0
                                   ? AppColors.white
                                   : AppColors.medium,
@@ -287,7 +287,7 @@ class SectionMiniGrid extends StatelessWidget {
                             const SizedBox(height: 4),
                             Text(
                               '$pickCount',
-                              style: AppTextStyles.large.copyWith(
+                              style: AppTextStyles.heading1.copyWith(
                                 color: AppColors.white,
                                 fontWeight: FontWeight.w700,
                               ),

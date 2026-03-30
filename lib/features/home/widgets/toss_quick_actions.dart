@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 
 /// 토스 스타일 퀵 액션 버튼들
 class TossQuickActions extends StatelessWidget {
@@ -33,7 +34,7 @@ class TossQuickActions extends StatelessWidget {
           _QuickActionItem(
             icon: Icons.calendar_today_rounded,
             label: 'DAILY',
-            color: AppColors.green,
+            color: AppColors.green500,
             onTap: () {},
           ),
           _QuickActionItem(
@@ -90,11 +91,7 @@ class _QuickActionItem extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.caption2.copyWith(color: AppColors.darkBlue),
           ),
         ],
       ),

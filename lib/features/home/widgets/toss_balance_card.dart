@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 import 'package:intl/intl.dart';
 
 /// 토스 스타일 잔액 카드
@@ -41,11 +42,7 @@ class TossBalanceCard extends StatelessWidget {
               children: [
                 Text(
                   '내 자산',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.gray600,
-                  ),
+                  style: AppTextStyles.title3.copyWith(color: AppColors.gray600),
                 ),
                 const Spacer(),
                 Icon(
@@ -64,23 +61,14 @@ class TossBalanceCard extends StatelessWidget {
                 children: [
                   Text(
                     _formatCurrency(balance),
-                    style: const TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.darkBlue,
-                      letterSpacing: -1,
-                    ),
+                    style: AppTextStyles.display1.copyWith(color: AppColors.darkBlue, letterSpacing: -1),
                   ),
                   const SizedBox(width: 4),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 4),
                     child: Text(
                       '원',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.darkBlue,
-                      ),
+                      style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
                     ),
                   ),
                 ],
@@ -89,11 +77,7 @@ class TossBalanceCard extends StatelessWidget {
               // 비로그인 상태
               Text(
                 '로그인하고 자산을 확인하세요',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.gray500,
-                ),
+                style: AppTextStyles.title1.copyWith(color: AppColors.gray500),
               ),
               const SizedBox(height: 8),
               Container(
@@ -104,11 +88,7 @@ class TossBalanceCard extends StatelessWidget {
                 ),
                 child: const Text(
                   '로그인',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
+                  style: AppTextStyles.caption2.copyWith(color: Colors.white),
                 ),
               ),
             ],

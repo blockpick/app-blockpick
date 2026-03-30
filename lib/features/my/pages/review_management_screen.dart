@@ -37,11 +37,7 @@ class _ReviewManagementScreenState extends State<ReviewManagementScreen> {
         appBar: AppBar(
           title: const Text(
             '리뷰관리',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           backgroundColor: AppColors.white,
           foregroundColor: AppColors.darkBlue,
@@ -79,7 +75,7 @@ class _ReviewManagementScreenState extends State<ReviewManagementScreen> {
             Expanded(
               child: Text(
                 '리뷰 작성 전, 꼭 확인해 주세요!',
-                style: AppTextStyles.body.copyWith(
+                style: AppTextStyles.body3.copyWith(
                   color: AppColors.red,
                   fontWeight: FontWeight.w600,
                 ),
@@ -115,7 +111,7 @@ class _ReviewManagementScreenState extends State<ReviewManagementScreen> {
         ),
         title: Text(
           '리뷰 작성 안내',
-          style: AppTextStyles.medium.copyWith(
+          style: AppTextStyles.title1.copyWith(
             color: AppColors.darkBlue,
           ),
         ),
@@ -139,7 +135,7 @@ class _ReviewManagementScreenState extends State<ReviewManagementScreen> {
             onPressed: () => Navigator.of(context).pop(),
             child: Text(
               '확인',
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 color: AppColors.blue,
                 fontWeight: FontWeight.w600,
               ),
@@ -177,7 +173,7 @@ class _ReviewManagementScreenState extends State<ReviewManagementScreen> {
         Expanded(
           child: Text(
             text,
-            style: AppTextStyles.body.copyWith(
+            style: AppTextStyles.body3.copyWith(
               color: AppColors.gray700,
               height: 1.4,
             ),
@@ -197,7 +193,7 @@ class _ReviewManagementScreenState extends State<ReviewManagementScreen> {
           children: [
             Text(
               '작성 가능한 리뷰가 없어요.',
-              style: AppTextStyles.medium.copyWith(
+              style: AppTextStyles.title1.copyWith(
                 color: AppColors.darkBlue,
                 fontWeight: FontWeight.w600,
               ),
@@ -206,7 +202,7 @@ class _ReviewManagementScreenState extends State<ReviewManagementScreen> {
             const SizedBox(height: 12),
             Text(
               '이벤트에 당첨되면\n리뷰를 작성할 수 있어요.',
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 color: AppColors.medium,
                 height: 1.5,
               ),
@@ -265,7 +261,7 @@ class _ReviewManagementScreenState extends State<ReviewManagementScreen> {
                         const SizedBox(width: 8),
                         Text(
                           TimeUtils.getRelativeTime(item.participatedAt),
-                          style: AppTextStyles.bodySmall.copyWith(
+                          style: AppTextStyles.body4.copyWith(
                             color: AppColors.gray500,
                           ),
                         ),
@@ -275,7 +271,7 @@ class _ReviewManagementScreenState extends State<ReviewManagementScreen> {
                     // 상품명
                     Text(
                       item.productName,
-                      style: AppTextStyles.body.copyWith(
+                      style: AppTextStyles.body3.copyWith(
                         color: AppColors.darkBlue,
                         fontWeight: FontWeight.w500,
                       ),
@@ -302,7 +298,7 @@ class _ReviewManagementScreenState extends State<ReviewManagementScreen> {
               ),
               child: Text(
                 item.reviewText!,
-                style: AppTextStyles.body.copyWith(
+                style: AppTextStyles.body3.copyWith(
                   color: AppColors.gray700,
                   height: 1.5,
                 ),
@@ -357,7 +353,7 @@ class _ReviewManagementScreenState extends State<ReviewManagementScreen> {
       case EventType.vibe:
         badgeColor = AppColors.pink;
       case EventType.prime:
-        badgeColor = AppColors.yellow;
+        badgeColor = AppColors.yellow500;
     }
 
     return Container(
@@ -396,11 +392,7 @@ class _ReviewManagementScreenState extends State<ReviewManagementScreen> {
         ),
         child: Text(
           hasReview ? '수정하기' : '리뷰쓰기',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: hasReview ? AppColors.gray600 : AppColors.darkBlue,
-          ),
+          style: AppTextStyles.caption2.copyWith(color: hasReview ? AppColors.gray600 : AppColors.darkBlue),
         ),
       ),
     );

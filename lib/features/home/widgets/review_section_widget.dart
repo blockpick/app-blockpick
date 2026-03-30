@@ -29,7 +29,7 @@ class ReviewSectionWidget extends StatelessWidget {
                   children: [
                     Text(
                       'PICK REVIEW',
-                      style: AppTextStyles.large.copyWith(
+                      style: AppTextStyles.heading1.copyWith(
                         color: AppColors.darkBlue,
                         fontWeight: FontWeight.bold,
                       ),
@@ -43,7 +43,7 @@ class ReviewSectionWidget extends StatelessWidget {
                         children: [
                           Text(
                             'View more',
-                            style: AppTextStyles.body.copyWith(
+                            style: AppTextStyles.body3.copyWith(
                               color: AppColors.blue,
                             ),
                           ),
@@ -118,7 +118,7 @@ class ReviewSectionWidget extends StatelessWidget {
                   ),
                   child: Text(
                     '✨ nice win',
-                    style: AppTextStyles.bodySmall.copyWith(
+                    style: AppTextStyles.body4.copyWith(
                       color: AppColors.white,
                       fontWeight: FontWeight.w600,
                     ),
@@ -127,7 +127,7 @@ class ReviewSectionWidget extends StatelessWidget {
                 const SizedBox(height: 12),
                 Text(
                   'Review Event',
-                  style: AppTextStyles.large.copyWith(
+                  style: AppTextStyles.heading1.copyWith(
                     color: AppColors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -135,7 +135,7 @@ class ReviewSectionWidget extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   'Leave a review, win your spot!',
-                  style: AppTextStyles.body.copyWith(
+                  style: AppTextStyles.body3.copyWith(
                     color: AppColors.white.withValues(alpha: 0.9),
                   ),
                 ),
@@ -188,7 +188,7 @@ class ReviewSectionWidget extends StatelessWidget {
                 backgroundColor: review.avatarColor,
                 child: Text(
                   review.userName[0].toUpperCase(),
-                  style: AppTextStyles.bodyLarge.copyWith(
+                  style: AppTextStyles.body2.copyWith(
                     color: AppColors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -201,14 +201,14 @@ class ReviewSectionWidget extends StatelessWidget {
                   children: [
                     Text(
                       review.userName,
-                      style: AppTextStyles.body.copyWith(
+                      style: AppTextStyles.body3.copyWith(
                         color: AppColors.darkBlue,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
                       review.handle,
-                      style: AppTextStyles.bodySmall.copyWith(
+                      style: AppTextStyles.body4.copyWith(
                         color: AppColors.grayBlue,
                       ),
                     ),
@@ -223,7 +223,7 @@ class ReviewSectionWidget extends StatelessWidget {
           // 리뷰 내용
           Text(
             review.content,
-            style: AppTextStyles.body.copyWith(
+            style: AppTextStyles.body3.copyWith(
               color: AppColors.navy,
               height: 1.4,
             ),
@@ -255,7 +255,7 @@ class ReviewSectionWidget extends StatelessWidget {
           // 시간
           Text(
             review.timestamp,
-            style: AppTextStyles.bodySmall.copyWith(
+            style: AppTextStyles.body4.copyWith(
               color: AppColors.grayBlue,
             ),
           ),
@@ -296,7 +296,7 @@ class ReviewSectionWidget extends StatelessWidget {
         handle: '@mikec',
         content: 'Got my Airpods Pro delivered super fast. Great customer service!',
         timestamp: '9:22 AM · Jun 25, 2025',
-        avatarColor: AppColors.green,
+        avatarColor: AppColors.green500,
         hasImage: true,
       ),
     ];

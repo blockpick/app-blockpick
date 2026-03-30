@@ -27,7 +27,7 @@ class _AccordionSample2State extends State<AccordionSample2> {
         ),
         title: Text(
           'Accordion #2',
-          style: AppTextStyles.large.copyWith(
+          style: AppTextStyles.heading1.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.darkBlue,
           ),
@@ -47,12 +47,12 @@ class _AccordionSample2State extends State<AccordionSample2> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppColors.green.withValues(alpha: 0.1),
+              color: AppColors.green500.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(AppConstants.radiusMd),
             ),
             child: Text(
               '카드 스타일 아코디언\n• 아이콘 회전 애니메이션\n• 그림자 효과로 입체감',
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 color: AppColors.darkBlue,
               ),
             ),
@@ -85,8 +85,8 @@ class _AccordionSample2State extends State<AccordionSample2> {
     final isExpanded = _expandedStates[index];
     final colors = [
       AppColors.blue,
-      AppColors.green,
-      AppColors.yellow,
+      AppColors.green500,
+      AppColors.yellow500,
       AppColors.purple,
       AppColors.pink,
     ];
@@ -144,7 +144,7 @@ class _AccordionSample2State extends State<AccordionSample2> {
                   Expanded(
                     child: Text(
                       title,
-                      style: AppTextStyles.bodyLarge.copyWith(
+                      style: AppTextStyles.body2.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppColors.darkBlue,
                       ),
@@ -178,7 +178,7 @@ class _AccordionSample2State extends State<AccordionSample2> {
                 ),
                 child: Text(
                   content,
-                  style: AppTextStyles.body.copyWith(
+                  style: AppTextStyles.body3.copyWith(
                     color: AppColors.navy,
                     height: 1.6,
                   ),

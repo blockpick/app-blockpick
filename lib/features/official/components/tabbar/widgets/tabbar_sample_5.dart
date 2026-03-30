@@ -46,7 +46,7 @@ class _TabBarSample5State extends State<TabBarSample5>
         ),
         title: Text(
           'Material 3 TabBar',
-          style: AppTextStyles.large.copyWith(
+          style: AppTextStyles.heading1.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.darkBlue,
           ),
@@ -81,7 +81,7 @@ class _TabBarSample5State extends State<TabBarSample5>
                 const SizedBox(height: 20),
                 Text(
                   tab.label,
-                  style: AppTextStyles.display.copyWith(
+                  style: AppTextStyles.display1.copyWith(
                     fontWeight: FontWeight.bold,
                     color: AppColors.darkBlue,
                   ),

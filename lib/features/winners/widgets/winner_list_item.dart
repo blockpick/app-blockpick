@@ -39,7 +39,7 @@ class WinnerListItem extends StatelessWidget {
                     children: [
                       Text(
                         winner.nickName,
-                        style: AppTextStyles.body.copyWith(
+                        style: AppTextStyles.body3.copyWith(
                           fontWeight: FontWeight.w600,
                           color: AppColors.darkBlue,
                         ),
@@ -53,7 +53,7 @@ class WinnerListItem extends StatelessWidget {
                   // 상품명
                   Text(
                     winner.productName,
-                    style: AppTextStyles.bodySmall.copyWith(
+                    style: AppTextStyles.body4.copyWith(
                       color: AppColors.medium,
                     ),
                     maxLines: 1,
@@ -66,21 +66,21 @@ class WinnerListItem extends StatelessWidget {
                     children: [
                       Text(
                         winner.eventType.displayName,
-                        style: AppTextStyles.bodySmall.copyWith(
+                        style: AppTextStyles.body4.copyWith(
                           color: AppColors.medium,
                         ),
                       ),
                       const SizedBox(width: 4),
                       Text(
                         '•',
-                        style: AppTextStyles.bodySmall.copyWith(
+                        style: AppTextStyles.body4.copyWith(
                           color: AppColors.medium,
                         ),
                       ),
                       const SizedBox(width: 4),
                       Text(
                         TimeUtils.getRelativeTime(winner.winDate),
-                        style: AppTextStyles.bodySmall.copyWith(
+                        style: AppTextStyles.body4.copyWith(
                           color: AppColors.medium,
                         ),
                       ),
@@ -126,7 +126,7 @@ class WinnerListItem extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         winner.initial,
-        style: AppTextStyles.medium.copyWith(
+        style: AppTextStyles.title1.copyWith(
           color: AppColors.white,
           fontWeight: FontWeight.bold,
         ),
@@ -144,7 +144,7 @@ class WinnerListItem extends StatelessWidget {
       ),
       child: Text(
         winner.eventType.displayName,
-        style: AppTextStyles.caption.copyWith(
+        style: AppTextStyles.caption1.copyWith(
           color: _getBadgeColor(),
           fontWeight: FontWeight.w600,
         ),
@@ -162,7 +162,7 @@ class WinnerListItem extends StatelessWidget {
       case EventType.vibe:
         return AppColors.pink;
       case EventType.prime:
-        return AppColors.yellow;
+        return AppColors.yellow500;
     }
   }
 }

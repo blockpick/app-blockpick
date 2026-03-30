@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 
 /// 이용 안내 화면
 class UsageGuideScreen extends StatelessWidget {
@@ -17,11 +18,7 @@ class UsageGuideScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text(
             '이용 안내',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           backgroundColor: AppColors.gray100,
           foregroundColor: AppColors.darkBlue,
@@ -139,11 +136,7 @@ class UsageGuideScreen extends StatelessWidget {
                 const SizedBox(width: 12),
                 Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.darkBlue,
-                  ),
+                  style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
                 ),
               ],
             ),
@@ -175,11 +168,7 @@ class UsageGuideScreen extends StatelessWidget {
                         child: Center(
                           child: Text(
                             '$index',
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.gray600,
-                            ),
+                            style: AppTextStyles.caption4.copyWith(color: AppColors.gray600),
                           ),
                         ),
                       ),

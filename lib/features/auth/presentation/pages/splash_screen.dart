@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 
 /// SC-001: 스플래시 화면
 ///
@@ -243,12 +244,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
               // 설명
               Text(
                 '인터넷 연결 상태를 확인하고\n다시 시도해 주세요.',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.gray600,
-                  height: 1.5,
-                ),
+                style: AppTextStyles.body1.copyWith(color: AppColors.gray600),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 40),
@@ -279,10 +275,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                         )
                       : const Text(
                           '다시시도',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: AppTextStyles.title2,
                         ),
                 ),
               ),

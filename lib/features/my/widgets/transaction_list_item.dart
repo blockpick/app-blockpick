@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../models/transaction_model.dart';
 
@@ -63,11 +64,7 @@ class TransactionListItem extends StatelessWidget {
               children: [
                 Text(
                   transaction.type.displayName,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.darkBlue,
-                  ),
+                  style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
                 ),
                 const SizedBox(height: 4),
                 if (transaction.description != null)
@@ -96,7 +93,7 @@ class TransactionListItem extends StatelessWidget {
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
                   color: transaction.isIncrease
-                      ? AppColors.success
+                      ? AppColors.green500
                       : AppColors.error,
                 ),
               ),

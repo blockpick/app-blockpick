@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 
-/// SC-008 디자인 하단 네비게이션 바
-/// Home / Event / Partner / Winners / My (5개 탭)
+/// 하단 네비게이션 바
+/// 홈 / 데일리 / 위시 / 프라임 / MY (5개 탭)
 class BottomNavBar extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
-  final bool hasEventNotification; // Event 탭 알림 뱃지
+  final bool hasWishNotification; // 위시 탭 알림 뱃지
 
   const BottomNavBar({
     super.key,
     required this.currentIndex,
     required this.onTap,
-    this.hasEventNotification = true,
+    this.hasWishNotification = false,
   });
 
   @override
@@ -38,29 +38,29 @@ class BottomNavBar extends StatelessWidget {
               _NavItem(
                 icon: Icons.home_outlined,
                 activeIcon: Icons.home_rounded,
-                label: 'Home',
+                label: '홈',
                 isSelected: currentIndex == 0,
                 onTap: () => onTap(0),
               ),
               _NavItem(
-                icon: Icons.calendar_today_outlined,
-                activeIcon: Icons.calendar_today_rounded,
-                label: 'Event',
+                icon: Icons.wb_sunny_outlined,
+                activeIcon: Icons.wb_sunny_rounded,
+                label: '데일리',
                 isSelected: currentIndex == 1,
                 onTap: () => onTap(1),
-                showBadge: hasEventNotification,
               ),
               _NavItem(
-                icon: Icons.handshake_outlined,
-                activeIcon: Icons.handshake_rounded,
-                label: 'Partner',
+                icon: Icons.auto_awesome_outlined,
+                activeIcon: Icons.auto_awesome,
+                label: '위시',
                 isSelected: currentIndex == 2,
                 onTap: () => onTap(2),
+                showBadge: hasWishNotification,
               ),
               _NavItem(
-                icon: Icons.emoji_events_outlined,
-                activeIcon: Icons.emoji_events_rounded,
-                label: 'Winners',
+                icon: Icons.diamond_outlined,
+                activeIcon: Icons.diamond_rounded,
+                label: '프라임',
                 isSelected: currentIndex == 3,
                 onTap: () => onTap(3),
               ),

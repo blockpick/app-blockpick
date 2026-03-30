@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/block_model.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 
 /// 선택된 블록 아이템 카드 (기획 SC-009-17)
 ///
@@ -71,12 +72,7 @@ class BlockItemCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   'X ${block.col.toString().padLeft(4, '0')}  |  Y ${block.row.toString().padLeft(4, '0')}',
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.darkBlue,
-                    letterSpacing: 0.5,
-                  ),
+                  style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
                 ),
               ),
 

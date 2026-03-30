@@ -23,7 +23,7 @@ class SliderSamplesScreen extends StatelessWidget {
         ),
         title: Text(
           'Slider Samples',
-          style: AppTextStyles.large.copyWith(
+          style: AppTextStyles.heading1.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.darkBlue,
           ),
@@ -110,13 +110,13 @@ class SliderSamplesScreen extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: AppColors.yellow,
+                color: AppColors.yellow500,
                 borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               ),
               child: Center(
                 child: Text(
                   '#$number',
-                  style: AppTextStyles.body.copyWith(
+                  style: AppTextStyles.body3.copyWith(
                     color: AppColors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -130,7 +130,7 @@ class SliderSamplesScreen extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppTextStyles.bodyLarge.copyWith(
+                    style: AppTextStyles.body2.copyWith(
                       fontWeight: FontWeight.bold,
                       color: AppColors.darkBlue,
                     ),
@@ -138,7 +138,7 @@ class SliderSamplesScreen extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     description,
-                    style: AppTextStyles.body.copyWith(
+                    style: AppTextStyles.body3.copyWith(
                       color: AppColors.medium,
                     ),
                   ),

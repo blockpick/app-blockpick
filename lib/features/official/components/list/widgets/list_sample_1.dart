@@ -26,7 +26,7 @@ class _ListSample1State extends State<ListSample1> {
       icon: Icons.notifications,
       title: '알림',
       subtitle: '새로운 알림이 있습니다',
-      color: AppColors.yellow,
+      color: AppColors.yellow500,
       count: '5',
     ),
     _ListItem(
@@ -40,7 +40,7 @@ class _ListSample1State extends State<ListSample1> {
       icon: Icons.chat,
       title: '메시지',
       subtitle: '읽지 않은 메시지가 있습니다',
-      color: AppColors.green,
+      color: AppColors.green500,
       count: '3',
     ),
     _ListItem(
@@ -65,7 +65,7 @@ class _ListSample1State extends State<ListSample1> {
         ),
         title: Text(
           'List #1',
-          style: AppTextStyles.large.copyWith(
+          style: AppTextStyles.heading1.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.darkBlue,
           ),
@@ -90,7 +90,7 @@ class _ListSample1State extends State<ListSample1> {
             ),
             child: Text(
               '카드형 리스트\n• 탭 애니메이션\n• 선택 상태 표시',
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 color: AppColors.darkBlue,
               ),
             ),
@@ -165,7 +165,7 @@ class _ListSample1State extends State<ListSample1> {
                 children: [
                   Text(
                     item.title,
-                    style: AppTextStyles.large.copyWith(
+                    style: AppTextStyles.heading1.copyWith(
                       fontWeight: FontWeight.bold,
                       color: isSelected ? item.color : AppColors.darkBlue,
                     ),
@@ -173,7 +173,7 @@ class _ListSample1State extends State<ListSample1> {
                   const SizedBox(height: 4),
                   Text(
                     item.subtitle,
-                    style: AppTextStyles.body.copyWith(
+                    style: AppTextStyles.body3.copyWith(
                       color: AppColors.medium,
                     ),
                   ),
@@ -192,7 +192,7 @@ class _ListSample1State extends State<ListSample1> {
                 ),
                 child: Text(
                   item.count,
-                  style: AppTextStyles.bodyLarge.copyWith(
+                  style: AppTextStyles.body2.copyWith(
                     fontWeight: FontWeight.bold,
                     color: isSelected ? AppColors.white : AppColors.medium,
                   ),

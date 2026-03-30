@@ -20,7 +20,7 @@ class MoreScreen extends StatelessWidget {
       name: 'Time',
       icon: '⏱️',
       description: '지금 이 순간의 좌표를 잡아보세요',
-      color: AppColors.yellow,
+      color: AppColors.yellow500,
     ),
     PickMode(
       id: 'draw',
@@ -34,7 +34,7 @@ class MoreScreen extends StatelessWidget {
       name: 'Wave',
       icon: '🌊',
       description: '파동이 퍼져나가는 곳이 좌표가 됩니다',
-      color: AppColors.mint,
+      color: AppColors.green500,
     ),
     PickMode(
       id: 'voice',
@@ -48,7 +48,7 @@ class MoreScreen extends StatelessWidget {
       name: 'Farm',
       icon: '🌱',
       description: '좌표를 심고 키워보세요',
-      color: AppColors.mint,
+      color: AppColors.green500,
     ),
     PickMode(
       id: 'rpg',
@@ -76,7 +76,7 @@ class MoreScreen extends StatelessWidget {
       name: 'Predict',
       icon: '🌀',
       description: '다음 당첨 좌표를 예언해보세요',
-      color: AppColors.mint,
+      color: AppColors.green500,
     ),
     PickMode(
       id: 'gacha',
@@ -90,14 +90,14 @@ class MoreScreen extends StatelessWidget {
       name: 'Treasure',
       icon: '💎',
       description: '숨겨진 보물을 찾아보세요!',
-      color: AppColors.yellow,
+      color: AppColors.yellow500,
     ),
     PickMode(
       id: 'unity',
       name: '3D Block',
       icon: '🧊',
       description: '3D 블록 세계에서 보물을 찾아보세요',
-      color: AppColors.mint,
+      color: AppColors.green500,
     ),
   ];
 

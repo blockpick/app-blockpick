@@ -29,7 +29,7 @@ class ParticipationFeedWidget extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
             child: Text(
               'Recent Participation',
-              style: AppTextStyles.large.copyWith(
+              style: AppTextStyles.heading1.copyWith(
                 fontWeight: FontWeight.w700,
                 fontSize: 22,
               ),
@@ -68,7 +68,7 @@ class ParticipationFeedWidget extends StatelessWidget {
                 child: Center(
                   child: Text(
                     'View more',
-                    style: AppTextStyles.body.copyWith(
+                    style: AppTextStyles.body3.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColors.navy,
                     ),
@@ -89,8 +89,8 @@ class ParticipationFeedWidget extends StatelessWidget {
       AppColors.primaryMain,
       AppColors.primaryLight,
       AppColors.red,
-      AppColors.mint,
-      AppColors.yellow,
+      AppColors.green500,
+      AppColors.yellow500,
     ];
     final colorIndex = participation.id.hashCode % colors.length;
 
@@ -124,7 +124,7 @@ class ParticipationFeedWidget extends StatelessWidget {
               children: [
                 Text(
                   participation.gameName,
-                  style: AppTextStyles.body.copyWith(
+                  style: AppTextStyles.body3.copyWith(
                     fontWeight: FontWeight.w700,
                     fontSize: 15,
                   ),
@@ -132,7 +132,7 @@ class ParticipationFeedWidget extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   participation.userName,
-                  style: AppTextStyles.bodySmall.copyWith(
+                  style: AppTextStyles.body4.copyWith(
                     color: AppColors.medium,
                     fontSize: 13,
                   ),
@@ -147,13 +147,13 @@ class ParticipationFeedWidget extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: AppColors.mint.withValues(alpha: 0.12),
+              color: AppColors.green500.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(6),
             ),
             child: Text(
               participation.relativeTime,
-              style: AppTextStyles.bodySmall.copyWith(
-                color: AppColors.mint,
+              style: AppTextStyles.body4.copyWith(
+                color: AppColors.green500,
                 fontWeight: FontWeight.w600,
                 fontSize: 12,
               ),

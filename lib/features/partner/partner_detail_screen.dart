@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 import 'partner_game_webview.dart';
 
 /// 파트너 이벤트 상세 화면
@@ -22,6 +23,7 @@ class PartnerDetailScreen extends StatelessWidget {
     final startTime = game['startTime'] as String? ?? '';
     final endTime = game['endTime'] as String? ?? '';
     final maxEntries = game['maxEntries'] as int?;
+    final maxEntriesPerUser = game['maxEntriesPerUser'] as int?;
     final entryFee = game['entryFee'] as int? ?? 0;
     final hasInstantPrize = game['hasInstantPrize'] as bool? ?? false;
 
@@ -47,7 +49,7 @@ class PartnerDetailScreen extends StatelessWidget {
         ),
         title: const Text(
           '파트너 이벤트',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.darkBlue),
+          style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
         ),
       ),
       body: Column(
@@ -67,11 +69,7 @@ class PartnerDetailScreen extends StatelessWidget {
                     child: const Text(
                       '오늘의 행운 꿈기 🍀',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF5941F2),
-                      ),
+                      style: AppTextStyles.title3.copyWith(color: Color(0xFF5941F2)),
                     ),
                   ),
 
@@ -135,7 +133,7 @@ class PartnerDetailScreen extends StatelessWidget {
                   const SizedBox(height: 24),
 
                   // 유의사항
-                  _buildNoticeSection(maxEntries),
+                  _buildNoticeSection(maxEntries, maxEntriesPerUser),
 
                   const SizedBox(height: 24),
                 ],
@@ -235,7 +233,7 @@ class PartnerDetailScreen extends StatelessWidget {
           children: [
             const Text(
               '참여방법',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.darkBlue),
+              style: AppTextStyles.buttonLarge.copyWith(color: AppColors.darkBlue),
             ),
             const SizedBox(height: 16),
             _buildStep('1', '이벤트 참여하기 버튼 선택'),
@@ -263,7 +261,7 @@ class PartnerDetailScreen extends StatelessWidget {
             child: Center(
               child: Text(
                 number,
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white),
+                style: AppTextStyles.caption3.copyWith(color: Colors.white),
               ),
             ),
           ),
@@ -271,7 +269,7 @@ class PartnerDetailScreen extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.darkBlue),
+              style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
             ),
           ),
         ],
@@ -280,11 +278,12 @@ class PartnerDetailScreen extends StatelessWidget {
   }
 
   /// 유의사항 섹션
-  Widget _buildNoticeSection(int? maxEntries) {
+  Widget _buildNoticeSection(int? maxEntries, int? maxEntriesPerUser) {
     final notices = [
       '본 이벤트는 1일 1회 참여가능하며, 당사 사정에 따라 이벤트 일정 및 내용이 변경 될 수 있습니다.',
       '블록픽 App 회원가입을 하셔야 경품 수령 및 혜택을 받을 수 있습니다.',
       if (maxEntries != null) '참여 인원은 최대 ${maxEntries.toString()}명으로 제한됩니다.',
+      if (maxEntriesPerUser != null) '1인당 최대 ${maxEntriesPerUser.toString()}회까지 참여 가능합니다.',
       '부정 참여 시 당첨이 취소될 수 있습니다.',
     ];
 
@@ -305,7 +304,7 @@ class PartnerDetailScreen extends StatelessWidget {
                 const SizedBox(width: 6),
                 Text(
                   '이벤트 유의사항',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.amber.shade900),
+                  style: AppTextStyles.title3.copyWith(color: Colors.amber.shade900),
                 ),
               ],
             ),
@@ -370,7 +369,7 @@ class PartnerDetailScreen extends StatelessWidget {
           ),
           child: const Text(
             '이벤트 참여하기',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+            style: AppTextStyles.buttonLarge,
           ),
         ),
       ),
@@ -424,11 +423,7 @@ class _BenefitCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.darkBlue,
-                  ),
+                  style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
                 ),
                 const SizedBox(height: 2),
                 Text(

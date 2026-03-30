@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../widgets/coordinate_result_dialog.dart';
@@ -16,7 +17,7 @@ class TimePickScreen extends StatefulWidget {
 
 class _TimePickScreenState extends State<TimePickScreen>
     with TickerProviderStateMixin {
-  static const Color modeColor = AppColors.yellow;
+  static const Color modeColor = AppColors.yellow500;
   static const int gridSize = 1000;
 
   Timer? _timer;
@@ -186,12 +187,7 @@ class _TimePickScreenState extends State<TimePickScreen>
                   ),
                   child: Text(
                     'MILLISECONDS',
-                    style: TextStyle(
-                      color: modeColor,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 3,
-                    ),
+                    style: AppTextStyles.caption4.copyWith(color: modeColor),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -287,12 +283,7 @@ class _TimePickScreenState extends State<TimePickScreen>
       ),
       child: Text(
         label,
-        style: TextStyle(
-          color: Colors.white.withValues(alpha: 0.5),
-          fontSize: 10,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 2,
-        ),
+        style: AppTextStyles.caption4.copyWith(color: Colors.white.withValues(alpha: 0.5)),
       ),
     );
   }

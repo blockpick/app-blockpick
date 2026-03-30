@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sensors_plus/sensors_plus.dart';
@@ -179,12 +180,7 @@ class _GravityPickScreenState extends State<GravityPickScreen>
                   SizedBox(width: 6),
                   Text(
                     'RESET',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 1,
-                    ),
+                    style: AppTextStyles.caption2.copyWith(color: Colors.white),
                   ),
                 ],
               ),
@@ -349,11 +345,7 @@ class _GravityPickScreenState extends State<GravityPickScreen>
                   const SizedBox(width: 12),
                   Text(
                     'Tilt your phone to move the ball',
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.7),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    style: AppTextStyles.title3.copyWith(color: Colors.white.withValues(alpha: 0.7)),
                   ),
                 ],
               ),
@@ -389,12 +381,7 @@ class _GravityPickScreenState extends State<GravityPickScreen>
                       SizedBox(width: 10),
                       Text(
                         'LOCK POSITION',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 2,
-                        ),
+                        style: AppTextStyles.buttonLarge.copyWith(color: Colors.white),
                       ),
                     ],
                   ),

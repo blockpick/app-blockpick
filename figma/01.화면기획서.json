@@ -1,0 +1,467 @@
+{
+  "id": "0:1",
+  "name": "01.화면기획서",
+  "type": "CANVAS",
+  "scrollBehavior": "SCROLLS",
+  "children": [
+    {
+      "id": "3:616",
+      "name": "로그인/회원가입/휴대폰인증/이메일및비밀번호찾기",
+      "type": "SECTION",
+      "scrollBehavior": "SCROLLS",
+      "children": [],
+      "fills": [
+        {
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0.9490196108818054,
+            "g": 0.95686274766922,
+            "b": 0.9647058844566345,
+            "a": 1
+          }
+        }
+      ],
+      "strokes": [
+        {
+          "opacity": 0.10000000149011612,
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 1
+          }
+        }
+      ],
+      "strokeWeight": 1,
+      "strokeAlign": "INSIDE",
+      "styles": {
+        "fill": "37:29"
+      },
+      "absoluteBoundingBox": {
+        "x": -6660,
+        "y": -204,
+        "width": 7560,
+        "height": 4208
+      },
+      "absoluteRenderBounds": {
+        "x": -6660,
+        "y": -204,
+        "width": 7560,
+        "height": 4208
+      },
+      "sectionContentsHidden": false
+    },
+    {
+      "id": "3:1871",
+      "name": "Home_오픈버전",
+      "type": "SECTION",
+      "scrollBehavior": "SCROLLS",
+      "children": [],
+      "fills": [
+        {
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0.9490196108818054,
+            "g": 0.95686274766922,
+            "b": 0.9647058844566345,
+            "a": 1
+          }
+        }
+      ],
+      "strokes": [
+        {
+          "opacity": 0.10000000149011612,
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 1
+          }
+        }
+      ],
+      "strokeWeight": 1,
+      "strokeAlign": "INSIDE",
+      "styles": {
+        "fill": "37:29"
+      },
+      "absoluteBoundingBox": {
+        "x": 1406,
+        "y": -204,
+        "width": 6080,
+        "height": 1100
+      },
+      "absoluteRenderBounds": {
+        "x": 1406,
+        "y": -204,
+        "width": 6080,
+        "height": 1100
+      },
+      "sectionContentsHidden": false
+    },
+    {
+      "id": "3:2592",
+      "name": "이벤트_오픈버전",
+      "type": "SECTION",
+      "scrollBehavior": "SCROLLS",
+      "children": [],
+      "fills": [
+        {
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0.9490196108818054,
+            "g": 0.95686274766922,
+            "b": 0.9647058844566345,
+            "a": 1
+          }
+        }
+      ],
+      "strokes": [
+        {
+          "opacity": 0.10000000149011612,
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 1
+          }
+        }
+      ],
+      "strokeWeight": 1,
+      "strokeAlign": "INSIDE",
+      "styles": {
+        "fill": "37:29"
+      },
+      "absoluteBoundingBox": {
+        "x": 1400,
+        "y": 1096,
+        "width": 6086,
+        "height": 4010
+      },
+      "absoluteRenderBounds": {
+        "x": 1400,
+        "y": 1096,
+        "width": 6086,
+        "height": 4010
+      },
+      "sectionContentsHidden": false
+    },
+    {
+      "id": "3:5219",
+      "name": "당첨자_오픈버전",
+      "type": "SECTION",
+      "scrollBehavior": "SCROLLS",
+      "children": [],
+      "fills": [
+        {
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0.9490196108818054,
+            "g": 0.95686274766922,
+            "b": 0.9647058844566345,
+            "a": 1
+          }
+        }
+      ],
+      "strokes": [
+        {
+          "opacity": 0.10000000149011612,
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 1
+          }
+        }
+      ],
+      "strokeWeight": 1,
+      "strokeAlign": "INSIDE",
+      "styles": {
+        "fill": "37:29"
+      },
+      "absoluteBoundingBox": {
+        "x": 1400,
+        "y": 5386,
+        "width": 4600,
+        "height": 1100
+      },
+      "absoluteRenderBounds": {
+        "x": 1400,
+        "y": 5386,
+        "width": 4600,
+        "height": 1100
+      },
+      "sectionContentsHidden": false
+    },
+    {
+      "id": "3:5918",
+      "name": "내정보_오픈버전",
+      "type": "SECTION",
+      "scrollBehavior": "SCROLLS",
+      "children": [],
+      "fills": [
+        {
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0.9490196108818054,
+            "g": 0.95686274766922,
+            "b": 0.9647058844566345,
+            "a": 1
+          }
+        }
+      ],
+      "strokes": [
+        {
+          "opacity": 0.10000000149011612,
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 1
+          }
+        }
+      ],
+      "strokeWeight": 1,
+      "strokeAlign": "INSIDE",
+      "styles": {
+        "fill": "37:29"
+      },
+      "absoluteBoundingBox": {
+        "x": 1400,
+        "y": 6686,
+        "width": 7560,
+        "height": 3995
+      },
+      "absoluteRenderBounds": {
+        "x": 1400,
+        "y": 6686,
+        "width": 7560,
+        "height": 3995
+      },
+      "sectionContentsHidden": false
+    },
+    {
+      "id": "3:8046",
+      "name": "약관 초안",
+      "type": "SECTION",
+      "scrollBehavior": "SCROLLS",
+      "children": [],
+      "fills": [
+        {
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0.9490196108818054,
+            "g": 0.95686274766922,
+            "b": 0.9647058844566345,
+            "a": 1
+          }
+        }
+      ],
+      "strokes": [
+        {
+          "opacity": 0.10000000149011612,
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 1
+          }
+        }
+      ],
+      "strokeWeight": 1,
+      "strokeAlign": "INSIDE",
+      "styles": {
+        "fill": "37:29"
+      },
+      "absoluteBoundingBox": {
+        "x": 7986,
+        "y": -204,
+        "width": 2160,
+        "height": 2694
+      },
+      "absoluteRenderBounds": {
+        "x": 7986,
+        "y": -204,
+        "width": 2160,
+        "height": 2694
+      },
+      "sectionContentsHidden": false
+    },
+    {
+      "id": "3:13291",
+      "name": "Official Web",
+      "type": "SECTION",
+      "scrollBehavior": "SCROLLS",
+      "children": [],
+      "fills": [
+        {
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0.9490196108818054,
+            "g": 0.95686274766922,
+            "b": 0.9647058844566345,
+            "a": 1
+          }
+        }
+      ],
+      "strokes": [
+        {
+          "opacity": 0.10000000149011612,
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 1
+          }
+        }
+      ],
+      "strokeWeight": 1,
+      "strokeAlign": "INSIDE",
+      "styles": {
+        "fill": "37:29"
+      },
+      "absoluteBoundingBox": {
+        "x": 7986,
+        "y": 2606,
+        "width": 2864,
+        "height": 2428
+      },
+      "absoluteRenderBounds": {
+        "x": 7986,
+        "y": 2606,
+        "width": 2864,
+        "height": 2428
+      },
+      "sectionContentsHidden": false
+    },
+    {
+      "id": "3:8227",
+      "name": "Backup",
+      "type": "SECTION",
+      "scrollBehavior": "SCROLLS",
+      "children": [],
+      "fills": [
+        {
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0.09803921729326248,
+            "g": 0.12156862765550613,
+            "b": 0.1568627506494522,
+            "a": 1
+          }
+        }
+      ],
+      "strokes": [
+        {
+          "opacity": 0.10000000149011612,
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 1
+          }
+        }
+      ],
+      "strokeWeight": 1,
+      "strokeAlign": "INSIDE",
+      "absoluteBoundingBox": {
+        "x": -15613,
+        "y": -282,
+        "width": 7995,
+        "height": 11316
+      },
+      "absoluteRenderBounds": {
+        "x": -15613,
+        "y": -282,
+        "width": 7995,
+        "height": 11316
+      },
+      "sectionContentsHidden": false
+    },
+    {
+      "id": "486:2800",
+      "name": "파트너스 메뉴 추가",
+      "type": "SECTION",
+      "scrollBehavior": "SCROLLS",
+      "children": [],
+      "fills": [
+        {
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0.09803921729326248,
+            "g": 0.12156862765550613,
+            "b": 0.1568627506494522,
+            "a": 1
+          }
+        }
+      ],
+      "strokes": [
+        {
+          "opacity": 0.10000000149011612,
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1,
+            "a": 1
+          }
+        }
+      ],
+      "strokeWeight": 1,
+      "strokeAlign": "INSIDE",
+      "styles": {
+        "fill": "37:23"
+      },
+      "absoluteBoundingBox": {
+        "x": -15613,
+        "y": 12073,
+        "width": 24573,
+        "height": 9944
+      },
+      "absoluteRenderBounds": {
+        "x": -15613,
+        "y": 12073,
+        "width": 24573,
+        "height": 9944
+      },
+      "sectionContentsHidden": false
+    }
+  ],
+  "backgroundColor": {
+    "r": 0.30825263261795044,
+    "g": 0.31673794984817505,
+    "b": 0.38098394870758057,
+    "a": 1
+  },
+  "prototypeStartNodeID": null,
+  "flowStartingPoints": [],
+  "prototypeDevice": {
+    "type": "NONE",
+    "rotation": "NONE"
+  }
+}

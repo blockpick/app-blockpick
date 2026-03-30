@@ -50,7 +50,7 @@ class GameCard extends StatelessWidget {
                     // 제목
                     Text(
                       game.title,
-                      style: AppTextStyles.medium.copyWith(
+                      style: AppTextStyles.title1.copyWith(
                         color: AppColors.darkBlue,
                         fontWeight: FontWeight.w700,
                       ),
@@ -146,7 +146,7 @@ class GameCard extends StatelessWidget {
             ),
             child: Text(
               _getStatusText(),
-              style: AppTextStyles.caption.copyWith(
+              style: AppTextStyles.caption1.copyWith(
                 color: AppColors.white,
                 fontWeight: FontWeight.w600,
               ),
@@ -167,7 +167,7 @@ class GameCard extends StatelessWidget {
             ),
             child: Text(
               _getTypeText(),
-              style: AppTextStyles.caption.copyWith(
+              style: AppTextStyles.caption1.copyWith(
                 color: _getTypeColor(),
                 fontWeight: FontWeight.w600,
               ),
@@ -228,7 +228,7 @@ class GameCard extends StatelessWidget {
         Flexible(
           child: Text(
             value,
-            style: AppTextStyles.bodySmall.copyWith(
+            style: AppTextStyles.body4.copyWith(
               color: AppColors.darkBlue,
               fontWeight: FontWeight.w600,
             ),
@@ -251,14 +251,14 @@ class GameCard extends StatelessWidget {
             if (game.originalPrice != game.currentPrice)
               Text(
                 '₩${_formatNumber(game.originalPrice)}',
-                style: AppTextStyles.bodySmall.copyWith(
+                style: AppTextStyles.body4.copyWith(
                   color: AppColors.medium,
                   decoration: TextDecoration.lineThrough,
                 ),
               ),
             Text(
               '₩${_formatNumber(game.currentPrice)}',
-              style: AppTextStyles.bodyLarge.copyWith(
+              style: AppTextStyles.body2.copyWith(
                 color: AppColors.blue,
                 fontWeight: FontWeight.w700,
               ),
@@ -279,7 +279,7 @@ class GameCard extends StatelessWidget {
               const SizedBox(width: 4),
               Text(
                 game.timeLeft,
-                style: AppTextStyles.caption.copyWith(
+                style: AppTextStyles.caption1.copyWith(
                   color: AppColors.darkBlue,
                   fontWeight: FontWeight.w600,
                 ),
@@ -297,9 +297,9 @@ class GameCard extends StatelessWidget {
       case GameStatus.scheduled:
         return AppColors.blue;
       case GameStatus.active:
-        return AppColors.green;
+        return AppColors.green500;
       case GameStatus.paused:
-        return AppColors.yellow;
+        return AppColors.yellow500;
       case GameStatus.settling:
         return AppColors.orange;
       case GameStatus.ended:
@@ -325,7 +325,7 @@ class GameCard extends StatelessWidget {
       case GameType.vibe:
         return AppColors.blue;
       case GameType.prime:
-        return AppColors.yellow;
+        return AppColors.yellow500;
     }
   }
 

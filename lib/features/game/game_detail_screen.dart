@@ -91,7 +91,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                   const SizedBox(height: 16),
                   Text(
                     'Game not found',
-                    style: AppTextStyles.large.copyWith(
+                    style: AppTextStyles.heading1.copyWith(
                       color: AppColors.darkBlue,
                     ),
                   ),
@@ -257,14 +257,14 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
               const SizedBox(height: 16),
               Text(
                 'Error loading game',
-                style: AppTextStyles.large.copyWith(
+                style: AppTextStyles.heading1.copyWith(
                   color: AppColors.darkBlue,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
                 error.toString(),
-                style: AppTextStyles.bodySmall.copyWith(
+                style: AppTextStyles.body4.copyWith(
                   color: AppColors.medium,
                 ),
                 textAlign: TextAlign.center,
@@ -344,11 +344,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
               children: [
                 Text(
                   selectedProduct.product.name,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.darkBlue,
-                  ),
+                  style: AppTextStyles.caption2.copyWith(color: AppColors.darkBlue),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -415,22 +411,14 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                       ),
                       child: Text(
                         _getTypeText(game.type),
-                        style: const TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.white,
-                        ),
+                        style: AppTextStyles.caption4.copyWith(color: AppColors.white),
                       ),
                     ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
                         game.title,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.darkBlue,
-                        ),
+                        style: AppTextStyles.buttonLarge.copyWith(color: AppColors.darkBlue),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -510,11 +498,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                       const SizedBox(width: 4),
                       Text(
                         game.timeLeft,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.red,
-                        ),
+                        style: AppTextStyles.caption2.copyWith(color: AppColors.red),
                       ),
                     ],
                   ),
@@ -551,11 +535,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                       const SizedBox(width: 4),
                       Text(
                         '${game.currentPrice}',
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.darkBlue,
-                        ),
+                        style: AppTextStyles.caption2.copyWith(color: AppColors.darkBlue),
                       ),
                     ],
                   ),
@@ -653,11 +633,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
         const SizedBox(height: 2),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-            color: AppColors.darkBlue,
-          ),
+          style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
       ],
     );
@@ -713,11 +689,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                 const SizedBox(width: 10),
                 const Text(
                   '블록 선택하고 참가하기',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.white,
-                  ),
+                  style: AppTextStyles.buttonLarge.copyWith(color: AppColors.white),
                 ),
               ],
             ),
@@ -750,11 +722,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
           Expanded(
             child: Text(
               message,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: statusColor,
-              ),
+              style: AppTextStyles.caption2.copyWith(color: statusColor),
             ),
           ),
         ],
@@ -783,11 +751,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
             const SizedBox(width: 10),
             Text(
               buttonText,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppColors.gray500,
-              ),
+              style: AppTextStyles.buttonLarge.copyWith(color: AppColors.gray500),
             ),
           ],
         ),
@@ -801,7 +765,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
       case GameStatus.scheduled:
         return AppColors.blue;
       case GameStatus.active:
-        return AppColors.green;
+        return AppColors.green500;
       case GameStatus.paused:
         return AppColors.orange;
       case GameStatus.settling:
@@ -843,7 +807,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
       case GameType.vibe:
         return AppColors.blue;
       case GameType.prime:
-        return AppColors.yellow;
+        return AppColors.yellow500;
     }
   }
 

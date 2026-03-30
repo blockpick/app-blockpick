@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 
 /// SELECT 게임 캐러셀 위젯 (프리미엄 디자인)
 class SelectCarouselPremiumWidget extends StatefulWidget {
@@ -271,11 +272,7 @@ class _SelectCarouselPremiumWidgetState extends State<SelectCarouselPremiumWidge
                         // 서브 텍스트
                         Text(
                           'Join now and claim yours!',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: AppColors.gray600,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: AppTextStyles.title3.copyWith(color: AppColors.gray600),
                         ),
 
                         const SizedBox(height: 16),

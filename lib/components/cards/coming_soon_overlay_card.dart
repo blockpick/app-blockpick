@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 import '../../models/game_round_model.dart';
 
 /// Coming Soon 글래스모피즘 카드
@@ -193,11 +194,7 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
         const SizedBox(width: 4),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            color: AppColors.gray600,
-          ),
+          style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
         ),
       ],
     );
@@ -272,12 +269,7 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
           // COMING SOON 텍스트
           Text(
             'COMING SOON',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: AppColors.gray800.withValues(alpha: 0.8),
-              letterSpacing: 3,
-            ),
+            style: AppTextStyles.caption2.copyWith(color: AppColors.gray800.withValues(alpha: 0.8)),
           ),
           const SizedBox(height: 6),
           // 타이머
@@ -310,7 +302,7 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
       case 'daily':
         return AppColors.blue;
       case 'select':
-        return AppColors.mint;
+        return AppColors.green500;
       case 'vibe':
         return AppColors.primaryLight;
       case 'prime':

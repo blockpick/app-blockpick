@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/auth/domain/providers/auth_provider.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 
 /// 환불 신청 화면
 class RefundScreen extends ConsumerStatefulWidget {
@@ -37,7 +38,7 @@ class _RefundScreenState extends ConsumerState<RefundScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('${_formatNumber(amount)}원 환불 신청이 완료되었습니다'),
-            backgroundColor: AppColors.green,
+            backgroundColor: AppColors.green500,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
@@ -80,11 +81,7 @@ class _RefundScreenState extends ConsumerState<RefundScreen> {
         appBar: AppBar(
           title: const Text(
             '환불 신청',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           backgroundColor: AppColors.gray100,
           foregroundColor: AppColors.darkBlue,
@@ -117,11 +114,7 @@ class _RefundScreenState extends ConsumerState<RefundScreen> {
                         const SizedBox(height: 8),
                         Text(
                           '${_formatNumber(balance)}원',
-                          style: const TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.darkBlue,
-                          ),
+                          style: AppTextStyles.display2.copyWith(color: AppColors.darkBlue),
                         ),
                       ],
                     ),
@@ -205,11 +198,7 @@ class _RefundScreenState extends ConsumerState<RefundScreen> {
                       children: [
                         Text(
                           '환불 안내',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.red,
-                          ),
+                          style: AppTextStyles.caption2.copyWith(color: AppColors.red),
                         ),
                         const SizedBox(height: 8),
                         Text(
@@ -258,10 +247,7 @@ class _RefundScreenState extends ConsumerState<RefundScreen> {
                           )
                         : const Text(
                             '환불 신청',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: AppTextStyles.title2,
                           ),
                   ),
                 ),

@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -41,7 +42,7 @@ class TreasurePickScreen extends StatefulWidget {
 
 class _TreasurePickScreenState extends State<TreasurePickScreen>
     with TickerProviderStateMixin {
-  static const Color modeColor = AppColors.yellow; // Gold
+  static const Color modeColor = AppColors.yellow500; // Gold
   static const Color accentColor = Color(0xFFFF6B35); // Orange accent
   static const int gridSize = 100; // 100x100 그리드
   static const int treasureCount = 15; // 숨겨진 보물 개수
@@ -516,12 +517,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
                     SizedBox(width: 6),
                     Text(
                       'RESET',
-                      style: TextStyle(
-                        color: AppColors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 1,
-                      ),
+                      style: AppTextStyles.caption2.copyWith(color: AppColors.white),
                     ),
                   ],
                 ),
@@ -859,16 +855,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
           const SizedBox(width: 6),
           Text(
             label,
-            style: TextStyle(
-              color: isActive
-                  ? AppColors.white
-                  : isDone
-                  ? modeColor
-                  : AppColors.white.withValues(alpha: 0.3),
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 1,
-            ),
+            style: AppTextStyles.caption3.copyWith(color: isActive),
           ),
         ],
       ),
@@ -882,11 +869,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
       children: [
         Text(
           '$label:',
-          style: TextStyle(
-            color: isActive ? modeColor : Colors.white54,
-            fontSize: 11,
-            fontWeight: FontWeight.w600,
-          ),
+          style: AppTextStyles.caption4.copyWith(color: isActive ? modeColor : Colors.white54),
         ),
         const SizedBox(width: 4),
         Text(
@@ -938,11 +921,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
               // 섹션 헤더
               Text(
                 '실시간좌표',
-                style: TextStyle(
-                  color: modeColor,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: AppTextStyles.heading3.copyWith(color: modeColor),
               ),
               const SizedBox(width: 20),
               // ROW
@@ -984,11 +963,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
               const SizedBox(width: 8),
               Text(
                 '효과 선택',
-                style: TextStyle(
-                  color: Colors.cyan,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: AppTextStyles.caption2.copyWith(color: Colors.cyan),
               ),
             ],
           ),
@@ -1046,11 +1021,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
               const SizedBox(width: 8),
               Text(
                 '속도 조절',
-                style: TextStyle(
-                  color: Colors.orange,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: AppTextStyles.caption2.copyWith(color: Colors.orange),
               ),
             ],
           ),
@@ -1192,11 +1163,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
               const SizedBox(width: 8),
               Text(
                 '보물 크기 (히트박스)',
-                style: TextStyle(
-                  color: Colors.amber,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: AppTextStyles.caption2.copyWith(color: Colors.amber),
               ),
             ],
           ),
@@ -1267,11 +1234,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
               const SizedBox(width: 8),
               Text(
                 '결과 테스트',
-                style: TextStyle(
-                  color: Colors.pink,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: AppTextStyles.caption2.copyWith(color: Colors.pink),
               ),
             ],
           ),
@@ -1301,11 +1264,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
                         const SizedBox(width: 6),
                         Text(
                           '당첨 테스트',
-                          style: TextStyle(
-                            color: Colors.amber,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: AppTextStyles.caption2.copyWith(color: Colors.amber),
                         ),
                       ],
                     ),
@@ -1331,11 +1290,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
                         const SizedBox(width: 6),
                         Text(
                           '꽝 테스트',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: AppTextStyles.caption2.copyWith(color: Colors.grey),
                         ),
                       ],
                     ),
@@ -1385,11 +1340,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
                 const SizedBox(width: 6),
                 Text(
                   '$treasureCount',
-                  style: TextStyle(
-                    color: modeColor,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: AppTextStyles.title3.copyWith(color: modeColor),
                 ),
               ],
             ),
@@ -2166,7 +2117,7 @@ class _TreasureCrosshairPainter extends CustomPainter {
           const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [AppColors.yellow, Color(0xFFFFA500), Color(0xFFFF6B35)],
+            colors: [AppColors.yellow500, Color(0xFFFFA500), Color(0xFFFF6B35)],
           ).createShader(
             Rect.fromCenter(
               center: center,
@@ -3400,7 +3351,7 @@ class _TreasureResultDialogState extends State<_TreasureResultDialog>
   @override
   Widget build(BuildContext context) {
     final color = widget.foundTreasure
-        ? AppColors.yellow
+        ? AppColors.yellow500
         : Colors.grey.shade600;
 
     return Center(
@@ -3662,11 +3613,7 @@ class _TreasureResultDialogState extends State<_TreasureResultDialog>
                                   const SizedBox(width: 10),
                                   Text(
                                     '특별 보상 + 참가 보상 획득!',
-                                    style: TextStyle(
-                                      color: color,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w700,
-                                    ),
+                                    style: AppTextStyles.title3.copyWith(color: color),
                                   ),
                                 ],
                               ),
@@ -3717,12 +3664,7 @@ class _TreasureResultDialogState extends State<_TreasureResultDialog>
       children: [
         Text(
           label,
-          style: TextStyle(
-            color: color.withValues(alpha: 0.7),
-            fontSize: 11,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 3,
-          ),
+          style: AppTextStyles.caption4.copyWith(color: color.withValues(alpha: 0.7)),
         ),
         const SizedBox(height: 8),
         Text(
@@ -3789,12 +3731,7 @@ class _TreasureResultDialogState extends State<_TreasureResultDialog>
             const SizedBox(width: 8),
             Text(
               label,
-              style: TextStyle(
-                color: AppColors.white.withValues(alpha: isPrimary ? 1 : 0.8),
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1.5,
-              ),
+              style: AppTextStyles.title3.copyWith(color: AppColors.white.withValues(alpha: isPrimary ? 1 : 0.8)),
             ),
           ],
         ),

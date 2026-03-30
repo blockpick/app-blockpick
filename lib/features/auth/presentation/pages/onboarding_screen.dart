@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 
 /// SC-003: 온보딩 화면
 ///
@@ -41,7 +42,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       icon: Icons.shopping_bag_rounded,
       title: '할인 혜택이 많은\n쇼핑까지',
       description: '다양한 상품을 쇼핑캐시로 할인받아 구입해보세요.\n더 많은 제휴 상품으로 더 큰 혜택을 드립니다.',
-      color: AppColors.green,
+      color: AppColors.green500,
     ),
   ];
 
@@ -98,11 +99,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     // 안내 문구
                     Text(
                       '블록픽 일부 기능은 회원가입 및 로그인이 필요합니다.',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.gray500,
-                      ),
+                      style: AppTextStyles.body3.copyWith(color: AppColors.gray500),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
@@ -123,10 +120,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         ),
                         child: const Text(
                           '로그인 하기',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: AppTextStyles.title2,
                         ),
                       ),
                     ),
@@ -147,10 +141,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         ),
                         child: const Text(
                           '앱 둘러보기',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: AppTextStyles.title2,
                         ),
                       ),
                     ),
@@ -203,12 +194,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           // 설명
           Text(
             content.description,
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
-              color: AppColors.gray600,
-              height: 1.6,
-            ),
+            style: AppTextStyles.body1.copyWith(color: AppColors.gray600),
             textAlign: TextAlign.center,
           ),
         ],

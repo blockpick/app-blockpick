@@ -107,7 +107,7 @@ class _ProductSelectorOverlayState extends State<ProductSelectorOverlay>
                   padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: Text(
                     currentProduct.product.name,
-                    style: AppTextStyles.large.copyWith(
+                    style: AppTextStyles.heading1.copyWith(
                       color: AppColors.white,
                       fontWeight: FontWeight.w700,
                       fontSize: 28,

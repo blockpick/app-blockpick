@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/auth/domain/providers/auth_provider.dart';
 import '../../core/auth/data/repositories/auth_repository.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 import '../../providers/notification_settings_provider.dart';
 
 /// 토스 스타일 설정 화면
@@ -27,11 +28,7 @@ class SettingsScreen extends ConsumerWidget {
         appBar: AppBar(
           title: const Text(
             '설정',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           backgroundColor: AppColors.gray100,
           foregroundColor: AppColors.darkBlue,
@@ -170,11 +167,7 @@ class SettingsScreen extends ConsumerWidget {
       padding: const EdgeInsets.only(left: 4),
       child: Text(
         title,
-        style: TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w500,
-          color: AppColors.gray600,
-        ),
+        style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
       ),
     );
   }
@@ -206,11 +199,7 @@ class SettingsScreen extends ConsumerWidget {
         ),
         title: const Text(
           '로그아웃',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: AppColors.darkBlue,
-          ),
+          style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
         ),
         content: const Text(
           '로그아웃 하시겠습니까?',
@@ -251,11 +240,7 @@ class SettingsScreen extends ConsumerWidget {
         ),
         title: const Text(
           '회원 탈퇴',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: AppColors.darkBlue,
-          ),
+          style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
         ),
         content: const Text(
           '정말로 탈퇴하시겠습니까?\n모든 데이터가 삭제되며 복구할 수 없습니다.',
@@ -299,11 +284,7 @@ class SettingsScreen extends ConsumerWidget {
           ),
           title: const Text(
             '비밀번호 확인',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -466,11 +447,7 @@ class _SettingItem extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    color: textColor ?? AppColors.darkBlue,
-                  ),
+                  style: AppTextStyles.body2.copyWith(color: textColor ?? AppColors.darkBlue),
                 ),
               ),
               if (trailing != null)
@@ -518,11 +495,7 @@ class _SettingToggleItem extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-                color: AppColors.darkBlue,
-              ),
+              style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
             ),
           ),
           Switch(

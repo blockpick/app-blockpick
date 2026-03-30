@@ -26,7 +26,7 @@ class _ListSample2State extends State<ListSample2>
       time: '11:30',
       title: '점심 약속',
       description: '팀원들과 함께하는 점심',
-      color: AppColors.yellow,
+      color: AppColors.yellow500,
       icon: Icons.restaurant,
     ),
     _TimelineItem(
@@ -40,7 +40,7 @@ class _ListSample2State extends State<ListSample2>
       time: '16:30',
       title: '코드 리뷰',
       description: '신규 기능 코드 리뷰 세션',
-      color: AppColors.green,
+      color: AppColors.green500,
       icon: Icons.code,
     ),
     _TimelineItem(
@@ -80,7 +80,7 @@ class _ListSample2State extends State<ListSample2>
         ),
         title: Text(
           'List #2',
-          style: AppTextStyles.large.copyWith(
+          style: AppTextStyles.heading1.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.darkBlue,
           ),
@@ -107,7 +107,7 @@ class _ListSample2State extends State<ListSample2>
             ),
             child: Text(
               '타임라인 리스트\n• 슬라이드 인 애니메이션\n• 타임라인 디자인',
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 color: AppColors.white,
                 fontWeight: FontWeight.w500,
               ),
@@ -161,7 +161,7 @@ class _ListSample2State extends State<ListSample2>
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Text(
                     item.time,
-                    style: AppTextStyles.bodyLarge.copyWith(
+                    style: AppTextStyles.body2.copyWith(
                       fontWeight: FontWeight.bold,
                       color: item.color,
                     ),
@@ -237,7 +237,7 @@ class _ListSample2State extends State<ListSample2>
                         children: [
                           Text(
                             item.title,
-                            style: AppTextStyles.bodyLarge.copyWith(
+                            style: AppTextStyles.body2.copyWith(
                               fontWeight: FontWeight.bold,
                               color: AppColors.darkBlue,
                             ),
@@ -245,7 +245,7 @@ class _ListSample2State extends State<ListSample2>
                           const SizedBox(height: 4),
                           Text(
                             item.description,
-                            style: AppTextStyles.body.copyWith(
+                            style: AppTextStyles.body3.copyWith(
                               color: AppColors.medium,
                             ),
                           ),

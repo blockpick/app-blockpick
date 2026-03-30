@@ -27,7 +27,7 @@ class _AccordionSample1State extends State<AccordionSample1> {
         ),
         title: Text(
           'Accordion #1',
-          style: AppTextStyles.large.copyWith(
+          style: AppTextStyles.heading1.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.darkBlue,
           ),
@@ -52,7 +52,7 @@ class _AccordionSample1State extends State<AccordionSample1> {
             ),
             child: Text(
               '기본적인 아코디언 스타일\n• 부드러운 expand/collapse 애니메이션\n• 심플한 디자인',
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 color: AppColors.darkBlue,
               ),
             ),
@@ -100,7 +100,7 @@ class _AccordionSample1State extends State<AccordionSample1> {
         child: ExpansionTile(
           title: Text(
             title,
-            style: AppTextStyles.bodyLarge.copyWith(
+            style: AppTextStyles.body2.copyWith(
               fontWeight: FontWeight.bold,
               color: isExpanded ? AppColors.blue : AppColors.darkBlue,
             ),
@@ -127,7 +127,7 @@ class _AccordionSample1State extends State<AccordionSample1> {
               ),
               child: Text(
                 content,
-                style: AppTextStyles.body.copyWith(
+                style: AppTextStyles.body3.copyWith(
                   color: AppColors.navy,
                   height: 1.6,
                 ),

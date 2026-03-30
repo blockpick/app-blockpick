@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 import '../../core/auth/domain/providers/auth_provider.dart';
 
 /// 파트너 게임 WebView 화면
@@ -106,8 +107,14 @@ class _PartnerGameWebViewState extends ConsumerState<PartnerGameWebView> {
   void _handleGameResult(Map<String, dynamic> payload) {
     final isWin = payload['isWin'] as bool? ?? false;
     final prize = payload['prize'] as Map<String, dynamic>?;
+    final guestToken = payload['guestToken'] as String?;
 
     debugPrint('[Bridge] 게임 결과: isWin=$isWin, prize=$prize');
+
+    // 비회원 guestToken 저장 (향후 재참여 시 사용)
+    if (guestToken != null) {
+      debugPrint('[Bridge] guestToken 수신: $guestToken');
+    }
 
     // TODO: 포인트 잔액 갱신, 당첨 내역 업데이트
     // ref.invalidate(walletProvider);
@@ -168,11 +175,7 @@ class _PartnerGameWebViewState extends ConsumerState<PartnerGameWebView> {
         scrolledUnderElevation: 0,
         title: Text(
           widget.gameTitle ?? '파트너 이벤트',
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: AppColors.darkBlue,
-          ),
+          style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
         ),
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),

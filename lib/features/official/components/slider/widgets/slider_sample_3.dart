@@ -47,7 +47,7 @@ class _SliderSample3State extends State<SliderSample3>
         ),
         title: Text(
           'Slider #3',
-          style: AppTextStyles.large.copyWith(
+          style: AppTextStyles.heading1.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.darkBlue,
           ),
@@ -72,7 +72,7 @@ class _SliderSample3State extends State<SliderSample3>
             ),
             child: Text(
               '그라데이션 슬라이더\n• 글로우 효과\n• 화려한 애니메이션',
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 color: AppColors.white,
                 fontWeight: FontWeight.w500,
               ),
@@ -86,7 +86,7 @@ class _SliderSample3State extends State<SliderSample3>
             icon: Icons.bolt,
             value: _energyValue,
             gradient: LinearGradient(
-              colors: [AppColors.yellow, AppColors.pink],
+              colors: [AppColors.yellow500, AppColors.pink],
             ),
             onChanged: (value) {
               setState(() {
@@ -118,7 +118,7 @@ class _SliderSample3State extends State<SliderSample3>
             icon: Icons.center_focus_strong,
             value: _focusValue,
             gradient: LinearGradient(
-              colors: [AppColors.green, AppColors.blue],
+              colors: [AppColors.green500, AppColors.blue],
             ),
             onChanged: (value) {
               setState(() {
@@ -186,7 +186,7 @@ class _SliderSample3State extends State<SliderSample3>
                   Expanded(
                     child: Text(
                       label,
-                      style: AppTextStyles.large.copyWith(
+                      style: AppTextStyles.heading1.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppColors.white,
                       ),
@@ -208,7 +208,7 @@ class _SliderSample3State extends State<SliderSample3>
                     ),
                     child: Text(
                       '${value.toInt()}%',
-                      style: AppTextStyles.display.copyWith(
+                      style: AppTextStyles.display1.copyWith(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                         color: AppColors.white,

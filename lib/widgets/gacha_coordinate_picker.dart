@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../core/theme/app_colors.dart';
+import '../core/theme/app_text_styles.dart';
 
 /// Gacha 스타일 좌표 선택 위젯 (토스 디자인)
 class GachaCoordinatePicker extends StatefulWidget {
@@ -348,11 +349,7 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
                     children: [
                       Text(
                         'X (COL)',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.gray500,
-                        ),
+                        style: AppTextStyles.body4.copyWith(color: AppColors.gray500),
                       ),
                       const Spacer(),
                       Text(
@@ -382,11 +379,7 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
                     children: [
                       Text(
                         'Y (ROW)',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.gray500,
-                        ),
+                        style: AppTextStyles.body4.copyWith(color: AppColors.gray500),
                       ),
                       const Spacer(),
                       Text(
@@ -436,11 +429,7 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
                       : _phase == 1
                           ? 'Y (ROW) 좌표 선택'
                           : '선택 완료',
-                  style: const TextStyle(
-                    color: AppColors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: AppTextStyles.title2.copyWith(color: AppColors.white),
                 ),
               ),
             ),
@@ -588,7 +577,7 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
           height: 28,
           decoration: BoxDecoration(
             color: isDone
-                ? AppColors.green
+                ? AppColors.green500
                 : isActive
                     ? widget.accentColor
                     : AppColors.gray200,
@@ -621,7 +610,7 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
       width: 20,
       height: 2,
       margin: const EdgeInsets.symmetric(horizontal: 4),
-      color: isDone ? AppColors.green : AppColors.gray200,
+      color: isDone ? AppColors.green500 : AppColors.gray200,
     );
   }
 
@@ -715,11 +704,7 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
                             : _phase == 1
                                 ? 'Y (ROW) 좌표 선택'
                                 : '선택 완료',
-                        style: const TextStyle(
-                          color: AppColors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: AppTextStyles.title2.copyWith(color: AppColors.white),
                       ),
                     ),
                   ),
@@ -738,12 +723,7 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
       children: [
         Text(
           label,
-          style: TextStyle(
-            color: AppColors.gray500,
-            fontSize: 10,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 1,
-          ),
+          style: AppTextStyles.caption4.copyWith(color: AppColors.gray500),
         ),
         const SizedBox(height: 2),
         Text(
@@ -915,7 +895,7 @@ class _TossCrosshairPainter extends CustomPainter {
     // ROW 라인 (가로) - Phase 1부터 표시
     if (phase >= 1) {
       final isMoving = phase == 1;
-      final lineColor = isMoving ? AppColors.green : accentColor;
+      final lineColor = isMoving ? AppColors.green500 : accentColor;
       final alpha = isMoving ? 0.6 + pulseValue * 0.4 : 1.0;
 
       // 글로우 효과
@@ -999,7 +979,7 @@ class _TossCrosshairPainter extends CustomPainter {
 
     // 색상 정의
     const primaryColor = AppColors.red; // 핑크
-    const secondaryColor = AppColors.yellow; // 오렌지
+    const secondaryColor = AppColors.yellow500; // 오렌지
     const sparkleColor = AppColors.white; // 화이트
 
     // 1. 허용 범위 영역 (그라데이션 원형)
@@ -1124,7 +1104,7 @@ class _TossCrosshairPainter extends CustomPainter {
 
   /// 가이드선 그리기
   void _drawGuideLine(Canvas canvas, Size size) {
-    const guideColor = AppColors.yellow; // 골드 색상
+    const guideColor = AppColors.yellow500; // 골드 색상
 
     // 가로 가이드선 (Y 좌표 - ROW)
     if (guideY != null) {

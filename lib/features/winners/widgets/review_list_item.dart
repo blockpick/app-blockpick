@@ -36,7 +36,7 @@ class ReviewListItem extends StatelessWidget {
                   // 닉네임
                   Text(
                     review.nickName,
-                    style: AppTextStyles.body.copyWith(
+                    style: AppTextStyles.body3.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColors.darkBlue,
                     ),
@@ -46,7 +46,7 @@ class ReviewListItem extends StatelessWidget {
                   // 리뷰 내용 (최대 2줄)
                   Text(
                     review.content,
-                    style: AppTextStyles.body.copyWith(
+                    style: AppTextStyles.body3.copyWith(
                       color: AppColors.navy,
                       height: 1.4,
                     ),
@@ -60,21 +60,21 @@ class ReviewListItem extends StatelessWidget {
                     children: [
                       Text(
                         review.source.displayName,
-                        style: AppTextStyles.bodySmall.copyWith(
+                        style: AppTextStyles.body4.copyWith(
                           color: AppColors.medium,
                         ),
                       ),
                       const SizedBox(width: 4),
                       Text(
                         '•',
-                        style: AppTextStyles.bodySmall.copyWith(
+                        style: AppTextStyles.body4.copyWith(
                           color: AppColors.medium,
                         ),
                       ),
                       const SizedBox(width: 4),
                       Text(
                         TimeUtils.getRelativeTime(review.createdAt),
-                        style: AppTextStyles.bodySmall.copyWith(
+                        style: AppTextStyles.body4.copyWith(
                           color: AppColors.medium,
                         ),
                       ),
@@ -120,7 +120,7 @@ class ReviewListItem extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         review.initial,
-        style: AppTextStyles.medium.copyWith(
+        style: AppTextStyles.title1.copyWith(
           color: AppColors.white,
           fontWeight: FontWeight.bold,
         ),

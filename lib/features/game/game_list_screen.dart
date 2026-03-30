@@ -103,7 +103,7 @@ class _GameListScreenState extends ConsumerState<GameListScreen> {
                     },
                     selectedColor: AppColors.blue,
                     backgroundColor: AppColors.white,
-                    labelStyle: AppTextStyles.bodySmall.copyWith(
+                    labelStyle: AppTextStyles.body4.copyWith(
                       color: isSelected ? AppColors.white : AppColors.navy,
                       fontWeight: FontWeight.w600,
                     ),
@@ -138,7 +138,7 @@ class _GameListScreenState extends ConsumerState<GameListScreen> {
 
                   return Text(
                     '$count games',
-                    style: AppTextStyles.bodySmall.copyWith(
+                    style: AppTextStyles.body4.copyWith(
                       color: AppColors.medium,
                     ),
                   );
@@ -170,7 +170,7 @@ class _GameListScreenState extends ConsumerState<GameListScreen> {
                         _sortOptions.firstWhere(
                           (opt) => opt['value'] == _selectedSort,
                         )['label']!,
-                        style: AppTextStyles.bodySmall.copyWith(
+                        style: AppTextStyles.body4.copyWith(
                           color: AppColors.navy,
                           fontWeight: FontWeight.w600,
                         ),
@@ -235,14 +235,14 @@ class _GameListScreenState extends ConsumerState<GameListScreen> {
             const SizedBox(height: 16),
             Text(
               'Error loading games',
-              style: AppTextStyles.medium.copyWith(
+              style: AppTextStyles.title1.copyWith(
                 color: AppColors.red,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               error.toString(),
-              style: AppTextStyles.bodySmall.copyWith(
+              style: AppTextStyles.body4.copyWith(
                 color: AppColors.medium,
               ),
               textAlign: TextAlign.center,
@@ -330,14 +330,14 @@ class _GameListScreenState extends ConsumerState<GameListScreen> {
           const SizedBox(height: 16),
           Text(
             'No games found',
-            style: AppTextStyles.medium.copyWith(
+            style: AppTextStyles.title1.copyWith(
               color: AppColors.medium,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             'Try changing your filters',
-            style: AppTextStyles.body.copyWith(
+            style: AppTextStyles.body3.copyWith(
               color: AppColors.medium,
             ),
           ),

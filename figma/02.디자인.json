@@ -1,0 +1,460 @@
+{
+  "id": "1:2",
+  "name": "02.디자인",
+  "type": "CANVAS",
+  "scrollBehavior": "SCROLLS",
+  "children": [
+    {
+      "id": "16:1394",
+      "name": "Official Web",
+      "type": "SECTION",
+      "scrollBehavior": "SCROLLS",
+      "children": [],
+      "fills": [
+        {
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0.8980392217636108,
+            "g": 0.9098039269447327,
+            "b": 0.9215686321258545,
+            "a": 1
+          }
+        }
+      ],
+      "strokes": [
+        {
+          "opacity": 0.10000000149011612,
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 1
+          }
+        }
+      ],
+      "strokeWeight": 1,
+      "strokeAlign": "INSIDE",
+      "styles": {
+        "fill": "37:28"
+      },
+      "absoluteBoundingBox": {
+        "x": 524,
+        "y": 205,
+        "width": 2864,
+        "height": 2428
+      },
+      "absoluteRenderBounds": {
+        "x": 524,
+        "y": 205,
+        "width": 2864,
+        "height": 2428
+      },
+      "sectionContentsHidden": false
+    },
+    {
+      "id": "344:1517",
+      "name": "개요",
+      "type": "FRAME",
+      "scrollBehavior": "SCROLLS",
+      "children": [],
+      "blendMode": "PASS_THROUGH",
+      "clipsContent": false,
+      "background": [],
+      "fills": [],
+      "strokes": [],
+      "strokeWeight": 1,
+      "strokeAlign": "INSIDE",
+      "backgroundColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0
+      },
+      "layoutMode": "VERTICAL",
+      "counterAxisSizingMode": "FIXED",
+      "itemSpacing": 24,
+      "layoutWrap": "NO_WRAP",
+      "absoluteBoundingBox": {
+        "x": 3514,
+        "y": 2388,
+        "width": 320,
+        "height": 414
+      },
+      "absoluteRenderBounds": {
+        "x": 3514,
+        "y": 2388,
+        "width": 320,
+        "height": 414
+      },
+      "constraints": {
+        "vertical": "TOP",
+        "horizontal": "LEFT_RIGHT"
+      },
+      "layoutSizingHorizontal": "FIXED",
+      "layoutSizingVertical": "HUG",
+      "effects": [],
+      "interactions": [],
+      "complexStrokeProperties": {
+        "strokeType": "BASIC"
+      }
+    },
+    {
+      "id": "16:1692",
+      "name": "Blockpick Design Set",
+      "type": "SECTION",
+      "scrollBehavior": "SCROLLS",
+      "children": [],
+      "fills": [
+        {
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1,
+            "a": 1
+          }
+        }
+      ],
+      "strokes": [],
+      "strokeWeight": 1,
+      "strokeAlign": "INSIDE",
+      "styles": {
+        "fill": "37:30"
+      },
+      "absoluteBoundingBox": {
+        "x": -3076,
+        "y": 228,
+        "width": 3355,
+        "height": 6969
+      },
+      "absoluteRenderBounds": {
+        "x": -3076,
+        "y": 228,
+        "width": 3355,
+        "height": 6969
+      },
+      "sectionContentsHidden": false
+    },
+    {
+      "id": "115:819",
+      "name": "device",
+      "type": "FRAME",
+      "scrollBehavior": "SCROLLS",
+      "children": [],
+      "blendMode": "PASS_THROUGH",
+      "clipsContent": true,
+      "background": [
+        {
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0.9490196108818054,
+            "g": 0.95686274766922,
+            "b": 0.9647058844566345,
+            "a": 1
+          }
+        }
+      ],
+      "fills": [
+        {
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0.9490196108818054,
+            "g": 0.95686274766922,
+            "b": 0.9647058844566345,
+            "a": 1
+          }
+        }
+      ],
+      "strokes": [],
+      "cornerRadius": 24,
+      "cornerSmoothing": 0,
+      "strokeWeight": 2,
+      "strokeAlign": "OUTSIDE",
+      "backgroundColor": {
+        "r": 0.9490196108818054,
+        "g": 0.95686274766922,
+        "b": 0.9647058844566345,
+        "a": 1
+      },
+      "styles": {
+        "fills": "37:29",
+        "fill": "37:29",
+        "effect": "37:36"
+      },
+      "absoluteBoundingBox": {
+        "x": 3514,
+        "y": 188,
+        "width": 402,
+        "height": 880
+      },
+      "absoluteRenderBounds": {
+        "x": 3510,
+        "y": 188,
+        "width": 418,
+        "height": 896
+      },
+      "constraints": {
+        "vertical": "CENTER",
+        "horizontal": "CENTER"
+      },
+      "effects": [
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "color": {
+            "r": 0.09803921729326248,
+            "g": 0.12156862765550613,
+            "b": 0.1568627506494522,
+            "a": 0.05000000074505806
+          },
+          "blendMode": "NORMAL",
+          "offset": {
+            "x": 4,
+            "y": 8
+          },
+          "radius": 8,
+          "showShadowBehindNode": false
+        }
+      ],
+      "interactions": [],
+      "complexStrokeProperties": {
+        "strokeType": "BASIC"
+      }
+    },
+    {
+      "id": "166:994",
+      "name": "컨셉",
+      "type": "FRAME",
+      "scrollBehavior": "SCROLLS",
+      "children": [],
+      "blendMode": "PASS_THROUGH",
+      "clipsContent": false,
+      "background": [],
+      "fills": [],
+      "strokes": [],
+      "strokeWeight": 1,
+      "strokeAlign": "INSIDE",
+      "backgroundColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0
+      },
+      "layoutMode": "HORIZONTAL",
+      "itemSpacing": 16,
+      "layoutWrap": "NO_WRAP",
+      "absoluteBoundingBox": {
+        "x": 3514,
+        "y": 1161,
+        "width": 1104,
+        "height": 378
+      },
+      "absoluteRenderBounds": {
+        "x": 3514,
+        "y": 1161,
+        "width": 1104,
+        "height": 378
+      },
+      "constraints": {
+        "vertical": "TOP",
+        "horizontal": "LEFT"
+      },
+      "layoutSizingHorizontal": "HUG",
+      "layoutSizingVertical": "HUG",
+      "exportSettings": [
+        {
+          "suffix": "",
+          "format": "JPG",
+          "constraint": {
+            "type": "SCALE",
+            "value": 2
+          }
+        }
+      ],
+      "effects": [],
+      "interactions": [],
+      "complexStrokeProperties": {
+        "strokeType": "BASIC"
+      }
+    },
+    {
+      "id": "178:850",
+      "name": "컨셉",
+      "type": "FRAME",
+      "scrollBehavior": "SCROLLS",
+      "children": [],
+      "blendMode": "PASS_THROUGH",
+      "clipsContent": false,
+      "background": [],
+      "fills": [],
+      "strokes": [],
+      "strokeWeight": 1,
+      "strokeAlign": "INSIDE",
+      "backgroundColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0
+      },
+      "layoutMode": "HORIZONTAL",
+      "itemSpacing": 16,
+      "layoutWrap": "NO_WRAP",
+      "absoluteBoundingBox": {
+        "x": 3514,
+        "y": 1578,
+        "width": 1104,
+        "height": 378
+      },
+      "absoluteRenderBounds": {
+        "x": 3514,
+        "y": 1578,
+        "width": 1104,
+        "height": 378
+      },
+      "constraints": {
+        "vertical": "TOP",
+        "horizontal": "LEFT"
+      },
+      "layoutSizingHorizontal": "HUG",
+      "layoutSizingVertical": "HUG",
+      "exportSettings": [
+        {
+          "suffix": "",
+          "format": "JPG",
+          "constraint": {
+            "type": "SCALE",
+            "value": 2
+          }
+        }
+      ],
+      "effects": [],
+      "interactions": [],
+      "complexStrokeProperties": {
+        "strokeType": "BASIC"
+      }
+    },
+    {
+      "id": "186:1029",
+      "name": "컨셉",
+      "type": "FRAME",
+      "scrollBehavior": "SCROLLS",
+      "children": [],
+      "blendMode": "PASS_THROUGH",
+      "clipsContent": false,
+      "background": [],
+      "fills": [],
+      "strokes": [],
+      "strokeWeight": 1,
+      "strokeAlign": "INSIDE",
+      "backgroundColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0
+      },
+      "layoutMode": "HORIZONTAL",
+      "itemSpacing": 16,
+      "layoutWrap": "NO_WRAP",
+      "absoluteBoundingBox": {
+        "x": 3514,
+        "y": 1995,
+        "width": 1104,
+        "height": 354
+      },
+      "absoluteRenderBounds": {
+        "x": 3514,
+        "y": 1995,
+        "width": 1104,
+        "height": 354
+      },
+      "constraints": {
+        "vertical": "TOP",
+        "horizontal": "LEFT"
+      },
+      "layoutSizingHorizontal": "HUG",
+      "layoutSizingVertical": "HUG",
+      "exportSettings": [
+        {
+          "suffix": "",
+          "format": "JPG",
+          "constraint": {
+            "type": "SCALE",
+            "value": 2
+          }
+        }
+      ],
+      "effects": [],
+      "interactions": [],
+      "complexStrokeProperties": {
+        "strokeType": "BASIC"
+      }
+    },
+    {
+      "id": "402:3141",
+      "name": "광고보기",
+      "type": "FRAME",
+      "scrollBehavior": "SCROLLS",
+      "children": [],
+      "blendMode": "PASS_THROUGH",
+      "clipsContent": false,
+      "background": [],
+      "fills": [],
+      "strokes": [],
+      "cornerRadius": 12,
+      "cornerSmoothing": 0,
+      "strokeWeight": 4,
+      "strokeAlign": "INSIDE",
+      "backgroundColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0
+      },
+      "layoutMode": "VERTICAL",
+      "counterAxisSizingMode": "FIXED",
+      "itemSpacing": 16,
+      "layoutWrap": "NO_WRAP",
+      "absoluteBoundingBox": {
+        "x": 3860,
+        "y": 2453,
+        "width": 320,
+        "height": 180
+      },
+      "absoluteRenderBounds": {
+        "x": 3860,
+        "y": 2453,
+        "width": 320,
+        "height": 180
+      },
+      "constraints": {
+        "vertical": "TOP",
+        "horizontal": "LEFT"
+      },
+      "layoutSizingHorizontal": "FIXED",
+      "layoutSizingVertical": "HUG",
+      "effects": [],
+      "interactions": [],
+      "complexStrokeProperties": {
+        "strokeType": "BASIC"
+      }
+    }
+  ],
+  "backgroundColor": {
+    "r": 0.9490196108818054,
+    "g": 0.95686274766922,
+    "b": 0.9647058844566345,
+    "a": 1
+  },
+  "prototypeStartNodeID": null,
+  "flowStartingPoints": [],
+  "prototypeDevice": {
+    "type": "NONE",
+    "rotation": "NONE"
+  }
+}

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 import '../../../models/game_round_model.dart';
 
 /// 토스 스타일 게임 섹션
@@ -45,11 +46,7 @@ class TossGameSection extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   subtitle,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.gray500,
-                  ),
+                  style: AppTextStyles.body3.copyWith(color: AppColors.gray500),
                 ),
               ],
             ),
@@ -68,11 +65,7 @@ class TossGameSection extends StatelessWidget {
                     children: [
                       Text(
                         '전체보기',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.gray600,
-                        ),
+                        style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
                       ),
                       const SizedBox(width: 2),
                       Icon(
@@ -173,11 +166,7 @@ class _TossGameCard extends StatelessWidget {
                     ),
                     child: Text(
                       game.category,
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: _getCategoryColor(),
-                      ),
+                      style: AppTextStyles.caption4.copyWith(color: _getCategoryColor()),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -185,11 +174,7 @@ class _TossGameCard extends StatelessWidget {
                   // 제목
                   Text(
                     game.title,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.darkBlue,
-                    ),
+                    style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -234,21 +219,12 @@ class _TossGameCard extends StatelessWidget {
                     children: [
                       Text(
                         '${_formatCurrency(game.currentPrice)}원',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.blue,
-                        ),
+                        style: AppTextStyles.buttonLarge.copyWith(color: AppColors.blue),
                       ),
                       const SizedBox(width: 8),
                       Text(
                         '${_formatCurrency(game.originalPrice)}원',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.gray400,
-                          decoration: TextDecoration.lineThrough,
-                        ),
+                        style: AppTextStyles.caption1.copyWith(color: AppColors.gray400, decoration: TextDecoration.lineThrough),
                       ),
                     ],
                   ),
@@ -315,9 +291,9 @@ class _TossGameCard extends StatelessWidget {
       case 'gift':
         return AppColors.pink;
       case 'food':
-        return AppColors.yellow;
+        return AppColors.yellow500;
       case 'charity':
-        return AppColors.green;
+        return AppColors.green500;
       case 'art':
         return AppColors.purple;
       case 'tribute':
@@ -407,11 +383,7 @@ class _TossVibeCard extends StatelessWidget {
                       ),
                       child: Text(
                         game.category,
-                        style: const TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
+                        style: AppTextStyles.caption4.copyWith(color: Colors.white),
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -419,11 +391,7 @@ class _TossVibeCard extends StatelessWidget {
                     // 제목
                     Text(
                       game.title,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
+                      style: AppTextStyles.title3.copyWith(color: Colors.white),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),

@@ -75,11 +75,7 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
         appBar: AppBar(
           title: Text(
             isEditing ? '리뷰수정' : '리뷰쓰기',
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           backgroundColor: AppColors.white,
           foregroundColor: AppColors.darkBlue,
@@ -134,7 +130,7 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
                   ],
                   Text(
                     widget.participatedAt,
-                    style: AppTextStyles.bodySmall.copyWith(
+                    style: AppTextStyles.body4.copyWith(
                       color: AppColors.gray500,
                     ),
                   ),
@@ -143,7 +139,7 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
               const SizedBox(height: 8),
               Text(
                 widget.productName,
-                style: AppTextStyles.body.copyWith(
+                style: AppTextStyles.body3.copyWith(
                   color: AppColors.darkBlue,
                   fontWeight: FontWeight.w500,
                 ),
@@ -198,7 +194,7 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
       case EventType.vibe:
         badgeColor = AppColors.pink;
       case EventType.prime:
-        badgeColor = AppColors.yellow;
+        badgeColor = AppColors.yellow500;
     }
 
     return Container(
@@ -234,7 +230,7 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
       children: [
         Text(
           '리뷰 작성',
-          style: AppTextStyles.body.copyWith(
+          style: AppTextStyles.body3.copyWith(
             color: AppColors.darkBlue,
             fontWeight: FontWeight.w600,
           ),
@@ -252,14 +248,14 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
             decoration: InputDecoration(
               hintText:
                   '블록픽을 이용한 소감 또는 상품 당첨에 대한 소감을 솔직하게 남겨주세요. (10자 이상)',
-              hintStyle: AppTextStyles.body.copyWith(
+              hintStyle: AppTextStyles.body3.copyWith(
                 color: AppColors.gray400,
                 height: 1.6,
               ),
               contentPadding: const EdgeInsets.all(16),
               border: InputBorder.none,
             ),
-            style: AppTextStyles.body.copyWith(
+            style: AppTextStyles.body3.copyWith(
               color: AppColors.darkBlue,
               height: 1.6,
             ),
@@ -270,7 +266,7 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
           alignment: Alignment.centerRight,
           child: Text(
             '${_reviewController.text.length}자',
-            style: AppTextStyles.bodySmall.copyWith(
+            style: AppTextStyles.body4.copyWith(
               color: _isValid ? AppColors.blue : AppColors.gray400,
             ),
           ),

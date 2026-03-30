@@ -23,7 +23,7 @@ class ListSamplesScreen extends StatelessWidget {
         ),
         title: Text(
           'List Samples',
-          style: AppTextStyles.large.copyWith(
+          style: AppTextStyles.heading1.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.darkBlue,
           ),
@@ -116,7 +116,7 @@ class ListSamplesScreen extends StatelessWidget {
               child: Center(
                 child: Text(
                   '#$number',
-                  style: AppTextStyles.body.copyWith(
+                  style: AppTextStyles.body3.copyWith(
                     color: AppColors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -130,7 +130,7 @@ class ListSamplesScreen extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppTextStyles.bodyLarge.copyWith(
+                    style: AppTextStyles.body2.copyWith(
                       fontWeight: FontWeight.bold,
                       color: AppColors.darkBlue,
                     ),
@@ -138,7 +138,7 @@ class ListSamplesScreen extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     description,
-                    style: AppTextStyles.body.copyWith(
+                    style: AppTextStyles.body3.copyWith(
                       color: AppColors.medium,
                     ),
                   ),

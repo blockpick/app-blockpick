@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 import 'partner_detail_screen.dart';
 
 /// 파트너 이벤트 목록 화면
@@ -53,11 +54,13 @@ class _PartnerScreenState extends ConsumerState<PartnerScreen> {
               title
               description
               mainProductName
+              type
               gameType
               category
               status
               hasInstantPrize
               maxEntries
+              maxEntriesPerUser
               entryFee
               startTime
               endTime
@@ -91,7 +94,9 @@ class _PartnerScreenState extends ConsumerState<PartnerScreen> {
 
       final data = jsonDecode(response.body) as Map<String, dynamic>;
       final games = (data['data']?['getGames']?['games'] as List? ?? [])
-          .where((g) => g['status'] == 'IN_PROGRESS' || g['status'] == 'SCHEDULED')
+          .where((g) =>
+              (g['status'] == 'IN_PROGRESS' || g['status'] == 'SCHEDULED') &&
+              (g['gameType'] == 'PARTNER_GACHA' || g['type'] == 'PARTNER_GACHA'))
           .toList();
 
       setState(() {
@@ -208,12 +213,7 @@ class _PartnerScreenState extends ConsumerState<PartnerScreen> {
                 const SizedBox(height: 10),
                 const Text(
                   '4대 편의점 사용 가능!\n모바일상품권 10000원 획득하기',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                    height: 1.4,
-                  ),
+                  style: AppTextStyles.title3.copyWith(color: Colors.white),
                 ),
                 const SizedBox(height: 8),
                 Container(
@@ -224,11 +224,7 @@ class _PartnerScreenState extends ConsumerState<PartnerScreen> {
                   ),
                   child: const Text(
                     '이벤트 참여하면 +1000P',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
+                    style: AppTextStyles.caption4.copyWith(color: Colors.white),
                   ),
                 ),
               ],
@@ -462,12 +458,7 @@ class _GameGridCard extends StatelessWidget {
                     // 상품명
                     Text(
                       productName.isNotEmpty ? productName : (game['title'] as String? ?? ''),
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.darkBlue,
-                        height: 1.3,
-                      ),
+                      style: AppTextStyles.caption2.copyWith(color: AppColors.darkBlue),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),

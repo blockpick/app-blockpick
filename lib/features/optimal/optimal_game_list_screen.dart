@@ -86,7 +86,7 @@ class OptimalGameListScreen extends StatelessWidget {
                       // 제목
                       Text(
                         game.title,
-                        style: AppTextStyles.medium.copyWith(
+                        style: AppTextStyles.title1.copyWith(
                           color: AppColors.darkBlue,
                         ),
                         maxLines: 2,
@@ -107,7 +107,7 @@ class OptimalGameListScreen extends StatelessWidget {
                         ),
                         child: Text(
                           '${_formatPrice(game.minPrice)} ~ ${_formatPrice(game.maxPrice)}',
-                          style: AppTextStyles.bodySmall.copyWith(
+                          style: AppTextStyles.body4.copyWith(
                             color: AppColors.purple,
                             fontWeight: FontWeight.w600,
                           ),
@@ -127,7 +127,7 @@ class OptimalGameListScreen extends StatelessWidget {
                           const SizedBox(width: 4),
                           Text(
                             '${game.participants}명',
-                            style: AppTextStyles.bodySmall.copyWith(
+                            style: AppTextStyles.body4.copyWith(
                               color: AppColors.grayBlue,
                             ),
                           ),
@@ -135,13 +135,13 @@ class OptimalGameListScreen extends StatelessWidget {
                           const Icon(
                             LucideIcons.clock,
                             size: 14,
-                            color: AppColors.yellow,
+                            color: AppColors.yellow500,
                           ),
                           const SizedBox(width: 4),
                           Text(
                             game.timeLeft,
-                            style: AppTextStyles.bodySmall.copyWith(
-                              color: AppColors.yellow,
+                            style: AppTextStyles.body4.copyWith(
+                              color: AppColors.yellow500,
                             ),
                           ),
                           const Spacer(),
@@ -156,7 +156,7 @@ class OptimalGameListScreen extends StatelessWidget {
                             ),
                             child: Text(
                               '최적가',
-                              style: AppTextStyles.caption.copyWith(
+                              style: AppTextStyles.caption1.copyWith(
                                 color: AppColors.white,
                                 fontWeight: FontWeight.w600,
                               ),

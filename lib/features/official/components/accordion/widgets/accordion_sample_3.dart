@@ -50,7 +50,7 @@ class _AccordionSample3State extends State<AccordionSample3>
         ),
         title: Text(
           'Accordion #3',
-          style: AppTextStyles.large.copyWith(
+          style: AppTextStyles.heading1.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.darkBlue,
           ),
@@ -75,7 +75,7 @@ class _AccordionSample3State extends State<AccordionSample3>
             ),
             child: Text(
               '그라데이션 아코디언\n• 슬라이드 애니메이션\n• 화려한 그라데이션 효과',
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 color: AppColors.white,
                 fontWeight: FontWeight.w500,
               ),
@@ -112,10 +112,10 @@ class _AccordionSample3State extends State<AccordionSample3>
       AppColors.gradientBluePurplePink,
       AppColors.gradientBlue,
       LinearGradient(
-        colors: [AppColors.green, AppColors.blue],
+        colors: [AppColors.green500, AppColors.blue],
       ),
       LinearGradient(
-        colors: [AppColors.yellow, AppColors.pink],
+        colors: [AppColors.yellow500, AppColors.pink],
       ),
       LinearGradient(
         colors: [AppColors.purple, AppColors.blue],
@@ -196,7 +196,7 @@ class _AccordionSample3State extends State<AccordionSample3>
                     Expanded(
                       child: Text(
                         title,
-                        style: AppTextStyles.bodyLarge.copyWith(
+                        style: AppTextStyles.body2.copyWith(
                           fontWeight: FontWeight.bold,
                           color: AppColors.white,
                         ),
@@ -249,7 +249,7 @@ class _AccordionSample3State extends State<AccordionSample3>
                       ),
                       child: Text(
                         content,
-                        style: AppTextStyles.body.copyWith(
+                        style: AppTextStyles.body3.copyWith(
                           color: AppColors.darkBlue,
                           height: 1.6,
                         ),

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/auth/domain/providers/auth_provider.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 import '../../features/auth/presentation/dialogs/auth_dialogs.dart';
 
 /// 토스 스타일 메인 AppBar
@@ -134,11 +135,7 @@ class MainAppBar extends ConsumerWidget implements PreferredSizeWidget {
                                 child: Text(
                                   (user?.nickname ?? user?.email ?? 'U')[0]
                                       .toUpperCase(),
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColors.white,
-                                  ),
+                                  style: AppTextStyles.caption3.copyWith(color: AppColors.white),
                                 ),
                               )
                             : CircleAvatar(

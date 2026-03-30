@@ -67,7 +67,7 @@ class TutorialButtonWidget extends StatelessWidget {
                   children: [
                     Text(
                       '단 하나의 선택이 행운으로!',
-                      style: AppTextStyles.bodyLarge.copyWith(
+                      style: AppTextStyles.body2.copyWith(
                         color: AppColors.darkBlue,
                         fontWeight: FontWeight.bold,
                       ),
@@ -75,7 +75,7 @@ class TutorialButtonWidget extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       '블록픽 참가하는 방법',
-                      style: AppTextStyles.body.copyWith(
+                      style: AppTextStyles.body3.copyWith(
                         color: AppColors.navy,
                       ),
                     ),
@@ -142,7 +142,7 @@ class TutorialModal extends StatelessWidget {
               children: [
                 Text(
                   'BlockPick Tutorial',
-                  style: AppTextStyles.large.copyWith(
+                  style: AppTextStyles.heading1.copyWith(
                     color: AppColors.darkBlue,
                     fontWeight: FontWeight.bold,
                   ),
@@ -183,7 +183,7 @@ class TutorialModal extends StatelessWidget {
                     title: '3. 게임 참가하기',
                     description: '선택한 블록으로 게임에 참가합니다. 참가비를 지불하고 당첨을 기다리세요!',
                     icon: LucideIcons.trophy,
-                    iconColor: AppColors.yellow,
+                    iconColor: AppColors.yellow500,
                   ),
                   const SizedBox(height: 20),
                   _buildTutorialSection(
@@ -210,7 +210,7 @@ class TutorialModal extends StatelessWidget {
                         Expanded(
                           child: Text(
                             '게임이 취소되면 참가비가 100% 환불됩니다.',
-                            style: AppTextStyles.body.copyWith(
+                            style: AppTextStyles.body3.copyWith(
                               color: AppColors.navy,
                             ),
                           ),
@@ -281,7 +281,7 @@ class TutorialModal extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: AppTextStyles.bodyLarge.copyWith(
+                style: AppTextStyles.body2.copyWith(
                   color: AppColors.darkBlue,
                   fontWeight: FontWeight.bold,
                 ),
@@ -289,7 +289,7 @@ class TutorialModal extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 description,
-                style: AppTextStyles.body.copyWith(
+                style: AppTextStyles.body3.copyWith(
                   color: AppColors.navy,
                   height: 1.5,
                 ),

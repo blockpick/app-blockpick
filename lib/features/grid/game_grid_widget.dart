@@ -557,7 +557,7 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: AppColors.green.withOpacity(0.9),
+              color: AppColors.green500.withOpacity(0.9),
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: AppColors.white, width: 2),
             ),

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:noise_meter/noise_meter.dart';
@@ -299,11 +300,7 @@ class _VoicePickScreenState extends State<VoicePickScreen>
                         if (_isRecording)
                           Text(
                             '$_recordingSeconds',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                            ),
+                            style: AppTextStyles.buttonLarge.copyWith(color: Colors.white),
                           ),
                       ],
                     ),
@@ -348,12 +345,7 @@ class _VoicePickScreenState extends State<VoicePickScreen>
       children: [
         Text(
           label,
-          style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.5),
-            fontSize: 10,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 2,
-          ),
+          style: AppTextStyles.caption4.copyWith(color: Colors.white.withValues(alpha: 0.5)),
         ),
         const SizedBox(height: 8),
         Row(
@@ -373,11 +365,7 @@ class _VoicePickScreenState extends State<VoicePickScreen>
               padding: const EdgeInsets.only(bottom: 4),
               child: Text(
                 'dB',
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.5),
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: AppTextStyles.body4.copyWith(color: Colors.white.withValues(alpha: 0.5)),
               ),
             ),
           ],
@@ -434,11 +422,7 @@ class _VoicePickScreenState extends State<VoicePickScreen>
                     : _hasPermission
                         ? 'Tap the microphone to start'
                         : 'Microphone permission required',
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.7),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: AppTextStyles.title3.copyWith(color: Colors.white.withValues(alpha: 0.7)),
               ),
 
               if (!_hasPermission) ...[
@@ -461,12 +445,7 @@ class _VoicePickScreenState extends State<VoicePickScreen>
                         SizedBox(width: 8),
                         Text(
                           'GRANT PERMISSION',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 1,
-                          ),
+                          style: AppTextStyles.caption2.copyWith(color: Colors.white),
                         ),
                       ],
                     ),
@@ -497,11 +476,7 @@ class _VoicePickScreenState extends State<VoicePickScreen>
           const SizedBox(width: 8),
           Text(
             text,
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.8),
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-            ),
+            style: AppTextStyles.caption2.copyWith(color: Colors.white.withValues(alpha: 0.8)),
           ),
         ],
       ),

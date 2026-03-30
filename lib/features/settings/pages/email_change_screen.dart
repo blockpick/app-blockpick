@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 import '../../../core/constants/app_constants.dart';
 
 /// SC-011-03, SC-011-04: 이메일 변경 화면
@@ -188,11 +189,7 @@ class _EmailChangeScreenState extends ConsumerState<EmailChangeScreen> {
         appBar: AppBar(
           title: const Text(
             '이메일 변경',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           backgroundColor: AppColors.white,
           foregroundColor: AppColors.darkBlue,
@@ -210,11 +207,7 @@ class _EmailChangeScreenState extends ConsumerState<EmailChangeScreen> {
                     // 이메일 인증 섹션
                     const Text(
                       '이메일 인증',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.darkBlue,
-                      ),
+                      style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
                     ),
                     const SizedBox(height: 12),
 
@@ -330,10 +323,7 @@ class _EmailChangeScreenState extends ConsumerState<EmailChangeScreen> {
         ),
         child: const Text(
           '인증번호 전송',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          style: AppTextStyles.title2,
         ),
       ),
     );
@@ -407,13 +397,7 @@ class _EmailChangeScreenState extends ConsumerState<EmailChangeScreen> {
               ),
               child: Text(
                 _formatTime(_remainingSeconds),
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: _remainingSeconds <= 30
-                      ? AppColors.red
-                      : AppColors.darkBlue,
-                ),
+                style: AppTextStyles.title2,
               ),
             ),
           ],
@@ -451,10 +435,7 @@ class _EmailChangeScreenState extends ConsumerState<EmailChangeScreen> {
         ),
         child: const Text(
           '인증번호 재전송',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          style: AppTextStyles.title2,
         ),
       ),
     );
@@ -484,10 +465,7 @@ class _EmailChangeScreenState extends ConsumerState<EmailChangeScreen> {
             ),
             child: const Text(
               '인증 완료',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTextStyles.title2,
             ),
           ),
         ),

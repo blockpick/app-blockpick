@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 
 import '../../core/auth/domain/providers/auth_provider.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 import '../../core/constants/app_constants.dart';
 import '../../components/common/common_app_bar.dart';
 
@@ -124,11 +125,7 @@ class MyScreen extends ConsumerWidget {
               const SizedBox(height: 16),
               const Text(
                 '로그인이 필요합니다',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.darkBlue,
-                ),
+                style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
               ),
               const SizedBox(height: 8),
               Text(
@@ -156,10 +153,7 @@ class MyScreen extends ConsumerWidget {
                   ),
                   child: const Text(
                     '로그인',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: AppTextStyles.title2,
                   ),
                 ),
               ),
@@ -298,11 +292,7 @@ class MyScreen extends ConsumerWidget {
             children: [
               Text(
                 title,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.gray600,
-                ),
+                style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
               ),
               const SizedBox(height: 8),
               Row(
@@ -342,11 +332,7 @@ class MyScreen extends ConsumerWidget {
             children: [
               const Text(
                 '포인트 추가 적립',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.darkBlue,
-                ),
+                style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
               ),
               const SizedBox(width: 4),
               GestureDetector(
@@ -425,11 +411,7 @@ class MyScreen extends ConsumerWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.darkBlue,
-                  ),
+                  style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
                 ),
               ),
             ],
@@ -453,11 +435,7 @@ class MyScreen extends ConsumerWidget {
           children: [
             const Text(
               '포인트 적립 안내',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: AppColors.darkBlue,
-              ),
+              style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
             ),
             IconButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -516,6 +494,12 @@ class MyScreen extends ConsumerWidget {
         if (isAuthenticated) ...[
           _buildMenuItem(
             context,
+            title: '⭐ 내 소원',
+            onTap: () => context.push('/my/wishes'),
+          ),
+          _buildMenuDivider(),
+          _buildMenuItem(
+            context,
             title: '후기관리',
             onTap: () => context.push('/my/reviews'),
           ),
@@ -551,11 +535,7 @@ class MyScreen extends ConsumerWidget {
             children: [
               Text(
                 title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.darkBlue,
-                ),
+                style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
               ),
               const Spacer(),
               Icon(
@@ -580,12 +560,7 @@ class MyScreen extends ConsumerWidget {
 
   /// 회사 정보 푸터
   Widget _buildFooter(BuildContext context) {
-    const footerTextStyle = TextStyle(
-      fontSize: 11,
-      fontWeight: FontWeight.w400,
-      color: AppColors.gray500,
-      height: 1.6,
-    );
+    const footerTextStyle = AppTextStyles.caption4.copyWith(color: AppColors.gray500);
 
     return Container(
       width: double.infinity,
@@ -597,11 +572,7 @@ class MyScreen extends ConsumerWidget {
           // 회사명
           const Text(
             'Blockpick, Inc.',
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: AppColors.gray700,
-            ),
+            style: AppTextStyles.caption2.copyWith(color: AppColors.gray700),
           ),
           const SizedBox(height: 6),
           // 주소
@@ -625,12 +596,7 @@ class MyScreen extends ConsumerWidget {
                 },
                 child: const Text(
                   'Business Information',
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.gray600,
-                    decoration: TextDecoration.underline,
-                  ),
+                  style: AppTextStyles.caption4.copyWith(color: AppColors.gray600, decoration: TextDecoration.underline),
                 ),
               ),
               _footerDot(),
@@ -638,12 +604,7 @@ class MyScreen extends ConsumerWidget {
                 onTap: () => context.push('/settings/terms'),
                 child: const Text(
                   'Terms of Service',
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.gray600,
-                    decoration: TextDecoration.underline,
-                  ),
+                  style: AppTextStyles.caption4.copyWith(color: AppColors.gray600, decoration: TextDecoration.underline),
                 ),
               ),
               _footerDot(),
@@ -651,12 +612,7 @@ class MyScreen extends ConsumerWidget {
                 onTap: () => context.push('/settings/privacy'),
                 child: const Text(
                   'Privacy Policy',
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.gray600,
-                    decoration: TextDecoration.underline,
-                  ),
+                  style: AppTextStyles.caption4.copyWith(color: AppColors.gray600, decoration: TextDecoration.underline),
                 ),
               ),
             ],

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/auth/domain/providers/auth_provider.dart';
 import '../../../../core/auth/data/services/google_auth_service.dart';
 import '../../../../core/auth/data/services/apple_auth_service.dart';
@@ -126,12 +127,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
               const SizedBox(height: 8),
               const Text(
                 'Blockpick 회원 계정이 아니에요.\n다른 계정으로 로그인 하거나\n회원가입을 해주세요.',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.darkBlue,
-                  height: 1.5,
-                ),
+                style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
@@ -149,11 +145,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                       ),
                       child: Text(
                         '취소',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.gray600,
-                        ),
+                        style: AppTextStyles.title2.copyWith(color: AppColors.gray600),
                       ),
                     ),
                   ),
@@ -174,11 +166,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                       ),
                       child: const Text(
                         '회원가입 하기',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.white,
-                        ),
+                        style: AppTextStyles.title2.copyWith(color: AppColors.white),
                       ),
                     ),
                   ),
@@ -332,12 +320,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
               const SizedBox(height: 8),
               const Text(
                 '비밀번호 5회 실패로 보안을 위해\n계정이 잠겼어요.\n비밀번호 찾기를 이용해주세요.',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.darkBlue,
-                  height: 1.5,
-                ),
+                style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
@@ -355,11 +338,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                       ),
                       child: Text(
                         '취소',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.gray600,
-                        ),
+                        style: AppTextStyles.title2.copyWith(color: AppColors.gray600),
                       ),
                     ),
                   ),
@@ -380,11 +359,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                       ),
                       child: const Text(
                         '비밀번호찾기',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.white,
-                        ),
+                        style: AppTextStyles.title2.copyWith(color: AppColors.white),
                       ),
                     ),
                   ),
@@ -413,11 +388,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 child: const Text(
                   '로그인 하기',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.darkBlue,
-                  ),
+                  style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -435,11 +406,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                         // 이메일 입력
                         const Text(
                           '이메일',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.darkBlue,
-                          ),
+                          style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
                         ),
                         const SizedBox(height: 8),
                         TextField(
@@ -449,18 +416,10 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                           textInputAction: TextInputAction.next,
                           onChanged: (_) => setState(() => _emailError = null),
                           onEditingComplete: () => _passwordFocusNode.requestFocus(),
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.darkBlue,
-                          ),
+                          style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
                           decoration: InputDecoration(
                             hintText: '이메일을 입력해 주세요.',
-                            hintStyle: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              color: AppColors.gray400,
-                            ),
+                            hintStyle: AppTextStyles.body1.copyWith(color: AppColors.gray400),
                             filled: true,
                             fillColor: AppColors.gray100,
                             border: OutlineInputBorder(
@@ -487,11 +446,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                         // 비밀번호 입력
                         const Text(
                           '비밀번호',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.darkBlue,
-                          ),
+                          style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
                         ),
                         const SizedBox(height: 8),
                         TextField(
@@ -501,18 +456,10 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                           textInputAction: TextInputAction.done,
                           onChanged: (_) => setState(() => _passwordError = null),
                           onEditingComplete: _handleLogin,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.darkBlue,
-                          ),
+                          style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
                           decoration: InputDecoration(
                             hintText: '비밀번호를 입력해 주세요.',
-                            hintStyle: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              color: AppColors.gray400,
-                            ),
+                            hintStyle: AppTextStyles.body1.copyWith(color: AppColors.gray400),
                             filled: true,
                             fillColor: AppColors.gray100,
                             border: OutlineInputBorder(
@@ -575,10 +522,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                                   )
                                 : const Text(
                                     '이메일 계정으로 로그인',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                    style: AppTextStyles.title2,
                                   ),
                           ),
                         ),
@@ -598,11 +542,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                               ),
                               child: Text(
                                 '회원가입',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.gray500,
-                                ),
+                                style: AppTextStyles.title3.copyWith(color: AppColors.gray500),
                               ),
                             ),
                             Text(
@@ -621,11 +561,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                               ),
                               child: Text(
                                 '이메일 찾기',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.gray500,
-                                ),
+                                style: AppTextStyles.title3.copyWith(color: AppColors.gray500),
                               ),
                             ),
                             Text(
@@ -644,11 +580,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                               ),
                               child: Text(
                                 '비밀번호 찾기',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.gray500,
-                                ),
+                                style: AppTextStyles.title3.copyWith(color: AppColors.gray500),
                               ),
                             ),
                           ],
@@ -712,11 +644,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
               const SizedBox(width: 12),
               Text(
                 text,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.darkBlue,
-                ),
+                style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
               ),
             ],
           ),

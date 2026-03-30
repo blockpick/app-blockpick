@@ -33,11 +33,7 @@ class EventPointsScreen extends ConsumerWidget {
         appBar: AppBar(
           title: const Text(
             '이벤트 포인트',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           backgroundColor: AppColors.white,
           foregroundColor: AppColors.darkBlue,
@@ -110,10 +106,7 @@ class EventPointsScreen extends ConsumerWidget {
             ),
             child: const Text(
               '포인트 충전하기',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
+              style: AppTextStyles.title3,
             ),
           ),
           const SizedBox(height: 24),
@@ -138,15 +131,11 @@ class EventPointsScreen extends ConsumerWidget {
             children: [
               const Text(
                 '적립/사용 내역',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.darkBlue,
-                ),
+                style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
               ),
               Text(
                 dateLabel,
-                style: AppTextStyles.bodySmall.copyWith(
+                style: AppTextStyles.body4.copyWith(
                   color: AppColors.gray500,
                 ),
               ),
@@ -169,7 +158,7 @@ class EventPointsScreen extends ConsumerWidget {
                   width: 80,
                   child: Text(
                     '일자',
-                    style: AppTextStyles.bodySmall.copyWith(
+                    style: AppTextStyles.body4.copyWith(
                       color: AppColors.gray600,
                       fontWeight: FontWeight.w600,
                     ),
@@ -178,7 +167,7 @@ class EventPointsScreen extends ConsumerWidget {
                 Expanded(
                   child: Text(
                     '내역',
-                    style: AppTextStyles.bodySmall.copyWith(
+                    style: AppTextStyles.body4.copyWith(
                       color: AppColors.gray600,
                       fontWeight: FontWeight.w600,
                     ),
@@ -189,7 +178,7 @@ class EventPointsScreen extends ConsumerWidget {
                   width: 70,
                   child: Text(
                     '포인트',
-                    style: AppTextStyles.bodySmall.copyWith(
+                    style: AppTextStyles.body4.copyWith(
                       color: AppColors.gray600,
                       fontWeight: FontWeight.w600,
                     ),
@@ -206,7 +195,7 @@ class EventPointsScreen extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(vertical: 40),
               child: Text(
                 '포인트 내역이 없습니다.',
-                style: AppTextStyles.body.copyWith(
+                style: AppTextStyles.body3.copyWith(
                   color: AppColors.gray500,
                 ),
               ),
@@ -236,7 +225,7 @@ class EventPointsScreen extends ConsumerWidget {
             width: 80,
             child: Text(
               tx.date,
-              style: AppTextStyles.bodySmall.copyWith(
+              style: AppTextStyles.body4.copyWith(
                 color: AppColors.gray600,
               ),
             ),
@@ -244,7 +233,7 @@ class EventPointsScreen extends ConsumerWidget {
           Expanded(
             child: Text(
               tx.description,
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 color: AppColors.darkBlue,
                 fontSize: 13,
               ),
@@ -255,11 +244,7 @@ class EventPointsScreen extends ConsumerWidget {
             width: 70,
             child: Text(
               pointText,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: isPositive ? AppColors.blue : AppColors.red,
-              ),
+              style: AppTextStyles.caption2.copyWith(color: isPositive ? AppColors.blue : AppColors.red),
               textAlign: TextAlign.right,
             ),
           ),
@@ -281,7 +266,7 @@ class EventPointsScreen extends ConsumerWidget {
         child: Center(
           child: Text(
             'AD Banner',
-            style: AppTextStyles.body.copyWith(
+            style: AppTextStyles.body3.copyWith(
               color: AppColors.gray500,
               fontWeight: FontWeight.w500,
             ),

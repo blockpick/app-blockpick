@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/auth/domain/providers/auth_provider.dart';
 import '../../../../core/auth/domain/exceptions/auth_exception.dart';
 
@@ -319,11 +320,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                 ),
                 child: const Text(
                   'Sign in',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: AppColors.primaryMain,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: AppTextStyles.caption2.copyWith(color: AppColors.primaryMain),
                 ),
               ),
             ],
@@ -388,10 +385,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
         const SizedBox(height: 16),
         const Text(
           'Email',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
+          style: AppTextStyles.title3,
         ),
         const SizedBox(height: 8),
         TextFormField(
@@ -449,7 +443,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                   ),
                   child: const Text(
                     'Send Verification Code',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    style: AppTextStyles.title2,
                   ),
                 ),
               ),
@@ -472,10 +466,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
         const SizedBox(height: 16),
         const Text(
           'Verification Code',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
+          style: AppTextStyles.title3,
         ),
         const SizedBox(height: 8),
         TextFormField(
@@ -517,11 +508,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
           onPressed: _handleSendCode,
           child: const Text(
             'Resend Code',
-            style: TextStyle(
-              fontSize: 13,
-              color: AppColors.primaryMain,
-              fontWeight: FontWeight.w500,
-            ),
+            style: AppTextStyles.body4.copyWith(color: AppColors.primaryMain),
           ),
         ),
         const SizedBox(height: 16),
@@ -546,7 +533,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                   ),
                   child: const Text(
                     'Verify Code',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    style: AppTextStyles.title2,
                   ),
                 ),
               ),
@@ -571,7 +558,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
         // 닉네임
         const Text(
           'Nickname',
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+          style: AppTextStyles.title3,
         ),
         const SizedBox(height: 8),
         TextFormField(
@@ -611,7 +598,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
         // 비밀번호
         const Text(
           'Password',
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+          style: AppTextStyles.title3,
         ),
         const SizedBox(height: 8),
         TextFormField(
@@ -666,7 +653,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
         // 비밀번호 확인
         const Text(
           'Confirm Password',
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+          style: AppTextStyles.title3,
         ),
         const SizedBox(height: 8),
         TextFormField(
@@ -740,7 +727,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                   ),
                   child: const Text(
                     'Sign Up',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    style: AppTextStyles.title2,
                   ),
                 ),
               ),

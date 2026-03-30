@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/auth/domain/providers/auth_provider.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 
 /// SC-011-02: 내 정보 수정 화면
 class ProfileEditScreen extends ConsumerStatefulWidget {
@@ -28,11 +29,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
         appBar: AppBar(
           title: const Text(
             '내 정보 수정',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           backgroundColor: AppColors.white,
           foregroundColor: AppColors.darkBlue,
@@ -116,13 +113,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
           onTap: () => _showNicknameChangeDialog(context, user),
           child: Text(
             '닉네임 변경',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: AppColors.blue,
-              decoration: TextDecoration.underline,
-              decorationColor: AppColors.blue,
-            ),
+            style: AppTextStyles.title3.copyWith(color: AppColors.blue, decoration: TextDecoration.underline),
           ),
         ),
       ],
@@ -199,11 +190,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
             children: [
               Text(
                 title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.darkBlue,
-                ),
+                style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
               ),
               const Spacer(),
               if (value != null && value.isNotEmpty) ...[
@@ -298,11 +285,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
             ),
             title: const Text(
               '닉네임 변경',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: AppColors.darkBlue,
-              ),
+              style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
               textAlign: TextAlign.center,
             ),
             content: Column(
@@ -532,11 +515,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
         ),
         title: const Text(
           '로그아웃 하시겠어요?',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: AppColors.darkBlue,
-          ),
+          style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
         ),
         content: const Text(
           '로그아웃 하시면 재 로그인 전까지\n블록픽 이벤트에 응모할 수 없어요.',

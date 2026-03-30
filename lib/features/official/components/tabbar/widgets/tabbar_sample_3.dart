@@ -107,7 +107,7 @@ class _TabBarSample3State extends State<TabBarSample3>
                         ),
                         Text(
                           'Liquid Swipe TabBar',
-                          style: AppTextStyles.large.copyWith(
+                          style: AppTextStyles.heading1.copyWith(
                             fontWeight: FontWeight.bold,
                             color: AppColors.white,
                           ),

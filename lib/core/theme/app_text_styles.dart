@@ -1,121 +1,251 @@
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
-/// BlockPick 앱의 텍스트 스타일 시스템
+/// BlockPick 디자인 시스템 — 타이포그래피 토큰
 ///
-/// UI_SPECIFICATION 문서에서 정의된 타이포그래피를 구현합니다.
+/// Figma "블록픽_2026 / 02.디자인" 기준으로 생성됨.
+/// 폰트: Pretendard, letterSpacing: -0.5% ~ -1%
 class AppTextStyles {
-  // ========== Font Sizes ==========
+  // ========================================
+  // Display (최대 크기)
+  // ========================================
 
-  /// Display / H1 - 32px (font-bold)
-  static const TextStyle display = TextStyle(
+  /// Display 1 — 32px Bold
+  static const TextStyle display1 = TextStyle(
+    fontFamily: 'Pretendard',
     fontSize: 32,
     fontWeight: FontWeight.w700,
-    height: 1.2,
+    height: 40 / 32,
+    letterSpacing: -0.16,
     color: AppColors.textBlack,
   );
 
-  /// Large / H2 - 24px (font-bold)
-  static const TextStyle large = TextStyle(
+  /// Display 2 — 28px Bold
+  static const TextStyle display2 = TextStyle(
+    fontFamily: 'Pretendard',
+    fontSize: 28,
+    fontWeight: FontWeight.w700,
+    height: 36 / 28,
+    letterSpacing: -0.14,
+    color: AppColors.textBlack,
+  );
+
+  // ========================================
+  // Heading (섹션 제목)
+  // ========================================
+
+  /// Heading 1 — 24px Bold
+  static const TextStyle heading1 = TextStyle(
+    fontFamily: 'Pretendard',
     fontSize: 24,
     fontWeight: FontWeight.w700,
-    height: 1.3,
+    height: 32 / 24,
+    letterSpacing: -0.12,
     color: AppColors.textBlack,
   );
 
-  /// Medium / H3 - 18px (font-semibold)
-  static const TextStyle medium = TextStyle(
+  /// Heading 2 — 22px Bold
+  static const TextStyle heading2 = TextStyle(
+    fontFamily: 'Pretendard',
+    fontSize: 22,
+    fontWeight: FontWeight.w700,
+    height: 28 / 22,
+    letterSpacing: -0.11,
+    color: AppColors.textBlack,
+  );
+
+  /// Heading 3 — 20px SemiBold
+  static const TextStyle heading3 = TextStyle(
+    fontFamily: 'Pretendard',
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    height: 28 / 20,
+    letterSpacing: -0.1,
+    color: AppColors.textBlack,
+  );
+
+  // ========================================
+  // Title (컨텐츠 제목)
+  // ========================================
+
+  /// Title 1 — 18px SemiBold, lh:24px, ls:-0.5%
+  static const TextStyle title1 = TextStyle(
+    fontFamily: 'Pretendard',
     fontSize: 18,
     fontWeight: FontWeight.w600,
-    height: 1.4,
+    height: 24 / 18,
+    letterSpacing: -0.09,
     color: AppColors.textBlack,
   );
 
-  /// Body Large - 16px (font-medium)
-  static const TextStyle bodyLarge = TextStyle(
+  /// Title 2 — 16px SemiBold, lh:24px, ls:-0.5%
+  static const TextStyle title2 = TextStyle(
+    fontFamily: 'Pretendard',
     fontSize: 16,
-    fontWeight: FontWeight.w500,
-    height: 1.5,
-    color: AppColors.gray800,
+    fontWeight: FontWeight.w600,
+    height: 24 / 16,
+    letterSpacing: -0.08,
+    color: AppColors.textBlack,
   );
 
-  /// Body - 14px (font-normal)
-  static const TextStyle body = TextStyle(
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    height: 1.5,
-    color: AppColors.gray800,
-  );
-
-  /// Body Small - 12px (font-normal)
-  static const TextStyle bodySmall = TextStyle(
-    fontSize: 12,
-    fontWeight: FontWeight.w400,
-    height: 1.4,
-    color: AppColors.gray600,
-  );
-
-  /// Caption - 10px (font-normal)
-  static const TextStyle caption = TextStyle(
-    fontSize: 10,
-    fontWeight: FontWeight.w400,
-    height: 1.4,
-    color: AppColors.gray400,
-  );
-
-  // ========== Alias Styles (다른 파일 호환용) ==========
-
-  /// XLarge - display와 동일
-  static const TextStyle xlarge = display;
-
-  /// Small - bodySmall과 동일
-  static const TextStyle small = bodySmall;
-
-  // ========== Specific Use Cases ==========
-
-  /// Button Text - 14px semibold
-  static const TextStyle button = TextStyle(
+  /// Title 3 — 14px SemiBold, lh:20px, ls:-0.5%
+  static const TextStyle title3 = TextStyle(
+    fontFamily: 'Pretendard',
     fontSize: 14,
     fontWeight: FontWeight.w600,
-    height: 1.2,
-    letterSpacing: 0.2,
+    height: 20 / 14,
+    letterSpacing: -0.07,
+    color: AppColors.textBlack,
   );
 
-  /// Button Large - 16px bold
-  static const TextStyle buttonLarge = TextStyle(
+  // ========================================
+  // Body (본문)
+  // ========================================
+
+  /// Body 1 — 16px Regular, lh:24px
+  static const TextStyle body1 = TextStyle(
+    fontFamily: 'Pretendard',
     fontSize: 16,
-    fontWeight: FontWeight.w700,
-    height: 1.2,
-    letterSpacing: 0.3,
+    fontWeight: FontWeight.w400,
+    height: 24 / 16,
+    letterSpacing: -0.08,
+    color: AppColors.gray800,
   );
 
-  /// Label - 12px medium
-  static const TextStyle label = TextStyle(
+  /// Body 2 — 16px Medium, lh:24px, ls:-0.5%
+  static const TextStyle body2 = TextStyle(
+    fontFamily: 'Pretendard',
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    height: 24 / 16,
+    letterSpacing: -0.08,
+    color: AppColors.gray800,
+  );
+
+  /// Body 3 — 14px Regular, lh:20px
+  static const TextStyle body3 = TextStyle(
+    fontFamily: 'Pretendard',
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    height: 20 / 14,
+    letterSpacing: -0.07,
+    color: AppColors.gray800,
+  );
+
+  /// Body 4 — 12px Medium, lh:16px, ls:-0.5%
+  static const TextStyle body4 = TextStyle(
+    fontFamily: 'Pretendard',
     fontSize: 12,
     fontWeight: FontWeight.w500,
-    height: 1.3,
+    height: 16 / 12,
+    letterSpacing: -0.06,
+    color: AppColors.gray800,
+  );
+
+  // ========================================
+  // Caption (보조 텍스트)
+  // ========================================
+
+  /// Caption 1 — 12px Regular, lh:16px, ls:-1%
+  static const TextStyle caption1 = TextStyle(
+    fontFamily: 'Pretendard',
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    height: 16 / 12,
+    letterSpacing: -0.12,
     color: AppColors.gray600,
   );
 
-  /// Hint - 14px normal
-  static const TextStyle hint = TextStyle(
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    height: 1.5,
+  /// Caption 2 — 12px SemiBold, lh:16px, ls:-1%
+  static const TextStyle caption2 = TextStyle(
+    fontFamily: 'Pretendard',
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+    height: 16 / 12,
+    letterSpacing: -0.12,
+    color: AppColors.gray600,
+  );
+
+  /// Caption 3 — 12px Bold, lh:16px, ls:-1%
+  static const TextStyle caption3 = TextStyle(
+    fontFamily: 'Pretendard',
+    fontSize: 12,
+    fontWeight: FontWeight.w700,
+    height: 16 / 12,
+    letterSpacing: -0.12,
+    color: AppColors.gray600,
+  );
+
+  /// Caption 4 — 11px SemiBold, lh:12px, ls:-1%
+  static const TextStyle caption4 = TextStyle(
+    fontFamily: 'Pretendard',
+    fontSize: 11,
+    fontWeight: FontWeight.w600,
+    height: 12 / 11,
+    letterSpacing: -0.11,
     color: AppColors.gray400,
   );
 
-  // ========== Gradient Text Support ==========
+  // ========================================
+  // Specific Use Cases
+  // ========================================
 
-  /// Gradient 텍스트를 위한 유틸리티
-  ///
-  /// 사용 예:
-  /// ```dart
-  /// Text(
-  ///   'Gradient Text',
-  ///   style: AppTextStyles.gradientText(AppTextStyles.display),
-  /// )
-  /// ```
+  /// Button — 14px SemiBold
+  static const TextStyle button = TextStyle(
+    fontFamily: 'Pretendard',
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    height: 20 / 14,
+    letterSpacing: -0.07,
+  );
+
+  /// Button Large — 16px Bold
+  static const TextStyle buttonLarge = TextStyle(
+    fontFamily: 'Pretendard',
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    height: 24 / 16,
+    letterSpacing: -0.08,
+  );
+
+  /// Label — 12px Medium
+  static const TextStyle label = TextStyle(
+    fontFamily: 'Pretendard',
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+    height: 16 / 12,
+    letterSpacing: -0.06,
+    color: AppColors.gray600,
+  );
+
+  /// Hint — 14px Regular
+  static const TextStyle hint = TextStyle(
+    fontFamily: 'Pretendard',
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    height: 20 / 14,
+    letterSpacing: -0.07,
+    color: AppColors.gray400,
+  );
+
+  // ========================================
+  // Aliases (기존 코드 호환용)
+  // ========================================
+
+  static const TextStyle display = display1;
+  static const TextStyle large = heading1;
+  static const TextStyle xlarge = display1;
+  static const TextStyle medium = title1;
+  static const TextStyle bodyLarge = body2;
+  static const TextStyle body = body3;
+  static const TextStyle bodySmall = body4;
+  static const TextStyle small = body4;
+  static const TextStyle caption = caption1;
+
+  // ========================================
+  // Utility
+  // ========================================
+
   static TextStyle gradientText(TextStyle baseStyle) {
     return baseStyle.copyWith(
       foreground: Paint()
@@ -125,19 +255,14 @@ class AppTextStyles {
     );
   }
 
-  // ========== Color Variations ==========
-
-  /// 텍스트 색상을 변경합니다.
   static TextStyle withColor(TextStyle style, Color color) {
     return style.copyWith(color: color);
   }
 
-  /// 텍스트 두께를 변경합니다.
   static TextStyle withWeight(TextStyle style, FontWeight weight) {
     return style.copyWith(fontWeight: weight);
   }
 
-  /// 텍스트 크기를 변경합니다.
   static TextStyle withSize(TextStyle style, double size) {
     return style.copyWith(fontSize: size);
   }

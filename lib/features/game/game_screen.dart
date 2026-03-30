@@ -516,7 +516,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               const SizedBox(width: 8),
               Text(
                 title,
-                style: AppTextStyles.large.copyWith(
+                style: AppTextStyles.heading1.copyWith(
                   color: AppColors.darkBlue,
                   fontWeight: FontWeight.bold,
                 ),
@@ -526,7 +526,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           const SizedBox(height: 8),
           Text(
             description,
-            style: AppTextStyles.bodySmall.copyWith(color: AppColors.navy),
+            style: AppTextStyles.body4.copyWith(color: AppColors.navy),
           ),
         ],
       ),
@@ -767,11 +767,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                   children: [
                     Text(
                       '상품 정보',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.darkBlue,
-                      ),
+                      style: AppTextStyles.body4.copyWith(color: AppColors.darkBlue),
                     ),
                     const SizedBox(width: 2),
                     Icon(
@@ -811,11 +807,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                       ),
                       child: Text(
                         '입찰가능 ${_formatBidPrice(bidRange.$1)}~${_formatBidPrice(bidRange.$2)}원',
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.darkBlue,
-                        ),
+                        style: AppTextStyles.caption2.copyWith(color: AppColors.darkBlue),
                       ),
                     );
                   },
@@ -920,11 +912,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                         ),
                         Text(
                           '/$_pickMax개 선택',
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
+                          style: AppTextStyles.title2.copyWith(color: Colors.white),
                         ),
                         const SizedBox(width: 4),
                         const Icon(
@@ -1019,11 +1007,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                     Expanded(
                       child: Text(
                         appBarTitle,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.darkBlue,
-                        ),
+                        style: AppTextStyles.buttonLarge.copyWith(color: AppColors.darkBlue),
                         textAlign: TextAlign.center,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -1087,11 +1071,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                 Expanded(
                   child: Text(
                     productName,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.darkBlue,
-                    ),
+                    style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -1156,11 +1136,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           // Row 1: 상품명
           Text(
             productName,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -1188,13 +1164,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               const SizedBox(width: 4),
               Text(
                 _formatRemainingTime(remaining),
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: remaining.inMinutes < 30
-                      ? AppColors.red
-                      : AppColors.gray600,
-                ),
+                style: AppTextStyles.caption2.copyWith(color: remaining.inMinutes < 30),
               ),
             ],
           ),
@@ -1241,11 +1211,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         const SizedBox(width: 4),
         Text(
           _formatPrice(value),
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            color: AppColors.gray600,
-          ),
+          style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
         ),
       ],
     );
@@ -1260,11 +1226,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         const SizedBox(width: 4),
         Text(
           text,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            color: AppColors.gray600,
-          ),
+          style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
         ),
       ],
     );
@@ -1403,11 +1365,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                     hasBid
                         ? '${_formatPrice(_selectedBidPrice!)}원에 입찰하기'
                         : '가격을 선택하세요',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
+                    style: AppTextStyles.title3.copyWith(color: Colors.white),
                   ),
                   const SizedBox(width: 4),
                   const Icon(
@@ -1443,11 +1401,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               children: [
                 Text(
                   '직접입력',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.darkBlue,
-                  ),
+                  style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
                 ),
                 const SizedBox(width: 2),
                 Icon(
@@ -1572,10 +1526,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                   ),
                   child: const Text(
                     '확인',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: AppTextStyles.title2,
                   ),
                 ),
               ),
@@ -1704,11 +1655,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                                     children: [
                                       Text(
                                         product.name,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                          color: AppColors.darkBlue,
-                                        ),
+                                        style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -1740,11 +1687,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                                           Text(
                                             _formatPrice(
                                                 product.price ?? 0),
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w500,
-                                              color: AppColors.gray600,
-                                            ),
+                                            style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
                                           ),
                                         ],
                                       ),
@@ -1827,11 +1770,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     selectedProduct.name,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.darkBlue,
-                    ),
+                    style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
                   ),
                 ),
               ),
@@ -1910,10 +1849,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                       ),
                       child: const Text(
                         '확인',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: AppTextStyles.title2,
                       ),
                     ),
                   ),

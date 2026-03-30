@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 
 /// 상품 이미지 위에 1000x1000 좌표 선택을 위한 게임 캔버스
 class GameCanvas extends StatelessWidget {
@@ -199,12 +200,7 @@ class _CoordinateHUD extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
-            color: AppColors.white.withValues(alpha: 0.5),
-            fontSize: 10,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 2,
-          ),
+          style: AppTextStyles.caption4.copyWith(color: AppColors.white.withValues(alpha: 0.5)),
         ),
         const SizedBox(height: 2),
         Text(

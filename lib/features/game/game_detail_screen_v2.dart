@@ -93,7 +93,7 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
             children: [
               const Icon(LucideIcons.alertCircle, size: 64, color: AppColors.red),
               const SizedBox(height: 16),
-              Text('Game not found', style: AppTextStyles.large),
+              Text('Game not found', style: AppTextStyles.heading1),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
@@ -219,7 +219,7 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
               Expanded(
                 child: Text(
                   _game!.title,
-                  style: AppTextStyles.large.copyWith(
+                  style: AppTextStyles.heading1.copyWith(
                     color: AppColors.darkBlue,
                     fontWeight: FontWeight.w700,
                   ),
@@ -252,13 +252,13 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
                 children: [
                   Text(
                     'Brand: APPLE',
-                    style: AppTextStyles.bodySmall.copyWith(
+                    style: AppTextStyles.body4.copyWith(
                       color: AppColors.medium,
                     ),
                   ),
                   Text(
                     'Value: \$${(_game!.originalPrice / 1000).toStringAsFixed(2)}',
-                    style: AppTextStyles.body.copyWith(
+                    style: AppTextStyles.body3.copyWith(
                       color: AppColors.darkBlue,
                       fontWeight: FontWeight.w600,
                     ),
@@ -317,11 +317,11 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
       children: [
         Text(
           label,
-          style: AppTextStyles.bodySmall.copyWith(color: AppColors.medium),
+          style: AppTextStyles.body4.copyWith(color: AppColors.medium),
         ),
         Text(
           value,
-          style: AppTextStyles.bodySmall.copyWith(
+          style: AppTextStyles.body4.copyWith(
             color: AppColors.darkBlue,
             fontWeight: FontWeight.w600,
           ),
@@ -345,7 +345,7 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
             const SizedBox(height: 16),
             Text(
               'Select blocks on the grid',
-              style: AppTextStyles.body.copyWith(color: AppColors.medium),
+              style: AppTextStyles.body3.copyWith(color: AppColors.medium),
             ),
           ],
         ),
@@ -385,7 +385,7 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
                 contentPadding: const EdgeInsets.symmetric(vertical: 4),
                 title: Text(
                   '${block.row} Row, ${block.col} Column',
-                  style: AppTextStyles.body.copyWith(
+                  style: AppTextStyles.body3.copyWith(
                     color: AppColors.darkBlue,
                     fontWeight: FontWeight.w600,
                   ),
@@ -426,11 +426,11 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
                 children: [
                   Text(
                     'Total Cost',
-                    style: AppTextStyles.body.copyWith(color: AppColors.medium),
+                    style: AppTextStyles.body3.copyWith(color: AppColors.medium),
                   ),
                   Text(
                     '₩${_formatNumber(totalCost)}',
-                    style: AppTextStyles.bodyLarge.copyWith(
+                    style: AppTextStyles.body2.copyWith(
                       color: AppColors.blue,
                       fontWeight: FontWeight.w700,
                     ),
@@ -447,7 +447,7 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('Confirmed ${_selectedBlocks.length} blocks!'),
-                    backgroundColor: AppColors.green,
+                    backgroundColor: AppColors.green500,
                   ),
                 );
               },

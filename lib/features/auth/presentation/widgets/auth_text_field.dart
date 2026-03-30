@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 
 /// 토스 스타일의 텍스트 입력 필드
 class AuthTextField extends StatefulWidget {
@@ -87,11 +88,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
         if (widget.label != null) ...[
           Text(
             widget.label!,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
           ),
           const SizedBox(height: 8),
         ],
@@ -120,18 +117,10 @@ class _AuthTextFieldState extends State<AuthTextField> {
             onEditingComplete: widget.onEditingComplete,
             onSubmitted: widget.onSubmitted,
             maxLength: widget.maxLength,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
             decoration: InputDecoration(
               hintText: widget.hint,
-              hintStyle: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                color: AppColors.gray500,
-              ),
+              hintStyle: AppTextStyles.body1.copyWith(color: AppColors.gray500),
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 16,
@@ -157,11 +146,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
               Expanded(
                 child: Text(
                   widget.errorText!,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.red,
-                  ),
+                  style: AppTextStyles.body3.copyWith(color: AppColors.red),
                 ),
               ),
             ],
@@ -310,11 +295,7 @@ class _AuthCodeInputState extends State<AuthCodeInput> {
                 FilteringTextInputFormatter.digitsOnly,
               ],
               onChanged: (value) => _onChanged(index, value),
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-                color: AppColors.darkBlue,
-              ),
+              style: AppTextStyles.heading1.copyWith(color: AppColors.darkBlue),
               decoration: InputDecoration(
                 counterText: '',
                 contentPadding: EdgeInsets.zero,

@@ -31,7 +31,7 @@ class AnnouncementsWidget extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
             child: Text(
               'Announcements',
-              style: AppTextStyles.large.copyWith(
+              style: AppTextStyles.heading1.copyWith(
                 fontWeight: FontWeight.w700,
                 fontSize: 22,
               ),
@@ -70,7 +70,7 @@ class AnnouncementsWidget extends StatelessWidget {
                 child: Center(
                   child: Text(
                     'View more',
-                    style: AppTextStyles.body.copyWith(
+                    style: AppTextStyles.body3.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColors.navy,
                     ),
@@ -99,7 +99,7 @@ class AnnouncementsWidget extends StatelessWidget {
           children: [
             Text(
               announcement.title,
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 fontWeight: FontWeight.w600,
                 fontSize: 15,
                 color: AppColors.navy,
@@ -110,7 +110,7 @@ class AnnouncementsWidget extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               announcement.formattedDate,
-              style: AppTextStyles.bodySmall.copyWith(
+              style: AppTextStyles.body4.copyWith(
                 color: AppColors.medium,
                 fontSize: 13,
               ),

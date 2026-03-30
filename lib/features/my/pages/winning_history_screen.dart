@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 
 /// 당첨 내역 화면
 class WinningHistoryScreen extends ConsumerWidget {
@@ -21,11 +22,7 @@ class WinningHistoryScreen extends ConsumerWidget {
         appBar: AppBar(
           title: const Text(
             '당첨 내역',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           backgroundColor: AppColors.gray100,
           foregroundColor: AppColors.darkBlue,
@@ -59,11 +56,7 @@ class WinningHistoryScreen extends ConsumerWidget {
           const SizedBox(height: 16),
           Text(
             '당첨 내역이 없습니다',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: AppColors.gray500,
-            ),
+            style: AppTextStyles.body2.copyWith(color: AppColors.gray500),
           ),
           const SizedBox(height: 8),
           Text(
@@ -93,7 +86,7 @@ class _WinningItem extends StatelessWidget {
         color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppColors.green.withValues(alpha: 0.3),
+          color: AppColors.green500.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -106,12 +99,12 @@ class _WinningItem extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: AppColors.green.withValues(alpha: 0.1),
+                  color: AppColors.green500.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(
                   Icons.emoji_events_rounded,
-                  color: AppColors.green,
+                  color: AppColors.green500,
                   size: 20,
                 ),
               ),
@@ -122,11 +115,7 @@ class _WinningItem extends StatelessWidget {
                   children: [
                     Text(
                       winning['gameTitle'] as String,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.darkBlue,
-                      ),
+                      style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
                     ),
                     const SizedBox(height: 2),
                     Text(
@@ -160,11 +149,7 @@ class _WinningItem extends StatelessWidget {
                 ),
                 Text(
                   winning['prize'] as String,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.darkBlue,
-                  ),
+                  style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
                 ),
               ],
             ),

@@ -27,7 +27,7 @@ class _ListSample3State extends State<ListSample3>
       icon: Icons.explore,
       title: '탐색',
       count: '89',
-      gradient: LinearGradient(colors: [AppColors.green, AppColors.blue]),
+      gradient: LinearGradient(colors: [AppColors.green500, AppColors.blue]),
     ),
     _GridItem(
       icon: Icons.favorite,
@@ -39,13 +39,13 @@ class _ListSample3State extends State<ListSample3>
       icon: Icons.shopping_cart,
       title: '장바구니',
       count: '12',
-      gradient: LinearGradient(colors: [AppColors.yellow, AppColors.pink]),
+      gradient: LinearGradient(colors: [AppColors.yellow500, AppColors.pink]),
     ),
     _GridItem(
       icon: Icons.message,
       title: '메시지',
       count: '45',
-      gradient: LinearGradient(colors: [AppColors.blue, AppColors.green]),
+      gradient: LinearGradient(colors: [AppColors.blue, AppColors.green500]),
     ),
     _GridItem(
       icon: Icons.notifications,
@@ -63,7 +63,7 @@ class _ListSample3State extends State<ListSample3>
       icon: Icons.person,
       title: '프로필',
       count: '-',
-      gradient: LinearGradient(colors: [AppColors.green, AppColors.yellow]),
+      gradient: LinearGradient(colors: [AppColors.green500, AppColors.yellow500]),
     ),
   ];
 
@@ -95,7 +95,7 @@ class _ListSample3State extends State<ListSample3>
         ),
         title: Text(
           'List #3',
-          style: AppTextStyles.large.copyWith(
+          style: AppTextStyles.heading1.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.darkBlue,
           ),
@@ -120,7 +120,7 @@ class _ListSample3State extends State<ListSample3>
             ),
             child: Text(
               '그리드 카드 리스트\n• 스케일 애니메이션\n• 그라데이션 효과',
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 color: AppColors.white,
                 fontWeight: FontWeight.w500,
               ),
@@ -225,7 +225,7 @@ class _ListSample3State extends State<ListSample3>
                       // 타이틀
                       Text(
                         item.title,
-                        style: AppTextStyles.large.copyWith(
+                        style: AppTextStyles.heading1.copyWith(
                           fontWeight: FontWeight.bold,
                           color: AppColors.white,
                         ),
@@ -234,7 +234,7 @@ class _ListSample3State extends State<ListSample3>
                       // 카운트
                       Text(
                         item.count,
-                        style: AppTextStyles.display.copyWith(
+                        style: AppTextStyles.display1.copyWith(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
                           color: AppColors.white.withValues(alpha: 0.9),

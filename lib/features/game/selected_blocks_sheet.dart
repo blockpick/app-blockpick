@@ -4,6 +4,7 @@ import '../../models/block_model.dart';
 import '../../models/game_model.dart';
 import '../../models/game_round_model.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 import '../../providers/grid_state_provider.dart';
 import '../../providers/game_participation_provider.dart';
 import '../../components/cards/block_item_card.dart';
@@ -144,11 +145,7 @@ class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
                       ),
                       child: Text(
                         '${selectedBlocks.length}개 좌표',
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.blue,
-                        ),
+                        style: AppTextStyles.caption2.copyWith(color: AppColors.blue),
                       ),
                     ),
                     const Spacer(),
@@ -168,11 +165,7 @@ class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
                       },
                       child: Text(
                         '전체선택',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.gray600,
-                        ),
+                        style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
                       ),
                     ),
                     Padding(
@@ -203,11 +196,7 @@ class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
                           : null,
                       child: Text(
                         '선택삭제',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          color: checkedCount > 0 ? AppColors.red : AppColors.gray400,
-                        ),
+                        style: AppTextStyles.body4.copyWith(color: checkedCount > 0 ? AppColors.red : AppColors.gray400),
                       ),
                     ),
                   ],
@@ -299,11 +288,7 @@ class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
                               totalCost > 0
                                   ? '참여하기 (${_formatNumber(totalCost)}P)'
                                   : '참여하기',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.white,
-                              ),
+                              style: AppTextStyles.buttonLarge.copyWith(color: AppColors.white),
                             ),
                           ),
                         ),
@@ -318,11 +303,7 @@ class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
                           child: Center(
                             child: Text(
                               '취소',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.gray600,
-                              ),
+                              style: AppTextStyles.body2.copyWith(color: AppColors.gray600),
                             ),
                           ),
                         ),

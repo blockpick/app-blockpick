@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 
 /// 비밀번호 변경 화면
 class PasswordChangeScreen extends ConsumerStatefulWidget {
@@ -50,7 +51,7 @@ class _PasswordChangeScreenState extends ConsumerState<PasswordChangeScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text('비밀번호가 변경되었습니다'),
-            backgroundColor: AppColors.green,
+            backgroundColor: AppColors.green500,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
@@ -90,11 +91,7 @@ class _PasswordChangeScreenState extends ConsumerState<PasswordChangeScreen> {
         appBar: AppBar(
           title: const Text(
             '비밀번호 변경',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           backgroundColor: AppColors.gray100,
           foregroundColor: AppColors.darkBlue,
@@ -167,11 +164,7 @@ class _PasswordChangeScreenState extends ConsumerState<PasswordChangeScreen> {
                   children: [
                     Text(
                       '비밀번호 규칙',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.blue,
-                      ),
+                      style: AppTextStyles.caption2.copyWith(color: AppColors.blue),
                     ),
                     const SizedBox(height: 8),
                     _buildRule('영문, 숫자, 특수문자 포함'),
@@ -228,10 +221,7 @@ class _PasswordChangeScreenState extends ConsumerState<PasswordChangeScreen> {
                         )
                       : const Text(
                           '비밀번호 변경',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: AppTextStyles.title2,
                         ),
                 ),
               ),
@@ -260,11 +250,7 @@ class _PasswordChangeScreenState extends ConsumerState<PasswordChangeScreen> {
         children: [
           Text(
             label,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
-              color: AppColors.gray500,
-            ),
+            style: AppTextStyles.body4.copyWith(color: AppColors.gray500),
           ),
           const SizedBox(height: 8),
           TextFormField(

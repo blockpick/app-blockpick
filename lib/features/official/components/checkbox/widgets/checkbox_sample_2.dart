@@ -27,7 +27,7 @@ class _CheckboxSample2State extends State<CheckboxSample2> {
         ),
         title: Text(
           'Checkbox #2',
-          style: AppTextStyles.large.copyWith(
+          style: AppTextStyles.heading1.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.darkBlue,
           ),
@@ -52,7 +52,7 @@ class _CheckboxSample2State extends State<CheckboxSample2> {
             ),
             child: Text(
               '카드형 체크박스\n• 선택 시 스케일 애니메이션\n• 그림자 효과',
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 color: AppColors.darkBlue,
               ),
             ),
@@ -93,9 +93,9 @@ class _CheckboxSample2State extends State<CheckboxSample2> {
     final colors = [
       AppColors.blue,
       AppColors.pink,
-      AppColors.yellow,
+      AppColors.yellow500,
       AppColors.purple,
-      AppColors.green,
+      AppColors.green500,
       AppColors.darkBlue,
     ];
 
@@ -138,7 +138,7 @@ class _CheckboxSample2State extends State<CheckboxSample2> {
               const SizedBox(height: 12),
               Text(
                 labels[index],
-                style: AppTextStyles.bodyLarge.copyWith(
+                style: AppTextStyles.body2.copyWith(
                   fontWeight: isChecked ? FontWeight.bold : FontWeight.normal,
                   color: isChecked ? colors[index] : AppColors.darkBlue,
                 ),

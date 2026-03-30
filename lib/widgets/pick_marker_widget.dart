@@ -45,7 +45,7 @@ class PickMarkerWidget extends StatelessWidget {
       width: markerSize,
       height: markerSize,
       decoration: BoxDecoration(
-        color: isFocused ? AppColors.yellow : AppColors.blue,
+        color: isFocused ? AppColors.yellow500 : AppColors.blue,
         shape: BoxShape.circle,
         border: Border.all(
           color: AppColors.white,
@@ -155,7 +155,7 @@ class ClusterMarkerWidget extends StatelessWidget {
       child: Center(
         child: Text(
           cluster.label,
-          style: AppTextStyles.bodySmall.copyWith(
+          style: AppTextStyles.body4.copyWith(
             color: AppColors.white,
             fontWeight: FontWeight.w700,
             fontSize: _getTextSize(),
@@ -264,7 +264,7 @@ class _PulsingMarkerWidgetState extends State<PulsingMarkerWidget>
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: AppColors.yellow,
+                      color: AppColors.yellow500,
                       width: 3.0,
                     ),
                   ),

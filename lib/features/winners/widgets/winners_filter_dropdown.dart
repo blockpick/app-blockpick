@@ -40,7 +40,7 @@ class WinnersFilterDropdown<T> extends StatelessWidget {
           children: [
             Text(
               labelBuilder(value),
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 color: AppColors.darkBlue,
                 fontWeight: FontWeight.w500,
               ),
@@ -63,7 +63,7 @@ class WinnersFilterDropdown<T> extends StatelessWidget {
               children: [
                 Text(
                   labelBuilder(item),
-                  style: AppTextStyles.body.copyWith(
+                  style: AppTextStyles.body3.copyWith(
                     color: isSelected ? AppColors.blue : AppColors.darkBlue,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                   ),

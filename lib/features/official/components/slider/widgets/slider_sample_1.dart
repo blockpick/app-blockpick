@@ -30,7 +30,7 @@ class _SliderSample1State extends State<SliderSample1> {
         ),
         title: Text(
           'Slider #1',
-          style: AppTextStyles.large.copyWith(
+          style: AppTextStyles.heading1.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.darkBlue,
           ),
@@ -50,12 +50,12 @@ class _SliderSample1State extends State<SliderSample1> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppColors.yellow.withValues(alpha: 0.1),
+              color: AppColors.yellow500.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(AppConstants.radiusMd),
             ),
             child: Text(
               '기본 슬라이더 스타일\n• 실시간 값 표시\n• 다양한 색상 지원',
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 color: AppColors.darkBlue,
               ),
             ),
@@ -82,7 +82,7 @@ class _SliderSample1State extends State<SliderSample1> {
             icon: Icons.brightness_6,
             label: '밝기',
             value: _brightnessValue,
-            color: AppColors.yellow,
+            color: AppColors.yellow500,
             unit: '%',
             onChanged: (value) {
               setState(() {
@@ -114,7 +114,7 @@ class _SliderSample1State extends State<SliderSample1> {
             icon: Icons.speed,
             label: '속도',
             value: _speedValue,
-            color: AppColors.green,
+            color: AppColors.green500,
             unit: 'km/h',
             max: 120,
             onChanged: (value) {
@@ -162,7 +162,7 @@ class _SliderSample1State extends State<SliderSample1> {
               Expanded(
                 child: Text(
                   label,
-                  style: AppTextStyles.large.copyWith(
+                  style: AppTextStyles.heading1.copyWith(
                     fontWeight: FontWeight.bold,
                     color: AppColors.darkBlue,
                   ),
@@ -177,7 +177,7 @@ class _SliderSample1State extends State<SliderSample1> {
                 ),
                 child: Text(
                   '${value.toInt()}$unit',
-                  style: AppTextStyles.bodyLarge.copyWith(
+                  style: AppTextStyles.body2.copyWith(
                     fontWeight: FontWeight.bold,
                     color: color,
                   ),
@@ -207,13 +207,13 @@ class _SliderSample1State extends State<SliderSample1> {
             children: [
               Text(
                 '${min.toInt()}$unit',
-                style: AppTextStyles.body.copyWith(
+                style: AppTextStyles.body3.copyWith(
                   color: AppColors.medium,
                 ),
               ),
               Text(
                 '${max.toInt()}$unit',
-                style: AppTextStyles.body.copyWith(
+                style: AppTextStyles.body3.copyWith(
                   color: AppColors.medium,
                 ),
               ),

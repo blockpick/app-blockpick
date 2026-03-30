@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../widgets/auth_scaffold.dart';
 import '../widgets/auth_button.dart';
 
@@ -78,13 +79,7 @@ class _TermsAgreeScreenState extends ConsumerState<TermsAgreeScreen> {
             // 타이틀
             const Text(
               '서비스 이용약관에\n동의해주세요',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w700,
-                color: AppColors.darkBlue,
-                height: 1.3,
-                letterSpacing: -0.5,
-              ),
+              style: AppTextStyles.display2.copyWith(color: AppColors.darkBlue),
             ),
             const SizedBox(height: 40),
 
@@ -298,12 +293,7 @@ class _TermsDetailSheet extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               child: Text(
                 _getTermsContent(title),
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.gray700,
-                  height: 1.6,
-                ),
+                style: AppTextStyles.body3.copyWith(color: AppColors.gray700),
               ),
             ),
           ),

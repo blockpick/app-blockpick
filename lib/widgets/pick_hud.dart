@@ -39,7 +39,7 @@ class PickHud extends StatelessWidget {
         color: AppColors.white.withOpacity(opacity),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: done ? AppColors.green : AppColors.buleGray,
+          color: done ? AppColors.green500 : AppColors.buleGray,
           width: 2,
         ),
         boxShadow: [
@@ -63,7 +63,7 @@ class PickHud extends StatelessWidget {
               ),
               child: Text(
                 'L$zoomLevel',
-                style: AppTextStyles.bodySmall.copyWith(
+                style: AppTextStyles.body4.copyWith(
                   fontSize: 12,
                   color: AppColors.blue,
                   fontWeight: FontWeight.bold,
@@ -76,7 +76,7 @@ class PickHud extends StatelessWidget {
           // 텍스트
           Text(
             'Select $selected/$pickMax',
-            style: AppTextStyles.bodySmall.copyWith(
+            style: AppTextStyles.body4.copyWith(
               fontSize: 14,
               color: AppColors.darkBlue,
               fontWeight: FontWeight.w600,
@@ -93,7 +93,7 @@ class PickHud extends StatelessWidget {
                 value: progress,
                 backgroundColor: AppColors.disable,
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  done ? AppColors.green : AppColors.blue,
+                  done ? AppColors.green500 : AppColors.blue,
                 ),
                 minHeight: 6,
               ),
@@ -105,7 +105,7 @@ class PickHud extends StatelessWidget {
           ElevatedButton(
             onPressed: done ? onSubmit : null,
             style: ElevatedButton.styleFrom(
-              backgroundColor: done ? AppColors.green : AppColors.disable,
+              backgroundColor: done ? AppColors.green500 : AppColors.disable,
               foregroundColor: AppColors.white,
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,
@@ -118,7 +118,7 @@ class PickHud extends StatelessWidget {
             ),
             child: Text(
               done ? 'Submit' : 'Pick',
-              style: AppTextStyles.bodySmall.copyWith(
+              style: AppTextStyles.body4.copyWith(
                 fontWeight: FontWeight.bold,
                 color: AppColors.white,
               ),
@@ -156,7 +156,7 @@ class CompactPickHud extends StatelessWidget {
         color: AppColors.white.withOpacity(opacity),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: done ? AppColors.green : AppColors.buleGray,
+          color: done ? AppColors.green500 : AppColors.buleGray,
           width: 1.5,
         ),
       ),
@@ -166,7 +166,7 @@ class CompactPickHud extends StatelessWidget {
           // 텍스트
           Text(
             '$selected/$pickMax',
-            style: AppTextStyles.bodySmall.copyWith(
+            style: AppTextStyles.body4.copyWith(
               color: AppColors.darkBlue,
               fontWeight: FontWeight.bold,
             ),
@@ -182,7 +182,7 @@ class CompactPickHud extends StatelessWidget {
                 value: progress,
                 backgroundColor: AppColors.disable,
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  done ? AppColors.green : AppColors.blue,
+                  done ? AppColors.green500 : AppColors.blue,
                 ),
                 minHeight: 4,
               ),
@@ -195,7 +195,7 @@ class CompactPickHud extends StatelessWidget {
             onPressed: done ? onSubmit : null,
             icon: Icon(
               done ? Icons.check_circle : Icons.radio_button_unchecked,
-              color: done ? AppColors.green : AppColors.disable,
+              color: done ? AppColors.green500 : AppColors.disable,
               size: 20,
             ),
             padding: EdgeInsets.zero,

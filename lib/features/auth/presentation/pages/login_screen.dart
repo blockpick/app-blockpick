@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/auth/domain/providers/auth_provider.dart';
 
 /// SC-004: 로그인 화면
@@ -107,12 +108,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           children: [
             const Text(
               '비밀번호 5회 실패로 보안을 위해\n계정이 잠겼어요.',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: AppColors.darkBlue,
-                height: 1.5,
-              ),
+              style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
@@ -163,11 +159,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           children: [
             const Text(
               'Blockpick 회원 계정이 아니에요.',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AppColors.darkBlue,
-              ),
+              style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
@@ -231,11 +223,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ),
           title: const Text(
             '로그인 하기',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           centerTitle: true,
         ),
@@ -328,10 +316,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 )
                               : const Text(
                                   '로그인',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                  style: AppTextStyles.title2,
                                 ),
                         ),
                       ),
@@ -403,11 +388,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: AppColors.darkBlue,
-          ),
+          style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
         const SizedBox(height: 8),
         TextField(
@@ -472,11 +453,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       ),
       child: Text(
         text,
-        style: TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w500,
-          color: AppColors.gray600,
-        ),
+        style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
       ),
     );
   }
@@ -521,11 +498,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               const SizedBox(width: 12),
               Text(
                 text,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: textColor,
-                ),
+                style: AppTextStyles.title2.copyWith(color: textColor),
               ),
             ],
           ),

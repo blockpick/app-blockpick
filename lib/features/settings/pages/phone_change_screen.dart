@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 import '../../../core/constants/app_constants.dart';
 
 /// SC-011-05, SC-011-06: 휴대폰 번호 변경 화면
@@ -193,11 +194,7 @@ class _PhoneChangeScreenState extends ConsumerState<PhoneChangeScreen> {
         appBar: AppBar(
           title: const Text(
             '휴대폰 번호 변경',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           backgroundColor: AppColors.white,
           foregroundColor: AppColors.darkBlue,
@@ -215,11 +212,7 @@ class _PhoneChangeScreenState extends ConsumerState<PhoneChangeScreen> {
                     // 휴대폰 번호 섹션
                     const Text(
                       '휴대폰 번호',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.darkBlue,
-                      ),
+                      style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
                     ),
                     const SizedBox(height: 12),
 
@@ -388,10 +381,7 @@ class _PhoneChangeScreenState extends ConsumerState<PhoneChangeScreen> {
         ),
         child: const Text(
           '인증번호 전송',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          style: AppTextStyles.title2,
         ),
       ),
     );
@@ -465,13 +455,7 @@ class _PhoneChangeScreenState extends ConsumerState<PhoneChangeScreen> {
               ),
               child: Text(
                 _formatTime(_remainingSeconds),
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: _remainingSeconds <= 30
-                      ? AppColors.red
-                      : AppColors.darkBlue,
-                ),
+                style: AppTextStyles.title2,
               ),
             ),
           ],
@@ -511,10 +495,7 @@ class _PhoneChangeScreenState extends ConsumerState<PhoneChangeScreen> {
         ),
         child: const Text(
           '인증번호 재전송',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          style: AppTextStyles.title2,
         ),
       ),
     );
@@ -544,10 +525,7 @@ class _PhoneChangeScreenState extends ConsumerState<PhoneChangeScreen> {
             ),
             child: const Text(
               '인증 완료',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTextStyles.title2,
             ),
           ),
         ),

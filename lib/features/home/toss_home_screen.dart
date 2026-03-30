@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 import '../../core/auth/domain/providers/auth_provider.dart';
 import '../../providers/current_tab_provider.dart';
 import '../../data/mock_game_data.dart';
@@ -246,12 +247,7 @@ class _TossHomeScreenState extends ConsumerState<TossHomeScreen> {
         children: [
           Text(
             'BLOCKPICK',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: AppColors.gray500,
-              letterSpacing: 2,
-            ),
+            style: AppTextStyles.buttonLarge.copyWith(color: AppColors.gray500, letterSpacing: 2),
           ),
           const SizedBox(height: 12),
           Text(

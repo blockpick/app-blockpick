@@ -1,0 +1,786 @@
+{
+  "styles": [
+    {
+      "key": "451ca763b9805c19787e78c8cd87183bb2234619",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "525:3590",
+      "style_type": "TEXT",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/ZFR/UbK/nYBUihwQTFysfNiR/525_3590.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=1821a997c39af1d2fb015361a32a7a42591c0576014e585f43ac401ee2fa308f",
+      "name": "Caption 4",
+      "description": "",
+      "created_at": "2026-03-30T01:38:58.471Z",
+      "updated_at": "2026-03-30T01:38:58.471Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "\"E"
+    },
+    {
+      "key": "ac1c9971b5549745b13ad2227057ab31cae09d46",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "525:3549",
+      "style_type": "TEXT",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/iQV/8Fq/pC3Bf5UhsV5avTOk/525_3549.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=ddaf5c5e04a56825304dff6eefbb33662650983b1db1c95493beb26379b8891d",
+      "name": "Display 1",
+      "description": "",
+      "created_at": "2026-03-30T01:38:58.477Z",
+      "updated_at": "2026-03-30T01:38:58.477Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "\"+"
+    },
+    {
+      "key": "69c011ee78e8b80db14415c1c1969b7bd942a9b6",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "525:3556",
+      "style_type": "TEXT",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/3R6/RUI/v4OhNfliei9briLP/525_3556.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=17be808cd247315734353c075837798f4585ee5b2c761444b5241d07afa594db",
+      "name": "Title 3",
+      "description": "",
+      "created_at": "2026-03-30T01:38:58.463Z",
+      "updated_at": "2026-03-30T01:38:58.463Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "\"2"
+    },
+    {
+      "key": "e5328ed70e28d73e99cd114021da4be3c6848a75",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "525:3557",
+      "style_type": "TEXT",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/17S/puE/qtKHNM3lqoBGAVNh/525_3557.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=06586395f5e5f4da8889f8c0f7cf46901c81b288889ec65ef8cb6b0fe3095a74",
+      "name": "Body 1",
+      "description": "",
+      "created_at": "2026-03-30T01:38:58.484Z",
+      "updated_at": "2026-03-30T01:38:58.484Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "\"3"
+    },
+    {
+      "key": "d8421cb153d8e44b10e0a520ddadf3ea285c0a64",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "525:3558",
+      "style_type": "TEXT",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/DfW/o8F/8IC4HaEJISijXt8J/525_3558.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=9cd79348f8daa6b4a1d1c7489350f884f84388112e1d6e712f30ce244d37b677",
+      "name": "Body 2",
+      "description": "",
+      "created_at": "2026-03-30T01:38:58.490Z",
+      "updated_at": "2026-03-30T01:38:58.490Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "\"4"
+    },
+    {
+      "key": "5cb05ccf1fc5181f5cd393471df120cc29ee8c25",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "525:3561",
+      "style_type": "TEXT",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/vDX/CBX/usEpA2yRGXTPzYV7/525_3561.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=144b6b5dc373b92a46bffa1d971692dadf0bbef4e2c48041afb261a214331000",
+      "name": "Caption 1",
+      "description": "",
+      "created_at": "2026-03-30T01:38:58.497Z",
+      "updated_at": "2026-03-30T01:38:58.497Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "\"B"
+    },
+    {
+      "key": "ab1d0e34e1a5a24c8278187b2515179611c3a384",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "525:3563",
+      "style_type": "TEXT",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/kGv/5jH/yDKAZerUt3zrJ33b/525_3563.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=7c94ab83f4cd7fc265600c5406912ef626a1841157f4134e0a2b040c1d4aaef0",
+      "name": "Caption 3",
+      "description": "",
+      "created_at": "2026-03-30T01:38:58.503Z",
+      "updated_at": "2026-03-30T01:38:58.503Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "\"D"
+    },
+    {
+      "key": "a82dd59821421e54448755a7a667d12f3b66247a",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "525:3551",
+      "style_type": "TEXT",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/3f9/dpq/bwDz4NY03aWaZ3yX/525_3551.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=8d634f0f1fe211ae1fdcf52f21ed2ca2ff650d830f9e8c6c0394a0faade76b45",
+      "name": "Heading 1",
+      "description": "",
+      "created_at": "2026-03-30T01:38:58.509Z",
+      "updated_at": "2026-03-30T01:38:58.509Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "\"-"
+    },
+    {
+      "key": "5e02a22ee21a98920b91379ba81617f600c1a153",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "525:3560",
+      "style_type": "TEXT",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/DwY/DyA/24qzxAWvZexP0BIy/525_3560.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=7f4f4484f1f106b344db489307b38df5926b2014576febc9ff1c77ba5bc585fd",
+      "name": "Body 4",
+      "description": "",
+      "created_at": "2026-03-30T01:38:58.515Z",
+      "updated_at": "2026-03-30T01:38:58.515Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "\"6"
+    },
+    {
+      "key": "57a7ac87b9ef7007464a55ff61d8b18774530210",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "525:3562",
+      "style_type": "TEXT",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/24L/3Mp/F0AsyJIToNUJzf7f/525_3562.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=c0c3df2530b72098ff10fde24224c4b6262ba46deacc0cd6253404b1973906dd",
+      "name": "Caption 2",
+      "description": "",
+      "created_at": "2026-03-30T01:38:58.522Z",
+      "updated_at": "2026-03-30T01:38:58.522Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "\"C"
+    },
+    {
+      "key": "a33d89736c5fcbdffe3896fef3307fd146883412",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "525:3553",
+      "style_type": "TEXT",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/EMp/JPo/fuyix9TmnT0Ze7GD/525_3553.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=7d40a122b1e1f5fe8be4f29a515d39add90c1c2bd4b80998def33fe638277906",
+      "name": "Heading 3",
+      "description": "",
+      "created_at": "2026-03-30T01:38:58.531Z",
+      "updated_at": "2026-03-30T01:38:58.531Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "\"/"
+    },
+    {
+      "key": "508ef9c729d409c5d013b029b9178895f5a5ee49",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "525:3555",
+      "style_type": "TEXT",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/67Q/XKN/gWVmvHFBIyKFy9dD/525_3555.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=ff62dfb56f9273d4ab87b7506a56ac43e0e1d65b490d90664ebf8120abadd37c",
+      "name": "Title 2",
+      "description": "",
+      "created_at": "2026-03-30T01:38:58.537Z",
+      "updated_at": "2026-03-30T01:38:58.537Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "\"1"
+    },
+    {
+      "key": "86d02832f64764eba3485f5ff1a050772d5f16e7",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "525:3559",
+      "style_type": "TEXT",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/u0E/khz/ofSsoc8FKz97EJVK/525_3559.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=bc6f16a708b41f6463e44f466a8806327b1ae530daf1aa63b21d07a35c04fdea",
+      "name": "Body 3",
+      "description": "",
+      "created_at": "2026-03-30T01:38:58.543Z",
+      "updated_at": "2026-03-30T01:38:58.543Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "\"5"
+    },
+    {
+      "key": "09adcde8b948fa69187d4d592ec66f32451c4242",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "525:3550",
+      "style_type": "TEXT",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/Fwi/gmf/eUL770uuFlYhD42G/525_3550.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=7783f154a108870dba340192bb8bf36b25d74f330601cce15f78a0a169b882f5",
+      "name": "Display 2",
+      "description": "",
+      "created_at": "2026-03-30T01:38:58.550Z",
+      "updated_at": "2026-03-30T01:38:58.550Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "\","
+    },
+    {
+      "key": "56c5fe65139893728b7a806b92d6e1372d0c3e94",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "525:3552",
+      "style_type": "TEXT",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/iaB/4Bh/5PXGP2mRhSwejIkl/525_3552.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=29ccf4dfe7e69bfc5f13facaf7da3f64e62fd5b4f773c55eb10bb80d56373203",
+      "name": "Heading 2",
+      "description": "",
+      "created_at": "2026-03-30T01:38:58.558Z",
+      "updated_at": "2026-03-30T01:38:58.558Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "\"."
+    },
+    {
+      "key": "96b1d2b281d3679d3693f336fec070d1fa0cc532",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "525:3554",
+      "style_type": "TEXT",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/CXp/aBv/XJ7JQThactxK2KiA/525_3554.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=754f11ee3a8b014e226cf524699f00cfdd3762dac0325f40a2bbcc4170e2f6dd",
+      "name": "Title 1",
+      "description": "",
+      "created_at": "2026-03-30T01:38:58.564Z",
+      "updated_at": "2026-03-30T01:38:58.564Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "\"0"
+    },
+    {
+      "key": "5ca26de2638fceb961ef0c3d6bd5483d26008d3c",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "270:1173",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/uS2/l7H/EZuBvCcOc98ZOxaR/270_1173.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=96c69e7c73d633f0216fb2217a2548b4143702b62df97865b3fc96f062ca7519",
+      "name": "Point/Yellow 800",
+      "description": "",
+      "created_at": "2026-03-03T05:38:27.733Z",
+      "updated_at": "2026-03-03T05:38:27.733Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "0O"
+    },
+    {
+      "key": "af475117a29093e61ea53c5286c99e35adc9f24a",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "270:1175",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/GlN/vaf/CoK5mox8D1vKHT9e/270_1175.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=06044acdd0c9bb618233213e9a02dd4b237f908785f1b04550500ea3ea28a9b0",
+      "name": "Point/Green 800",
+      "description": "",
+      "created_at": "2026-03-03T05:38:27.740Z",
+      "updated_at": "2026-03-03T05:38:27.740Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "<"
+    },
+    {
+      "key": "1571c8c3700d5af00cc0552f0f26f36bd2e92fb5",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "270:1172",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/aSF/KaF/63tfcCOUI9muGy8E/270_1172.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=21535dc1167193219e3b84c2253abf7cc7c08d8278a5bbc328a63f58dda25fb6",
+      "name": "Point/Blue 200",
+      "description": "",
+      "created_at": "2026-03-03T05:38:27.745Z",
+      "updated_at": "2026-03-03T05:38:27.745Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "/f"
+    },
+    {
+      "key": "8ab68e0240067ba692ebd29dd2cd74146142c160",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "270:1168",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/KMk/qCh/H72TyrHPUUI2VZjl/270_1168.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=69acd338123eb6eb63a2ae36c3c2d6226386de01f8d129f15b27befc57227127",
+      "name": "Point/Red 800",
+      "description": "",
+      "created_at": "2026-03-03T05:38:27.751Z",
+      "updated_at": "2026-03-03T05:38:27.751Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": ".O"
+    },
+    {
+      "key": "24c158861e77c3c405d1316c462e803ac2e7f60b",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "270:1169",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/nRI/qVb/8fUPbsxUwo6RjTUi/270_1169.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=c76693ff1736eb0dd9cbc1e7f175fadf77e227eca70a626ac573059b6d65c510",
+      "name": "Point/Red 200",
+      "description": "",
+      "created_at": "2026-03-03T05:38:27.756Z",
+      "updated_at": "2026-03-03T05:38:27.756Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": ".f"
+    },
+    {
+      "key": "b2f165a97cfc0ca03ceb2f5ebb29f8ddd680d4a3",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "270:1171",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/O51/z2E/4YbWfiWbgfOIs43m/270_1171.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=aa6403e0b69c80a6f2645ab8d20842914d92b78d1ca819ac2f2460c98786cc70",
+      "name": "Point/Blue 800",
+      "description": "",
+      "created_at": "2026-03-03T05:38:27.761Z",
+      "updated_at": "2026-03-03T05:38:27.761Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "/O"
+    },
+    {
+      "key": "653485b90f178675be067a23a7a84908d6ba3a64",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "270:1174",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/NfC/hKa/BcdateIaPiQiWSqK/270_1174.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=118927061654d665e0f53aa01c1984c87dcfce31a526341a0bd4de72dfc23d86",
+      "name": "Point/Yellow 200",
+      "description": "",
+      "created_at": "2026-03-03T05:38:27.766Z",
+      "updated_at": "2026-03-03T05:38:27.766Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "0f"
+    },
+    {
+      "key": "f1041b23131564141e386b1029864ff6ff677660",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "270:1176",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/gqQ/3vn/TPIMzZU3IaASBLRW/270_1176.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=fccd766ed2d4641432b4aad4b26d15ef906f1b1b5495b0e8ac04230c9e63cf21",
+      "name": "Point/Green 200",
+      "description": "",
+      "created_at": "2026-03-03T05:38:27.771Z",
+      "updated_at": "2026-03-03T05:38:27.771Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "="
+    },
+    {
+      "key": "0c1449019a955d533a4db4b2eeb5b8546e39f542",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "37:23",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/kTl/xdq/Xq11GSQqCVYJrPa0/37_23.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=5af578853e7ca34d2e154337912a28a0dfff9bae5f668c31abc4eaa35009d7a0",
+      "name": "Grayscale/Black",
+      "description": "",
+      "created_at": "2026-02-26T06:21:11.682Z",
+      "updated_at": "2026-03-03T05:38:27.874Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "'"
+    },
+    {
+      "key": "225a23655e35ba6d1978337bc5164fa16637df8d",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "37:36",
+      "style_type": "EFFECT",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/zxM/g6g/HKDUTCKUtZmYPIEx/37_36.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=f86e3f51065258109a9c85a2ee456470dfdbaff3198b602e162c3b0b3ec6ffa5",
+      "name": "Drop Shadow/Black_8px",
+      "description": "",
+      "created_at": "2026-02-26T06:21:11.621Z",
+      "updated_at": "2026-03-03T05:38:27.880Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "\"O"
+    },
+    {
+      "key": "24323584db6b1c727f3b39844b1b85dc26a6bfd7",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "37:20",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/5IA/xtX/7w9v7DcRttx3R3Lx/37_20.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=4daf1430e0f888f3ec6e3b5be3adfba1f276495b803c4d75c5062b1e3652cfce",
+      "name": "Primary/Dark",
+      "description": "",
+      "created_at": "2026-02-26T06:21:11.663Z",
+      "updated_at": "2026-03-03T05:38:27.886Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "$"
+    },
+    {
+      "key": "254c78b5ec3a511913fce0276b22110a7a03a932",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "37:31",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/gGN/YZK/xF7Ew6QXNhnESkjG/37_31.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=9659ed4468ae11c3816aabb9fbb6e54774c940f74d93f567f410cc849ca57b1d",
+      "name": "Point/Red 500",
+      "description": "",
+      "created_at": "2026-02-26T06:21:11.714Z",
+      "updated_at": "2026-03-03T05:38:27.892Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "."
+    },
+    {
+      "key": "25987db0f1968e1c41a7bfb3b2a91517c0da69a3",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "37:34",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/S4n/iTw/QoT39mTmXb7US4lb/37_34.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=e8b79c4cdb06fd92859ca533a160548ec575155c436cda7d5c5583ea916db594",
+      "name": "Point/Green 500",
+      "description": "",
+      "created_at": "2026-02-26T06:21:11.740Z",
+      "updated_at": "2026-03-03T05:38:27.897Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "1"
+    },
+    {
+      "key": "2943239ebe6324847570282c7ce9d8249cd06ae1",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "47:17",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/euH/k3A/K30oCbNr2ph13pEj/47_17.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=c08b50954c2655be83a00a7597a225945f0440a7ee69c0e31bcf2e115c7db79b",
+      "name": "Gradient/Gold",
+      "description": "",
+      "created_at": "2026-02-26T06:21:11.676Z",
+      "updated_at": "2026-03-03T05:38:27.903Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "4"
+    },
+    {
+      "key": "5d01ef733425b00c1faa90a580b7687d3282b9e9",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "37:30",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/Cam/MKW/Q9JO3A02inYmSIp6/37_30.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=ad6c1e2303a796ca99f332589e69337d7f99a0706cef283834150ff7292b2b56",
+      "name": "Grayscale/White",
+      "description": "",
+      "created_at": "2026-02-26T06:21:11.657Z",
+      "updated_at": "2026-03-03T05:38:27.920Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "-"
+    },
+    {
+      "key": "6975c927ba2508faba8f54cbc5b191625956a7ee",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "37:26",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/PMC/voq/jtxfpNrzj6UF3cQy/37_26.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=b93cc3285604817b279d925828c10980777a6fd4ad7181dc620f8acadc0c94a7",
+      "name": "Grayscale/600",
+      "description": "",
+      "created_at": "2026-02-26T06:21:11.643Z",
+      "updated_at": "2026-03-03T05:38:27.925Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": ")"
+    },
+    {
+      "key": "6d0c6866cc2b989e860c95ee95f3dffa074f9564",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "37:15",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/q3E/pfh/4Ly8AwXChPsLkpMJ/37_15.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=f156081d9c2516ff213bee80eb580d5c77fa533baf3d760871006e7a4d10afa6",
+      "name": "Primary/Main",
+      "description": "",
+      "created_at": "2026-02-26T06:21:11.629Z",
+      "updated_at": "2026-03-03T05:38:27.931Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "\""
+    },
+    {
+      "key": "722263f8a1a7b709ea7548a06a251854f3cb2560",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "66:18",
+      "style_type": "EFFECT",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/HeR/oAj/xbXNd5YWKEpT7zYM/66_18.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=181a9c464362436aefa1d44048311033c7b6e10f327b65a2b3a442b9ea87dfc7",
+      "name": "Drop Shadow/Black_4px",
+      "description": "",
+      "created_at": "2026-02-26T06:21:11.721Z",
+      "updated_at": "2026-03-03T05:38:27.936Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "\"P"
+    },
+    {
+      "key": "8cb032affd22d551d89bfc27d936b34ad83d5860",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "37:21",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/4xs/VQC/D7L9DOSDkUxPS7Cz/37_21.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=5d2707ab7da1c597158f1887f74710a94337035291d51f1d8c96ec130cb5faaf",
+      "name": "Primary/Light",
+      "description": "",
+      "created_at": "2026-02-26T06:21:11.650Z",
+      "updated_at": "2026-03-03T05:38:27.942Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "%"
+    },
+    {
+      "key": "a8ecdce088210672b2e3681debbe254bbbbde831",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "37:27",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/TxN/ogH/JGVdkkdkuOsVucFI/37_27.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=ba18f3e72b6253c5cbc9d0b9ae956cc2c1da216a57177061b48abf8c756f154f",
+      "name": "Grayscale/400",
+      "description": "",
+      "created_at": "2026-02-26T06:21:11.695Z",
+      "updated_at": "2026-03-03T05:38:27.948Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "*"
+    },
+    {
+      "key": "acb0ee6347ff7fcff1694b66e73524ad2ce9e339",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "37:28",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/pjY/n8M/M2ePjJqapJmBZTpH/37_28.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=accbdb3865d708f90ba6303cc93584d8344f1b495dfecd529cb7783c056c8908",
+      "name": "Grayscale/200",
+      "description": "",
+      "created_at": "2026-02-26T06:21:11.702Z",
+      "updated_at": "2026-03-03T05:38:27.953Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "+"
+    },
+    {
+      "key": "be081657e0a32062bc156024b197832561ac0320",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "37:32",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/7uZ/nna/hiKBVrlLiYOi9Jzr/37_32.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=3fba5abf87149fb9f52f7b8a56f670b4f2d5d3ac836302dd3f572bf3f47f2d2a",
+      "name": "Point/Blue 500",
+      "description": "",
+      "created_at": "2026-02-26T06:21:11.746Z",
+      "updated_at": "2026-03-03T05:38:27.958Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "/"
+    },
+    {
+      "key": "de4f4cfba07a60ae38503f64db139cfbdbf6fcd3",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "47:14",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/NkR/us7/rmIwbvY5GjPJDz4T/47_14.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=27124258ebc1510198de615f6a158c76fda9cd97de8c19f45289ad7bbd6c5054",
+      "name": "Opacity/White_40%",
+      "description": "",
+      "created_at": "2026-02-26T06:21:11.689Z",
+      "updated_at": "2026-03-03T05:38:27.970Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "2"
+    },
+    {
+      "key": "f4292f13135e0bf26b5450193ea45a57fab0d46f",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "37:29",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/evm/W5M/yXiUfJorU3ap43f4/37_29.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=c5da8f119a45b781bf8089a5e2953706b3c52a75b2747166efb8697da5370ebd",
+      "name": "Grayscale/100",
+      "description": "",
+      "created_at": "2026-02-26T06:21:11.708Z",
+      "updated_at": "2026-03-03T05:38:27.976Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": ","
+    },
+    {
+      "key": "f805e1665759e8e3f4a374646e4a723934c1a45d",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "47:15",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/e9V/UFZ/WlSPFj4qVgAuXa2D/47_15.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=09e723dbb0e3f5b924fd9f88a4e0f47d9b68339e68ce16bf4b5a9752016c8f1c",
+      "name": "Gradient/Main",
+      "description": "",
+      "created_at": "2026-02-26T06:21:11.759Z",
+      "updated_at": "2026-03-03T05:38:27.982Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "3"
+    },
+    {
+      "key": "f93c7ef392ee9736267a8248c519c4263137c68e",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "74:170",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/F4Q/L9A/8QFPM2VvkmHcC8Ad/74_170.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=a4639dc013e45fae32d1ee23b5774cc44533b26299960e238c10d16745f41ca8",
+      "name": "Grayscale/800",
+      "description": "",
+      "created_at": "2026-02-26T06:21:11.727Z",
+      "updated_at": "2026-03-03T05:38:27.987Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "("
+    },
+    {
+      "key": "dc6d008b43a7672c68f336013a5eb37699c8a702",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "37:33",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/5CC/XuL/j0IXXVwVc3tRFFrH/37_33.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=06b267eb877fcd9870b52fffb9e74945efa7948a35ecef5737e19b9305e87b16",
+      "name": "Point/Yellow 500",
+      "description": "",
+      "created_at": "2026-02-26T06:21:11.734Z",
+      "updated_at": "2026-03-03T09:00:37.464Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "0"
+    },
+    {
+      "key": "5bf964c5942d3110fe78275d7c930771d79aab37",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "37:22",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/sVD/IEB/wzDUX5VKn0d84lWy/37_22.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=a1993dd016ae1cf9cf1adc07c26950abd30209d4940f0644f628e6c1e23d0a0d",
+      "name": "Primary/BG",
+      "description": "",
+      "created_at": "2026-02-26T06:21:11.670Z",
+      "updated_at": "2026-03-03T05:38:27.914Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "&"
+    },
+    {
+      "key": "3038726b821dab74d26a207ea0d3abbb0d2211d9",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "285:2601",
+      "style_type": "EFFECT",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/PP5/YI8/H5JZrGBl2pD0jJKE/285_2601.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=6bc63cab4098f954dc26a0bbff92bb886c4fffc1de54b3033f3cc610edb4839c",
+      "name": "Drop Shadow/Primary shadow",
+      "description": "",
+      "created_at": "2026-03-04T07:05:20.036Z",
+      "updated_at": "2026-03-04T07:05:20.036Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "\"N"
+    },
+    {
+      "key": "40fcfe5bfdd8b6f471c8c2190085a15f5b4a3325",
+      "file_key": "YYu7OKVlt5tUjTaQri18MD",
+      "node_id": "220:1469",
+      "style_type": "FILL",
+      "thumbnail_url": "https://s3-alpha.figma.com/checkpoints/iNR/6Dg/QD0KsEiCESYvA2Ja/220_1469.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWC6RGVDPLF%2F20260329%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260329T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=487d21245362bb3e56d23295e137fbc919d2f0880132b30847dd7e1ba3f945d4",
+      "name": "Gradient/Dark Purple",
+      "description": "",
+      "created_at": "2026-02-26T06:21:11.752Z",
+      "updated_at": "2026-03-11T07:56:30.117Z",
+      "user": {
+        "id": "1579777119433426122",
+        "handle": "김정한",
+        "img_url": "https://www.gravatar.com/avatar/9ed9d044e26d7f7c6f934d8c3a89c39a?size=240&default=https%3A%2F%2Fs3-alpha.figma.com%2Fstatic%2Fuser_2.png"
+      },
+      "sort_position": "5"
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 import '../../models/game_round_model.dart';
 
 /// SC-008 프로모션 카드 (오픈 버전)
@@ -176,12 +177,7 @@ class PromotionCard extends StatelessWidget {
       ),
       child: Text(
         game.status.badgeText,
-        style: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w700,
-          color: AppColors.white,
-          letterSpacing: 0.5,
-        ),
+        style: AppTextStyles.caption3.copyWith(color: AppColors.white),
       ),
     );
   }
@@ -208,12 +204,7 @@ class PromotionCard extends StatelessWidget {
           const SizedBox(width: 6),
           const Text(
             'LIVE',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-              color: AppColors.white,
-              letterSpacing: 0.5,
-            ),
+            style: AppTextStyles.caption3.copyWith(color: AppColors.white),
           ),
         ],
       ),
@@ -230,12 +221,7 @@ class PromotionCard extends StatelessWidget {
       ),
       child: Text(
         gameType.toUpperCase(),
-        style: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w700,
-          color: AppColors.white,
-          letterSpacing: 0.5,
-        ),
+        style: AppTextStyles.caption3.copyWith(color: AppColors.white),
       ),
     );
   }
@@ -326,7 +312,7 @@ class PromotionCard extends StatelessWidget {
       case 'daily':
         return AppColors.blue;
       case 'select':
-        return AppColors.green;
+        return AppColors.green500;
       case 'vibe':
         return AppColors.primaryLight;
       case 'prime':
@@ -513,11 +499,7 @@ class PromotionCardSmall extends StatelessWidget {
             children: [
               Text(
                 '${game.currentPrice}P PLAY',
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.darkBlue,
-                ),
+                style: AppTextStyles.caption3.copyWith(color: AppColors.darkBlue),
               ),
               const SizedBox(width: 4),
               const Icon(
@@ -537,7 +519,7 @@ class PromotionCardSmall extends StatelessWidget {
       case 'daily':
         return AppColors.blue;
       case 'select':
-        return AppColors.green;
+        return AppColors.green500;
       case 'vibe':
         return AppColors.primaryLight;
       case 'prime':

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 
 /// 거래내역 화면
 class TransactionScreen extends ConsumerWidget {
@@ -21,11 +22,7 @@ class TransactionScreen extends ConsumerWidget {
         appBar: AppBar(
           title: const Text(
             '거래내역',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           backgroundColor: AppColors.gray100,
           foregroundColor: AppColors.darkBlue,
@@ -59,11 +56,7 @@ class TransactionScreen extends ConsumerWidget {
           const SizedBox(height: 16),
           Text(
             '거래내역이 없습니다',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: AppColors.gray500,
-            ),
+            style: AppTextStyles.body2.copyWith(color: AppColors.gray500),
           ),
         ],
       ),
@@ -89,7 +82,7 @@ class _TransactionItem extends StatelessWidget {
     switch (type) {
       case 'charge':
         icon = Icons.add_circle_outline;
-        iconColor = AppColors.green;
+        iconColor = AppColors.green500;
         typeText = '충전';
         break;
       case 'refund':
@@ -147,11 +140,7 @@ class _TransactionItem extends StatelessWidget {
               children: [
                 Text(
                   transaction['description'] as String,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.darkBlue,
-                  ),
+                  style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -166,11 +155,7 @@ class _TransactionItem extends StatelessWidget {
           ),
           Text(
             '${isPositive ? '+' : ''}${_formatNumber(amount)}원',
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-              color: isPositive ? AppColors.green : AppColors.red,
-            ),
+            style: AppTextStyles.title2.copyWith(color: isPositive ? AppColors.green500 : AppColors.red),
           ),
         ],
       ),

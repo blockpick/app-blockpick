@@ -50,7 +50,7 @@ class _CheckboxSample3State extends State<CheckboxSample3>
         ),
         title: Text(
           'Checkbox #3',
-          style: AppTextStyles.large.copyWith(
+          style: AppTextStyles.heading1.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.darkBlue,
           ),
@@ -77,7 +77,7 @@ class _CheckboxSample3State extends State<CheckboxSample3>
             ),
             child: Text(
               '커스텀 아이콘 체크박스\n• 리플 애니메이션\n• 다양한 아이콘 스타일',
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 color: AppColors.white,
                 fontWeight: FontWeight.w500,
               ),
@@ -129,9 +129,9 @@ class _CheckboxSample3State extends State<CheckboxSample3>
     final gradients = [
       LinearGradient(colors: [AppColors.blue, AppColors.purple]),
       LinearGradient(colors: [AppColors.pink, AppColors.purple]),
-      LinearGradient(colors: [AppColors.yellow, AppColors.pink]),
-      LinearGradient(colors: [AppColors.green, AppColors.blue]),
-      LinearGradient(colors: [AppColors.yellow, AppColors.yellow]),
+      LinearGradient(colors: [AppColors.yellow500, AppColors.pink]),
+      LinearGradient(colors: [AppColors.green500, AppColors.blue]),
+      LinearGradient(colors: [AppColors.yellow500, AppColors.yellow500]),
       LinearGradient(colors: [AppColors.purple, AppColors.blue]),
       LinearGradient(colors: [AppColors.darkBlue, AppColors.purple]),
     ];
@@ -221,7 +221,7 @@ class _CheckboxSample3State extends State<CheckboxSample3>
             Expanded(
               child: Text(
                 labels[index],
-                style: AppTextStyles.large.copyWith(
+                style: AppTextStyles.heading1.copyWith(
                   fontWeight: FontWeight.bold,
                   color: isChecked ? AppColors.white : AppColors.darkBlue,
                 ),

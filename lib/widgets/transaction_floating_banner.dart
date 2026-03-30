@@ -119,7 +119,7 @@ class _TransactionFloatingBannerState
               children: [
                 Text(
                   text,
-                  style: AppTextStyles.body.copyWith(
+                  style: AppTextStyles.body3.copyWith(
                     color: AppColors.white,
                     fontWeight: FontWeight.w600,
                   ),
@@ -128,7 +128,7 @@ class _TransactionFloatingBannerState
                   const SizedBox(height: 2),
                   Text(
                     pending.gameTitle,
-                    style: AppTextStyles.bodySmall.copyWith(
+                    style: AppTextStyles.body4.copyWith(
                       color: AppColors.white.withValues(alpha: 0.8),
                     ),
                     maxLines: 1,
@@ -202,7 +202,7 @@ class _TransactionFloatingBannerState
       case TransactionPhase.confirmed:
         return (
           LucideIcons.checkCircle2,
-          AppColors.green,
+          AppColors.green500,
           '트랜잭션 완료!',
         );
       case TransactionPhase.failed:

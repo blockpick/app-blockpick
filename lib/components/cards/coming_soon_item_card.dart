@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 import '../../models/game_round_model.dart';
 
 /// Coming Soon 아이템 카드
@@ -163,7 +164,7 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
         child: Icon(
           Icons.card_giftcard_rounded,
           size: 32,
-          color: AppColors.mint,
+          color: AppColors.green500,
         ),
       ),
     );
@@ -218,12 +219,7 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
   Widget _buildTitle() {
     return Text(
       widget.game.title,
-      style: const TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: AppColors.textBlack,
-        height: 1.3,
-      ),
+      style: AppTextStyles.title3,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );
@@ -269,11 +265,7 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
         const SizedBox(width: 3),
         Text(
           value,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            color: AppColors.gray600,
-          ),
+          style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
         ),
       ],
     );
@@ -296,7 +288,7 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
               widthFactor: _progress.clamp(0.0, 1.0),
               child: Container(
                 decoration: BoxDecoration(
-                  color: AppColors.mint,
+                  color: AppColors.green500,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -307,11 +299,7 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
         // 타이머
         Text(
           '${_formatDuration(_remainingTime)} 남음',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            color: AppColors.gray500,
-          ),
+          style: AppTextStyles.body4.copyWith(color: AppColors.gray500),
         ),
       ],
     );
@@ -331,7 +319,7 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
       case 'daily':
         return AppColors.blue;
       case 'select':
-        return AppColors.mint;
+        return AppColors.green500;
       case 'vibe':
         return AppColors.primaryLight;
       case 'prime':

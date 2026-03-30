@@ -88,7 +88,7 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
                 // 타이틀
                 Text(
                   '게임에 참가하고 있어요',
-                  style: AppTextStyles.large.copyWith(
+                  style: AppTextStyles.heading1.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -105,7 +105,7 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
                 // 현재 단계 설명
                 Text(
                   widget.currentStep,
-                  style: AppTextStyles.body.copyWith(
+                  style: AppTextStyles.body3.copyWith(
                     color: Colors.white.withOpacity(0.9),
                   ),
                   textAlign: TextAlign.center,
@@ -124,7 +124,7 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
                 // 단계 표시
                 Text(
                   '${widget.stepNumber}/${widget.totalSteps}',
-                  style: AppTextStyles.bodySmall.copyWith(
+                  style: AppTextStyles.body4.copyWith(
                     color: Colors.white.withOpacity(0.7),
                   ),
                 ),
@@ -151,7 +151,7 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
                       const SizedBox(height: 8),
                       Text(
                         '블록체인에 트랜잭션을 전송하고 있습니다.\n잠시만 기다려주세요.',
-                        style: AppTextStyles.bodySmall.copyWith(
+                        style: AppTextStyles.body4.copyWith(
                           color: Colors.white.withOpacity(0.8),
                         ),
                         textAlign: TextAlign.center,

@@ -35,14 +35,14 @@ class _MallPreviewWidgetState extends State<MallPreviewWidget> {
                       children: [
                         TextSpan(
                           text: 'BLOCK',
-                          style: AppTextStyles.large.copyWith(
+                          style: AppTextStyles.heading1.copyWith(
                             color: AppColors.pink,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         TextSpan(
                           text: '\nPICK MALL',
-                          style: AppTextStyles.large.copyWith(
+                          style: AppTextStyles.heading1.copyWith(
                             color: AppColors.darkBlue,
                             fontWeight: FontWeight.bold,
                           ),
@@ -53,7 +53,7 @@ class _MallPreviewWidgetState extends State<MallPreviewWidget> {
                   const SizedBox(height: 4),
                   Text(
                     'Shop the Future.\nExperience the Exclusive.',
-                    style: AppTextStyles.body.copyWith(
+                    style: AppTextStyles.body3.copyWith(
                       color: AppColors.navy,
                       height: 1.4,
                     ),
@@ -69,7 +69,7 @@ class _MallPreviewWidgetState extends State<MallPreviewWidget> {
                   children: [
                     Text(
                       'View more',
-                      style: AppTextStyles.body.copyWith(
+                      style: AppTextStyles.body3.copyWith(
                         color: AppColors.blue,
                       ),
                     ),
@@ -152,7 +152,7 @@ class _MallPreviewWidgetState extends State<MallPreviewWidget> {
         ),
         child: Text(
           category,
-          style: AppTextStyles.body.copyWith(
+          style: AppTextStyles.body3.copyWith(
             color: isSelected ? AppColors.white : AppColors.pink,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
@@ -202,7 +202,7 @@ class _MallPreviewWidgetState extends State<MallPreviewWidget> {
                 children: [
                   Text(
                     product.name,
-                    style: AppTextStyles.body.copyWith(
+                    style: AppTextStyles.body3.copyWith(
                       color: AppColors.darkBlue,
                       fontWeight: FontWeight.w600,
                     ),
@@ -214,7 +214,7 @@ class _MallPreviewWidgetState extends State<MallPreviewWidget> {
                     children: [
                       Text(
                         '\$${product.price.toStringAsFixed(2)}',
-                        style: AppTextStyles.bodyLarge.copyWith(
+                        style: AppTextStyles.body2.copyWith(
                           color: AppColors.blue,
                           fontWeight: FontWeight.bold,
                         ),
@@ -223,7 +223,7 @@ class _MallPreviewWidgetState extends State<MallPreviewWidget> {
                       if (product.originalPrice != null) ...[
                         Text(
                           '\$${product.originalPrice!.toStringAsFixed(2)}',
-                          style: AppTextStyles.bodySmall.copyWith(
+                          style: AppTextStyles.body4.copyWith(
                             color: AppColors.light,
                             decoration: TextDecoration.lineThrough,
                           ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../core/theme/app_colors.dart';
+import '../core/theme/app_text_styles.dart';
 
 /// Zoom 컨트롤 버튼
 class ZoomControls extends StatelessWidget {
@@ -83,11 +84,7 @@ class ZoomControls extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               child: Text(
                 _getZoomLabel(),
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.darkBlue,
-                ),
+                style: AppTextStyles.caption3.copyWith(color: AppColors.darkBlue),
               ),
             ),
 
@@ -175,11 +172,7 @@ class HorizontalZoomControls extends StatelessWidget {
                     const SizedBox(width: 4),
                     Text(
                       '(LOD$lodLevel)',
-                      style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.medium,
-                      ),
+                      style: AppTextStyles.caption4.copyWith(color: AppColors.medium),
                     ),
                   ],
                 ],

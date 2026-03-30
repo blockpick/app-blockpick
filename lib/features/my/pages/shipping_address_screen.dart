@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 import '../../../core/constants/app_constants.dart';
 
 /// 국가 정보 모델
@@ -230,11 +231,7 @@ class _ShippingAddressScreenState
         appBar: AppBar(
           title: const Text(
             '상품받기',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           backgroundColor: AppColors.white,
           foregroundColor: AppColors.darkBlue,
@@ -399,20 +396,12 @@ class _ShippingAddressScreenState
       children: [
         Text(
           text,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: AppColors.darkBlue,
-          ),
+          style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
         if (required)
           const Text(
             ' *',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: AppColors.red,
-            ),
+            style: AppTextStyles.title3.copyWith(color: AppColors.red),
           ),
       ],
     );
@@ -622,10 +611,7 @@ class _ShippingAddressScreenState
                   )
                 : const Text(
                     '완료',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: AppTextStyles.title2,
                   ),
           ),
         ),
@@ -699,11 +685,7 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
               child: Text(
                 widget.showDialCode ? '국가코드 선택' : '국가 선택',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.darkBlue,
-                ),
+                style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
               ),
             ),
 

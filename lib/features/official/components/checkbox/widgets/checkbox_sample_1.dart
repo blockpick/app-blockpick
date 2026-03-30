@@ -27,7 +27,7 @@ class _CheckboxSample1State extends State<CheckboxSample1> {
         ),
         title: Text(
           'Checkbox #1',
-          style: AppTextStyles.large.copyWith(
+          style: AppTextStyles.heading1.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.darkBlue,
           ),
@@ -47,12 +47,12 @@ class _CheckboxSample1State extends State<CheckboxSample1> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppColors.green.withValues(alpha: 0.1),
+              color: AppColors.green500.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(AppConstants.radiusMd),
             ),
             child: Text(
               '기본 체크박스 스타일\n• 부드러운 체크 애니메이션\n• 다양한 색상 지원',
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 color: AppColors.darkBlue,
               ),
             ),
@@ -63,8 +63,8 @@ class _CheckboxSample1State extends State<CheckboxSample1> {
           ...List.generate(8, (index) {
             final colors = [
               AppColors.blue,
-              AppColors.green,
-              AppColors.yellow,
+              AppColors.green500,
+              AppColors.yellow500,
               AppColors.purple,
               AppColors.pink,
               AppColors.darkBlue,
@@ -107,14 +107,14 @@ class _CheckboxSample1State extends State<CheckboxSample1> {
         },
         title: Text(
           label,
-          style: AppTextStyles.bodyLarge.copyWith(
+          style: AppTextStyles.body2.copyWith(
             fontWeight: _checkedStates[index] ? FontWeight.bold : FontWeight.normal,
             color: _checkedStates[index] ? color : AppColors.darkBlue,
           ),
         ),
         subtitle: Text(
           _checkedStates[index] ? '선택됨' : '선택 안 됨',
-          style: AppTextStyles.body.copyWith(
+          style: AppTextStyles.body3.copyWith(
             color: AppColors.medium,
           ),
         ),

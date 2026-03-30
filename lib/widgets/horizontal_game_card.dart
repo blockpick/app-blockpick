@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../core/theme/app_colors.dart';
+import '../core/theme/app_text_styles.dart';
 import '../models/game_round_model.dart';
 
 /// 가로형 게임 카드 위젯 (SC-009 디자인)
@@ -112,11 +113,7 @@ class HorizontalGameCard extends StatelessWidget {
             ),
             child: Text(
               _getTypeText(),
-              style: const TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w600,
-                color: AppColors.white,
-              ),
+              style: AppTextStyles.caption4.copyWith(color: AppColors.white),
             ),
           ),
         ),
@@ -132,12 +129,7 @@ class HorizontalGameCard extends StatelessWidget {
         // 제목
         Text(
           game.title,
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-            color: AppColors.darkBlue,
-            height: 1.3,
-          ),
+          style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),
@@ -204,11 +196,7 @@ class HorizontalGameCard extends StatelessWidget {
           const SizedBox(width: 4),
           Text(
             value,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: AppColors.gray700,
-            ),
+            style: AppTextStyles.caption2.copyWith(color: AppColors.gray700),
           ),
         ],
       ),
@@ -248,11 +236,7 @@ class HorizontalGameCard extends StatelessWidget {
         // 남은 시간
         Text(
           '${game.timeLeft} 남음',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            color: AppColors.gray500,
-          ),
+          style: AppTextStyles.body4.copyWith(color: AppColors.gray500),
         ),
       ],
     );
@@ -268,7 +252,7 @@ class HorizontalGameCard extends StatelessWidget {
       case GameType.vibe:
         return AppColors.blue;
       case GameType.prime:
-        return AppColors.yellow;
+        return AppColors.yellow500;
     }
   }
 
@@ -310,7 +294,7 @@ class HorizontalGameCard extends StatelessWidget {
   /// 프로그레스 색상
   Color _getProgressColor(double progress) {
     if (progress < 0.2) return AppColors.red;
-    if (progress < 0.5) return AppColors.yellow;
-    return AppColors.green;
+    if (progress < 0.5) return AppColors.yellow500;
+    return AppColors.green500;
   }
 }

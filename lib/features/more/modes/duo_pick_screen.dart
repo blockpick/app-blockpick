@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../widgets/coordinate_result_dialog.dart';
@@ -448,21 +449,12 @@ class _DuoPickScreenState extends State<DuoPickScreen>
                       children: [
                         Text(
                           title,
-                          style: TextStyle(
-                            color: color,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 1.5,
-                          ),
+                          style: AppTextStyles.caption3.copyWith(color: color),
                         ),
                         if (hasValue)
                           Text(
                             '(${rowController.text}, ${colController.text})',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: AppTextStyles.title2.copyWith(color: Colors.white),
                           ),
                       ],
                     ),
@@ -487,12 +479,7 @@ class _DuoPickScreenState extends State<DuoPickScreen>
                           const SizedBox(width: 6),
                           Text(
                             'RANDOM',
-                            style: TextStyle(
-                              color: color,
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 1,
-                            ),
+                            style: AppTextStyles.caption4.copyWith(color: color),
                           ),
                         ],
                       ),
@@ -543,12 +530,7 @@ class _DuoPickScreenState extends State<DuoPickScreen>
       children: [
         Text(
           label,
-          style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.5),
-            fontSize: 10,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 1,
-          ),
+          style: AppTextStyles.caption4.copyWith(color: Colors.white.withValues(alpha: 0.5)),
         ),
         const SizedBox(height: 6),
         TextField(
@@ -559,11 +541,7 @@ class _DuoPickScreenState extends State<DuoPickScreen>
             LengthLimitingTextInputFormatter(4),
           ],
           onChanged: onChanged,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
+          style: AppTextStyles.title1.copyWith(color: Colors.white),
           decoration: InputDecoration(
             hintText: '1-1000',
             hintStyle: TextStyle(
@@ -603,12 +581,7 @@ class _DuoPickScreenState extends State<DuoPickScreen>
         children: [
           Text(
             'COMBINE METHOD',
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.5),
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 1.5,
-            ),
+            style: AppTextStyles.caption4.copyWith(color: Colors.white.withValues(alpha: 0.5)),
           ),
           const SizedBox(height: 12),
           Row(
@@ -668,14 +641,7 @@ class _DuoPickScreenState extends State<DuoPickScreen>
               const SizedBox(height: 4),
               Text(
                 label,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: isSelected
-                      ? Colors.white
-                      : Colors.white.withValues(alpha: 0.5),
-                  letterSpacing: 1,
-                ),
+                style: AppTextStyles.caption3.copyWith(color: isSelected),
               ),
             ],
           ),
@@ -719,14 +685,7 @@ class _DuoPickScreenState extends State<DuoPickScreen>
             const SizedBox(width: 10),
             Text(
               'COMBINE COORDINATES',
-              style: TextStyle(
-                color: canCombine
-                    ? Colors.white
-                    : Colors.white.withValues(alpha: 0.3),
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 2,
-              ),
+              style: AppTextStyles.buttonLarge.copyWith(color: canCombine),
             ),
           ],
         ),

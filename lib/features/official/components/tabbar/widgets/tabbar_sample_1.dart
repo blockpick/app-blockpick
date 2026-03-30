@@ -59,7 +59,7 @@ class _TabBarSample1State extends State<TabBarSample1>
         ),
         title: Text(
           'Neon Glow TabBar',
-          style: AppTextStyles.large.copyWith(
+          style: AppTextStyles.heading1.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.white,
           ),
@@ -207,7 +207,7 @@ class _TabBarSample1State extends State<TabBarSample1>
                     },
                     child: Text(
                       tab.label,
-                      style: AppTextStyles.small.copyWith(
+                      style: AppTextStyles.body4.copyWith(
                         color: AppColors.white,
                         fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                       ),
@@ -247,7 +247,7 @@ class _TabBarSample1State extends State<TabBarSample1>
               },
               child: Text(
                 _tabs[_selectedIndex].label,
-                style: AppTextStyles.display.copyWith(
+                style: AppTextStyles.display1.copyWith(
                   color: AppColors.white,
                   fontWeight: FontWeight.bold,
                 ),

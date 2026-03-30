@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/auth/data/repositories/auth_repository.dart';
 import '../../../../core/auth/domain/providers/auth_provider.dart';
 import '../../../../core/auth/domain/providers/verification_state_provider.dart';
@@ -276,11 +277,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                       ),
                       child: Text(
                         '이메일 찾기',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.gray600,
-                        ),
+                        style: AppTextStyles.title2.copyWith(color: AppColors.gray600),
                       ),
                     ),
                   ),
@@ -301,11 +298,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                       ),
                       child: const Text(
                         '로그인하기',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.white,
-                        ),
+                        style: AppTextStyles.title2.copyWith(color: AppColors.white),
                       ),
                     ),
                   ),
@@ -532,11 +525,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                       ),
                       child: Text(
                         '닫기',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.gray600,
-                        ),
+                        style: AppTextStyles.title2.copyWith(color: AppColors.gray600),
                       ),
                     ),
                   ),
@@ -557,11 +546,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                       ),
                       child: const Text(
                         '로그인하기',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.white,
-                        ),
+                        style: AppTextStyles.title2.copyWith(color: AppColors.white),
                       ),
                     ),
                   ),
@@ -628,11 +613,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                       ),
                       child: Text(
                         '취소',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.gray600,
-                        ),
+                        style: AppTextStyles.title2.copyWith(color: AppColors.gray600),
                       ),
                     ),
                   ),
@@ -653,11 +634,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                       ),
                       child: const Text(
                         '재전송',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.white,
-                        ),
+                        style: AppTextStyles.title2.copyWith(color: AppColors.white),
                       ),
                     ),
                   ),
@@ -727,11 +704,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                   ),
                   child: const Text(
                     '인증번호 재전송',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.white,
-                    ),
+                    style: AppTextStyles.title2.copyWith(color: AppColors.white),
                   ),
                 ),
               ),
@@ -796,11 +769,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                   ),
                   child: const Text(
                     '확인',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.white,
-                    ),
+                    style: AppTextStyles.title2.copyWith(color: AppColors.white),
                   ),
                 ),
               ),
@@ -855,11 +824,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                     const Expanded(
                       child: Text(
                         '휴대폰 인증',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.darkBlue,
-                        ),
+                        style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -895,12 +860,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                           _codeSent
                               ? '${_phoneNumber.dialCode} ${_phoneController.text}로 전송된 6자리 인증번호를 입력해 주세요.'
                               : '본인 확인을 위해 휴대폰 인증이 필요해요.',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                            color: AppColors.gray600,
-                            height: 1.4,
-                          ),
+                          style: AppTextStyles.body1.copyWith(color: AppColors.gray600),
                         ),
                         const SizedBox(height: 32),
 
@@ -965,10 +925,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                           )
                         : Text(
                             _codeSent ? '인증 완료' : '인증번호 전송',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: AppTextStyles.title2,
                           ),
                   ),
                 ),
@@ -986,11 +943,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
       children: [
         const Text(
           '휴대폰 번호',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: AppColors.darkBlue,
-          ),
+          style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
         const SizedBox(height: 8),
         Container(
@@ -1020,11 +973,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
             ),
             ignoreBlank: false,
             autoValidateMode: AutovalidateMode.disabled,
-            selectorTextStyle: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            selectorTextStyle: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
             initialValue: _initialPhoneNumber,
             textFieldController: _phoneController,
             formatInput: true,
@@ -1035,21 +984,13 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
             ),
             inputDecoration: InputDecoration(
               hintText: '전화번호 입력',
-              hintStyle: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                color: AppColors.gray400,
-              ),
+              hintStyle: AppTextStyles.body1.copyWith(color: AppColors.gray400),
               filled: true,
               fillColor: Colors.transparent,
               border: InputBorder.none,
               contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 16),
             ),
-            textStyle: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: AppColors.darkBlue,
-            ),
+            textStyle: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
             searchBoxDecoration: InputDecoration(
               hintText: '국가 검색',
               hintStyle: TextStyle(color: AppColors.gray400),
@@ -1084,11 +1025,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
       children: [
         const Text(
           '인증번호',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: AppColors.darkBlue,
-          ),
+          style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
         const SizedBox(height: 8),
         TextField(
@@ -1101,12 +1038,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
             LengthLimitingTextInputFormatter(6),
           ],
           onChanged: (_) => setState(() => _codeError = null),
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: AppColors.darkBlue,
-            letterSpacing: 12,
-          ),
+          style: AppTextStyles.heading3.copyWith(color: AppColors.darkBlue),
           decoration: InputDecoration(
             hintText: '● ● ● ● ● ●',
             hintStyle: TextStyle(
@@ -1150,11 +1082,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
             onPressed: _resendCount < _maxResendCount ? _resendCode : null,
             child: Text(
               '인증번호 재전송${_resendCount > 0 ? ' ($_resendCount/$_maxResendCount)' : ''}',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: _resendCount < _maxResendCount ? AppColors.blue : AppColors.gray400,
-              ),
+              style: AppTextStyles.title3.copyWith(color: _resendCount < _maxResendCount ? AppColors.blue : AppColors.gray400),
             ),
           ),
         ),

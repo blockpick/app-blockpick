@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 import 'select_carousel_widget.dart';
 
 /// Pick 섹션 위젯 (피그마 디자인 정확히 재현)
@@ -145,12 +146,7 @@ class PickSectionRedesignWidget extends StatelessWidget {
                     ),
                     child: const Text(
                       'HOT PICK',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 0.4,
-                      ),
+                      style: AppTextStyles.caption4.copyWith(color: Colors.white, letterSpacing: 0.4),
                     ),
                   ),
                   const Spacer(),
@@ -166,11 +162,7 @@ class PickSectionRedesignWidget extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white.withValues(alpha: 0.9),
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: AppTextStyles.title3.copyWith(color: Colors.white.withValues(alpha: 0.9)),
                   ),
                 ],
               ),
@@ -294,11 +286,7 @@ class PickSectionRedesignWidget extends StatelessWidget {
                         const SizedBox(width: 4),
                         Text(
                           label,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: AppTextStyles.caption4.copyWith(color: Colors.white),
                         ),
                       ],
                     ),

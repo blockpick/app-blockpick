@@ -79,13 +79,13 @@ class _ConfettiCelebrationState extends State<ConfettiCelebration>
 
   static const _colors = [
     AppColors.red,
-    AppColors.yellow,
-    AppColors.mint,
+    AppColors.yellow500,
+    AppColors.green500,
     AppColors.blue,
-    AppColors.mint,
+    AppColors.green500,
     AppColors.primaryLight,
-    AppColors.yellow,
-    AppColors.mint,
+    AppColors.yellow500,
+    AppColors.green500,
   ];
 
   @override

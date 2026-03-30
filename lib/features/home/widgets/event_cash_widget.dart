@@ -63,7 +63,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
                   children: [
                     Text(
                       'Est total value',
-                      style: AppTextStyles.bodySmall.copyWith(
+                      style: AppTextStyles.body4.copyWith(
                         color: AppColors.medium,
                       ),
                     ),
@@ -96,7 +96,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
               children: [
                 Text(
                   _formatCurrency(widget.cashData.totalAmount),
-                  style: AppTextStyles.large.copyWith(
+                  style: AppTextStyles.heading1.copyWith(
                     fontSize: 32,
                     fontWeight: FontWeight.w700,
                   ),
@@ -104,7 +104,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
                 const SizedBox(width: 8),
                 Text(
                   widget.cashData.currency,
-                  style: AppTextStyles.body.copyWith(
+                  style: AppTextStyles.body3.copyWith(
                     color: AppColors.navy,
                     fontWeight: FontWeight.w600,
                   ),
@@ -122,22 +122,22 @@ class _EventCashWidgetState extends State<EventCashWidget> {
               children: [
                 Text(
                   '오늘의 변동: ',
-                  style: AppTextStyles.bodySmall.copyWith(
+                  style: AppTextStyles.body4.copyWith(
                     color: AppColors.medium,
                   ),
                 ),
                 Text(
                   '${isPositive ? '+' : ''}${_formatCurrency(widget.cashData.todayChange)}',
-                  style: AppTextStyles.bodySmall.copyWith(
-                    color: isPositive ? AppColors.mint : AppColors.red,
+                  style: AppTextStyles.body4.copyWith(
+                    color: isPositive ? AppColors.green500 : AppColors.red,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 const SizedBox(width: 4),
                 Text(
                   '(${isPositive ? '+' : ''}${widget.cashData.todayChangePercent.toStringAsFixed(1)}%)',
-                  style: AppTextStyles.bodySmall.copyWith(
-                    color: isPositive ? AppColors.mint : AppColors.red,
+                  style: AppTextStyles.body4.copyWith(
+                    color: isPositive ? AppColors.green500 : AppColors.red,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -265,7 +265,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
           const SizedBox(height: 4),
           Text(
             label,
-            style: AppTextStyles.bodySmall.copyWith(
+            style: AppTextStyles.body4.copyWith(
               color: AppColors.medium,
               fontSize: 11,
             ),
@@ -273,7 +273,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
           const SizedBox(height: 2),
           Text(
             value,
-            style: AppTextStyles.bodySmall.copyWith(
+            style: AppTextStyles.body4.copyWith(
               color: AppColors.navy,
               fontWeight: FontWeight.w700,
               fontSize: 13,
@@ -321,7 +321,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
         ),
         child: Text(
           period,
-          style: AppTextStyles.bodySmall.copyWith(
+          style: AppTextStyles.body4.copyWith(
             color: isSelected ? Colors.white : AppColors.medium,
             fontWeight: FontWeight.w600,
             fontSize: 13,
@@ -352,7 +352,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
       _ChartData(
         '당첨\n${latestData.winCount}회',
         latestData.winCount.toDouble(),
-        AppColors.mint,
+        AppColors.green500,
       ),
       _ChartData(
         '당첨률\n${latestData.winRate.toStringAsFixed(1)}%',
@@ -384,11 +384,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
               ),
               child: Text(
                 chartData[tile.indices[0]].label,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
+                style: AppTextStyles.caption2.copyWith(color: Colors.white),
               ),
             );
           },
@@ -397,7 +393,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 chartData[tile.indices[0]].label,
-                style: AppTextStyles.bodySmall.copyWith(
+                style: AppTextStyles.body4.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.w700,
                   fontSize: 13,

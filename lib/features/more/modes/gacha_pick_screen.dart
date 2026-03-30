@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -172,12 +173,7 @@ class _GachaPickScreenState extends State<GachaPickScreen>
                     SizedBox(width: 6),
                     Text(
                       'RESET',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 1,
-                      ),
+                      style: AppTextStyles.caption2.copyWith(color: Colors.white),
                     ),
                   ],
                 ),
@@ -452,16 +448,7 @@ class _GachaPickScreenState extends State<GachaPickScreen>
           const SizedBox(width: 6),
           Text(
             label,
-            style: TextStyle(
-              color: isActive
-                  ? Colors.white
-                  : isDone
-                  ? modeColor
-                  : Colors.white.withValues(alpha: 0.3),
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 1,
-            ),
+            style: AppTextStyles.caption3.copyWith(color: isActive),
           ),
         ],
       ),

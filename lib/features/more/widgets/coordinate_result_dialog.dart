@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 
 /// 게임 스타일 좌표 결과 다이얼로그
 class CoordinateResultDialog extends StatefulWidget {
@@ -232,12 +233,7 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
                                 const SizedBox(width: 10),
                                 Text(
                                   widget.modeName.toUpperCase(),
-                                  style: TextStyle(
-                                    color: widget.modeColor,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700,
-                                    letterSpacing: 3,
-                                  ),
+                                  style: AppTextStyles.caption3.copyWith(color: widget.modeColor),
                                 ),
                               ],
                             ),
@@ -248,12 +244,7 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
                           // 타이틀
                           Text(
                             'COORDINATE',
-                            style: TextStyle(
-                              color: AppColors.white.withValues(alpha: 0.5),
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 5,
-                            ),
+                            style: AppTextStyles.caption4.copyWith(color: AppColors.white.withValues(alpha: 0.5)),
                           ),
                           const SizedBox(height: 6),
                           ShaderMask(
@@ -399,12 +390,7 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
       children: [
         Text(
           label,
-          style: TextStyle(
-            color: widget.modeColor.withValues(alpha: 0.7),
-            fontSize: 11,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 3,
-          ),
+          style: AppTextStyles.caption4.copyWith(color: widget.modeColor.withValues(alpha: 0.7)),
         ),
         const SizedBox(height: 10),
         Text(
@@ -473,12 +459,7 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
             const SizedBox(width: 8),
             Text(
               label,
-              style: TextStyle(
-                color: AppColors.white.withValues(alpha: isPrimary ? 1 : 0.8),
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1.5,
-              ),
+              style: AppTextStyles.title3.copyWith(color: AppColors.white.withValues(alpha: isPrimary ? 1 : 0.8)),
             ),
           ],
         ),

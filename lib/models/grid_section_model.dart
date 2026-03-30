@@ -86,12 +86,12 @@ class GridSectionManager {
       AppColors.blue, // blue
       AppColors.primaryLight, // purple
       AppColors.red, // pink
-      AppColors.yellow, // amber
-      AppColors.mint, // green
+      AppColors.yellow500, // amber
+      AppColors.green500, // green
       AppColors.blue, // cyan
       AppColors.red, // red
       AppColors.primaryMain, // indigo
-      AppColors.mint, // lime
+      AppColors.green500, // lime
     ];
 
     // 섹션 이름 생성 (A1, A2, ... B1, B2, ...)

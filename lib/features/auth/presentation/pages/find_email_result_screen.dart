@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/auth/data/repositories/auth_repository.dart';
 
 /// SC-006-03: 이메일 찾기 결과 화면
@@ -85,11 +86,7 @@ class _FindEmailResultScreenState extends ConsumerState<FindEmailResultScreen> {
           ),
           title: const Text(
             '이메일 찾기',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           centerTitle: true,
         ),
@@ -119,12 +116,7 @@ class _FindEmailResultScreenState extends ConsumerState<FindEmailResultScreen> {
           // 안내 문구
           const Text(
             '입력하신 휴대폰 번호로\n가입된 계정을 찾았어요!',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-              color: AppColors.darkBlue,
-              height: 1.4,
-            ),
+            style: AppTextStyles.heading2.copyWith(color: AppColors.darkBlue),
           ),
           const SizedBox(height: 32),
 
@@ -163,7 +155,7 @@ class _FindEmailResultScreenState extends ConsumerState<FindEmailResultScreen> {
               ),
               child: const Text(
                 '비밀번호 찾기',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                style: AppTextStyles.title2,
               ),
             ),
           ),
@@ -185,7 +177,7 @@ class _FindEmailResultScreenState extends ConsumerState<FindEmailResultScreen> {
               ),
               child: const Text(
                 '로그인 하기',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                style: AppTextStyles.title2,
               ),
             ),
           ),
@@ -205,12 +197,7 @@ class _FindEmailResultScreenState extends ConsumerState<FindEmailResultScreen> {
 
           const Text(
             '해당 번호로 가입된\n계정이 없어요',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-              color: AppColors.darkBlue,
-              height: 1.4,
-            ),
+            style: AppTextStyles.heading2.copyWith(color: AppColors.darkBlue),
           ),
           const SizedBox(height: 12),
           Text(
@@ -239,7 +226,7 @@ class _FindEmailResultScreenState extends ConsumerState<FindEmailResultScreen> {
               ),
               child: const Text(
                 '다시 찾기',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                style: AppTextStyles.title2,
               ),
             ),
           ),
@@ -261,7 +248,7 @@ class _FindEmailResultScreenState extends ConsumerState<FindEmailResultScreen> {
               ),
               child: const Text(
                 '회원가입 하기',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                style: AppTextStyles.title2,
               ),
             ),
           ),
@@ -315,21 +302,13 @@ class _FindEmailResultScreenState extends ConsumerState<FindEmailResultScreen> {
           width: 80,
           child: Text(
             label,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: AppColors.gray500,
-            ),
+            style: AppTextStyles.title3.copyWith(color: AppColors.gray500),
           ),
         ),
         Expanded(
           child: Text(
             value,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
           ),
         ),
       ],

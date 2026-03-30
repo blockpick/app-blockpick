@@ -57,7 +57,7 @@ class WinnerDetailScreen extends StatelessWidget {
       ),
       title: Text(
         '역대 당첨자',
-        style: AppTextStyles.medium.copyWith(
+        style: AppTextStyles.title1.copyWith(
           color: AppColors.darkBlue,
           fontWeight: FontWeight.bold,
         ),
@@ -110,7 +110,7 @@ class WinnerDetailScreen extends StatelessWidget {
               children: [
                 Text(
                   winner.productName,
-                  style: AppTextStyles.body.copyWith(
+                  style: AppTextStyles.body3.copyWith(
                     fontWeight: FontWeight.w600,
                     color: AppColors.darkBlue,
                   ),
@@ -122,21 +122,21 @@ class WinnerDetailScreen extends StatelessWidget {
                   children: [
                     Text(
                       winner.eventType.displayName,
-                      style: AppTextStyles.bodySmall.copyWith(
+                      style: AppTextStyles.body4.copyWith(
                         color: AppColors.medium,
                       ),
                     ),
                     const SizedBox(width: 4),
                     Text(
                       '•',
-                      style: AppTextStyles.bodySmall.copyWith(
+                      style: AppTextStyles.body4.copyWith(
                         color: AppColors.medium,
                       ),
                     ),
                     const SizedBox(width: 4),
                     Text(
                       dateFormat.format(winner.winDate),
-                      style: AppTextStyles.bodySmall.copyWith(
+                      style: AppTextStyles.body4.copyWith(
                         color: AppColors.medium,
                       ),
                     ),
@@ -171,7 +171,7 @@ class WinnerDetailScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   gradient: RadialGradient(
                     colors: [
-                      AppColors.yellow.withValues(alpha: 0.2),
+                      AppColors.yellow500.withValues(alpha: 0.2),
                       AppColors.pink.withValues(alpha: 0.1),
                       Colors.transparent,
                     ],
@@ -187,12 +187,12 @@ class WinnerDetailScreen extends StatelessWidget {
                   shape: BoxShape.circle,
                   color: AppColors.bgWhite,
                   border: Border.all(
-                    color: AppColors.yellow,
+                    color: AppColors.yellow500,
                     width: 3,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.yellow.withValues(alpha: 0.3),
+                      color: AppColors.yellow500.withValues(alpha: 0.3),
                       blurRadius: 16,
                       spreadRadius: 2,
                     ),
@@ -219,7 +219,7 @@ class WinnerDetailScreen extends StatelessWidget {
                   width: 28,
                   height: 28,
                   decoration: BoxDecoration(
-                    color: AppColors.yellow,
+                    color: AppColors.yellow500,
                     shape: BoxShape.circle,
                     border: Border.all(
                       color: AppColors.white,
@@ -240,7 +240,7 @@ class WinnerDetailScreen extends StatelessWidget {
           // 닉네임
           Text(
             winner.nickName,
-            style: AppTextStyles.medium.copyWith(
+            style: AppTextStyles.title1.copyWith(
               fontWeight: FontWeight.bold,
               color: AppColors.darkBlue,
             ),
@@ -257,7 +257,7 @@ class WinnerDetailScreen extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         winner.initial,
-        style: AppTextStyles.large.copyWith(
+        style: AppTextStyles.heading1.copyWith(
           color: AppColors.white,
           fontWeight: FontWeight.bold,
         ),
@@ -287,7 +287,7 @@ class WinnerDetailScreen extends StatelessWidget {
             children: [
               Text(
                 '선택 좌표 보기',
-                style: AppTextStyles.body.copyWith(
+                style: AppTextStyles.body3.copyWith(
                   color: AppColors.darkBlue,
                   fontWeight: FontWeight.w500,
                 ),
@@ -297,7 +297,7 @@ class WinnerDetailScreen extends StatelessWidget {
                 width: 20,
                 height: 20,
                 decoration: BoxDecoration(
-                  color: AppColors.yellow,
+                  color: AppColors.yellow500,
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
@@ -325,7 +325,7 @@ class WinnerDetailScreen extends StatelessWidget {
             children: [
               Text(
                 '최종 결과',
-                style: AppTextStyles.medium.copyWith(
+                style: AppTextStyles.title1.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppColors.darkBlue,
                 ),
@@ -333,7 +333,7 @@ class WinnerDetailScreen extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 '(총 ${_formatNumber(detail.totalParticipants)}명 참여)',
-                style: AppTextStyles.bodySmall.copyWith(
+                style: AppTextStyles.body4.copyWith(
                   color: AppColors.medium,
                 ),
               ),
@@ -372,7 +372,7 @@ class WinnerDetailScreen extends StatelessWidget {
                   width: 40,
                   child: Text(
                     '순위',
-                    style: AppTextStyles.bodySmall.copyWith(
+                    style: AppTextStyles.body4.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColors.medium,
                     ),
@@ -381,7 +381,7 @@ class WinnerDetailScreen extends StatelessWidget {
                 Expanded(
                   child: Text(
                     '아이디',
-                    style: AppTextStyles.bodySmall.copyWith(
+                    style: AppTextStyles.body4.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColors.medium,
                     ),
@@ -391,7 +391,7 @@ class WinnerDetailScreen extends StatelessWidget {
                   width: 80,
                   child: Text(
                     '시간(UTC)',
-                    style: AppTextStyles.bodySmall.copyWith(
+                    style: AppTextStyles.body4.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColors.medium,
                     ),
@@ -402,7 +402,7 @@ class WinnerDetailScreen extends StatelessWidget {
                   width: 60,
                   child: Text(
                     '중복 인원',
-                    style: AppTextStyles.bodySmall.copyWith(
+                    style: AppTextStyles.body4.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColors.medium,
                     ),
@@ -432,7 +432,7 @@ class WinnerDetailScreen extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          color: isWinner ? AppColors.yellow.withValues(alpha: 0.1) : null,
+          color: isWinner ? AppColors.yellow500.withValues(alpha: 0.1) : null,
           border: Border(
             bottom: BorderSide(
               color: AppColors.bgWhite,
@@ -446,16 +446,16 @@ class WinnerDetailScreen extends StatelessWidget {
               width: 40,
               child: Text(
                 '${ranker.rank}',
-                style: AppTextStyles.body.copyWith(
+                style: AppTextStyles.body3.copyWith(
                   fontWeight: isWinner ? FontWeight.bold : FontWeight.normal,
-                  color: isWinner ? AppColors.yellow : AppColors.darkBlue,
+                  color: isWinner ? AppColors.yellow500 : AppColors.darkBlue,
                 ),
               ),
             ),
             Expanded(
               child: Text(
                 ranker.nickName,
-                style: AppTextStyles.body.copyWith(
+                style: AppTextStyles.body3.copyWith(
                   fontWeight: isWinner ? FontWeight.w600 : FontWeight.normal,
                   color: AppColors.darkBlue,
                 ),
@@ -465,7 +465,7 @@ class WinnerDetailScreen extends StatelessWidget {
               width: 80,
               child: Text(
                 timeFormat.format(ranker.selectedTime),
-                style: AppTextStyles.body.copyWith(
+                style: AppTextStyles.body3.copyWith(
                   color: AppColors.medium,
                 ),
                 textAlign: TextAlign.center,
@@ -477,9 +477,9 @@ class WinnerDetailScreen extends StatelessWidget {
                 ranker.duplicateCount == 1
                     ? '1명 (독점)'
                     : '${ranker.duplicateCount}명',
-                style: AppTextStyles.bodySmall.copyWith(
+                style: AppTextStyles.body4.copyWith(
                   color: ranker.duplicateCount == 1
-                      ? AppColors.green
+                      ? AppColors.green500
                       : AppColors.medium,
                   fontWeight: ranker.duplicateCount == 1
                       ? FontWeight.w600

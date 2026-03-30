@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 import '../models/event_prize.dart';
 
 /// 이벤트 당첨 팝업
@@ -255,11 +256,7 @@ class _EventPrizePopupState extends State<EventPrizePopup>
                           ),
                           child: Text(
                             EventPrize.getGradeName(widget.prize.grade),
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
+                            style: AppTextStyles.caption3.copyWith(color: Colors.white),
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -345,11 +342,7 @@ class _EventPrizePopupState extends State<EventPrizePopup>
                               const SizedBox(width: 8),
                               Text(
                                 '${_priceFormatter.format(widget.prize.value)}원 상당',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  color: _gradeColor,
-                                ),
+                                style: AppTextStyles.buttonLarge.copyWith(color: _gradeColor),
                               ),
                             ],
                           ),

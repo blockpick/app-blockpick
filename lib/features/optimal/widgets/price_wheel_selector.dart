@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -78,69 +76,33 @@ class _PriceWheelSelectorState extends ConsumerState<PriceWheelSelector> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        // 배경 상품 이미지 (블러 처리)
+        // 배경 상품 이미지 (직접 노출)
         if (widget.backgroundImageUrl != null)
           Positioned.fill(
-            child: ClipRRect(
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  // 상품 이미지
-                  Image.asset(
-                    widget.backgroundImageUrl!,
-                    fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const SizedBox.shrink();
-                    },
-                  ),
-                  // 블러 효과
-                  BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
-                    child: Container(
-                      color: AppColors.deepWhite.withOpacity(0.2),
-                    ),
-                  ),
-                ],
-              ),
+            child: Image.asset(
+              widget.backgroundImageUrl!,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                return const SizedBox.shrink();
+              },
             ),
           ),
-
-        // 중앙 포커스 인디케이터 (블록 테두리 강조)
-        Positioned.fill(
-          child: Center(
-            child: Container(
-              height: 90,
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: AppColors.purple.withOpacity(0.3),
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-          ),
-        ),
 
         // 휠 스크롤 뷰
         SizedBox(
           height: widget.height,
           child: ListWheelScrollView.useDelegate(
             controller: _scrollController,
-            itemExtent: 90, // 각 블록 높이
-            diameterRatio: 1.5, // 휠 직경 (작을수록 3D 효과 강함)
-            perspective: 0.003, // 3D 원근감
+            itemExtent: 90,
+            diameterRatio: 1.5,
+            perspective: 0.003,
             physics: const FixedExtentScrollPhysics(),
             onSelectedItemChanged: (index) {
               setState(() {
                 _currentIndex = index;
               });
 
-              // 선택된 가격 콜백
               widget.onPriceSelected(widget.prices[index]);
-
-              // 햅틱 피드백
-              // HapticFeedback.selectionClick();
             },
             childDelegate: ListWheelChildBuilderDelegate(
               childCount: widget.prices.length,
@@ -148,18 +110,20 @@ class _PriceWheelSelectorState extends ConsumerState<PriceWheelSelector> {
                 final price = widget.prices[index];
                 final isSelected = widget.selectedPrice == price;
                 final isFocused = _currentIndex == index;
+                final distance = (index - _currentIndex).abs();
 
                 return PriceBlockItem(
                   price: price,
                   isSelected: isSelected,
                   isFocused: isFocused,
+                  distanceFromCenter: distance,
                 );
               },
             ),
           ),
         ),
 
-        // 상단 그라데이션 페이드
+        // 상단 페이드 (부모 배경에 자연스럽게 연결)
         Positioned(
           top: 0,
           left: 0,
@@ -172,8 +136,8 @@ class _PriceWheelSelectorState extends ConsumerState<PriceWheelSelector> {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    AppColors.deepWhite,
-                    AppColors.deepWhite.withOpacity(0.0),
+                    AppColors.white.withValues(alpha: 0.8),
+                    AppColors.white.withValues(alpha: 0.0),
                   ],
                 ),
               ),
@@ -181,7 +145,7 @@ class _PriceWheelSelectorState extends ConsumerState<PriceWheelSelector> {
           ),
         ),
 
-        // 하단 그라데이션 페이드
+        // 하단 페이드
         Positioned(
           bottom: 0,
           left: 0,
@@ -194,8 +158,8 @@ class _PriceWheelSelectorState extends ConsumerState<PriceWheelSelector> {
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
                   colors: [
-                    AppColors.deepWhite,
-                    AppColors.deepWhite.withOpacity(0.0),
+                    AppColors.white.withValues(alpha: 0.8),
+                    AppColors.white.withValues(alpha: 0.0),
                   ],
                 ),
               ),

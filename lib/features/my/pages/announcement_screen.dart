@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 
 /// 공지사항 화면
 class AnnouncementScreen extends StatelessWidget {
@@ -20,11 +21,7 @@ class AnnouncementScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text(
             '공지사항',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           backgroundColor: AppColors.gray100,
           foregroundColor: AppColors.darkBlue,
@@ -44,11 +41,7 @@ class AnnouncementScreen extends StatelessWidget {
                     const SizedBox(height: 16),
                     Text(
                       '공지사항이 없습니다',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.gray500,
-                      ),
+                      style: AppTextStyles.body2.copyWith(color: AppColors.gray500),
                     ),
                   ],
                 ),
@@ -115,11 +108,7 @@ class _AnnouncementItemState extends State<_AnnouncementItem> {
                         ),
                         child: Text(
                           '중요',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.red,
-                          ),
+                          style: AppTextStyles.caption4.copyWith(color: AppColors.red),
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -127,11 +116,7 @@ class _AnnouncementItemState extends State<_AnnouncementItem> {
                     Expanded(
                       child: Text(
                         widget.announcement['title'] as String,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.darkBlue,
-                        ),
+                        style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
                       ),
                     ),
                     Icon(

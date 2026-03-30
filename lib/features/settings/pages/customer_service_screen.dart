@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 
 /// 고객센터 화면
 class CustomerServiceScreen extends StatelessWidget {
@@ -18,11 +19,7 @@ class CustomerServiceScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text(
             '고객센터',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           backgroundColor: AppColors.gray100,
           foregroundColor: AppColors.darkBlue,
@@ -117,11 +114,7 @@ class CustomerServiceScreen extends StatelessWidget {
       padding: const EdgeInsets.only(left: 4),
       child: Text(
         title,
-        style: TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w500,
-          color: AppColors.gray600,
-        ),
+        style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
       ),
     );
   }
@@ -166,11 +159,7 @@ class CustomerServiceScreen extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.darkBlue,
-                        ),
+                        style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -272,11 +261,7 @@ class _FAQItemState extends State<_FAQItem> {
                     child: Center(
                       child: Text(
                         'Q',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.blue,
-                        ),
+                        style: AppTextStyles.caption3.copyWith(color: AppColors.blue),
                       ),
                     ),
                   ),
@@ -284,11 +269,7 @@ class _FAQItemState extends State<_FAQItem> {
                   Expanded(
                     child: Text(
                       widget.question,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.darkBlue,
-                      ),
+                      style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
                     ),
                   ),
                   Icon(
@@ -308,17 +289,13 @@ class _FAQItemState extends State<_FAQItem> {
                       width: 24,
                       height: 24,
                       decoration: BoxDecoration(
-                        color: AppColors.green.withValues(alpha: 0.1),
+                        color: AppColors.green500.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Center(
                         child: Text(
                           'A',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.green,
-                          ),
+                          style: AppTextStyles.caption3.copyWith(color: AppColors.green500),
                         ),
                       ),
                     ),

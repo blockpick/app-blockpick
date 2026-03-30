@@ -33,7 +33,7 @@ class _TabBarSample6State extends State<TabBarSample6> {
         ),
         title: Text(
           '카카오톡 스타일',
-          style: AppTextStyles.large.copyWith(
+          style: AppTextStyles.heading1.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.darkBlue,
           ),
@@ -52,7 +52,7 @@ class _TabBarSample6State extends State<TabBarSample6> {
             child: Center(
               child: Text(
                 _tabs[_selectedIndex].label,
-                style: AppTextStyles.display.copyWith(
+                style: AppTextStyles.display1.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppColors.darkBlue,
                 ),
@@ -132,7 +132,7 @@ class _TabBarSample6State extends State<TabBarSample6> {
             const SizedBox(height: 4),
             Text(
               tab.label,
-              style: AppTextStyles.small.copyWith(
+              style: AppTextStyles.body4.copyWith(
                 color: isSelected ? AppColors.darkBlue : AppColors.medium,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               ),

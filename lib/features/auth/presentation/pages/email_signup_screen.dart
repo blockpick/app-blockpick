@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../widgets/auth_scaffold.dart';
 import '../widgets/auth_button.dart';
 import '../widgets/auth_text_field.dart';
@@ -104,11 +105,7 @@ class _EmailSignupScreenState extends ConsumerState<EmailSignupScreen> {
               const SizedBox(height: 8),
               Text(
                 '${_emailController.text}\n으로 가입된 계정이 있어요',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.gray600,
-                ),
+                style: AppTextStyles.body1.copyWith(color: AppColors.gray600),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
@@ -146,22 +143,12 @@ class _EmailSignupScreenState extends ConsumerState<EmailSignupScreen> {
             // 타이틀
             const Text(
               '이메일을\n입력해주세요',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w700,
-                color: AppColors.darkBlue,
-                height: 1.3,
-                letterSpacing: -0.5,
-              ),
+              style: AppTextStyles.display2.copyWith(color: AppColors.darkBlue),
             ),
             const SizedBox(height: 12),
             Text(
               '로그인할 때 사용할 이메일이에요',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                color: AppColors.gray600,
-              ),
+              style: AppTextStyles.body1.copyWith(color: AppColors.gray600),
             ),
             const SizedBox(height: 40),
 

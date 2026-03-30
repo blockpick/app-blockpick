@@ -74,7 +74,7 @@ class _WinnersScreenState extends State<WinnersScreen>
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Text(
         'Winners',
-        style: AppTextStyles.large.copyWith(
+        style: AppTextStyles.heading1.copyWith(
           fontWeight: FontWeight.bold,
           color: AppColors.darkBlue,
         ),
@@ -106,8 +106,8 @@ class _WinnersScreenState extends State<WinnersScreen>
         dividerColor: Colors.transparent,
         labelColor: AppColors.darkBlue,
         unselectedLabelColor: AppColors.gray500,
-        labelStyle: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
-        unselectedLabelStyle: AppTextStyles.body,
+        labelStyle: AppTextStyles.body3.copyWith(fontWeight: FontWeight.w600),
+        unselectedLabelStyle: AppTextStyles.body3,
         labelPadding: EdgeInsets.zero,
         tabs: const [
           Tab(text: '역대 당첨자'),
@@ -162,7 +162,7 @@ class _WinnersScreenState extends State<WinnersScreen>
               children: [
                 Text(
                   isWinnersTab ? '내 당첨 내역' : '내 리뷰 내역',
-                  style: AppTextStyles.body.copyWith(
+                  style: AppTextStyles.body3.copyWith(
                     color: AppColors.darkBlue,
                     fontWeight: FontWeight.w500,
                   ),

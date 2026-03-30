@@ -205,7 +205,7 @@ class _TransactionProgressModalState extends ConsumerState<TransactionProgressMo
         // 제목 + 카운터
         Text(
           isPolling ? '트랜잭션 확인 중' : '트랜잭션 생성 중',
-          style: AppTextStyles.medium.copyWith(
+          style: AppTextStyles.title1.copyWith(
             color: AppColors.darkBlue,
             fontWeight: FontWeight.w700,
           ),
@@ -213,7 +213,7 @@ class _TransactionProgressModalState extends ConsumerState<TransactionProgressMo
         const SizedBox(height: 4),
         Text(
           '($step/$total)',
-          style: AppTextStyles.body.copyWith(
+          style: AppTextStyles.body3.copyWith(
             color: AppColors.grayBlue,
             fontWeight: FontWeight.w600,
           ),
@@ -231,7 +231,7 @@ class _TransactionProgressModalState extends ConsumerState<TransactionProgressMo
       children: [
         Text(
           message,
-          style: AppTextStyles.body.copyWith(color: AppColors.navy),
+          style: AppTextStyles.body3.copyWith(color: AppColors.navy),
           textAlign: TextAlign.center,
         ),
         if (txCount != null && totalTx != null && totalTx > 0) ...[
@@ -283,7 +283,7 @@ class _TransactionProgressModalState extends ConsumerState<TransactionProgressMo
             Expanded(
               child: Text(
                 displayHash,
-                style: AppTextStyles.bodySmall.copyWith(
+                style: AppTextStyles.body4.copyWith(
                   fontFamily: 'monospace',
                   color: AppColors.navy,
                 ),
@@ -379,7 +379,7 @@ class _TransactionProgressModalState extends ConsumerState<TransactionProgressMo
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('${result!.grantedAmount}P 적립 완료!'),
-          backgroundColor: AppColors.green,
+          backgroundColor: AppColors.green500,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../widgets/coordinate_result_dialog.dart';
@@ -17,7 +18,7 @@ class PredictPickScreen extends StatefulWidget {
 
 class _PredictPickScreenState extends State<PredictPickScreen>
     with TickerProviderStateMixin {
-  static const Color modeColor = AppColors.mint;
+  static const Color modeColor = AppColors.green500;
   static const int gridSize = 1000;
 
   final _rowController = TextEditingController();
@@ -210,12 +211,7 @@ class _PredictPickScreenState extends State<PredictPickScreen>
                   SizedBox(width: 6),
                   Text(
                     'RANDOM',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 1,
-                    ),
+                    style: AppTextStyles.caption2.copyWith(color: Colors.white),
                   ),
                 ],
               ),
@@ -430,11 +426,7 @@ class _PredictPickScreenState extends State<PredictPickScreen>
               const SizedBox(height: 4),
               Text(
                 '${_pastWinners.length}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: AppTextStyles.heading1.copyWith(color: Colors.white),
               ),
             ],
           ),
@@ -496,11 +488,7 @@ class _PredictPickScreenState extends State<PredictPickScreen>
                         ),
                         child: Text(
                           '(${winner['row']}, ${winner['col']})',
-                          style: TextStyle(
-                            color: modeColor,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: AppTextStyles.caption2.copyWith(color: modeColor),
                         ),
                       ),
                     );
@@ -550,12 +538,7 @@ class _PredictPickScreenState extends State<PredictPickScreen>
                       SizedBox(width: 10),
                       Text(
                         'SUBMIT PROPHECY',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 2,
-                        ),
+                        style: AppTextStyles.buttonLarge.copyWith(color: Colors.white),
                       ),
                     ],
                   ),
@@ -608,11 +591,7 @@ class _PredictPickScreenState extends State<PredictPickScreen>
                   controller: controller,
                   focusNode: focusNode,
                   keyboardType: TextInputType.number,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: AppTextStyles.heading1.copyWith(color: Colors.white),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(4),

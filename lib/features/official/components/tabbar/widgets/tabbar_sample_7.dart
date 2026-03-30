@@ -28,7 +28,7 @@ class _TabBarSample7State extends State<TabBarSample7> {
         ),
         title: Text(
           '네이버 스타일',
-          style: AppTextStyles.large.copyWith(
+          style: AppTextStyles.heading1.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.darkBlue,
           ),
@@ -63,12 +63,12 @@ class _TabBarSample7State extends State<TabBarSample7> {
             Icon(
               Icons.article,
               size: 100,
-              color: AppColors.green,
+              color: AppColors.green500,
             ),
             const SizedBox(height: 20),
             Text(
               _tabs[_selectedIndex],
-              style: AppTextStyles.display.copyWith(
+              style: AppTextStyles.display1.copyWith(
                 fontWeight: FontWeight.bold,
                 color: AppColors.darkBlue,
               ),
@@ -92,7 +92,7 @@ class _TabBarSample7State extends State<TabBarSample7> {
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
-              color: isSelected ? AppColors.green : Colors.transparent,
+              color: isSelected ? AppColors.green500 : Colors.transparent,
               width: 3,
             ),
           ),
@@ -100,7 +100,7 @@ class _TabBarSample7State extends State<TabBarSample7> {
         child: Center(
           child: Text(
             _tabs[index],
-            style: AppTextStyles.body.copyWith(
+            style: AppTextStyles.body3.copyWith(
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               color: isSelected ? AppColors.darkBlue : AppColors.medium,
             ),

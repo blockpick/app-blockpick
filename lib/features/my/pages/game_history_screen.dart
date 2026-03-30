@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 
 /// 게임 참여 내역 화면
 class GameHistoryScreen extends ConsumerWidget {
@@ -21,11 +22,7 @@ class GameHistoryScreen extends ConsumerWidget {
         appBar: AppBar(
           title: const Text(
             '게임 참여 내역',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           backgroundColor: AppColors.gray100,
           foregroundColor: AppColors.darkBlue,
@@ -59,11 +56,7 @@ class GameHistoryScreen extends ConsumerWidget {
           const SizedBox(height: 16),
           Text(
             '참여한 게임이 없습니다',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: AppColors.gray500,
-            ),
+            style: AppTextStyles.body2.copyWith(color: AppColors.gray500),
           ),
           const SizedBox(height: 8),
           Text(
@@ -92,7 +85,7 @@ class _GameHistoryItem extends StatelessWidget {
     Color statusColor;
     String statusText;
     if (status == 'completed') {
-      statusColor = isWinner ? AppColors.green : AppColors.gray500;
+      statusColor = isWinner ? AppColors.green500 : AppColors.gray500;
       statusText = isWinner ? '당첨' : '미당첨';
     } else {
       statusColor = AppColors.blue;
@@ -114,11 +107,7 @@ class _GameHistoryItem extends StatelessWidget {
               Expanded(
                 child: Text(
                   game['title'] as String,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.darkBlue,
-                  ),
+                  style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
                 ),
               ),
               Container(
@@ -129,11 +118,7 @@ class _GameHistoryItem extends StatelessWidget {
                 ),
                 child: Text(
                   statusText,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: statusColor,
-                  ),
+                  style: AppTextStyles.caption2.copyWith(color: statusColor),
                 ),
               ),
             ],
@@ -167,11 +152,7 @@ class _GameHistoryItem extends StatelessWidget {
         const SizedBox(height: 2),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
-            color: AppColors.darkBlue,
-          ),
+          style: AppTextStyles.body4.copyWith(color: AppColors.darkBlue),
         ),
       ],
     );

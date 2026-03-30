@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 import '../../core/auth/domain/providers/auth_provider.dart';
 import '../../models/game_round_model.dart';
 import '../../providers/game_provider.dart';
@@ -146,8 +147,8 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                AppColors.yellow.withValues(alpha: 0.35),
-                AppColors.yellow.withValues(alpha: 0.6),
+                AppColors.yellow500.withValues(alpha: 0.35),
+                AppColors.yellow500.withValues(alpha: 0.6),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -155,7 +156,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: AppColors.yellow.withValues(alpha: 0.3),
+                color: AppColors.yellow500.withValues(alpha: 0.3),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -169,12 +170,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                   children: [
                     const Text(
                       '전 세계 어디서나,',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF664D03),
-                        height: 1.4,
-                      ),
+                      style: AppTextStyles.title3.copyWith(color: Color(0xFF664D03), height: 1.4),
                     ),
                     const Text(
                       '나를 위한 맞춤 경품 Event',
@@ -190,11 +186,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                       children: [
                         Text(
                           'Blockpick 서비스 알아보기',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF664D03).withValues(alpha: 0.7),
-                          ),
+                          style: AppTextStyles.caption2.copyWith(color: const Color(0xFF664D03).withValues(alpha: 0.7)),
                         ),
                         const SizedBox(width: 4),
                         Icon(
@@ -277,11 +269,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                   const SizedBox(width: 12),
                   const Text(
                     '이벤트 포인트',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.gray700,
-                    ),
+                    style: AppTextStyles.title2.copyWith(color: AppColors.gray700),
                   ),
                 ],
               ),
@@ -305,11 +293,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                       ),
                       child: const Text(
                         '로그인 필요',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.gray500,
-                        ),
+                        style: AppTextStyles.body4.copyWith(color: AppColors.gray500),
                       ),
                     ),
                   const SizedBox(width: 8),
@@ -343,14 +327,14 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [AppColors.yellow.withValues(alpha: 0.15), AppColors.yellow.withValues(alpha: 0.35)],
+              colors: [AppColors.yellow500.withValues(alpha: 0.15), AppColors.yellow500.withValues(alpha: 0.35)],
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
             ),
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: AppColors.yellow.withValues(alpha: 0.2),
+                color: AppColors.yellow500.withValues(alpha: 0.2),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -365,7 +349,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                     width: 32,
                     height: 32,
                     decoration: BoxDecoration(
-                      color: AppColors.yellow,
+                      color: AppColors.yellow500,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Icon(
@@ -380,19 +364,11 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                     children: [
                       const Text(
                         '출석체크',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF664D03),
-                        ),
+                        style: AppTextStyles.title2.copyWith(color: Color(0xFF664D03)),
                       ),
                       Text(
                         '매일 10P 적립',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: const Color(0xFF664D03).withValues(alpha: 0.7),
-                        ),
+                        style: AppTextStyles.caption1.copyWith(color: const Color(0xFF664D03).withValues(alpha: 0.7)),
                       ),
                     ],
                   ),
@@ -406,11 +382,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                 ),
                 child: const Text(
                   'CHECK-IN',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.white,
-                  ),
+                  style: AppTextStyles.caption3.copyWith(color: AppColors.white),
                 ),
               ),
             ],
@@ -536,11 +508,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                 const SizedBox(width: 8),
                 Text(
                   'AD Banner',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.gray500,
-                  ),
+                  style: AppTextStyles.title3.copyWith(color: AppColors.gray500),
                 ),
               ],
             ),
@@ -660,7 +628,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
-                          color: AppColors.yellow,
+                          color: AppColors.yellow500,
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: const Text(
@@ -678,17 +646,17 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: AppColors.green.withValues(alpha: 0.1),
+                            color: AppColors.green500.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(4),
                             border: Border.all(
-                                color: AppColors.green.withValues(alpha: 0.3)),
+                                color: AppColors.green500.withValues(alpha: 0.3)),
                           ),
                           child: const Text(
                             'NEW',
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w700,
-                              color: AppColors.green,
+                              color: AppColors.green500,
                             ),
                           ),
                         ),
@@ -699,12 +667,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                   // 상품명
                   Text(
                     game.title,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.darkBlue,
-                      height: 1.3,
-                    ),
+                    style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue, height: 1.3),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -715,21 +678,13 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                       // 참여 인원
                       Text(
                         '👥 ${game.participants}/${game.maxParticipants}',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.gray600,
-                        ),
+                        style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
                       ),
                       const SizedBox(width: 12),
                       // 입찰 금액 범위
                       Text(
                         '${_formatPrice(game.currentPrice)}원 ~ ${_formatPrice(game.originalPrice)}원',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.gray600,
-                        ),
+                        style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
                       ),
                     ],
                   ),
@@ -850,20 +805,12 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
               children: [
                 Text(
                   username,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.darkBlue,
-                  ),
+                  style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   product,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.gray600,
-                  ),
+                  style: AppTextStyles.body3.copyWith(color: AppColors.gray600),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -1049,11 +996,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
               Expanded(
                 child: Text(
                   username,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.darkBlue,
-                  ),
+                  style: AppTextStyles.caption2.copyWith(color: AppColors.darkBlue),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -1063,12 +1006,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
           Expanded(
             child: Text(
               review,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-                color: AppColors.gray700,
-                height: 1.4,
-              ),
+              style: AppTextStyles.body4.copyWith(color: AppColors.gray700, height: 1.4),
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
             ),
@@ -1113,11 +1051,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
       child: Center(
         child: Text(
           username.isNotEmpty ? username[0].toUpperCase() : '?',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-            color: textColors[colorIndex],
-          ),
+          style: AppTextStyles.title3.copyWith(color: textColors[colorIndex]),
         ),
       ),
     );
@@ -1195,11 +1129,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
               const SizedBox(height: 2),
               Text(
                 subtitle,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.gray500,
-                ),
+                style: AppTextStyles.body4.copyWith(color: AppColors.gray500),
               ),
             ],
           ),
@@ -1209,11 +1139,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
               children: [
                 Text(
                   'More',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.gray600,
-                  ),
+                  style: AppTextStyles.caption2,
                 ),
                 const SizedBox(width: 2),
                 Icon(
@@ -1266,7 +1192,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
       case 'daily':
         return AppColors.blue;
       case 'select':
-        return AppColors.green;
+        return AppColors.green500;
       case 'vibe':
         return AppColors.primaryLight;
       case 'prime':

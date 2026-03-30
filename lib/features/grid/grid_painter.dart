@@ -287,10 +287,10 @@ class GridPainter extends CustomPainter {
           borderColor = AppColors.blue;
           borderOpacity = 0.3;
         } else if (lodLevel <= 3) {
-          borderColor = AppColors.green;
+          borderColor = AppColors.green500;
           borderOpacity = 0.3;
         } else if (lodLevel <= 5) {
-          borderColor = AppColors.yellow;
+          borderColor = AppColors.yellow500;
           borderOpacity = 0.3;
         } else {
           borderColor = AppColors.red;
@@ -321,10 +321,10 @@ class GridPainter extends CustomPainter {
       highlightColor = AppColors.blue;
       opacity = 0.4;
     } else if (lodLevel <= 3) {
-      highlightColor = AppColors.green;
+      highlightColor = AppColors.green500;
       opacity = 0.45;
     } else if (lodLevel <= 5) {
-      highlightColor = AppColors.yellow;
+      highlightColor = AppColors.yellow500;
       opacity = 0.5;
     } else {
       highlightColor = AppColors.red;
@@ -382,12 +382,12 @@ class GridPainter extends CustomPainter {
       // L2-L3: 중간 구역, 진한 하이라이트
       highlightOpacity = 0.55;
       borderWidth = 8.0 / zoom;
-      borderColor = AppColors.green; // 초록색
+      borderColor = AppColors.green500; // 초록색
     } else if (lodLevel <= 5) {
       // L4-L5: 좁은 구역, 보통 하이라이트
       highlightOpacity = 0.5;
       borderWidth = 6.0 / zoom;
-      borderColor = AppColors.yellow; // 노란색
+      borderColor = AppColors.yellow500; // 노란색
     } else {
       // L6+: 매우 좁은 구역, 약한 하이라이트
       highlightOpacity = 0.45;
@@ -701,9 +701,9 @@ class GridPainter extends CustomPainter {
       case BlockState.selected:
         return AppColors.blue;
       case BlockState.winner:
-        return AppColors.yellow;
+        return AppColors.yellow500;
       case BlockState.unique:
-        return AppColors.green;
+        return AppColors.green500;
       case BlockState.duplicate:
         return AppColors.red;
       case BlockState.past:

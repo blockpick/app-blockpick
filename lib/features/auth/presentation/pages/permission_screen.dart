@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 
 /// SC-002: 권한설정 화면
 ///
@@ -45,23 +46,13 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen> {
                       // 제목
                       const Text(
                         '앱 접근 권한 안내',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.darkBlue,
-                          letterSpacing: -0.5,
-                        ),
+                        style: AppTextStyles.heading1.copyWith(color: AppColors.darkBlue),
                       ),
                       const SizedBox(height: 12),
                       // 안내 문구
                       Text(
                         '블록픽은 더 나은 서비스를 위해\n아래와 같은 권한이 필요해요.',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.gray600,
-                          height: 1.5,
-                        ),
+                        style: AppTextStyles.body1.copyWith(color: AppColors.gray600),
                       ),
                       const SizedBox(height: 40),
 
@@ -90,7 +81,7 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen> {
                         icon: Icons.sms_rounded,
                         title: '문자',
                         description: '본인 인증 및 당첨 문자 수신',
-                        color: AppColors.green,
+                        color: AppColors.green500,
                       ),
                       const SizedBox(height: 12),
                       _buildPermissionItem(
@@ -110,12 +101,7 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen> {
                         ),
                         child: Text(
                           '선택 접근 권한은 관련 기능 이용 시 동의가 필요하며, 미동의 시에도 해당 기능 외 서비스는 이용 가능합니다.',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
-                            color: AppColors.gray600,
-                            height: 1.5,
-                          ),
+                          style: AppTextStyles.body3.copyWith(color: AppColors.gray600),
                         ),
                       ),
                     ],
@@ -143,10 +129,7 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen> {
                           ),
                           child: const Text(
                             '앱 종료',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: AppTextStyles.title2,
                           ),
                         ),
                       ),
@@ -169,10 +152,7 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen> {
                           ),
                           child: const Text(
                             '동의하고 계속',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: AppTextStyles.title2,
                           ),
                         ),
                       ),
@@ -200,21 +180,13 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen> {
           ),
           child: Text(
             isRequired ? '필수' : '선택',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: isRequired ? AppColors.blue : AppColors.gray600,
-            ),
+            style: AppTextStyles.caption2.copyWith(color: isRequired ? AppColors.blue : AppColors.gray600),
           ),
         ),
         const SizedBox(width: 8),
         Text(
           title,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: AppColors.darkBlue,
-          ),
+          style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
         ),
       ],
     );
@@ -255,20 +227,12 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen> {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.darkBlue,
-                  ),
+                  style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   description,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.gray500,
-                  ),
+                  style: AppTextStyles.body3.copyWith(color: AppColors.gray500),
                 ),
               ],
             ),

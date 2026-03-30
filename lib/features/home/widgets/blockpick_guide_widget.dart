@@ -31,7 +31,7 @@ class BlockPickGuideWidget extends StatelessWidget {
               const SizedBox(width: 12),
               Text(
                 'THIS IS HOW\nA FAIR GAME WORKS',
-                style: AppTextStyles.large.copyWith(
+                style: AppTextStyles.heading1.copyWith(
                   color: AppColors.blue,
                   fontWeight: FontWeight.bold,
                   height: 1.3,
@@ -55,7 +55,7 @@ class BlockPickGuideWidget extends StatelessWidget {
 
           _buildGuideStep(
             icon: Icons.emoji_events,
-            iconColor: AppColors.yellow,
+            iconColor: AppColors.yellow500,
             title: 'Be the Last Unique Block',
             description: 'The first to pick the longest-lasting solo block wins.',
             stepNumber: 2,
@@ -116,7 +116,7 @@ class BlockPickGuideWidget extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: AppTextStyles.bodyLarge.copyWith(
+                  style: AppTextStyles.body2.copyWith(
                     color: AppColors.darkBlue,
                     fontWeight: FontWeight.bold,
                   ),
@@ -124,7 +124,7 @@ class BlockPickGuideWidget extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   description,
-                  style: AppTextStyles.body.copyWith(
+                  style: AppTextStyles.body3.copyWith(
                     color: AppColors.navy,
                   ),
                 ),

@@ -83,7 +83,7 @@ class PickSectionWidget extends StatelessWidget {
                 children: [
                   Text(
                     'SELECT',
-                    style: AppTextStyles.display.copyWith(
+                    style: AppTextStyles.display1.copyWith(
                       color: AppColors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 36,
@@ -92,7 +92,7 @@ class PickSectionWidget extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     'Join now and claim yours!',
-                    style: AppTextStyles.bodyLarge.copyWith(
+                    style: AppTextStyles.body2.copyWith(
                       color: AppColors.white.withOpacity(0.9),
                     ),
                   ),
@@ -172,7 +172,7 @@ class PickSectionWidget extends StatelessWidget {
               const SizedBox(height: 16),
               Text(
                 'DAILY',
-                style: AppTextStyles.large.copyWith(
+                style: AppTextStyles.heading1.copyWith(
                   color: AppColors.blue,
                   fontWeight: FontWeight.bold,
                 ),
@@ -180,7 +180,7 @@ class PickSectionWidget extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 'Join the world',
-                style: AppTextStyles.body.copyWith(
+                style: AppTextStyles.body3.copyWith(
                   color: AppColors.navy,
                 ),
               ),
@@ -230,7 +230,7 @@ class PickSectionWidget extends StatelessWidget {
               const SizedBox(height: 16),
               Text(
                 'VIBE',
-                style: AppTextStyles.large.copyWith(
+                style: AppTextStyles.heading1.copyWith(
                   color: AppColors.pink,
                   fontWeight: FontWeight.bold,
                 ),
@@ -238,7 +238,7 @@ class PickSectionWidget extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 'Play with Purpose',
-                style: AppTextStyles.body.copyWith(
+                style: AppTextStyles.body3.copyWith(
                   color: AppColors.navy,
                 ),
               ),
@@ -261,7 +261,7 @@ class PickSectionWidget extends StatelessWidget {
           children: [
             Text(
               'PRIME',
-              style: AppTextStyles.large.copyWith(
+              style: AppTextStyles.heading1.copyWith(
                 color: AppColors.darkBlue,
                 fontWeight: FontWeight.bold,
               ),
@@ -275,7 +275,7 @@ class PickSectionWidget extends StatelessWidget {
                 children: [
                   Text(
                     'View more',
-                    style: AppTextStyles.body.copyWith(
+                    style: AppTextStyles.body3.copyWith(
                       color: AppColors.blue,
                     ),
                   ),
@@ -348,7 +348,7 @@ class PickSectionWidget extends StatelessWidget {
               children: [
                 Text(
                   item.name,
-                  style: AppTextStyles.bodySmall.copyWith(
+                  style: AppTextStyles.body4.copyWith(
                     color: AppColors.darkBlue,
                     fontWeight: FontWeight.w600,
                   ),
@@ -358,7 +358,7 @@ class PickSectionWidget extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   '\$${item.price.toStringAsFixed(2)}',
-                  style: AppTextStyles.bodySmall.copyWith(
+                  style: AppTextStyles.body4.copyWith(
                     color: AppColors.blue,
                     fontWeight: FontWeight.bold,
                   ),

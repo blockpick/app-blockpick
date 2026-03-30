@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../widgets/auth_button.dart';
 
 /// 회원가입 완료 화면
@@ -46,24 +47,14 @@ class SignupCompleteScreen extends ConsumerWidget {
               // 축하 메시지
               const Text(
                 '가입 완료!',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.darkBlue,
-                  letterSpacing: -0.5,
-                ),
+                style: AppTextStyles.display1.copyWith(color: AppColors.darkBlue),
               ),
 
               const SizedBox(height: 12),
 
               Text(
                 '블록픽에 오신 것을 환영해요\n지금 바로 게임을 시작해보세요',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.gray600,
-                  height: 1.5,
-                ),
+                style: AppTextStyles.body1.copyWith(color: AppColors.gray600),
                 textAlign: TextAlign.center,
               ),
 

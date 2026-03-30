@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 import '../../models/platform_mode.dart';
 import '../../providers/platform_mode_provider.dart';
 
@@ -140,11 +141,7 @@ class _PlatformOption extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: isSelected ? AppColors.blue : AppColors.dark,
-                    ),
+                    style: AppTextStyles.title2.copyWith(color: isSelected ? AppColors.blue : AppColors.dark),
                   ),
                   const SizedBox(height: 4),
                   Text(

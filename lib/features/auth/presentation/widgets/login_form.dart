@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/auth/domain/providers/auth_provider.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 
 /// 재사용 가능한 로그인 폼 위젯
 /// 페이지와 다이얼로그에서 모두 사용 가능
@@ -134,11 +135,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           children: [
             const Text(
               '로그인',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: AppColors.darkBlue,
-              ),
+              style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
             ),
             IconButton(
               onPressed: _handleClose,
@@ -154,11 +151,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
         // 이메일 입력
         const Text(
           '이메일',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: AppColors.darkBlue,
-          ),
+          style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
         const SizedBox(height: 8),
         TextField(
@@ -203,11 +196,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
         // 비밀번호 입력
         const Text(
           '비밀번호',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: AppColors.darkBlue,
-          ),
+          style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
         const SizedBox(height: 8),
         TextField(
@@ -289,10 +278,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                   )
                 : const Text(
                     '로그인',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: AppTextStyles.title2,
                   ),
           ),
         ),
@@ -321,11 +307,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               ),
               child: Text(
                 '회원가입',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.gray500,
-                ),
+                style: AppTextStyles.title3.copyWith(color: AppColors.gray500),
               ),
             ),
             Text(
@@ -353,11 +335,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               ),
               child: Text(
                 '비밀번호 찾기',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.gray500,
-                ),
+                style: AppTextStyles.title3.copyWith(color: AppColors.gray500),
               ),
             ),
           ],

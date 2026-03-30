@@ -56,7 +56,7 @@ class MyPickCard extends StatelessWidget {
                     // 제목
                     Text(
                       game.title,
-                      style: AppTextStyles.large.copyWith(
+                      style: AppTextStyles.heading1.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppColors.darkBlue,
                       ),
@@ -71,7 +71,7 @@ class MyPickCard extends StatelessWidget {
                       children: [
                         Text(
                           '\$${(game.currentPrice / 100).toStringAsFixed(2)}',
-                          style: AppTextStyles.large.copyWith(
+                          style: AppTextStyles.heading1.copyWith(
                             color: AppColors.blue,
                             fontWeight: FontWeight.bold,
                           ),
@@ -79,7 +79,7 @@ class MyPickCard extends StatelessWidget {
                         const SizedBox(width: 4),
                         Text(
                           '• ${(game.originalPrice / 1000).toStringAsFixed(1)}K',
-                          style: AppTextStyles.body.copyWith(
+                          style: AppTextStyles.body3.copyWith(
                             color: AppColors.medium,
                           ),
                         ),
@@ -192,7 +192,7 @@ class MyPickCard extends StatelessWidget {
           const SizedBox(width: 4),
           Text(
             value,
-            style: AppTextStyles.small.copyWith(
+            style: AppTextStyles.body4.copyWith(
               color: AppColors.dark,
               fontWeight: FontWeight.w500,
             ),
@@ -211,14 +211,14 @@ class MyPickCard extends StatelessWidget {
       children: [
         Text(
           '${myPicks.length} Picks',
-          style: AppTextStyles.body.copyWith(
+          style: AppTextStyles.body3.copyWith(
             color: AppColors.blue,
             fontWeight: FontWeight.bold,
           ),
         ),
         Text(
           'Total $totalValue',
-          style: AppTextStyles.body.copyWith(
+          style: AppTextStyles.body3.copyWith(
             color: AppColors.dark,
             fontWeight: FontWeight.w500,
           ),
@@ -248,7 +248,7 @@ class MyPickCard extends StatelessWidget {
         const SizedBox(width: 4),
         Text(
           game.status.isEnded ? 'Ended' : 'Ends in ${game.timeLeft}',
-          style: AppTextStyles.body.copyWith(
+          style: AppTextStyles.body3.copyWith(
             color: timeColor,
             fontWeight: FontWeight.w500,
           ),

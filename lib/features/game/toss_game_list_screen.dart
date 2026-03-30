@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 import '../../models/game_round_model.dart';
 import '../../providers/game_provider.dart';
 import '../../widgets/toss_game_card.dart';
@@ -93,11 +94,7 @@ class _TossGameListScreenState extends ConsumerState<TossGameListScreen> {
                       ),
                       child: Text(
                         category['label'] as String,
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: isSelected ? AppColors.white : AppColors.gray700,
-                        ),
+                        style: AppTextStyles.caption2.copyWith(color: isSelected ? AppColors.white : AppColors.gray700),
                       ),
                     ),
                   ),
@@ -134,11 +131,7 @@ class _TossGameListScreenState extends ConsumerState<TossGameListScreen> {
 
                     return Text(
                       '총 $count개',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.gray600,
-                      ),
+                      style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
                     );
                   },
                 ),
@@ -203,11 +196,7 @@ class _TossGameListScreenState extends ConsumerState<TossGameListScreen> {
               _sortOptions.firstWhere(
                 (opt) => opt['value'] == _selectedSort,
               )['label']!,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-                color: AppColors.gray700,
-              ),
+              style: AppTextStyles.body4.copyWith(color: AppColors.gray700),
             ),
             const SizedBox(width: 4),
             Icon(
@@ -298,11 +287,7 @@ class _TossGameListScreenState extends ConsumerState<TossGameListScreen> {
           const SizedBox(height: 20),
           Text(
             '게임이 없습니다',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: AppColors.gray600,
-            ),
+            style: AppTextStyles.title2.copyWith(color: AppColors.gray600),
           ),
           const SizedBox(height: 8),
           Text(
@@ -339,11 +324,7 @@ class _TossGameListScreenState extends ConsumerState<TossGameListScreen> {
           const SizedBox(height: 20),
           Text(
             '오류가 발생했습니다',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: AppColors.gray700,
-            ),
+            style: AppTextStyles.title2.copyWith(color: AppColors.gray700),
           ),
           const SizedBox(height: 8),
           Padding(
@@ -375,10 +356,7 @@ class _TossGameListScreenState extends ConsumerState<TossGameListScreen> {
             ),
             child: const Text(
               '다시 시도',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTextStyles.title3,
             ),
           ),
         ],

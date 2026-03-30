@@ -112,7 +112,7 @@ class _RollingAnnouncementsWidgetState
                       return Center(
                         child: Text(
                           announcement.title,
-                          style: AppTextStyles.body.copyWith(
+                          style: AppTextStyles.body3.copyWith(
                             color: AppColors.navy,
                             fontWeight: FontWeight.w500,
                           ),
@@ -131,7 +131,7 @@ class _RollingAnnouncementsWidgetState
               const SizedBox(width: 8),
               Text(
                 '${_currentPage + 1}/${widget.announcements.length}',
-                style: AppTextStyles.bodySmall.copyWith(
+                style: AppTextStyles.body4.copyWith(
                   color: AppColors.grayBlue,
                 ),
               ),

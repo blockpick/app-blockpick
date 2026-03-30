@@ -38,7 +38,7 @@ class OfficialScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   Text(
                     'OFFICIAL WEB',
-                    style: AppTextStyles.large.copyWith(
+                    style: AppTextStyles.heading1.copyWith(
                       fontWeight: FontWeight.bold,
                       color: AppColors.dark,
                     ),
@@ -46,7 +46,7 @@ class OfficialScreen extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     'Service introduction & resources',
-                    style: AppTextStyles.body.copyWith(
+                    style: AppTextStyles.body3.copyWith(
                       color: AppColors.medium,
                     ),
                   ),
@@ -96,7 +96,7 @@ class OfficialScreen extends StatelessWidget {
                     icon: Icons.check_box,
                     title: 'Checkbox',
                     description: '다양한 스타일의 체크박스',
-                    color: AppColors.green,
+                    color: AppColors.green500,
                     onTap: () {
                       Navigator.push(
                         context,
@@ -112,7 +112,7 @@ class OfficialScreen extends StatelessWidget {
                     icon: Icons.tune,
                     title: 'Slider',
                     description: '값을 조절하는 슬라이더',
-                    color: AppColors.yellow,
+                    color: AppColors.yellow500,
                     onTap: () {
                       Navigator.push(
                         context,
@@ -192,7 +192,7 @@ class OfficialScreen extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppTextStyles.large.copyWith(
+                    style: AppTextStyles.heading1.copyWith(
                       fontWeight: FontWeight.bold,
                       color: AppColors.darkBlue,
                     ),
@@ -200,7 +200,7 @@ class OfficialScreen extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     description,
-                    style: AppTextStyles.body.copyWith(
+                    style: AppTextStyles.body3.copyWith(
                       color: AppColors.medium,
                     ),
                   ),

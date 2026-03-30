@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 import '../../components/common/common_app_bar.dart';
 
 /// 토스 스타일 쇼핑 화면
@@ -485,11 +486,7 @@ class _MallScreenState extends State<MallScreen> {
                   ),
                   child: const Text(
                     '첫 구매 혜택',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.white,
-                    ),
+                    style: AppTextStyles.caption2.copyWith(color: AppColors.white),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -605,11 +602,7 @@ class _MallScreenState extends State<MallScreen> {
               const SizedBox(height: 2),
               Text(
                 subtitle,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.gray500,
-                ),
+                style: AppTextStyles.body4.copyWith(color: AppColors.gray500),
               ),
             ],
           ),
@@ -782,22 +775,13 @@ class _MallScreenState extends State<MallScreen> {
                   // 위치
                   Text(
                     product['location'] as String,
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.gray500,
-                    ),
+                    style: AppTextStyles.caption4.copyWith(color: AppColors.gray500),
                   ),
                   const SizedBox(height: 4),
                   // 상품명
                   Text(
                     product['name'] as String,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.darkBlue,
-                      height: 1.3,
-                    ),
+                    style: AppTextStyles.caption2.copyWith(color: AppColors.darkBlue),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -813,11 +797,7 @@ class _MallScreenState extends State<MallScreen> {
                       const SizedBox(width: 4),
                       Text(
                         '${product['rating']}',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.darkBlue,
-                        ),
+                        style: AppTextStyles.caption2.copyWith(color: AppColors.darkBlue),
                       ),
                       Text(
                         ' (${_formatReviews(product['reviews'] as int)})',
@@ -840,11 +820,7 @@ class _MallScreenState extends State<MallScreen> {
                         ),
                         child: Text(
                           '${product['discount']}%',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.red,
-                          ),
+                          style: AppTextStyles.caption3.copyWith(color: AppColors.red),
                         ),
                       ),
                       const SizedBox(width: 6),
@@ -875,7 +851,7 @@ class _MallScreenState extends State<MallScreen> {
       case 'BEST':
         return AppColors.blue;
       case 'NEW':
-        return AppColors.green;
+        return AppColors.green500;
       case 'PREMIUM':
         return AppColors.darkBlue;
       default:

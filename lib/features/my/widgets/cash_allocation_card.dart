@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 import '../../../core/constants/app_constants.dart';
 
 /// 캐시 배분 카드 위젯 (충전캐시, 이벤트 캐시, 쇼핑 캐시)
@@ -63,11 +64,7 @@ class CashAllocationCard extends StatelessWidget {
           // 제목
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 13,
-              color: AppColors.grayBlue,
-              fontWeight: FontWeight.w500,
-            ),
+            style: AppTextStyles.body4.copyWith(color: AppColors.grayBlue),
           ),
 
           const SizedBox(height: AppConstants.spacingXs),
@@ -90,16 +87,12 @@ class CashAllocationCard extends StatelessWidget {
               Icon(
                 isRefundable ? Icons.lock_open : Icons.lock,
                 size: 12,
-                color: isRefundable ? AppColors.success : AppColors.error,
+                color: isRefundable ? AppColors.green500 : AppColors.error,
               ),
               const SizedBox(width: 4),
               Text(
                 status,
-                style: TextStyle(
-                  fontSize: 11,
-                  color: isRefundable ? AppColors.success : AppColors.error,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: AppTextStyles.caption4.copyWith(color: isRefundable ? AppColors.green500 : AppColors.error),
               ),
             ],
           ),

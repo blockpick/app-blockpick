@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 
 /// SC-005-01: 회원가입 선택 화면
 ///
@@ -61,12 +62,7 @@ class SignupSelectScreen extends ConsumerWidget {
                       const SizedBox(height: 12),
                       Text(
                         'Blockpick에 오신 것을 환영해요!\n가입 방법을 선택해 주세요.',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.gray600,
-                          height: 1.5,
-                        ),
+                        style: AppTextStyles.body1.copyWith(color: AppColors.gray600),
                       ),
 
                       const SizedBox(height: 48),
@@ -113,11 +109,7 @@ class SignupSelectScreen extends ConsumerWidget {
                           children: [
                             Text(
                               '이미 계정이 있으신가요?',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: AppColors.gray500,
-                              ),
+                              style: AppTextStyles.body3.copyWith(color: AppColors.gray500),
                             ),
                             TextButton(
                               onPressed: () => context.go('/login'),
@@ -128,11 +120,7 @@ class SignupSelectScreen extends ConsumerWidget {
                               ),
                               child: const Text(
                                 '로그인',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.blue,
-                                ),
+                                style: AppTextStyles.title3.copyWith(color: AppColors.blue),
                               ),
                             ),
                           ],
@@ -249,11 +237,7 @@ class _SignupButton extends StatelessWidget {
               Expanded(
                 child: Text(
                   text,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.darkBlue,
-                  ),
+                  style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
                 ),
               ),
 

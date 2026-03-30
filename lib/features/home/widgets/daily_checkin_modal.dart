@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 
 /// SC-008-02 출석체크 페이지
 class DailyCheckinScreen extends StatefulWidget {
@@ -89,12 +90,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
           // 설명
           RichText(
             text: TextSpan(
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: AppColors.gray600,
-                height: 1.5,
-              ),
+              style: AppTextStyles.body3.copyWith(color: AppColors.gray600),
               children: [
                 const TextSpan(text: '1일 출석 체크하면 '),
                 TextSpan(
@@ -208,11 +204,11 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
       height: 80,
       decoration: BoxDecoration(
         color: isToday
-            ? AppColors.yellow.withValues(alpha: 0.15)
+            ? AppColors.yellow500.withValues(alpha: 0.15)
             : AppColors.gray100,
         borderRadius: BorderRadius.circular(12),
         border: isToday
-            ? Border.all(color: AppColors.yellow, width: 2)
+            ? Border.all(color: AppColors.yellow500, width: 2)
             : null,
       ),
       child: Column(
@@ -220,15 +216,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
         children: [
           Text(
             'DAY $day',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: isToday
-                  ? AppColors.yellow
-                  : isCompleted
-                      ? AppColors.gray500
-                      : AppColors.gray400,
-            ),
+            style: AppTextStyles.caption4.copyWith(color: isToday),
           ),
           const SizedBox(height: 8),
           if (isCompleted)
@@ -241,16 +229,12 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: AppColors.yellow,
+                color: AppColors.yellow500,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Text(
                 '+10P',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF664D03),
-                ),
+                style: AppTextStyles.caption3.copyWith(color: Color(0xFF664D03)),
               ),
             )
           else
@@ -287,11 +271,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
               children: [
                 Text(
                   'DAY 7 Reward',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.gray500,
-                  ),
+                  style: AppTextStyles.body4.copyWith(color: AppColors.gray500),
                 ),
                 const SizedBox(height: 4),
                 const Text(
@@ -311,14 +291,14 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
             height: 56,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [AppColors.yellow, AppColors.yellow.withValues(alpha: 0.7)],
+                colors: [AppColors.yellow500, AppColors.yellow500.withValues(alpha: 0.7)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.yellow.withValues(alpha: 0.4),
+                  color: AppColors.yellow500.withValues(alpha: 0.4),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -363,12 +343,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
         child: Center(
           child: Text(
             canCheckIn ? 'CHECK-IN NOW' : 'CHECKED IN',
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: AppColors.white,
-              letterSpacing: 1,
-            ),
+            style: AppTextStyles.buttonLarge.copyWith(color: AppColors.white),
           ),
         ),
       ),
@@ -395,14 +370,14 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
             height: 120,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [AppColors.yellow, AppColors.yellow.withValues(alpha: 0.7)],
+                colors: [AppColors.yellow500, AppColors.yellow500.withValues(alpha: 0.7)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.yellow.withValues(alpha: 0.5),
+                  color: AppColors.yellow500.withValues(alpha: 0.5),
                   blurRadius: 30,
                   offset: const Offset(0, 10),
                 ),
@@ -445,12 +420,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
           Text(
             '오늘의 포인트 도착! 2배로 더 채워볼까요?\n광고 시청하고 포인트 2배 혜택을 누려보세요.',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: AppColors.gray600,
-              height: 1.5,
-            ),
+            style: AppTextStyles.body3.copyWith(color: AppColors.gray600),
           ),
 
           const Spacer(),
@@ -468,11 +438,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
               child: const Center(
                 child: Text(
                   '포인트 2배로 받기',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.white,
-                  ),
+                  style: AppTextStyles.buttonLarge.copyWith(color: AppColors.white),
                 ),
               ),
             ),
@@ -490,11 +456,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
                 children: [
                   Text(
                     '오늘은 괜찮아요.',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.gray500,
-                    ),
+                    style: AppTextStyles.title3.copyWith(color: AppColors.gray500),
                   ),
                   const SizedBox(width: 4),
                   Container(
@@ -507,11 +469,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
                     child: Center(
                       child: Text(
                         '6',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.gray600,
-                        ),
+                        style: AppTextStyles.caption4.copyWith(color: AppColors.gray600),
                       ),
                     ),
                   ),

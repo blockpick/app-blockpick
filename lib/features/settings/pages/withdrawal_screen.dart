@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/auth/domain/providers/auth_provider.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 import '../../../core/constants/app_constants.dart';
 
 /// SC-011-09, SC-011-10: 회원 탈퇴 화면
@@ -101,12 +102,7 @@ class _WithdrawalScreenState extends ConsumerState<WithdrawalScreen> {
                     // 타이틀
                     const Text(
                       '회원 탈퇴 전,\n아래 사항을 반드시 확인해 주세요.',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.darkBlue,
-                        height: 1.3,
-                      ),
+                      style: AppTextStyles.heading2.copyWith(color: AppColors.darkBlue, height: 1.3),
                     ),
                     const SizedBox(height: 32),
 
@@ -141,11 +137,7 @@ class _WithdrawalScreenState extends ConsumerState<WithdrawalScreen> {
                     // 비밀번호 입력 섹션
                     const Text(
                       '비밀번호 입력 후 탈퇴됩니다.',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.darkBlue,
-                      ),
+                      style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
                     ),
                     const SizedBox(height: 16),
                     _buildPasswordInput(),
@@ -174,11 +166,7 @@ class _WithdrawalScreenState extends ConsumerState<WithdrawalScreen> {
       children: [
         Text(
           title,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: AppColors.darkBlue,
-          ),
+          style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
         ),
         const SizedBox(height: 8),
         Text(
@@ -242,7 +230,7 @@ class _WithdrawalScreenState extends ConsumerState<WithdrawalScreen> {
                   Icon(
                     Icons.check,
                     size: 20,
-                    color: _isValid ? AppColors.green : AppColors.gray400,
+                    color: _isValid ? AppColors.green500 : AppColors.gray400,
                   ),
                 // 비밀번호 보기/숨기기 토글
                 IconButton(
@@ -299,10 +287,7 @@ class _WithdrawalScreenState extends ConsumerState<WithdrawalScreen> {
             ),
             child: const Text(
               '탈퇴하기',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTextStyles.title2,
             ),
           ),
         ),

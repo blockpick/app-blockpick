@@ -119,14 +119,14 @@ class GameResultView extends ConsumerWidget {
             height: 40,
             decoration: BoxDecoration(
               color: isCompleted
-                  ? AppColors.green.withValues(alpha: 0.15)
+                  ? AppColors.green500.withValues(alpha: 0.15)
                   : AppColors.gray200,
               shape: BoxShape.circle,
             ),
             child: Icon(
               isCompleted ? LucideIcons.trophy : LucideIcons.flagTriangleRight,
               size: 20,
-              color: isCompleted ? AppColors.green : AppColors.gray500,
+              color: isCompleted ? AppColors.green500 : AppColors.gray500,
             ),
           ),
           const SizedBox(width: 12),
@@ -179,7 +179,7 @@ class GameResultView extends ConsumerWidget {
                     Flexible(
                       child: Text(
                         gameRound.title,
-                        style: AppTextStyles.body.copyWith(
+                        style: AppTextStyles.body3.copyWith(
                           fontWeight: FontWeight.w700,
                           color: AppColors.darkBlue,
                         ),
@@ -194,7 +194,7 @@ class GameResultView extends ConsumerWidget {
                   const SizedBox(height: 2),
                   Text(
                     game.description!,
-                    style: AppTextStyles.caption.copyWith(
+                    style: AppTextStyles.caption1.copyWith(
                       color: AppColors.gray600,
                     ),
                     maxLines: 2,
@@ -204,7 +204,7 @@ class GameResultView extends ConsumerWidget {
                   const SizedBox(height: 2),
                   Text(
                     gameRound.status.bannerMessage(),
-                    style: AppTextStyles.caption.copyWith(
+                    style: AppTextStyles.caption1.copyWith(
                       color: AppColors.gray600,
                     ),
                   ),
@@ -279,12 +279,12 @@ class GameResultView extends ConsumerWidget {
         const SizedBox(height: 4),
         Text(
           label,
-          style: AppTextStyles.caption.copyWith(color: AppColors.gray500),
+          style: AppTextStyles.caption1.copyWith(color: AppColors.gray500),
         ),
         const SizedBox(height: 2),
         Text(
           value,
-          style: AppTextStyles.body.copyWith(
+          style: AppTextStyles.body3.copyWith(
             fontWeight: FontWeight.w700,
             color: AppColors.darkBlue,
           ),
@@ -310,14 +310,14 @@ class GameResultView extends ConsumerWidget {
           const SizedBox(width: 10),
           Text(
             '총 보상',
-            style: AppTextStyles.body.copyWith(
+            style: AppTextStyles.body3.copyWith(
               color: AppColors.gray600,
             ),
           ),
           const Spacer(),
           Text(
             '$formatted P',
-            style: AppTextStyles.body.copyWith(
+            style: AppTextStyles.body3.copyWith(
               fontWeight: FontWeight.w700,
               color: AppColors.blue,
               fontSize: 16,
@@ -334,9 +334,9 @@ class GameResultView extends ConsumerWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: AppColors.yellow.withValues(alpha: 0.1),
+        color: AppColors.yellow500.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.yellow.withValues(alpha: 0.4)),
+        border: Border.all(color: AppColors.yellow500.withValues(alpha: 0.4)),
       ),
       child: Row(
         children: [
@@ -344,14 +344,14 @@ class GameResultView extends ConsumerWidget {
           const SizedBox(width: 10),
           Text(
             '당첨 위치',
-            style: AppTextStyles.body.copyWith(
+            style: AppTextStyles.body3.copyWith(
               color: AppColors.gray600,
             ),
           ),
           const Spacer(),
           Text(
             _formatWinningCell(game.winningCell!),
-            style: AppTextStyles.body.copyWith(
+            style: AppTextStyles.body3.copyWith(
               fontWeight: FontWeight.w700,
               color: AppColors.orange,
               fontSize: 16,
@@ -395,12 +395,12 @@ class GameResultView extends ConsumerWidget {
           const SizedBox(width: 10),
           Text(
             '게임 기간',
-            style: AppTextStyles.body.copyWith(color: AppColors.gray600),
+            style: AppTextStyles.body3.copyWith(color: AppColors.gray600),
           ),
           const Spacer(),
           Text(
             periodText,
-            style: AppTextStyles.body.copyWith(
+            style: AppTextStyles.body3.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColors.darkBlue,
             ),
@@ -422,7 +422,7 @@ class GameResultView extends ConsumerWidget {
       children: [
         Text(
           '경품 정보',
-          style: AppTextStyles.medium.copyWith(
+          style: AppTextStyles.title1.copyWith(
             fontWeight: FontWeight.w700,
             color: AppColors.darkBlue,
           ),
@@ -442,12 +442,12 @@ class GameResultView extends ConsumerWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: isGrand
-            ? AppColors.yellow.withValues(alpha: 0.08)
+            ? AppColors.yellow500.withValues(alpha: 0.08)
             : AppColors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isGrand
-              ? AppColors.yellow.withValues(alpha: 0.4)
+              ? AppColors.yellow500.withValues(alpha: 0.4)
               : AppColors.gray200,
         ),
       ),
@@ -490,7 +490,7 @@ class GameResultView extends ConsumerWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 5, vertical: 1),
                         decoration: BoxDecoration(
-                          color: AppColors.yellow,
+                          color: AppColors.yellow500,
                           borderRadius: BorderRadius.circular(3),
                         ),
                         child: const Text(
@@ -507,7 +507,7 @@ class GameResultView extends ConsumerWidget {
                     Flexible(
                       child: Text(
                         product.name,
-                        style: AppTextStyles.body.copyWith(
+                        style: AppTextStyles.body3.copyWith(
                           fontWeight: FontWeight.w600,
                           color: AppColors.darkBlue,
                         ),
@@ -521,7 +521,7 @@ class GameResultView extends ConsumerWidget {
                   const SizedBox(height: 2),
                   Text(
                     product.brand!,
-                    style: AppTextStyles.caption.copyWith(
+                    style: AppTextStyles.caption1.copyWith(
                       color: AppColors.gray500,
                     ),
                   ),
@@ -533,7 +533,7 @@ class GameResultView extends ConsumerWidget {
           if (product.price != null && product.price! > 0)
             Text(
               '${NumberFormat('#,###').format(product.price)}원',
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 fontWeight: FontWeight.w700,
                 color: AppColors.darkBlue,
               ),
@@ -561,7 +561,7 @@ class GameResultView extends ConsumerWidget {
               const SizedBox(width: 6),
               Text(
                 '블록체인 검증',
-                style: AppTextStyles.caption.copyWith(
+                style: AppTextStyles.caption1.copyWith(
                   fontWeight: FontWeight.w600,
                   color: AppColors.gray600,
                 ),
@@ -601,7 +601,7 @@ class GameResultView extends ConsumerWidget {
         children: [
           Text(
             '$label: ',
-            style: AppTextStyles.caption.copyWith(
+            style: AppTextStyles.caption1.copyWith(
               color: AppColors.gray500,
               fontSize: 11,
             ),
@@ -609,7 +609,7 @@ class GameResultView extends ConsumerWidget {
           Flexible(
             child: Text(
               shortHash,
-              style: AppTextStyles.caption.copyWith(
+              style: AppTextStyles.caption1.copyWith(
                 color: AppColors.blue,
                 fontSize: 11,
                 decoration: TextDecoration.underline,
@@ -631,7 +631,7 @@ class GameResultView extends ConsumerWidget {
       children: [
         Text(
           '참가자 결과',
-          style: AppTextStyles.medium.copyWith(
+          style: AppTextStyles.title1.copyWith(
             fontWeight: FontWeight.w700,
             color: AppColors.darkBlue,
           ),
@@ -652,12 +652,12 @@ class GameResultView extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: isWinner
-            ? AppColors.yellow.withValues(alpha: 0.1)
+            ? AppColors.yellow500.withValues(alpha: 0.1)
             : AppColors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isWinner
-              ? AppColors.yellow.withValues(alpha: 0.5)
+              ? AppColors.yellow500.withValues(alpha: 0.5)
               : AppColors.gray200,
         ),
       ),
@@ -677,7 +677,7 @@ class GameResultView extends ConsumerWidget {
                     Flexible(
                       child: Text(
                         displayName,
-                        style: AppTextStyles.body.copyWith(
+                        style: AppTextStyles.body3.copyWith(
                           fontWeight: FontWeight.w600,
                           color: AppColors.darkBlue,
                         ),
@@ -690,7 +690,7 @@ class GameResultView extends ConsumerWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
-                          color: AppColors.yellow,
+                          color: AppColors.yellow500,
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: const Text(
@@ -709,7 +709,7 @@ class GameResultView extends ConsumerWidget {
                   const SizedBox(height: 2),
                   Text(
                     'tx: ${result.txHash!.length > 14 ? '${result.txHash!.substring(0, 14)}...' : result.txHash!}',
-                    style: AppTextStyles.caption.copyWith(
+                    style: AppTextStyles.caption1.copyWith(
                       color: AppColors.gray400,
                       fontSize: 10,
                     ),
@@ -720,7 +720,7 @@ class GameResultView extends ConsumerWidget {
                   const SizedBox(height: 2),
                   Text(
                     _formatDateTime(result.joinedAt),
-                    style: AppTextStyles.caption.copyWith(
+                    style: AppTextStyles.caption1.copyWith(
                       color: AppColors.gray400,
                       fontSize: 10,
                     ),
@@ -737,7 +737,7 @@ class GameResultView extends ConsumerWidget {
               if (result.reward != null && result.reward! > 0)
                 Text(
                   '${NumberFormat('#,###').format(result.reward!.toInt())} P',
-                  style: AppTextStyles.body.copyWith(
+                  style: AppTextStyles.body3.copyWith(
                     fontWeight: FontWeight.w700,
                     color: isWinner ? AppColors.orange : AppColors.gray600,
                   ),
@@ -746,7 +746,7 @@ class GameResultView extends ConsumerWidget {
               if (result.score != null)
                 Text(
                   '${result.score}점',
-                  style: AppTextStyles.caption.copyWith(
+                  style: AppTextStyles.caption1.copyWith(
                     color: AppColors.gray500,
                     fontSize: 11,
                   ),
@@ -778,7 +778,7 @@ class GameResultView extends ConsumerWidget {
       width: 36,
       height: 36,
       decoration: BoxDecoration(
-        color: isWinner ? AppColors.yellow : AppColors.gray100,
+        color: isWinner ? AppColors.yellow500 : AppColors.gray100,
         shape: BoxShape.circle,
         border: isWinner
             ? Border.all(color: AppColors.orange, width: 2)
@@ -823,7 +823,7 @@ class GameResultView extends ConsumerWidget {
           const SizedBox(height: 12),
           Text(
             '결과 데이터가 아직 없습니다',
-            style: AppTextStyles.body.copyWith(
+            style: AppTextStyles.body3.copyWith(
               color: AppColors.gray500,
             ),
           ),
@@ -872,7 +872,7 @@ class GameResultView extends ConsumerWidget {
       case 'VIBE':
         return AppColors.blue;
       case 'PRIME':
-        return AppColors.yellow;
+        return AppColors.yellow500;
       default:
         return AppColors.gray500;
     }

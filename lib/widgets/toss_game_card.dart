@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../core/theme/app_colors.dart';
+import '../core/theme/app_text_styles.dart';
 import '../models/game_round_model.dart';
 
 /// 토스 스타일 게임 카드 위젯
@@ -42,12 +43,7 @@ class TossGameCard extends StatelessWidget {
                   // 제목
                   Text(
                     game.title,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.darkBlue,
-                      height: 1.3,
-                    ),
+                    style: AppTextStyles.buttonLarge.copyWith(color: AppColors.darkBlue),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -136,11 +132,7 @@ class TossGameCard extends StatelessWidget {
             ),
             child: Text(
               _getStatusText(),
-              style: const TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: AppColors.white,
-              ),
+              style: AppTextStyles.caption4.copyWith(color: AppColors.white),
             ),
           ),
         ),
@@ -164,11 +156,7 @@ class TossGameCard extends StatelessWidget {
             ),
             child: Text(
               _getTypeText(),
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: _getTypeColor(),
-              ),
+              style: AppTextStyles.caption4.copyWith(color: _getTypeColor()),
             ),
           ),
         ),
@@ -212,11 +200,7 @@ class TossGameCard extends StatelessWidget {
           const SizedBox(width: 4),
           Text(
             value,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: AppColors.gray700,
-            ),
+            style: AppTextStyles.caption2.copyWith(color: AppColors.gray700),
           ),
         ],
       ),
@@ -271,11 +255,7 @@ class TossGameCard extends StatelessWidget {
               const SizedBox(width: 4),
               Text(
                 game.timeLeft,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.red,
-                ),
+                style: AppTextStyles.caption2.copyWith(color: AppColors.red),
               ),
             ],
           ),
@@ -290,9 +270,9 @@ class TossGameCard extends StatelessWidget {
       case GameStatus.scheduled:
         return AppColors.blue;
       case GameStatus.active:
-        return AppColors.green;
+        return AppColors.green500;
       case GameStatus.paused:
-        return AppColors.yellow;
+        return AppColors.yellow500;
       case GameStatus.settling:
         return AppColors.orange;
       case GameStatus.ended:
@@ -318,7 +298,7 @@ class TossGameCard extends StatelessWidget {
       case GameType.vibe:
         return AppColors.blue;
       case GameType.prime:
-        return AppColors.yellow;
+        return AppColors.yellow500;
     }
   }
 

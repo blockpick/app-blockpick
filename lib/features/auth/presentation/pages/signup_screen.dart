@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/auth/data/services/google_auth_service.dart';
 import '../../../../core/auth/data/services/apple_auth_service.dart';
 
@@ -39,11 +40,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           ),
           title: const Text(
             '회원가입',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           centerTitle: true,
         ),
@@ -122,11 +119,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     ),
                     child: const Text(
                       '로그인',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.blue,
-                      ),
+                      style: AppTextStyles.title3.copyWith(color: AppColors.blue),
                     ),
                   ),
                 ],
@@ -193,11 +186,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               const SizedBox(width: 16),
               Text(
                 text,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.darkBlue,
-                ),
+                style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
               ),
               const Spacer(),
               Icon(

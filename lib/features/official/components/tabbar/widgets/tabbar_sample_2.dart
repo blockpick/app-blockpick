@@ -21,8 +21,8 @@ class _TabBarSample2State extends State<TabBarSample2>
   final List<_Tab3D> _tabs = [
     _Tab3D(icon: Icons.dashboard, label: '대시보드', color: AppColors.primaryMain),
     _Tab3D(icon: Icons.bar_chart, label: '통계', color: AppColors.pink),
-    _Tab3D(icon: Icons.notifications, label: '알림', color: AppColors.yellow),
-    _Tab3D(icon: Icons.settings, label: '설정', color: AppColors.mint),
+    _Tab3D(icon: Icons.notifications, label: '알림', color: AppColors.yellow500),
+    _Tab3D(icon: Icons.settings, label: '설정', color: AppColors.green500),
   ];
 
   @override
@@ -66,7 +66,7 @@ class _TabBarSample2State extends State<TabBarSample2>
         ),
         title: Text(
           '3D Floating TabBar',
-          style: AppTextStyles.large.copyWith(
+          style: AppTextStyles.heading1.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.white,
           ),
@@ -326,7 +326,7 @@ class _TabBarSample2State extends State<TabBarSample2>
             const SizedBox(height: 32),
             Text(
               _tabs[_selectedIndex].label,
-              style: AppTextStyles.display.copyWith(
+              style: AppTextStyles.display1.copyWith(
                 color: AppColors.white,
                 fontWeight: FontWeight.bold,
               ),

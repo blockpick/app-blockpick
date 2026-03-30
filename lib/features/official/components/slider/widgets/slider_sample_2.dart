@@ -29,7 +29,7 @@ class _SliderSample2State extends State<SliderSample2> {
         ),
         title: Text(
           'Slider #2',
-          style: AppTextStyles.large.copyWith(
+          style: AppTextStyles.heading1.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.darkBlue,
           ),
@@ -54,7 +54,7 @@ class _SliderSample2State extends State<SliderSample2> {
             ),
             child: Text(
               '커스텀 트랙 슬라이더\n• 포인터 애니메이션\n• 독특한 디자인',
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 color: AppColors.darkBlue,
               ),
             ),
@@ -92,14 +92,14 @@ class _SliderSample2State extends State<SliderSample2> {
             children: [
               Text(
                 '진행률',
-                style: AppTextStyles.large.copyWith(
+                style: AppTextStyles.heading1.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppColors.white,
                 ),
               ),
               Text(
                 '${_progressValue.toInt()}%',
-                style: AppTextStyles.display.copyWith(
+                style: AppTextStyles.display1.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppColors.white,
                 ),
@@ -147,7 +147,7 @@ class _SliderSample2State extends State<SliderSample2> {
             children: [
               Text(
                 '별점',
-                style: AppTextStyles.large.copyWith(
+                style: AppTextStyles.heading1.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppColors.darkBlue,
                 ),
@@ -159,16 +159,16 @@ class _SliderSample2State extends State<SliderSample2> {
                       index < _ratingValue.floor()
                           ? Icons.star
                           : (index < _ratingValue ? Icons.star_half : Icons.star_outline),
-                      color: AppColors.yellow,
+                      color: AppColors.yellow500,
                       size: 28,
                     );
                   }),
                   const SizedBox(width: 8),
                   Text(
                     _ratingValue.toStringAsFixed(1),
-                    style: AppTextStyles.large.copyWith(
+                    style: AppTextStyles.heading1.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppColors.yellow,
+                      color: AppColors.yellow500,
                     ),
                   ),
                 ],
@@ -178,11 +178,11 @@ class _SliderSample2State extends State<SliderSample2> {
           const SizedBox(height: 20),
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
-              activeTrackColor: AppColors.yellow,
-              inactiveTrackColor: AppColors.yellow.withValues(alpha: 0.2),
-              thumbColor: AppColors.yellow,
+              activeTrackColor: AppColors.yellow500,
+              inactiveTrackColor: AppColors.yellow500.withValues(alpha: 0.2),
+              thumbColor: AppColors.yellow500,
               thumbShape: const _StarThumbShape(),
-              overlayColor: AppColors.yellow.withValues(alpha: 0.2),
+              overlayColor: AppColors.yellow500.withValues(alpha: 0.2),
               trackHeight: 10,
             ),
             child: Slider(
@@ -221,7 +221,7 @@ class _SliderSample2State extends State<SliderSample2> {
         children: [
           Text(
             '가격 범위',
-            style: AppTextStyles.large.copyWith(
+            style: AppTextStyles.heading1.copyWith(
               fontWeight: FontWeight.bold,
               color: AppColors.darkBlue,
             ),
@@ -232,19 +232,19 @@ class _SliderSample2State extends State<SliderSample2> {
                   RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
                   (Match m) => '${m[1]},',
                 )}',
-            style: AppTextStyles.display.copyWith(
+            style: AppTextStyles.display1.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppColors.green,
+              color: AppColors.green500,
             ),
           ),
           const SizedBox(height: 20),
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
-              activeTrackColor: AppColors.green,
-              inactiveTrackColor: AppColors.green.withValues(alpha: 0.2),
-              thumbColor: AppColors.green,
+              activeTrackColor: AppColors.green500,
+              inactiveTrackColor: AppColors.green500.withValues(alpha: 0.2),
+              thumbColor: AppColors.green500,
               thumbShape: const _PriceThumbShape(),
-              overlayColor: AppColors.green.withValues(alpha: 0.2),
+              overlayColor: AppColors.green500.withValues(alpha: 0.2),
               trackHeight: 14,
             ),
             child: Slider(
@@ -263,13 +263,13 @@ class _SliderSample2State extends State<SliderSample2> {
             children: [
               Text(
                 '₩0',
-                style: AppTextStyles.body.copyWith(
+                style: AppTextStyles.body3.copyWith(
                   color: AppColors.medium,
                 ),
               ),
               Text(
                 '₩100,000',
-                style: AppTextStyles.body.copyWith(
+                style: AppTextStyles.body3.copyWith(
                   color: AppColors.medium,
                 ),
               ),
@@ -354,7 +354,7 @@ class _StarThumbShape extends SliderComponentShape {
 
     // 별 모양 그리기
     final paint = Paint()
-      ..color = AppColors.yellow
+      ..color = AppColors.yellow500
       ..style = PaintingStyle.fill;
 
     final path = Path();
@@ -410,7 +410,7 @@ class _PriceThumbShape extends SliderComponentShape {
 
     // 다이아몬드 모양
     final paint = Paint()
-      ..color = AppColors.green
+      ..color = AppColors.green500
       ..style = PaintingStyle.fill;
 
     final path = Path();

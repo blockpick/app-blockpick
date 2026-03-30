@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/auth/domain/providers/auth_provider.dart';
 import '../widgets/auth_scaffold.dart';
 import '../widgets/auth_button.dart';
@@ -143,13 +144,7 @@ class _PasswordSetupScreenState extends ConsumerState<PasswordSetupScreen> {
             // 타이틀
             const Text(
               '비밀번호를\n설정해주세요',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w700,
-                color: AppColors.darkBlue,
-                height: 1.3,
-                letterSpacing: -0.5,
-              ),
+              style: AppTextStyles.display2.copyWith(color: AppColors.darkBlue),
             ),
             const SizedBox(height: 40),
 
@@ -234,11 +229,7 @@ class _PasswordSetupScreenState extends ConsumerState<PasswordSetupScreen> {
             padding: const EdgeInsets.only(left: 28),
             child: Text(
               '* 영문/숫자/특수문자 중 2가지 이상 조합',
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                color: AppColors.gray500,
-              ),
+              style: AppTextStyles.caption1.copyWith(color: AppColors.gray500),
             ),
           ),
         ],
@@ -266,10 +257,10 @@ class _PasswordRuleItem extends StatelessWidget {
           width: 20,
           height: 20,
           decoration: BoxDecoration(
-            color: isValid ? AppColors.green : Colors.transparent,
+            color: isValid ? AppColors.green500 : Colors.transparent,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: isValid ? AppColors.green : AppColors.gray400,
+              color: isValid ? AppColors.green500 : AppColors.gray400,
               width: 2,
             ),
           ),
@@ -284,11 +275,7 @@ class _PasswordRuleItem extends StatelessWidget {
         const SizedBox(width: 8),
         Text(
           text,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-            color: isValid ? AppColors.green : AppColors.gray600,
-          ),
+          style: AppTextStyles.body3.copyWith(color: isValid ? AppColors.green500 : AppColors.gray600),
         ),
       ],
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 
 /// 공통 앱바 컴포넌트
 /// 모든 메인 탭 화면에서 일관된 스타일로 사용
@@ -224,11 +225,7 @@ class PointBadge extends StatelessWidget {
             const SizedBox(width: 8),
             Text(
               _formatNumber(balance),
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: AppColors.darkBlue,
-              ),
+              style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
             ),
           ],
         ),

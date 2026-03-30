@@ -122,7 +122,7 @@ class _EventBannerCarouselState extends State<EventBannerCarousel> {
           children: [
             Text(
               banner.title,
-              style: AppTextStyles.large.copyWith(
+              style: AppTextStyles.heading1.copyWith(
                 color: _parseColor(banner.textColor),
                 fontWeight: FontWeight.w700,
               ),
@@ -130,7 +130,7 @@ class _EventBannerCarouselState extends State<EventBannerCarousel> {
             const SizedBox(height: 8),
             Text(
               banner.subtitle,
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 color: _parseColor(banner.textColor).withOpacity(0.9),
               ),
             ),

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:ui';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -223,12 +224,7 @@ class _FortunePickScreenState extends State<FortunePickScreen>
                     SizedBox(width: 4),
                     Text(
                       'BACK',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 1,
-                      ),
+                      style: AppTextStyles.caption2.copyWith(color: Colors.white),
                     ),
                   ],
                 ),
@@ -451,24 +447,14 @@ class _FortunePickScreenState extends State<FortunePickScreen>
               Text(
                 question.question,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                  height: 1.3,
-                ),
+                style: AppTextStyles.heading1.copyWith(color: Colors.white),
               ),
 
               const SizedBox(height: 8),
 
               Text(
                 'Question ${_currentQuestion + 1} of ${_questions.length}',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white.withValues(alpha: 0.5),
-                  letterSpacing: 1,
-                ),
+                style: AppTextStyles.body4.copyWith(color: Colors.white.withValues(alpha: 0.5)),
               ),
 
               const SizedBox(height: 32),
@@ -556,13 +542,7 @@ class _FortunePickScreenState extends State<FortunePickScreen>
             Expanded(
               child: Text(
                 option,
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600,
-                  color: isSelected
-                      ? Colors.white
-                      : Colors.white.withValues(alpha: 0.8),
-                ),
+                style: AppTextStyles.title1.copyWith(color: isSelected),
               ),
             ),
             Icon(

@@ -57,11 +57,7 @@ class _ParticipationHistoryScreenState
         appBar: AppBar(
           title: const Text(
             '참여 내역',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           backgroundColor: AppColors.white,
           foregroundColor: AppColors.darkBlue,
@@ -108,8 +104,8 @@ class _ParticipationHistoryScreenState
         dividerColor: Colors.transparent,
         labelColor: AppColors.darkBlue,
         unselectedLabelColor: AppColors.gray500,
-        labelStyle: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
-        unselectedLabelStyle: AppTextStyles.body,
+        labelStyle: AppTextStyles.body3.copyWith(fontWeight: FontWeight.w600),
+        unselectedLabelStyle: AppTextStyles.body3,
         labelPadding: EdgeInsets.zero,
         tabs: const [
           Tab(text: '참여'),
@@ -161,7 +157,7 @@ class _ParticipationHistoryScreenState
                     const SizedBox(width: 8),
                     Text(
                       TimeUtils.getRelativeTime(item.participatedAt),
-                      style: AppTextStyles.bodySmall.copyWith(
+                      style: AppTextStyles.body4.copyWith(
                         color: AppColors.gray500,
                       ),
                     ),
@@ -171,7 +167,7 @@ class _ParticipationHistoryScreenState
                 // 상품명 (최대 2줄)
                 Text(
                   item.productName,
-                  style: AppTextStyles.body.copyWith(
+                  style: AppTextStyles.body3.copyWith(
                     color: AppColors.darkBlue,
                     fontWeight: FontWeight.w500,
                   ),
@@ -205,8 +201,8 @@ class _ParticipationHistoryScreenState
         textColor = AppColors.gray600;
         text = '종료';
       case _ParticipationStatus.won:
-        bgColor = AppColors.green.withValues(alpha: 0.1);
-        textColor = AppColors.green;
+        bgColor = AppColors.green500.withValues(alpha: 0.1);
+        textColor = AppColors.green500;
         text = '당첨';
     }
 
@@ -218,11 +214,7 @@ class _ParticipationHistoryScreenState
       ),
       child: Text(
         text,
-        style: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-          color: textColor,
-        ),
+        style: AppTextStyles.caption2.copyWith(color: textColor),
       ),
     );
   }
@@ -280,7 +272,7 @@ class _ParticipationHistoryScreenState
                     const SizedBox(width: 8),
                     Text(
                       TimeUtils.getRelativeTime(item.winDate),
-                      style: AppTextStyles.bodySmall.copyWith(
+                      style: AppTextStyles.body4.copyWith(
                         color: AppColors.gray500,
                       ),
                     ),
@@ -290,7 +282,7 @@ class _ParticipationHistoryScreenState
                 // 상품명 (최대 2줄)
                 Text(
                   item.productName,
-                  style: AppTextStyles.body.copyWith(
+                  style: AppTextStyles.body3.copyWith(
                     color: AppColors.darkBlue,
                     fontWeight: FontWeight.w500,
                   ),
@@ -396,11 +388,7 @@ class _ParticipationHistoryScreenState
         ),
         child: Text(
           text,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: isEnabled ? AppColors.darkBlue : AppColors.gray400,
-          ),
+          style: AppTextStyles.caption2.copyWith(color: isEnabled ? AppColors.darkBlue : AppColors.gray400),
         ),
       ),
     );
@@ -419,7 +407,7 @@ class _ParticipationHistoryScreenState
           children: [
             Text(
               message,
-              style: AppTextStyles.medium.copyWith(
+              style: AppTextStyles.title1.copyWith(
                 color: AppColors.darkBlue,
                 fontWeight: FontWeight.w600,
               ),
@@ -428,7 +416,7 @@ class _ParticipationHistoryScreenState
             const SizedBox(height: 12),
             Text(
               subMessage,
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body3.copyWith(
                 color: AppColors.medium,
                 height: 1.5,
               ),
@@ -450,7 +438,7 @@ class _ParticipationHistoryScreenState
                 ),
                 child: Text(
                   '참여하러 가기',
-                  style: AppTextStyles.body.copyWith(
+                  style: AppTextStyles.body3.copyWith(
                     color: AppColors.white,
                     fontWeight: FontWeight.w600,
                   ),
@@ -474,7 +462,7 @@ class _ParticipationHistoryScreenState
       case EventType.vibe:
         return AppColors.pink;
       case EventType.prime:
-        return AppColors.yellow;
+        return AppColors.yellow500;
     }
   }
 

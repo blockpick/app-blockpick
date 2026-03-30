@@ -125,7 +125,7 @@ class _MyPickScreenState extends ConsumerState<MyPickScreen> with SingleTickerPr
           const SizedBox(height: 16),
           Text(
             'No picks yet',
-            style: AppTextStyles.large.copyWith(
+            style: AppTextStyles.heading1.copyWith(
               color: AppColors.medium,
               fontWeight: FontWeight.w500,
             ),
@@ -133,7 +133,7 @@ class _MyPickScreenState extends ConsumerState<MyPickScreen> with SingleTickerPr
           const SizedBox(height: 8),
           Text(
             'Start playing to see your picks here',
-            style: AppTextStyles.body.copyWith(
+            style: AppTextStyles.body3.copyWith(
               color: AppColors.medium,
             ),
           ),
@@ -209,7 +209,7 @@ class _MyPickScreenState extends ConsumerState<MyPickScreen> with SingleTickerPr
                   children: [
                     Text(
                       game.title,
-                      style: AppTextStyles.xlarge.copyWith(
+                      style: AppTextStyles.display1.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppColors.darkBlue,
                       ),
@@ -217,7 +217,7 @@ class _MyPickScreenState extends ConsumerState<MyPickScreen> with SingleTickerPr
                     const SizedBox(height: 8),
                     Text(
                       game.description,
-                      style: AppTextStyles.body.copyWith(
+                      style: AppTextStyles.body3.copyWith(
                         color: AppColors.medium,
                       ),
                     ),
@@ -226,7 +226,7 @@ class _MyPickScreenState extends ConsumerState<MyPickScreen> with SingleTickerPr
                     // 내 픽 리스트
                     Text(
                       'My Picks (${myPicks.length})',
-                      style: AppTextStyles.large.copyWith(
+                      style: AppTextStyles.heading1.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppColors.darkBlue,
                       ),
@@ -248,7 +248,7 @@ class _MyPickScreenState extends ConsumerState<MyPickScreen> with SingleTickerPr
                           ),
                           child: Text(
                             'X${block.col}-Y${block.row}',
-                            style: AppTextStyles.body.copyWith(
+                            style: AppTextStyles.body3.copyWith(
                               color: AppColors.blue,
                               fontWeight: FontWeight.w500,
                             ),

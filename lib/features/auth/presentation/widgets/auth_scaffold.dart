@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 
 /// 토스 스타일의 인증 화면 Scaffold
 ///
@@ -85,11 +86,7 @@ class AuthScaffold extends StatelessWidget {
             Expanded(
               child: Text(
                 title!,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.darkBlue,
-                ),
+                style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
                 textAlign: TextAlign.center,
               ),
             )

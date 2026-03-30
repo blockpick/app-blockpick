@@ -28,7 +28,7 @@ class _TabBarSample4State extends State<TabBarSample4> {
         ),
         title: Text(
           'iOS Segmented Control',
-          style: AppTextStyles.large.copyWith(
+          style: AppTextStyles.heading1.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.darkBlue,
           ),
@@ -83,7 +83,7 @@ class _TabBarSample4State extends State<TabBarSample4> {
                         child: Center(
                           child: Text(
                             _tabs[index],
-                            style: AppTextStyles.body.copyWith(
+                            style: AppTextStyles.body3.copyWith(
                               fontWeight: _selectedIndex == index
                                   ? FontWeight.w600
                                   : FontWeight.normal,
@@ -106,7 +106,7 @@ class _TabBarSample4State extends State<TabBarSample4> {
             child: Center(
               child: Text(
                 _tabs[_selectedIndex],
-                style: AppTextStyles.display.copyWith(
+                style: AppTextStyles.display1.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppColors.darkBlue,
                 ),

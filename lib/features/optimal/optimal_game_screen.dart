@@ -42,28 +42,135 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
       appBar: _buildAppBar(context),
       body: Column(
         children: [
-          // 상품 정보 헤더 (미니멀)
+          // 상품 정보 헤더
           _buildMinimalHeader(),
 
-          // 가격 휠 선택기 (항상 표시)
+          // 가격 휠 + 오버레이 버튼 + 하단 버튼 (SC-009-18)
           Expanded(
-            child: PriceWheelSelector(
-              prices: _game!.availablePrices,
-              selectedPrice: _selectedPrice,
-              backgroundImageUrl: _game!.imageUrl,
-              onPriceSelected: (price) {
-                setState(() {
-                  _selectedPrice = price;
-                });
-              },
-            ),
-          ),
+            child: Stack(
+              children: [
+                // 가격 휠 선택기 (전체 영역)
+                Positioned.fill(
+                  child: PriceWheelSelector(
+                    prices: _game!.availablePrices,
+                    selectedPrice: _selectedPrice,
+                    backgroundImageUrl: _game!.imageUrl,
+                    onPriceSelected: (price) {
+                      setState(() {
+                        _selectedPrice = price;
+                      });
+                    },
+                  ),
+                ),
 
-          // 하단 버튼 (입찰하기 + 키패드 토글)
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
-              child: _buildBottomButtons(),
+                // (i) 정보 아이콘 (좌상단)
+                Positioned(
+                  top: 16,
+                  left: 16,
+                  child: GestureDetector(
+                    onTap: _showGameInfo,
+                    child: Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.black.withValues(alpha: 0.1),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.info_outline_rounded,
+                        size: 18,
+                        color: AppColors.darkBlue,
+                      ),
+                    ),
+                  ),
+                ),
+
+                // 입찰 범위 칩 (왼쪽 정렬)
+                Positioned(
+                  top: 16,
+                  left: 56,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.black.withValues(alpha: 0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                      '입찰가능 ${_formatBidPrice(_game!.minPrice)}~${_formatBidPrice(_game!.maxPrice)}원',
+                      style: AppTextStyles.caption2.copyWith(color: AppColors.darkBlue),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+
+                // 상품 정보 버튼 (우상단)
+                Positioned(
+                  top: 16,
+                  right: 16,
+                  child: GestureDetector(
+                    onTap: _showProductInfo,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.black.withValues(alpha: 0.1),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            '상품 정보',
+                            style: AppTextStyles.body4.copyWith(color: AppColors.darkBlue),
+                          ),
+                          const SizedBox(width: 2),
+                          Icon(
+                            Icons.chevron_right_rounded,
+                            size: 18,
+                            color: AppColors.darkBlue,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                // 하단 버튼 (floating)
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                      child: _buildBottomButtons(),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -71,60 +178,350 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
     );
   }
 
-  /// 미니멀 헤더
+  /// 상품 정보 바 (SC-009-18: 상품명 + 참여수 + 그리드 + 남은시간 + 진행바)
   Widget _buildMinimalHeader() {
+    final priceCount = _game!.availablePrices.length;
+    final remaining = _parseRemainingDuration(_game!.timeLeft);
+    final progress = _getTimeProgress();
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: const BoxDecoration(
+        color: AppColors.white,
+        border: Border(
+          bottom: BorderSide(color: AppColors.gray200, width: 1),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 왼쪽: 상품 이미지 + (참여자 수 / 타임) 수직 정렬
+          // Row 1: 상품명
+          Text(
+            _game!.title,
+            style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 8),
+          // Row 2: 참여수 + 그리드 + 남은시간
           Row(
             children: [
-              // 상품 이미지
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: AppColors.buleGray.withOpacity(0.3),
-                  ),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
-                    _game!.imageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(
-                        LucideIcons.package,
-                        size: 24,
-                        color: AppColors.grayBlue,
-                      );
-                    },
-                  ),
-                ),
+              _buildInfoChip(
+                Icons.people_outline_rounded,
+                '${_formatCount(_game!.participants)}/${_formatCount(_game!.maxParticipants)}',
               ),
-              const SizedBox(width: 12),
-              // 참여자 수 + 타임 (수직 정렬)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // 참여자 수 (카운트업 애니메이션)
-                  _AnimatedParticipantCount(participants: _game!.participants),
-                  const SizedBox(height: 4),
-                  // 실시간 카운트다운 타이머
-                  _CountdownTimer(timeLeft: _game!.timeLeft),
-                ],
+              const SizedBox(width: 16),
+              _buildInfoChip(
+                Icons.grid_view_rounded,
+                '1×$priceCount',
+              ),
+              const Spacer(),
+              Icon(
+                Icons.access_time_rounded,
+                size: 14,
+                color: remaining.inMinutes < 30
+                    ? AppColors.red
+                    : AppColors.gray600,
+              ),
+              const SizedBox(width: 4),
+              Text(
+                _formatRemainingTime(remaining),
+                style: AppTextStyles.caption2.copyWith(color: remaining.inMinutes < 30),
               ),
             ],
           ),
-
-          // 오른쪽: 트렌드 정보만
-          _AnimatedTrendInfo(),
+          const SizedBox(height: 8),
+          // Progress bar
+          ClipRRect(
+            borderRadius: BorderRadius.circular(2),
+            child: LinearProgressIndicator(
+              value: progress,
+              backgroundColor: AppColors.gray200,
+              valueColor: AlwaysStoppedAnimation<Color>(
+                progress > 0.8 ? AppColors.red : AppColors.blue,
+              ),
+              minHeight: 3,
+            ),
+          ),
         ],
+      ),
+    );
+  }
+
+  /// 정보 칩 (아이콘 + 텍스트)
+  Widget _buildInfoChip(IconData icon, String text) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 16, color: AppColors.gray600),
+        const SizedBox(width: 4),
+        Text(
+          text,
+          style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
+        ),
+      ],
+    );
+  }
+
+  /// 참여자 수 포맷 (만 단위 이상 K/M 표기)
+  String _formatCount(int count) {
+    if (count >= 1000000) {
+      final value = count / 1000000;
+      return value == value.truncateToDouble()
+          ? '${value.toInt()}M'
+          : '${value.toStringAsFixed(1)}M';
+    } else if (count >= 10000) {
+      final value = count / 1000;
+      return value == value.truncateToDouble()
+          ? '${value.toInt()}K'
+          : '${value.toStringAsFixed(1)}K';
+    }
+    return count.toString().replaceAllMapped(
+      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+      (Match m) => '${m[1]},',
+    );
+  }
+
+  /// timeLeft 문자열에서 Duration 파싱
+  Duration _parseRemainingDuration(String timeLeft) {
+    final weekMatch = RegExp(r'(\d+)주').firstMatch(timeLeft);
+    final dayMatch = RegExp(r'(\d+)일').firstMatch(timeLeft);
+    final hourMatch = RegExp(r'(\d+)시간').firstMatch(timeLeft);
+    final minuteMatch = RegExp(r'(\d+)분').firstMatch(timeLeft);
+    final secMatch = RegExp(r'(\d+)초').firstMatch(timeLeft);
+
+    int weeks = weekMatch != null ? int.parse(weekMatch.group(1)!) : 0;
+    int days = dayMatch != null ? int.parse(dayMatch.group(1)!) : 0;
+    int hours = hourMatch != null ? int.parse(hourMatch.group(1)!) : 0;
+    int minutes = minuteMatch != null ? int.parse(minuteMatch.group(1)!) : 0;
+    int seconds = secMatch != null ? int.parse(secMatch.group(1)!) : 0;
+
+    return Duration(
+      days: (weeks * 7) + days,
+      hours: hours,
+      minutes: minutes,
+      seconds: seconds,
+    );
+  }
+
+  /// 남은 시간 포맷 (HH:MM:SS 남음)
+  String _formatRemainingTime(Duration remaining) {
+    if (remaining == Duration.zero) return '종료';
+    final hours = remaining.inHours.toString().padLeft(2, '0');
+    final minutes = (remaining.inMinutes % 60).toString().padLeft(2, '0');
+    final seconds = (remaining.inSeconds % 60).toString().padLeft(2, '0');
+    return '$hours:$minutes:$seconds 남음';
+  }
+
+  /// 시간 진행률 (0.0 ~ 1.0, mock에서는 timeLeft 기반 추정)
+  double _getTimeProgress() {
+    final remaining = _parseRemainingDuration(_game!.timeLeft);
+    // 전체 기간을 알 수 없으므로 24시간 기준으로 추정
+    final totalSeconds = 24 * 60 * 60;
+    final elapsed = totalSeconds - remaining.inSeconds;
+    return (elapsed / totalSeconds).clamp(0.0, 1.0);
+  }
+
+  /// 입찰 가격 포맷 (만원 단위)
+  String _formatBidPrice(int price) {
+    if (price >= 100000000) {
+      final eok = price / 100000000;
+      return eok == eok.truncateToDouble()
+          ? '${eok.toInt()}억'
+          : '${eok.toStringAsFixed(1)}억';
+    }
+    if (price >= 10000) {
+      final man = price / 10000;
+      return man == man.truncateToDouble()
+          ? '${man.toInt()}만'
+          : '${man.toStringAsFixed(0)}만';
+    }
+    return _formatPrice(price);
+  }
+
+  /// 게임 참여 방법 안내 (SC-009-18 (i) 버튼)
+  void _showGameInfo() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
+        decoration: const BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  '경품 참여 방법',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.darkBlue,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: const Icon(Icons.close, color: AppColors.gray600),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            _buildInfoStep('1', '본인이 원하는 입찰 가격의 블록을 선택하세요.'),
+            const SizedBox(height: 12),
+            _buildInfoStep('2', '직접 입찰 가격을 입력하여 참여할 수 있어요.'),
+            const SizedBox(height: 12),
+            _buildInfoStep('3', '최대 인원을 달성하면 이벤트는 즉시 종료 및 정산을 합니다.'),
+            const SizedBox(height: 12),
+            _buildInfoStep('4', '가장 낮은 금액을 입찰한 단독 1인이 경품의 주인공이 돼요.'),
+            const SizedBox(height: 12),
+            _buildInfoStep('5', '전략적으로 입찰 금액을 선택해서 참여해보세요.'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoStep(String number, String text) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          number,
+          style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(
+              fontSize: 14,
+              color: AppColors.gray800,
+              height: 1.4,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// 상품 정보 보기 (SC-009-18 상품 정보 버튼)
+  void _showProductInfo() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.85,
+        minChildSize: 0.5,
+        maxChildSize: 0.95,
+        builder: (context, scrollController) => Container(
+          decoration: const BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            children: [
+              // 핸들 바
+              Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(top: 12, bottom: 16),
+                decoration: BoxDecoration(
+                  color: AppColors.gray200,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              // 타이틀
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '상품 정보',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.darkBlue,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              // 상품명
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    _game!.title,
+                    style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              // 상품 이미지
+              Expanded(
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.asset(
+                          _game!.imageUrl,
+                          fit: BoxFit.fitWidth,
+                          width: double.infinity,
+                          errorBuilder: (_, __, ___) => Container(
+                            height: 200,
+                            color: AppColors.gray100,
+                            child: const Center(
+                              child: Icon(Icons.image_not_supported_outlined,
+                                  size: 48, color: AppColors.gray600),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                    ],
+                  ),
+                ),
+              ),
+              // 확인 버튼
+              SafeArea(
+                top: false,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 20, vertical: 12),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.darkBlue,
+                        foregroundColor: AppColors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        '확인',
+                        style: AppTextStyles.title2,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -132,7 +529,11 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
   /// AppBar
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
-      title: Text(_game?.title ?? '최적가 게임'),
+      centerTitle: true,
+      title: const Text(
+        'PRIME Events',
+        style: AppTextStyles.buttonLarge.copyWith(color: AppColors.darkBlue),
+      ),
       backgroundColor: AppColors.white,
       elevation: 0,
       leading: IconButton(
@@ -150,97 +551,86 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
     );
   }
 
-  /// 하단 버튼들 (입찰하기 80% + 키패드 토글 20%)
+  /// 하단 버튼들 (SC-009-18: 입찰하기 + 직접입력)
   Widget _buildBottomButtons() {
-    final isDisabled = _selectedPrice == null;
+    final hasBid = _selectedPrice != null;
 
     return Row(
       children: [
-        // 입찰하기 버튼 (80%)
+        // 입찰하기 버튼 (메인)
         Expanded(
-          flex: 80,
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: isDisabled
-                  ? AppColors.gradientDisable
-                  : AppColors.gradientBluePurplePink,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: isDisabled
-                  ? []
-                  : [
-                      BoxShadow(
-                        color: AppColors.blue.withOpacity(0.3),
-                        blurRadius: 20,
-                        offset: const Offset(0, 10),
-                      ),
-                    ],
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: isDisabled ? null : _handleSubmit,
-                borderRadius: BorderRadius.circular(16),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 18),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        isDisabled ? LucideIcons.lock : LucideIcons.checkCircle,
-                        size: 24,
-                        color: AppColors.white,
-                      ),
-                      const SizedBox(width: 12),
-                      Flexible(
-                        child: Text(
-                          isDisabled
-                              ? '가격을 선택하세요'
-                              : '${_formatPrice(_selectedPrice!)}에 입찰하기',
-                          style: AppTextStyles.buttonLarge.copyWith(
-                            color: AppColors.white,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
+          child: GestureDetector(
+            onTap: hasBid ? _handleSubmit : null,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              decoration: BoxDecoration(
+                color: hasBid
+                    ? AppColors.textBlack.withValues(alpha: 0.85)
+                    : AppColors.gray400.withValues(alpha: 0.6),
+                borderRadius: BorderRadius.circular(32),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.black.withValues(alpha: 0.3),
+                    blurRadius: 16,
+                    offset: const Offset(0, 6),
                   ),
-                ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: Text(
+                      hasBid
+                          ? '${_formatPrice(_selectedPrice!)}에 입찰하기'
+                          : '가격을 선택하세요',
+                      style: AppTextStyles.title3.copyWith(color: Colors.white),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  const Icon(
+                    Icons.chevron_right_rounded,
+                    size: 20,
+                    color: Colors.white,
+                  ),
+                ],
               ),
             ),
           ),
         ),
-
-        const SizedBox(width: 12),
-
-        // 키패드 토글 버튼 (20%)
-        Expanded(
-          flex: 20,
+        const SizedBox(width: 8),
+        // 직접입력 버튼
+        GestureDetector(
+          onTap: _showKeypadBottomSheet,
           child: Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
-              gradient: AppColors.gradientBluePurplePink,
-              borderRadius: BorderRadius.circular(16),
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(32),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.purple.withOpacity(0.3),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
+                  color: AppColors.black.withValues(alpha: 0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
                 ),
               ],
             ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: _showKeypadBottomSheet,
-                borderRadius: BorderRadius.circular(16),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 18),
-                  child: Icon(
-                    LucideIcons.calculator,
-                    size: 24,
-                    color: AppColors.white,
-                  ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  '직접입력',
+                  style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
                 ),
-              ),
+                const SizedBox(width: 2),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  size: 18,
+                  color: AppColors.darkBlue,
+                ),
+              ],
             ),
           ),
         ),
@@ -313,7 +703,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('${_formatPrice(_selectedPrice!)}에 입찰되었습니다!'),
-        backgroundColor: AppColors.green,
+        backgroundColor: AppColors.green500,
       ),
     );
 
@@ -357,12 +747,12 @@ class _AnimatedTrendInfoState extends State<_AnimatedTrendInfo>
     _TrendData(
       icon: Icons.flash_on,
       text: '5분 전 3명 새로 참여',
-      color: AppColors.yellow,
+      color: AppColors.yellow500,
     ),
     _TrendData(
       icon: Icons.analytics,
       text: '평균가 대비 -2%',
-      color: AppColors.green,
+      color: AppColors.green500,
     ),
   ];
 
@@ -415,7 +805,7 @@ class _AnimatedTrendInfoState extends State<_AnimatedTrendInfo>
           Flexible(
             child: Text(
               trend.text,
-              style: AppTextStyles.bodySmall.copyWith(
+              style: AppTextStyles.body4.copyWith(
                 color: trend.color,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -506,7 +896,7 @@ class _AnimatedParticipantCountState extends State<_AnimatedParticipantCount>
             const SizedBox(width: 4),
             Text(
               '${_controller.isAnimating ? _countAnimation.value : _currentCount}명',
-              style: AppTextStyles.medium.copyWith(
+              style: AppTextStyles.title1.copyWith(
                 color: AppColors.grayBlue,
                 fontSize: 13,
               ),
@@ -618,8 +1008,8 @@ class _CountdownTimerState extends State<_CountdownTimer>
   Color _getTimeColor() {
     final minutes = _remainingTime.inMinutes;
     if (minutes < 30) return AppColors.red;
-    if (minutes < 60) return AppColors.yellow; // 주황색
-    return AppColors.yellow;
+    if (minutes < 60) return AppColors.yellow500; // 주황색
+    return AppColors.yellow500;
   }
 
   int _getFireIntensity() {
@@ -717,7 +1107,7 @@ class _CountdownTimerState extends State<_CountdownTimer>
               },
               child: Text(
                 _formatTime(),
-                style: AppTextStyles.medium.copyWith(
+                style: AppTextStyles.title1.copyWith(
                   color: _getTimeColor(),
                   fontSize: 13,
                   fontWeight: FontWeight.w600,

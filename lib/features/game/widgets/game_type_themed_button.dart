@@ -94,7 +94,7 @@ class GameTypeThemedButton extends ConsumerWidget {
         );
       case GameType.prime:
         return const LinearGradient(
-          colors: [AppColors.yellow, AppColors.orange],
+          colors: [AppColors.yellow500, AppColors.orange],
         );
     }
   }
@@ -134,7 +134,7 @@ class GameTypeThemedButton extends ConsumerWidget {
       case GameType.vibe:
         return AppColors.pink.withOpacity(0.4);
       case GameType.prime:
-        return AppColors.yellow.withOpacity(0.4);
+        return AppColors.yellow500.withOpacity(0.4);
     }
   }
 

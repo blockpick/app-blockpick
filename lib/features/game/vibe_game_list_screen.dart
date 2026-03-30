@@ -85,7 +85,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
                 ),
                 child: Text(
                   theme['label'] as String,
-                  style: AppTextStyles.bodySmall.copyWith(
+                  style: AppTextStyles.body4.copyWith(
                     color: isSelected ? Colors.white : AppColors.medium,
                     fontWeight: FontWeight.w600,
                   ),
@@ -200,7 +200,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
                         ),
                         child: Text(
                           game.category,
-                          style: AppTextStyles.caption.copyWith(
+                          style: AppTextStyles.caption1.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.w700,
                           ),
@@ -221,7 +221,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
                   // 타이틀
                   Text(
                     game.title,
-                    style: AppTextStyles.large.copyWith(
+                    style: AppTextStyles.heading1.copyWith(
                       fontWeight: FontWeight.w800,
                       color: AppColors.dark,
                     ),
@@ -235,7 +235,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
                   if (game.description.isNotEmpty)
                     Text(
                       game.description,
-                      style: AppTextStyles.body.copyWith(
+                      style: AppTextStyles.body3.copyWith(
                         color: AppColors.medium,
                         height: 1.5,
                       ),
@@ -253,7 +253,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
                       const SizedBox(width: 4),
                       Text(
                         '${game.participants}명',
-                        style: AppTextStyles.bodySmall.copyWith(
+                        style: AppTextStyles.body4.copyWith(
                           color: AppColors.medium,
                           fontWeight: FontWeight.w600,
                         ),
@@ -267,7 +267,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
                         const SizedBox(width: 4),
                         Text(
                           game.timeLeft,
-                          style: AppTextStyles.bodySmall.copyWith(
+                          style: AppTextStyles.body4.copyWith(
                             color: AppColors.medium,
                             fontWeight: FontWeight.w600,
                           ),
@@ -286,7 +286,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
                           gradient: const LinearGradient(
                             colors: [
                               AppColors.red,
-                              AppColors.yellow,
+                              AppColors.yellow500,
                             ],
                           ),
                           borderRadius: BorderRadius.circular(12),
@@ -296,7 +296,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
                           children: [
                             Text(
                               'Join',
-                              style: AppTextStyles.bodySmall.copyWith(
+                              style: AppTextStyles.body4.copyWith(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -349,7 +349,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
           const SizedBox(height: 24),
           Text(
             'No VIBE games yet',
-            style: AppTextStyles.large.copyWith(
+            style: AppTextStyles.heading1.copyWith(
               color: AppColors.medium,
               fontWeight: FontWeight.w600,
             ),
@@ -357,7 +357,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
           const SizedBox(height: 12),
           Text(
             'Check back soon for new experiences',
-            style: AppTextStyles.body.copyWith(
+            style: AppTextStyles.body3.copyWith(
               color: AppColors.medium,
             ),
             textAlign: TextAlign.center,
@@ -381,14 +381,14 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
           const SizedBox(height: 16),
           Text(
             'Error loading games',
-            style: AppTextStyles.medium.copyWith(
+            style: AppTextStyles.title1.copyWith(
               color: AppColors.red,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             error.toString(),
-            style: AppTextStyles.bodySmall.copyWith(
+            style: AppTextStyles.body4.copyWith(
               color: AppColors.medium,
             ),
             textAlign: TextAlign.center,

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/auth/domain/providers/auth_provider.dart';
 
 /// SC-007: 비밀번호 찾기 화면
@@ -276,7 +277,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
             Text('지금 로그인이 가능해요!'),
           ],
         ),
-        backgroundColor: AppColors.green,
+        backgroundColor: AppColors.green500,
         duration: Duration(seconds: 3),
       ),
     );
@@ -301,11 +302,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
           ),
           title: const Text(
             '비밀번호 찾기',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           centerTitle: true,
         ),
@@ -324,12 +321,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                       if (_step < 3) ...[
                         const Text(
                           '소중한 회원님의 정보 보호를 위해\n이메일 인증 후,\n비밀번호 재설정이 필요해요.',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.darkBlue,
-                            height: 1.4,
-                          ),
+                          style: AppTextStyles.heading2.copyWith(color: AppColors.darkBlue),
                         ),
                         const SizedBox(height: 32),
                         _buildEmailSection(),
@@ -338,12 +330,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                       if (_step == 3) ...[
                         const Text(
                           '보안을 위해,\n본인만의 비밀번호를\n재설정해 주세요!',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.darkBlue,
-                            height: 1.4,
-                          ),
+                          style: AppTextStyles.heading2.copyWith(color: AppColors.darkBlue),
                         ),
                         const SizedBox(height: 32),
                         _buildPasswordSection(),
@@ -372,7 +359,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
       children: [
         const Text(
           '이메일',
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.darkBlue),
+          style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
         const SizedBox(height: 8),
         Row(
@@ -413,7 +400,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   elevation: 0,
                 ),
-                child: const Text('인증번호 전송', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                child: const Text('인증번호 전송', style: AppTextStyles.title3),
               ),
             ),
           ],
@@ -423,7 +410,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
           const SizedBox(height: 16),
           const Text(
             '인증번호',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.darkBlue),
+            style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
           ),
           const SizedBox(height: 8),
           TextField(
@@ -451,11 +438,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                 padding: const EdgeInsets.only(right: 16),
                 child: Text(
                   _timerText,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: _remainingSeconds < 60 ? AppColors.red : AppColors.blue,
-                  ),
+                  style: AppTextStyles.title3.copyWith(color: _remainingSeconds < 60 ? AppColors.red : AppColors.blue),
                 ),
               ),
               suffixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
@@ -468,7 +451,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
               onPressed: _resendCount < _maxResendCount ? _resendCode : null,
               child: Text(
                 '인증번호 재전송${_resendCount > 0 ? ' ($_resendCount/$_maxResendCount)' : ''}',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.blue),
+                style: AppTextStyles.title3.copyWith(color: AppColors.blue),
               ),
             ),
           ),
@@ -483,7 +466,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
       children: [
         const Text(
           '새 비밀번호',
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.darkBlue),
+          style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
         const SizedBox(height: 8),
         TextField(
@@ -517,7 +500,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
 
         const Text(
           '비밀번호 확인',
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.darkBlue),
+          style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
         const SizedBox(height: 8),
         TextField(
@@ -563,7 +546,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
         children: [
           Text(
             '비밀번호 생성 규칙',
-            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.gray600),
+            style: AppTextStyles.caption2,
           ),
           const SizedBox(height: 8),
           _buildRule('영문, 숫자, 특수문자 포함 8자 이상'),
@@ -613,7 +596,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                     valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
                   ),
                 )
-              : const Text('완료', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              : const Text('완료', style: AppTextStyles.title2),
         ),
       );
     }
@@ -639,7 +622,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                   valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
                 ),
               )
-            : const Text('다음', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+            : const Text('다음', style: AppTextStyles.title2),
       ),
     );
   }

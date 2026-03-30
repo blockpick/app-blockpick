@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 
 /// 토스 스타일 알림 화면
 class NotificationScreen extends StatefulWidget {
@@ -51,7 +52,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       'time': '3시간 전',
       'isRead': true,
       'icon': Icons.campaign_rounded,
-      'iconColor': AppColors.green,
+      'iconColor': AppColors.green500,
     },
     {
       'id': '5',
@@ -71,7 +72,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       'time': '어제',
       'isRead': true,
       'icon': Icons.check_circle_rounded,
-      'iconColor': AppColors.green,
+      'iconColor': AppColors.green500,
     },
     {
       'id': '7',
@@ -149,11 +150,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               ),
               child: Text(
                 '$unreadCount',
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.white,
-                ),
+                style: AppTextStyles.caption3.copyWith(color: AppColors.white),
               ),
             ),
           ],
@@ -177,11 +174,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 ),
                 child: Text(
                   '모두 읽음',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.gray600,
-                  ),
+                  style: AppTextStyles.caption2,
                 ),
               ),
             ),
@@ -262,21 +255,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   const SizedBox(height: 6),
                   Text(
                     notification['message'] as String,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: isRead ? AppColors.gray500 : AppColors.gray700,
-                      height: 1.4,
-                    ),
+                    style: AppTextStyles.body3.copyWith(color: isRead ? AppColors.gray500 : AppColors.gray700),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     notification['time'] as String,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.gray400,
-                    ),
+                    style: AppTextStyles.body4.copyWith(color: AppColors.gray400),
                   ),
                 ],
               ),
@@ -308,11 +292,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           const SizedBox(height: 20),
           const Text(
             '알림이 없습니다',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: AppColors.gray600,
-            ),
+            style: AppTextStyles.title2.copyWith(color: AppColors.gray600),
           ),
           const SizedBox(height: 8),
           Text(

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/auth/data/services/apple_auth_service.dart';
 import '../../../../core/auth/data/services/google_auth_service.dart';
 import '../../../../core/auth/domain/providers/auth_provider.dart';
@@ -95,21 +96,12 @@ class LoginSelectScreen extends ConsumerWidget {
         // 환영 메시지
         const Text(
           '반가워요!',
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w700,
-            color: AppColors.darkBlue,
-            letterSpacing: -0.5,
-          ),
+          style: AppTextStyles.display2.copyWith(color: AppColors.darkBlue),
         ),
         const SizedBox(height: 8),
         Text(
           '로그인하고 블록픽을 시작하세요',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-            color: AppColors.gray600,
-          ),
+          style: AppTextStyles.body1.copyWith(color: AppColors.gray600),
         ),
       ],
     );
@@ -163,11 +155,7 @@ class LoginSelectScreen extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
                 '또는',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.gray500,
-                ),
+                style: AppTextStyles.body3.copyWith(color: AppColors.gray500),
               ),
             ),
             Expanded(child: Divider(color: AppColors.gray300, thickness: 1)),
@@ -192,11 +180,7 @@ class LoginSelectScreen extends ConsumerWidget {
           children: [
             Text(
               '계정이 없으신가요?',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: AppColors.gray600,
-              ),
+              style: AppTextStyles.body3.copyWith(color: AppColors.gray600),
             ),
             TextButton(
               onPressed: () => context.push('/auth/signup-select'),
@@ -207,11 +191,7 @@ class LoginSelectScreen extends ConsumerWidget {
               ),
               child: const Text(
                 '회원가입',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.blue,
-                ),
+                style: AppTextStyles.title3.copyWith(color: AppColors.blue),
               ),
             ),
           ],
@@ -219,11 +199,7 @@ class LoginSelectScreen extends ConsumerWidget {
         const SizedBox(height: 16),
         Text(
           '로그인 시 이용약관과 개인정보처리방침에 동의하게 됩니다',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w400,
-            color: AppColors.gray500,
-          ),
+          style: AppTextStyles.caption1.copyWith(color: AppColors.gray500),
           textAlign: TextAlign.center,
         ),
       ],
@@ -402,11 +378,7 @@ class _SocialButton extends StatelessWidget {
               const SizedBox(width: 12),
               Text(
                 text,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: textColor,
-                ),
+                style: AppTextStyles.title2.copyWith(color: textColor),
               ),
             ],
           ),
@@ -456,11 +428,7 @@ class _MemberCheckDialog extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               '회원가입을 진행할까요?',
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w400,
-                color: AppColors.gray600,
-              ),
+              style: AppTextStyles.body1.copyWith(color: AppColors.gray600),
             ),
             const SizedBox(height: 24),
             AuthButton(

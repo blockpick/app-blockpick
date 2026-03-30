@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 
 /// 쿠폰 화면
 class CouponScreen extends ConsumerStatefulWidget {
@@ -40,11 +41,7 @@ class _CouponScreenState extends ConsumerState<CouponScreen>
         appBar: AppBar(
           title: const Text(
             '쿠폰',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           backgroundColor: AppColors.gray100,
           foregroundColor: AppColors.darkBlue,
@@ -90,11 +87,7 @@ class _CouponScreenState extends ConsumerState<CouponScreen>
             const SizedBox(height: 16),
             Text(
               '보유한 쿠폰이 없습니다',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: AppColors.gray500,
-              ),
+              style: AppTextStyles.body2.copyWith(color: AppColors.gray500),
             ),
           ],
         ),
@@ -119,11 +112,7 @@ class _CouponScreenState extends ConsumerState<CouponScreen>
         children: [
           const Text(
             '쿠폰 코드 입력',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
           ),
           const SizedBox(height: 16),
           Container(
@@ -168,7 +157,7 @@ class _CouponScreenState extends ConsumerState<CouponScreen>
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: const Text('쿠폰이 등록되었습니다'),
-                          backgroundColor: AppColors.green,
+                          backgroundColor: AppColors.green500,
                           behavior: SnackBarBehavior.floating,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -186,10 +175,7 @@ class _CouponScreenState extends ConsumerState<CouponScreen>
                     ),
                     child: const Text(
                       '등록',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: AppTextStyles.title2,
                     ),
                   ),
                 ),
@@ -243,11 +229,7 @@ class _CouponItem extends StatelessWidget {
                       ),
                       child: Text(
                         coupon['type'] as String,
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: isExpired ? AppColors.gray500 : AppColors.blue,
-                        ),
+                        style: AppTextStyles.caption4.copyWith(color: isExpired ? AppColors.gray500 : AppColors.blue),
                       ),
                     ),
                   ],
@@ -255,20 +237,12 @@ class _CouponItem extends StatelessWidget {
                 const SizedBox(height: 12),
                 Text(
                   coupon['name'] as String,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: isExpired ? AppColors.gray400 : AppColors.darkBlue,
-                  ),
+                  style: AppTextStyles.title2.copyWith(color: isExpired ? AppColors.gray400 : AppColors.darkBlue),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   coupon['discount'] as String,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: isExpired ? AppColors.gray400 : AppColors.blue,
-                  ),
+                  style: AppTextStyles.heading1.copyWith(color: isExpired ? AppColors.gray400 : AppColors.blue),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -293,11 +267,7 @@ class _CouponItem extends StatelessWidget {
                 ),
                 child: const Text(
                   '만료',
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.white,
-                  ),
+                  style: AppTextStyles.caption4.copyWith(color: AppColors.white),
                 ),
               ),
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 
 /// 토스 스타일의 기본 버튼
 class AuthButton extends StatelessWidget {
@@ -56,11 +57,7 @@ class AuthButton extends StatelessWidget {
                   )
                 : Text(
                     text,
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600,
-                      color: txtColor,
-                    ),
+                    style: AppTextStyles.title1.copyWith(color: txtColor),
                   ),
           ),
         ),
@@ -139,11 +136,7 @@ class SocialLoginButton extends StatelessWidget {
               const SizedBox(width: 12),
               Text(
                 text,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: textColor,
-                ),
+                style: AppTextStyles.title2.copyWith(color: textColor),
               ),
             ],
           ),
@@ -203,11 +196,7 @@ class AuthTextButton extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-          color: textColor ?? AppColors.gray600,
-        ),
+        style: AppTextStyles.title3.copyWith(color: textColor ?? AppColors.gray600),
       ),
     );
   }

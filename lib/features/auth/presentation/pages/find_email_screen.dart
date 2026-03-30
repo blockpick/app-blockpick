@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/auth/data/repositories/auth_repository.dart';
 import '../../../../core/auth/domain/providers/verification_state_provider.dart';
 
@@ -211,11 +212,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
           children: [
             const Text(
               '해당번호로 가입된 계정이 없어요.',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AppColors.darkBlue,
-              ),
+              style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
@@ -263,11 +260,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
           ),
           title: const Text(
             '이메일 찾기',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           centerTitle: true,
         ),
@@ -285,12 +278,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
 
                       const Text(
                         '가입된 이메일을 찾기 위해\n휴대폰 번호 인증이 필요해요.',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.darkBlue,
-                          height: 1.4,
-                        ),
+                        style: AppTextStyles.heading2.copyWith(color: AppColors.darkBlue),
                       ),
                       const SizedBox(height: 32),
 
@@ -323,7 +311,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
                                   )
                                 : const Text(
                                     '인증번호 전송',
-                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                    style: AppTextStyles.title2,
                                   ),
                           ),
                         ),
@@ -356,7 +344,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
                       ),
                       child: const Text(
                         '다음',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        style: AppTextStyles.title2,
                       ),
                     ),
                   ),
@@ -374,11 +362,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
       children: [
         const Text(
           '휴대폰 번호',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: AppColors.darkBlue,
-          ),
+          style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
         const SizedBox(height: 8),
         Container(
@@ -407,11 +391,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
             ),
             ignoreBlank: false,
             autoValidateMode: AutovalidateMode.disabled,
-            selectorTextStyle: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            selectorTextStyle: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
             initialValue: _initialPhoneNumber,
             textFieldController: _phoneController,
             formatInput: true,
@@ -422,21 +402,13 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
             ),
             inputDecoration: InputDecoration(
               hintText: '전화번호 입력',
-              hintStyle: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                color: AppColors.gray400,
-              ),
+              hintStyle: AppTextStyles.body1.copyWith(color: AppColors.gray400),
               filled: true,
               fillColor: Colors.transparent,
               border: InputBorder.none,
               contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 16),
             ),
-            textStyle: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: AppColors.darkBlue,
-            ),
+            textStyle: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
             searchBoxDecoration: InputDecoration(
               hintText: '국가 검색',
               hintStyle: TextStyle(color: AppColors.gray400),
@@ -468,7 +440,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
       children: [
         const Text(
           '인증번호',
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.darkBlue),
+          style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
         const SizedBox(height: 8),
         TextField(
@@ -495,11 +467,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
               padding: const EdgeInsets.only(right: 16),
               child: Text(
                 _timerText,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: _remainingSeconds < 60 ? AppColors.red : AppColors.blue,
-                ),
+                style: AppTextStyles.title3.copyWith(color: _remainingSeconds < 60 ? AppColors.red : AppColors.blue),
               ),
             ),
             suffixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
@@ -512,11 +480,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
             onPressed: _resendCount < _maxResendCount ? _resendCode : null,
             child: Text(
               '인증번호 재전송${_resendCount > 0 ? ' ($_resendCount/$_maxResendCount)' : ''}',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: AppColors.blue,
-              ),
+              style: AppTextStyles.title3.copyWith(color: AppColors.blue),
             ),
           ),
         ),

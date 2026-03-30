@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 
 /// 캐시 충전 화면
 class ChargeScreen extends ConsumerStatefulWidget {
@@ -31,7 +32,7 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('${_formatNumber(_selectedAmount!)}원이 충전되었습니다'),
-            backgroundColor: AppColors.green,
+            backgroundColor: AppColors.green500,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
@@ -71,11 +72,7 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
         appBar: AppBar(
           title: const Text(
             '캐시 충전',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkBlue,
-            ),
+            style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
           backgroundColor: AppColors.gray100,
           foregroundColor: AppColors.darkBlue,
@@ -91,11 +88,7 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                   // 충전 금액 선택
                   const Text(
                     '충전할 금액을 선택하세요',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.darkBlue,
-                    ),
+                    style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
                   ),
                   const SizedBox(height: 16),
                   GridView.builder(
@@ -125,11 +118,7 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                           child: Center(
                             child: Text(
                               '${_formatNumber(amount)}원',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: isSelected ? AppColors.white : AppColors.darkBlue,
-                              ),
+                              style: AppTextStyles.title2.copyWith(color: isSelected ? AppColors.white : AppColors.darkBlue),
                             ),
                           ),
                         ),
@@ -150,11 +139,7 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                       children: [
                         Text(
                           '충전 안내',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.blue,
-                          ),
+                          style: AppTextStyles.caption2.copyWith(color: AppColors.blue),
                         ),
                         const SizedBox(height: 8),
                         Text(
@@ -205,10 +190,7 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                             _selectedAmount != null
                                 ? '${_formatNumber(_selectedAmount!)}원 충전하기'
                                 : '금액을 선택하세요',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: AppTextStyles.title2,
                           ),
                   ),
                 ),

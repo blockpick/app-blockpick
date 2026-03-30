@@ -36,7 +36,7 @@ class TutorialLinkWidget extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 '블록픽 참가 방법이 처음이신가요? 튜토리얼 보기',
-                style: AppTextStyles.bodySmall.copyWith(
+                style: AppTextStyles.body4.copyWith(
                   color: AppColors.medium,
                 ),
               ),

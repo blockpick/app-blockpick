@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../widgets/coordinate_result_dialog.dart';
@@ -201,18 +202,18 @@ class _RpgPickScreenState extends State<RpgPickScreen>
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      AppColors.yellow.withValues(alpha: 0.3),
-                      AppColors.yellow.withValues(alpha: 0.1),
+                      AppColors.yellow500.withValues(alpha: 0.3),
+                      AppColors.yellow500.withValues(alpha: 0.1),
                     ],
                   ),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: AppColors.yellow
+                    color: AppColors.yellow500
                         .withValues(alpha: 0.5 * _glowAnimation.value),
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.yellow
+                      color: AppColors.yellow500
                           .withValues(alpha: 0.3 * _glowAnimation.value),
                       blurRadius: 10,
                     ),
@@ -225,11 +226,7 @@ class _RpgPickScreenState extends State<RpgPickScreen>
                     const SizedBox(width: 6),
                     Text(
                       '$_score',
-                      style: TextStyle(
-                        color: AppColors.yellow,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
+                      style: AppTextStyles.buttonLarge.copyWith(color: AppColors.yellow500),
                     ),
                   ],
                 ),
@@ -394,12 +391,7 @@ class _RpgPickScreenState extends State<RpgPickScreen>
                           SizedBox(width: 8),
                           Text(
                             'SET FLAG',
-                            style: TextStyle(
-                              color: AppColors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 1,
-                            ),
+                            style: AppTextStyles.title3.copyWith(color: AppColors.white),
                           ),
                         ],
                       ),
@@ -566,11 +558,7 @@ class _RpgPickScreenState extends State<RpgPickScreen>
             children: [
               Text(
                 value,
-                style: const TextStyle(
-                  color: AppColors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: AppTextStyles.title3.copyWith(color: AppColors.white),
               ),
               Text(
                 label,
@@ -690,7 +678,7 @@ class _RPGMapPainter extends CustomPainter {
       if (treasure.collected) {
         // 수집된 보물 - 희미한 링
         final paint = Paint()
-          ..color = AppColors.yellow.withValues(alpha: 0.1)
+          ..color = AppColors.yellow500.withValues(alpha: 0.1)
           ..style = PaintingStyle.stroke
           ..strokeWidth = 2;
 
@@ -699,7 +687,7 @@ class _RPGMapPainter extends CustomPainter {
         // 글로우 효과
         final glowPaint = Paint()
           ..color =
-              AppColors.yellow.withValues(alpha: 0.3 * glowValue)
+              AppColors.yellow500.withValues(alpha: 0.3 * glowValue)
           ..style = PaintingStyle.fill
           ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 15);
 
