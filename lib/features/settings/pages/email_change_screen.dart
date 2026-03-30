@@ -166,7 +166,7 @@ class _EmailChangeScreenState extends ConsumerState<EmailChangeScreen> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('이메일이 변경되었습니다.'),
+          content: Text('이메일이 변경되었습니다.'),
           backgroundColor: AppColors.darkBlue,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
@@ -187,7 +187,7 @@ class _EmailChangeScreenState extends ConsumerState<EmailChangeScreen> {
       child: Scaffold(
         backgroundColor: AppColors.white,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             '이메일 변경',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -205,7 +205,7 @@ class _EmailChangeScreenState extends ConsumerState<EmailChangeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // 이메일 인증 섹션
-                    const Text(
+                    Text(
                       '이메일 인증',
                       style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
                     ),

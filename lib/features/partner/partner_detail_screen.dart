@@ -45,9 +45,9 @@ class PartnerDetailScreen extends StatelessWidget {
         scrolledUnderElevation: 0,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.darkBlue),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.darkBlue),
         ),
-        title: const Text(
+        title: Text(
           '파트너 이벤트',
           style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
         ),
@@ -65,8 +65,8 @@ class PartnerDetailScreen extends StatelessWidget {
                   // 오늘의 행운 문구
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 12),
-                    color: const Color(0xFFF8F7FF),
-                    child: const Text(
+                    color: Color(0xFFF8F7FF),
+                    child: Text(
                       '오늘의 행운 꿈기 🍀',
                       textAlign: TextAlign.center,
                       style: AppTextStyles.title3.copyWith(color: Color(0xFF5941F2)),
@@ -225,13 +225,13 @@ class PartnerDetailScreen extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: const Color(0xFFF8F7FF),
+          color: Color(0xFFF8F7FF),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               '참여방법',
               style: AppTextStyles.buttonLarge.copyWith(color: AppColors.darkBlue),
             ),
@@ -255,7 +255,7 @@ class PartnerDetailScreen extends StatelessWidget {
             width: 24,
             height: 24,
             decoration: BoxDecoration(
-              color: const Color(0xFF5941F2),
+              color: Color(0xFF5941F2),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Center(
@@ -265,7 +265,7 @@ class PartnerDetailScreen extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: Text(
               text,
@@ -301,7 +301,7 @@ class PartnerDetailScreen extends StatelessWidget {
             Row(
               children: [
                 Icon(Icons.warning_amber_rounded, size: 18, color: Colors.amber.shade700),
-                const SizedBox(width: 6),
+                SizedBox(width: 6),
                 Text(
                   '이벤트 유의사항',
                   style: AppTextStyles.title3.copyWith(color: Colors.amber.shade900),
@@ -416,7 +416,7 @@ class _BenefitCard extends StatelessWidget {
             ),
             child: Icon(icon, color: iconColor, size: 24),
           ),
-          const SizedBox(width: 14),
+          SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -60,7 +60,7 @@ class _WithdrawalScreenState extends ConsumerState<WithdrawalScreen> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            duration: const Duration(seconds: 3),
+            duration: Duration(seconds: 3),
           ),
         );
         context.go('/');
@@ -97,10 +97,10 @@ class _WithdrawalScreenState extends ConsumerState<WithdrawalScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
 
                     // 타이틀
-                    const Text(
+                    Text(
                       '회원 탈퇴 전,\n아래 사항을 반드시 확인해 주세요.',
                       style: AppTextStyles.heading2.copyWith(color: AppColors.darkBlue, height: 1.3),
                     ),
@@ -132,17 +132,17 @@ class _WithdrawalScreenState extends ConsumerState<WithdrawalScreen> {
 
                     const SizedBox(height: 32),
                     const Divider(color: AppColors.gray200, height: 1),
-                    const SizedBox(height: 32),
+                    SizedBox(height: 32),
 
                     // 비밀번호 입력 섹션
-                    const Text(
+                    Text(
                       '비밀번호 입력 후 탈퇴됩니다.',
                       style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
                     ),
                     const SizedBox(height: 16),
                     _buildPasswordInput(),
 
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24),
                   ],
                 ),
               ),

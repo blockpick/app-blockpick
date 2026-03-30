@@ -339,7 +339,7 @@ class _EventPrizePopupState extends State<EventPrizePopup>
                                 size: 20,
                                 color: _gradeColor,
                               ),
-                              const SizedBox(width: 8),
+                              SizedBox(width: 8),
                               Text(
                                 '${_priceFormatter.format(widget.prize.value)}원 상당',
                                 style: AppTextStyles.buttonLarge.copyWith(color: _gradeColor),

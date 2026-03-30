@@ -158,7 +158,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
                 child: Text(
                   _tabs[index]['label'] as String,
-                  style: AppTextStyles.title3.copyWith(color: isSelected ? AppColors.white : AppColors.gray700),
+                  style: AppTextStyles.title3,
                 ),
               ),
             ),
@@ -335,7 +335,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       size: 28,
                     ),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: 16),
             // 텍스트
             Expanded(
               child: Column(
@@ -346,7 +346,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     '광고 보고 포인트 받기',
                     style: AppTextStyles.buttonLarge.copyWith(color: AppColors.white),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     '1일 5회 · 회당 20P',
                     style: AppTextStyles.body4.copyWith(color: AppColors.white.withValues(alpha: 0.8)),
@@ -408,7 +408,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
               child: _isFabExpanded
-                  ? const Row(
+                  ? Row(
                       children: [
                         SizedBox(width: 8),
                         Text(
@@ -436,7 +436,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             size: 64,
             color: AppColors.gray400,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
             '게임이 없습니다',
             style: AppTextStyles.title2.copyWith(color: AppColors.gray600),
@@ -457,7 +457,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             size: 64,
             color: AppColors.red,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
             '오류가 발생했습니다',
             style: AppTextStyles.title2.copyWith(color: AppColors.gray700),

@@ -88,7 +88,7 @@ class _QuickActionItem extends StatelessWidget {
               color: color,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
             label,
             style: AppTextStyles.caption2.copyWith(color: AppColors.darkBlue),

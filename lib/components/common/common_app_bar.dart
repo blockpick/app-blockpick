@@ -222,7 +222,7 @@ class PointBadge extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             Text(
               _formatNumber(balance),
               style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),

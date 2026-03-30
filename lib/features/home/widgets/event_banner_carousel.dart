@@ -110,7 +110,7 @@ class _EventBannerCarouselState extends State<EventBannerCarousel> {
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
             blurRadius: 8,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -127,7 +127,7 @@ class _EventBannerCarouselState extends State<EventBannerCarousel> {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Text(
               banner.subtitle,
               style: AppTextStyles.body3.copyWith(

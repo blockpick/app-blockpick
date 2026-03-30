@@ -166,7 +166,7 @@ class _GachaPickScreenState extends State<GachaPickScreen>
                     color: Colors.white.withValues(alpha: 0.2),
                   ),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.refresh_rounded, color: Colors.white, size: 18),
@@ -448,7 +448,7 @@ class _GachaPickScreenState extends State<GachaPickScreen>
           const SizedBox(width: 6),
           Text(
             label,
-            style: AppTextStyles.caption3.copyWith(color: isActive),
+            style: AppTextStyles.caption3,
           ),
         ],
       ),

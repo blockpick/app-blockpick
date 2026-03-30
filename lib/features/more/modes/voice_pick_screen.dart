@@ -360,7 +360,7 @@ class _VoicePickScreenState extends State<VoicePickScreen>
                 fontFamily: 'monospace',
               ),
             ),
-            const SizedBox(width: 4),
+            SizedBox(width: 4),
             Padding(
               padding: const EdgeInsets.only(bottom: 4),
               child: Text(
@@ -413,7 +413,7 @@ class _VoicePickScreenState extends State<VoicePickScreen>
                 ],
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
 
               // 상태 텍스트
               Text(
@@ -438,7 +438,7 @@ class _VoicePickScreenState extends State<VoicePickScreen>
                         color: modeColor.withValues(alpha: 0.4),
                       ),
                     ),
-                    child: const Row(
+                    child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(Icons.settings_rounded, color: Colors.white, size: 20),
@@ -473,7 +473,7 @@ class _VoicePickScreenState extends State<VoicePickScreen>
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 18, color: modeColor),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Text(
             text,
             style: AppTextStyles.caption2.copyWith(color: Colors.white.withValues(alpha: 0.8)),

@@ -50,7 +50,7 @@ class _MallPreviewWidgetState extends State<MallPreviewWidget> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     'Shop the Future.\nExperience the Exclusive.',
                     style: AppTextStyles.body3.copyWith(
@@ -209,7 +209,7 @@ class _MallPreviewWidgetState extends State<MallPreviewWidget> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const Spacer(),
+                  Spacer(),
                   Row(
                     children: [
                       Text(
@@ -219,7 +219,7 @@ class _MallPreviewWidgetState extends State<MallPreviewWidget> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       if (product.originalPrice != null) ...[
                         Text(
                           '\$${product.originalPrice!.toStringAsFixed(2)}',

@@ -17,7 +17,7 @@ class CustomerServiceScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: AppColors.gray100,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             '고객센터',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -101,7 +101,7 @@ class CustomerServiceScreen extends StatelessWidget {
 
             // 자주 묻는 질문
             _buildSectionTitle('자주 묻는 질문'),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             _buildFAQCard(),
           ],
         ),
@@ -152,7 +152,7 @@ class CustomerServiceScreen extends StatelessWidget {
                     color: AppColors.darkBlue,
                   ),
                 ),
-                const SizedBox(width: 16),
+                SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -265,7 +265,7 @@ class _FAQItemState extends State<_FAQItem> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       widget.question,
@@ -281,7 +281,7 @@ class _FAQItemState extends State<_FAQItem> {
                 ],
               ),
               if (_isExpanded) ...[
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

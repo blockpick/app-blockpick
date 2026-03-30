@@ -90,7 +90,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -101,7 +101,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Text(
                   widget.cashData.currency,
                   style: AppTextStyles.body3.copyWith(
@@ -109,7 +109,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(width: 4),
+                SizedBox(width: 4),
                 Icon(
                   _isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
                   color: AppColors.navy,
@@ -117,7 +117,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Row(
               children: [
                 Text(
@@ -133,7 +133,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(width: 4),
+                SizedBox(width: 4),
                 Text(
                   '(${isPositive ? '+' : ''}${widget.cashData.todayChangePercent.toStringAsFixed(1)}%)',
                   style: AppTextStyles.body4.copyWith(
@@ -262,7 +262,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
             icon,
             style: const TextStyle(fontSize: 20),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(
             label,
             style: AppTextStyles.body4.copyWith(
@@ -270,7 +270,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
               fontSize: 11,
             ),
           ),
-          const SizedBox(height: 2),
+          SizedBox(height: 2),
           Text(
             value,
             style: AppTextStyles.body4.copyWith(
@@ -314,7 +314,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
                   BoxShadow(
                     color: AppColors.pink.withValues(alpha: 0.3),
                     blurRadius: 8,
-                    offset: const Offset(0, 2),
+                    offset: Offset(0, 2),
                   ),
                 ]
               : null,

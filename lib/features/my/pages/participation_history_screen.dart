@@ -55,7 +55,7 @@ class _ParticipationHistoryScreenState
       child: Scaffold(
         backgroundColor: AppColors.white,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             '참여 내역',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -154,7 +154,7 @@ class _ParticipationHistoryScreenState
                 Row(
                   children: [
                     _buildEventBadge(item.eventType),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8),
                     Text(
                       TimeUtils.getRelativeTime(item.participatedAt),
                       style: AppTextStyles.body4.copyWith(
@@ -163,7 +163,7 @@ class _ParticipationHistoryScreenState
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 // 상품명 (최대 2줄)
                 Text(
                   item.productName,
@@ -269,7 +269,7 @@ class _ParticipationHistoryScreenState
                 Row(
                   children: [
                     _buildEventBadge(item.eventType),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8),
                     Text(
                       TimeUtils.getRelativeTime(item.winDate),
                       style: AppTextStyles.body4.copyWith(
@@ -278,7 +278,7 @@ class _ParticipationHistoryScreenState
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 // 상품명 (최대 2줄)
                 Text(
                   item.productName,
@@ -388,7 +388,7 @@ class _ParticipationHistoryScreenState
         ),
         child: Text(
           text,
-          style: AppTextStyles.caption2.copyWith(color: isEnabled ? AppColors.darkBlue : AppColors.gray400),
+          style: AppTextStyles.caption2,
         ),
       ),
     );
@@ -413,7 +413,7 @@ class _ParticipationHistoryScreenState
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Text(
               subMessage,
               style: AppTextStyles.body3.copyWith(
@@ -422,7 +422,7 @@ class _ParticipationHistoryScreenState
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
             // 참여하러 가기 버튼
             GestureDetector(
               onTap: _navigateToHome,

@@ -46,7 +46,7 @@ class PickHud extends StatelessWidget {
           BoxShadow(
             color: AppColors.black.withOpacity(0.1),
             blurRadius: 8,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -70,7 +70,7 @@ class PickHud extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
           ],
 
           // 텍스트
@@ -99,7 +99,7 @@ class PickHud extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
 
           // Submit 버튼
           ElevatedButton(
@@ -137,7 +137,7 @@ class CompactPickHud extends StatelessWidget {
   final VoidCallback? onSubmit;
   final double opacity;
 
-  const CompactPickHud({
+  CompactPickHud({
     super.key,
     required this.selected,
     required this.pickMax,

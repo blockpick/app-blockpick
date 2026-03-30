@@ -39,7 +39,7 @@ class _CouponScreenState extends ConsumerState<CouponScreen>
       child: Scaffold(
         backgroundColor: AppColors.gray100,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             '쿠폰',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -84,7 +84,7 @@ class _CouponScreenState extends ConsumerState<CouponScreen>
               size: 64,
               color: AppColors.gray400,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
               '보유한 쿠폰이 없습니다',
               style: AppTextStyles.body2.copyWith(color: AppColors.gray500),
@@ -110,7 +110,7 @@ class _CouponScreenState extends ConsumerState<CouponScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             '쿠폰 코드 입력',
             style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
           ),
@@ -229,7 +229,7 @@ class _CouponItem extends StatelessWidget {
                       ),
                       child: Text(
                         coupon['type'] as String,
-                        style: AppTextStyles.caption4.copyWith(color: isExpired ? AppColors.gray500 : AppColors.blue),
+                        style: AppTextStyles.caption4,
                       ),
                     ),
                   ],
@@ -237,14 +237,14 @@ class _CouponItem extends StatelessWidget {
                 const SizedBox(height: 12),
                 Text(
                   coupon['name'] as String,
-                  style: AppTextStyles.title2.copyWith(color: isExpired ? AppColors.gray400 : AppColors.darkBlue),
+                  style: AppTextStyles.title2,
                 ),
                 const SizedBox(height: 4),
                 Text(
                   coupon['discount'] as String,
-                  style: AppTextStyles.heading1.copyWith(color: isExpired ? AppColors.gray400 : AppColors.blue),
+                  style: AppTextStyles.heading1,
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Text(
                   '${coupon['expiry']}까지',
                   style: TextStyle(
@@ -265,7 +265,7 @@ class _CouponItem extends StatelessWidget {
                   color: AppColors.gray400,
                   borderRadius: BorderRadius.circular(4),
                 ),
-                child: const Text(
+                child: Text(
                   '만료',
                   style: AppTextStyles.caption4.copyWith(color: AppColors.white),
                 ),

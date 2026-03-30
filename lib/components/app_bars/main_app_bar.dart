@@ -110,7 +110,7 @@ class MainAppBar extends ConsumerWidget implements PreferredSizeWidget {
                     ),
                   ),
 
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
 
                   // 프로필 버튼
                   GestureDetector(

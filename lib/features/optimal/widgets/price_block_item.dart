@@ -56,7 +56,7 @@ class PriceBlockItem extends StatelessWidget {
                   ? BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       border: GradientBorder(
-                        gradient: const LinearGradient(
+                        gradient: LinearGradient(
                           colors: [
                             Color(0xFF3B82F6),
                             Color(0xFF7C3AED),

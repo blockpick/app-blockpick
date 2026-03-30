@@ -139,10 +139,10 @@ class _PasswordSetupScreenState extends ConsumerState<PasswordSetupScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 32),
+            SizedBox(height: 32),
 
             // 타이틀
-            const Text(
+            Text(
               '비밀번호를\n설정해주세요',
               style: AppTextStyles.display2.copyWith(color: AppColors.darkBlue),
             ),
@@ -224,7 +224,7 @@ class _PasswordSetupScreenState extends ConsumerState<PasswordSetupScreen> {
             text: '특수문자 포함 (!@#\$%^&* 등)',
             isValid: _hasSpecial,
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.only(left: 28),
             child: Text(
@@ -275,7 +275,7 @@ class _PasswordRuleItem extends StatelessWidget {
         const SizedBox(width: 8),
         Text(
           text,
-          style: AppTextStyles.body3.copyWith(color: isValid ? AppColors.green500 : AppColors.gray600),
+          style: AppTextStyles.body3,
         ),
       ],
     );

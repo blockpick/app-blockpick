@@ -58,7 +58,7 @@ class GameJoinResultOverlay extends StatelessWidget {
                 // 결과 아이콘 애니메이션
                 _buildResultIcon(success),
 
-                const SizedBox(height: 48),
+                SizedBox(height: 48),
 
                 // 타이틀
                 Text(
@@ -74,7 +74,7 @@ class GameJoinResultOverlay extends StatelessWidget {
                     .fadeIn(delay: 300.ms, duration: 500.ms)
                     .slideY(begin: -0.2, end: 0),
 
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
 
                 // 설명
                 Text(
@@ -100,7 +100,7 @@ class GameJoinResultOverlay extends StatelessWidget {
                 // 버튼들
                 _buildButtons(context),
 
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
 
                 // 닫기 버튼
                 TextButton(
@@ -284,7 +284,7 @@ class GameJoinResultOverlay extends StatelessWidget {
           color: Colors.white.withOpacity(0.8),
           size: 20,
         ),
-        const SizedBox(width: 12),
+        SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -295,7 +295,7 @@ class GameJoinResultOverlay extends StatelessWidget {
                   color: Colors.white.withOpacity(0.7),
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4),
               Text(
                 value,
                 style: AppTextStyles.body3.copyWith(

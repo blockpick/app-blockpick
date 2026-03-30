@@ -90,7 +90,7 @@ class _WishStepOnelinerState extends State<WishStepOneliner> {
               color: AppColors.primaryBg,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(

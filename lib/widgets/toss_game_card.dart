@@ -23,7 +23,7 @@ class TossGameCard extends StatelessWidget {
             BoxShadow(
               color: AppColors.black.withValues(alpha: 0.04),
               blurRadius: 8,
-              offset: const Offset(0, 2),
+              offset: Offset(0, 2),
             ),
           ],
         ),
@@ -150,7 +150,7 @@ class TossGameCard extends StatelessWidget {
                 BoxShadow(
                   color: AppColors.black.withValues(alpha: 0.08),
                   blurRadius: 4,
-                  offset: const Offset(0, 1),
+                  offset: Offset(0, 1),
                 ),
               ],
             ),
@@ -197,7 +197,7 @@ class TossGameCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 14, color: AppColors.gray600),
-          const SizedBox(width: 4),
+          SizedBox(width: 4),
           Text(
             value,
             style: AppTextStyles.caption2.copyWith(color: AppColors.gray700),
@@ -252,7 +252,7 @@ class TossGameCard extends StatelessWidget {
                 size: 14,
                 color: AppColors.red,
               ),
-              const SizedBox(width: 4),
+              SizedBox(width: 4),
               Text(
                 game.timeLeft,
                 style: AppTextStyles.caption2.copyWith(color: AppColors.red),

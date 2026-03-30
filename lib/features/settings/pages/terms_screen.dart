@@ -16,7 +16,7 @@ class TermsScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: AppColors.gray100,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             '이용약관',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),

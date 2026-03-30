@@ -54,7 +54,7 @@ class _TabBarSample1State extends State<TabBarSample1>
         backgroundColor: const Color(0xFF0A0E27),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.white),
+          icon: Icon(Icons.arrow_back, color: AppColors.white),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -201,7 +201,7 @@ class _TabBarSample1State extends State<TabBarSample1>
                       if (isSelected) {
                         return tab.gradient.createShader(bounds);
                       }
-                      return const LinearGradient(
+                      return LinearGradient(
                         colors: [Colors.grey, Colors.grey],
                       ).createShader(bounds);
                     },
@@ -240,7 +240,7 @@ class _TabBarSample1State extends State<TabBarSample1>
                 color: AppColors.white,
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
             ShaderMask(
               shaderCallback: (bounds) {
                 return _tabs[_selectedIndex].gradient.createShader(bounds);

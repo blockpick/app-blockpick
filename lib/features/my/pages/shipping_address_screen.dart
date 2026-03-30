@@ -206,7 +206,7 @@ class _ShippingAddressScreenState
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('배송지 등록 완료! 소중한 경품이 곧 출발해요!'),
+          content: Text('배송지 등록 완료! 소중한 경품이 곧 출발해요!'),
           backgroundColor: AppColors.darkBlue,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
@@ -229,7 +229,7 @@ class _ShippingAddressScreenState
       child: Scaffold(
         backgroundColor: AppColors.white,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             '상품받기',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -375,7 +375,7 @@ class _ShippingAddressScreenState
                           }
                         },
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20),
                     ],
                   ),
                 ),
@@ -399,7 +399,7 @@ class _ShippingAddressScreenState
           style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
         if (required)
-          const Text(
+          Text(
             ' *',
             style: AppTextStyles.title3.copyWith(color: AppColors.red),
           ),

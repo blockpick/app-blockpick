@@ -510,7 +510,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
                     color: AppColors.white.withValues(alpha: 0.2),
                   ),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.refresh_rounded, color: AppColors.white, size: 18),
@@ -855,7 +855,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
           const SizedBox(width: 6),
           Text(
             label,
-            style: AppTextStyles.caption3.copyWith(color: isActive),
+            style: AppTextStyles.caption3,
           ),
         ],
       ),
@@ -869,7 +869,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
       children: [
         Text(
           '$label:',
-          style: AppTextStyles.caption4.copyWith(color: isActive ? modeColor : Colors.white54),
+          style: AppTextStyles.caption4,
         ),
         const SizedBox(width: 4),
         Text(
@@ -960,7 +960,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
           Row(
             children: [
               Icon(Icons.auto_awesome, color: Colors.cyan, size: 16),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Text(
                 '효과 선택',
                 style: AppTextStyles.caption2.copyWith(color: Colors.cyan),
@@ -1018,7 +1018,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
           Row(
             children: [
               Icon(Icons.speed, color: Colors.orange, size: 16),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Text(
                 '속도 조절',
                 style: AppTextStyles.caption2.copyWith(color: Colors.orange),
@@ -1160,7 +1160,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
           Row(
             children: [
               Icon(Icons.crop_square, color: Colors.amber, size: 16),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Text(
                 '보물 크기 (히트박스)',
                 style: AppTextStyles.caption2.copyWith(color: Colors.amber),
@@ -1231,7 +1231,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
           Row(
             children: [
               Icon(Icons.science, color: Colors.pink, size: 16),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Text(
                 '결과 테스트',
                 style: AppTextStyles.caption2.copyWith(color: Colors.pink),
@@ -1261,7 +1261,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('🎉', style: TextStyle(fontSize: 16)),
-                        const SizedBox(width: 6),
+                        SizedBox(width: 6),
                         Text(
                           '당첨 테스트',
                           style: AppTextStyles.caption2.copyWith(color: Colors.amber),
@@ -1287,7 +1287,7 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('💨', style: TextStyle(fontSize: 16)),
-                        const SizedBox(width: 6),
+                        SizedBox(width: 6),
                         Text(
                           '꽝 테스트',
                           style: AppTextStyles.caption2.copyWith(color: Colors.grey),
@@ -1336,8 +1336,8 @@ class _TreasurePickScreenState extends State<TreasurePickScreen>
             ),
             child: Row(
               children: [
-                const Text('💎', style: TextStyle(fontSize: 16)),
-                const SizedBox(width: 6),
+                Text('💎', style: TextStyle(fontSize: 16)),
+                SizedBox(width: 6),
                 Text(
                   '$treasureCount',
                   style: AppTextStyles.title3.copyWith(color: modeColor),
@@ -3606,11 +3606,11 @@ class _TreasureResultDialogState extends State<_TreasureResultDialog>
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text(
+                                  Text(
                                     '🎁',
                                     style: TextStyle(fontSize: 22),
                                   ),
-                                  const SizedBox(width: 10),
+                                  SizedBox(width: 10),
                                   Text(
                                     '특별 보상 + 참가 보상 획득!',
                                     style: AppTextStyles.title3.copyWith(color: color),
@@ -3728,7 +3728,7 @@ class _TreasureResultDialogState extends State<_TreasureResultDialog>
               color: AppColors.white.withValues(alpha: isPrimary ? 1 : 0.8),
               size: 20,
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             Text(
               label,
               style: AppTextStyles.title3.copyWith(color: AppColors.white.withValues(alpha: isPrimary ? 1 : 0.8)),

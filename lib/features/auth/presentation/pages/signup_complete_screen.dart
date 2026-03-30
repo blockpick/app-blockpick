@@ -42,15 +42,15 @@ class SignupCompleteScreen extends ConsumerWidget {
                 ),
               ),
 
-              const SizedBox(height: 40),
+              SizedBox(height: 40),
 
               // 축하 메시지
-              const Text(
+              Text(
                 '가입 완료!',
                 style: AppTextStyles.display1.copyWith(color: AppColors.darkBlue),
               ),
 
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
 
               Text(
                 '블록픽에 오신 것을 환영해요\n지금 바로 게임을 시작해보세요',

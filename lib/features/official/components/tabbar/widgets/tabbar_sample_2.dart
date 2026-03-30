@@ -61,7 +61,7 @@ class _TabBarSample2State extends State<TabBarSample2>
         backgroundColor: const Color(0xFF1A1A2E),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.white),
+          icon: Icon(Icons.arrow_back, color: AppColors.white),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -323,7 +323,7 @@ class _TabBarSample2State extends State<TabBarSample2>
                 color: AppColors.white,
               ),
             ),
-            const SizedBox(height: 32),
+            SizedBox(height: 32),
             Text(
               _tabs[_selectedIndex].label,
               style: AppTextStyles.display1.copyWith(

@@ -210,19 +210,19 @@ class _PartnerScreenState extends ConsumerState<PartnerScreen> {
                     _buildStoreLogo('E', const Color(0xFFF5A623)),
                   ],
                 ),
-                const SizedBox(height: 10),
-                const Text(
+                SizedBox(height: 10),
+                Text(
                   '4대 편의점 사용 가능!\n모바일상품권 10000원 획득하기',
                   style: AppTextStyles.title3.copyWith(color: Colors.white),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Text(
+                  child: Text(
                     '이벤트 참여하면 +1000P',
                     style: AppTextStyles.caption4.copyWith(color: Colors.white),
                   ),
@@ -434,7 +434,7 @@ class _GameGridCard extends StatelessWidget {
             AspectRatio(
               aspectRatio: 1.1,
               child: Container(
-                color: const Color(0xFFF2F4F6),
+                color: Color(0xFFF2F4F6),
                 child: imageUrl != null
                     ? Image.network(
                         imageUrl,

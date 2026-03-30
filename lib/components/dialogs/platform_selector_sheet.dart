@@ -141,7 +141,7 @@ class _PlatformOption extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppTextStyles.title2.copyWith(color: isSelected ? AppColors.blue : AppColors.dark),
+                    style: AppTextStyles.title2,
                   ),
                   const SizedBox(height: 4),
                   Text(

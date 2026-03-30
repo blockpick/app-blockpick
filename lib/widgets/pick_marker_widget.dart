@@ -148,7 +148,7 @@ class ClusterMarkerWidget extends StatelessWidget {
           BoxShadow(
             color: AppColors.black.withOpacity(0.4),
             blurRadius: 6,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),

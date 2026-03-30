@@ -27,7 +27,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
       child: Scaffold(
         backgroundColor: AppColors.white,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             '내 정보 수정',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -106,7 +106,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
           ),
         ),
 
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
 
         // 닉네임 변경 버튼
         GestureDetector(
@@ -283,7 +283,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),
-            title: const Text(
+            title: Text(
               '닉네임 변경',
               style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
               textAlign: TextAlign.center,
@@ -513,7 +513,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        title: const Text(
+        title: Text(
           '로그아웃 하시겠어요?',
           style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
         ),

@@ -52,7 +52,7 @@ class WinnerDetailScreen extends StatelessWidget {
       backgroundColor: AppColors.white,
       elevation: 0,
       leading: IconButton(
-        icon: const Icon(Icons.arrow_back, color: AppColors.darkBlue),
+        icon: Icon(Icons.arrow_back, color: AppColors.darkBlue),
         onPressed: () => context.pop(),
       ),
       title: Text(
@@ -101,7 +101,7 @@ class WinnerDetailScreen extends StatelessWidget {
                     color: AppColors.medium,
                   ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
 
           // 이벤트 정보
           Expanded(
@@ -117,7 +117,7 @@ class WinnerDetailScreen extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Row(
                   children: [
                     Text(
@@ -126,14 +126,14 @@ class WinnerDetailScreen extends StatelessWidget {
                         color: AppColors.medium,
                       ),
                     ),
-                    const SizedBox(width: 4),
+                    SizedBox(width: 4),
                     Text(
                       '•',
                       style: AppTextStyles.body4.copyWith(
                         color: AppColors.medium,
                       ),
                     ),
-                    const SizedBox(width: 4),
+                    SizedBox(width: 4),
                     Text(
                       dateFormat.format(winner.winDate),
                       style: AppTextStyles.body4.copyWith(
@@ -235,7 +235,7 @@ class WinnerDetailScreen extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           // 닉네임
           Text(
@@ -300,7 +300,7 @@ class WinnerDetailScreen extends StatelessWidget {
                   color: AppColors.yellow500,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.search,
                   size: 12,
                   color: AppColors.white,
@@ -330,7 +330,7 @@ class WinnerDetailScreen extends StatelessWidget {
                   color: AppColors.darkBlue,
                 ),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Text(
                 '(총 ${_formatNumber(detail.totalParticipants)}명 참여)',
                 style: AppTextStyles.body4.copyWith(

@@ -94,7 +94,7 @@ class _TossGameListScreenState extends ConsumerState<TossGameListScreen> {
                       ),
                       child: Text(
                         category['label'] as String,
-                        style: AppTextStyles.caption2.copyWith(color: isSelected ? AppColors.white : AppColors.gray700),
+                        style: AppTextStyles.caption2,
                       ),
                     ),
                   ),
@@ -170,7 +170,7 @@ class _TossGameListScreenState extends ConsumerState<TossGameListScreen> {
                 )
               else
                 const SizedBox(width: 18),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Text(
                 option['label']!,
                 style: TextStyle(
@@ -284,7 +284,7 @@ class _TossGameListScreenState extends ConsumerState<TossGameListScreen> {
               color: AppColors.gray500,
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           Text(
             '게임이 없습니다',
             style: AppTextStyles.title2.copyWith(color: AppColors.gray600),
@@ -321,7 +321,7 @@ class _TossGameListScreenState extends ConsumerState<TossGameListScreen> {
               color: AppColors.red,
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           Text(
             '오류가 발생했습니다',
             style: AppTextStyles.title2.copyWith(color: AppColors.gray700),

@@ -36,7 +36,7 @@ class WishCard extends StatelessWidget {
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.02),
               blurRadius: 2,
-              offset: const Offset(0, 1),
+              offset: Offset(0, 1),
             ),
           ],
         ),
@@ -212,7 +212,7 @@ class WishCard extends StatelessWidget {
                     wish.category.emoji,
                     style: const TextStyle(fontSize: 32),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     wish.productName,
                     maxLines: 1,
@@ -252,7 +252,7 @@ class WishCard extends StatelessWidget {
       children: [
         if (!wish.isBusinessWish) ...[
           Icon(Icons.favorite, size: 12, color: Colors.red.shade300),
-          const SizedBox(width: 3),
+          SizedBox(width: 3),
           Text(
             '${wish.empathyCount}',
             style: AppTextStyles.caption4.copyWith(color: AppColors.gray600, fontWeight: FontWeight.w500),
@@ -260,7 +260,7 @@ class WishCard extends StatelessWidget {
           const SizedBox(width: 10),
         ],
         const Icon(Icons.people_outline, size: 12, color: AppColors.gray400),
-        const SizedBox(width: 3),
+        SizedBox(width: 3),
         Text(
           _formatCount(wish.participantCount),
           style: AppTextStyles.caption4.copyWith(color: AppColors.gray600, fontWeight: FontWeight.w500),
@@ -285,8 +285,8 @@ class WishCard extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text('🎁', style: TextStyle(fontSize: 11)),
-          const SizedBox(width: 4),
+          Text('🎁', style: TextStyle(fontSize: 11)),
+          SizedBox(width: 4),
           Flexible(
             child: Text(
               '경품: ${_formatPrice(wish.prizeValue ?? 0)}원 상당',
@@ -312,7 +312,7 @@ class WishCard extends StatelessWidget {
               '${_formatCount(wish.currentExposures ?? 0)} / ${_formatCount(wish.maxExposures ?? 0)}명',
               style: const TextStyle(fontSize: 10, color: AppColors.gray600),
             ),
-            const Spacer(),
+            Spacer(),
             Text(
               '${(progress * 100).toInt()}%',
               style: AppTextStyles.caption4.copyWith(color: AppColors.primary),
@@ -327,7 +327,7 @@ class WishCard extends StatelessWidget {
             minHeight: 4,
             backgroundColor: AppColors.gray200,
             valueColor: AlwaysStoppedAnimation(
-              progress > 0.7 ? AppColors.primary : const Color(0xFF7C3AED),
+              progress > 0.7 ? AppColors.primary : Color(0xFF7C3AED),
             ),
           ),
         ),

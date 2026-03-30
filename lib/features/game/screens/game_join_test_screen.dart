@@ -159,7 +159,7 @@ class _GameJoinTestScreenState extends ConsumerState<GameJoinTestScreen> {
           Row(
             children: [
               Icon(Icons.science, color: AppColors.blue, size: 24),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Text(
                 'E2E 테스트',
                 style: AppTextStyles.body2.copyWith(
@@ -169,7 +169,7 @@ class _GameJoinTestScreenState extends ConsumerState<GameJoinTestScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Text(
             '실제 블록체인 트랜잭션을 전송하고 게임에 참가합니다.\n'
             '콘솔 로그를 확인하세요!',
@@ -188,7 +188,7 @@ class _GameJoinTestScreenState extends ConsumerState<GameJoinTestScreen> {
             child: Row(
               children: [
                 Icon(Icons.warning_amber, color: Colors.orange, size: 20),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     'Ronin Mainnet 사용',
@@ -255,7 +255,7 @@ class _GameJoinTestScreenState extends ConsumerState<GameJoinTestScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.play_arrow),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Text(
             '테스트 1: 기본 UI 버튼',
             style: AppTextStyles.body2.copyWith(
@@ -282,7 +282,7 @@ class _GameJoinTestScreenState extends ConsumerState<GameJoinTestScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.animation),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Text(
             '테스트 2: 토스 스타일 애니메이션',
             style: AppTextStyles.body2.copyWith(
@@ -309,7 +309,7 @@ class _GameJoinTestScreenState extends ConsumerState<GameJoinTestScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.code),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Text(
             '테스트 3: Provider 직접 호출',
             style: AppTextStyles.body2.copyWith(
@@ -333,7 +333,7 @@ class _GameJoinTestScreenState extends ConsumerState<GameJoinTestScreen> {
             Row(
               children: [
                 Icon(Icons.account_balance_wallet, color: AppColors.blue),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Text(
                   '지갑 정보',
                   style: AppTextStyles.body2.copyWith(
@@ -342,7 +342,7 @@ class _GameJoinTestScreenState extends ConsumerState<GameJoinTestScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             walletAddress.when(
               data: (address) {
                 if (address == null) {
@@ -382,7 +382,7 @@ class _GameJoinTestScreenState extends ConsumerState<GameJoinTestScreen> {
             Row(
               children: [
                 Icon(Icons.wifi, color: AppColors.green500),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Text(
                   '네트워크 상태',
                   style: AppTextStyles.body2.copyWith(
@@ -400,7 +400,7 @@ class _GameJoinTestScreenState extends ConsumerState<GameJoinTestScreen> {
                     color: can ? AppColors.green500 : AppColors.red,
                     size: 20,
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   Text(
                     can ? 'Ronin Mainnet 연결됨' : '연결 실패',
                     style: AppTextStyles.body3.copyWith(

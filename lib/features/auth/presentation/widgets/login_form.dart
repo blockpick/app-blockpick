@@ -133,7 +133,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
+            Text(
               '로그인',
               style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
             ),
@@ -146,10 +146,10 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             ),
           ],
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
 
         // 이메일 입력
-        const Text(
+        Text(
           '이메일',
           style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
@@ -191,10 +191,10 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               style: TextStyle(fontSize: 13, color: AppColors.red),
             ),
           ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
 
         // 비밀번호 입력
-        const Text(
+        Text(
           '비밀번호',
           style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
@@ -283,7 +283,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           ),
         ),
 
-        const SizedBox(height: 20),
+        SizedBox(height: 20),
 
         // 회원가입 | 비밀번호 찾기
         Row(

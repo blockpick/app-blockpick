@@ -102,7 +102,7 @@ class BuzzCompleteScreen extends StatelessWidget {
                   color: AppColors.primaryBg,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Column(
+                child: Column(
                   children: [
                     Text(
                       '💡 당첨 확률을 높이려면',

@@ -50,7 +50,7 @@ class SignupSelectScreen extends ConsumerWidget {
                       const SizedBox(height: 20),
 
                       // 타이틀
-                      const Text(
+                      Text(
                         '회원가입',
                         style: TextStyle(
                           fontSize: 28,
@@ -59,7 +59,7 @@ class SignupSelectScreen extends ConsumerWidget {
                           letterSpacing: -0.5,
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
                       Text(
                         'Blockpick에 오신 것을 환영해요!\n가입 방법을 선택해 주세요.',
                         style: AppTextStyles.body1.copyWith(color: AppColors.gray600),
@@ -99,7 +99,7 @@ class SignupSelectScreen extends ConsumerWidget {
                         onTap: () => _handleSocialSignup(context, 'apple'),
                       ),
 
-                      const Spacer(),
+                      Spacer(),
 
                       // 하단 로그인 안내
                       Padding(
@@ -118,7 +118,7 @@ class SignupSelectScreen extends ConsumerWidget {
                                 minimumSize: Size.zero,
                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               ),
-                              child: const Text(
+                              child: Text(
                                 '로그인',
                                 style: AppTextStyles.title3.copyWith(color: AppColors.blue),
                               ),
@@ -231,7 +231,7 @@ class _SignupButton extends StatelessWidget {
                       ),
                 ),
               ),
-              const SizedBox(width: 14),
+              SizedBox(width: 14),
 
               // 텍스트
               Expanded(

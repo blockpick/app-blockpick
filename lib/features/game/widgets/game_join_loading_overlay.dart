@@ -83,7 +83,7 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
                   // 로딩 애니메이션
                   _buildLoadingAnimation(),
 
-                const SizedBox(height: 48),
+                SizedBox(height: 48),
 
                 // 타이틀
                 Text(
@@ -100,7 +100,7 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
                       color: Colors.white.withOpacity(0.3),
                     ),
 
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
 
                 // 현재 단계 설명
                 Text(
@@ -119,7 +119,7 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
                 // 진행률 바
                 _buildProgressBar(progress),
 
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
 
                 // 단계 표시
                 Text(
@@ -148,7 +148,7 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
                         color: Colors.white.withOpacity(0.8),
                         size: 20,
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       Text(
                         '블록체인에 트랜잭션을 전송하고 있습니다.\n잠시만 기다려주세요.',
                         style: AppTextStyles.body4.copyWith(

@@ -147,7 +147,7 @@ class _PriceKeypadInputState extends State<PriceKeypadInput> {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.fromLTRB(24, 20, 24, 16),
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: AppColors.textBlack,
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
             ),
@@ -162,7 +162,7 @@ class _PriceKeypadInputState extends State<PriceKeypadInput> {
                     fontSize: 18,
                   ),
                 ),
-                const SizedBox(height: 6),
+                SizedBox(height: 6),
                 Text(
                   '입찰 가능 금액 : ${_formatPrice(widget.minPrice)} ~ ${_formatPrice(widget.maxPrice)}',
                   style: AppTextStyles.body4.copyWith(
@@ -229,7 +229,7 @@ class _PriceKeypadInputState extends State<PriceKeypadInput> {
                 const SizedBox(height: 8),
                 // Row 3: 7, 8, 9
                 _buildKeypadRow(['7', '8', '9']),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 // Row 4: 00, 0, AC
                 _buildKeypadRow(['00', '0', 'AC']),
               ],

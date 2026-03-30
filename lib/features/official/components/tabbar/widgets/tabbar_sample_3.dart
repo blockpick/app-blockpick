@@ -102,7 +102,7 @@ class _TabBarSample3State extends State<TabBarSample3>
                     child: Row(
                       children: [
                         IconButton(
-                          icon: const Icon(Icons.arrow_back, color: AppColors.white),
+                          icon: Icon(Icons.arrow_back, color: AppColors.white),
                           onPressed: () => Navigator.pop(context),
                         ),
                         Text(

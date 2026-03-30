@@ -193,7 +193,7 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
         // 제품 정보
         _buildProductInfo(),
 
-        const Divider(height: 1),
+        Divider(height: 1),
 
         // 선택된 블록 리스트
         Expanded(
@@ -241,12 +241,12 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
           // 브랜드 정보
           Row(
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 20,
                 backgroundColor: AppColors.blueWhite,
                 child: Icon(LucideIcons.package, size: 20, color: AppColors.blue),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -296,8 +296,8 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: () {},
-                  icon: const Icon(LucideIcons.award, size: 16),
-                  label: const Text('Prize info'),
+                  icon: Icon(LucideIcons.award, size: 16),
+                  label: Text('Prize info'),
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
@@ -342,7 +342,7 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
               size: 48,
               color: AppColors.buleGray,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
               'Select blocks on the grid',
               style: AppTextStyles.body3.copyWith(color: AppColors.medium),
@@ -378,7 +378,7 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
           child: ListView.separated(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             itemCount: _selectedBlocks.length,
-            separatorBuilder: (context, index) => const Divider(height: 1),
+            separatorBuilder: (context, index) => Divider(height: 1),
             itemBuilder: (context, index) {
               final block = _selectedBlocks[index];
               return ListTile(
@@ -409,7 +409,7 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
 
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.white,
         border: Border(
           top: BorderSide(color: AppColors.buleGray),
@@ -483,7 +483,7 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
           BoxShadow(
             color: AppColors.black.withOpacity(0.1),
             blurRadius: 10,
-            offset: const Offset(0, -4),
+            offset: Offset(0, -4),
           ),
         ],
       ),

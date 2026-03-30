@@ -94,7 +94,7 @@ class _EmailSignupScreenState extends ConsumerState<EmailSignupScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
+              Text(
                 '이미 가입된 계정이에요',
                 style: TextStyle(
                   fontSize: 20,
@@ -102,7 +102,7 @@ class _EmailSignupScreenState extends ConsumerState<EmailSignupScreen> {
                   color: AppColors.darkBlue,
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Text(
                 '${_emailController.text}\n으로 가입된 계정이 있어요',
                 style: AppTextStyles.body1.copyWith(color: AppColors.gray600),
@@ -138,14 +138,14 @@ class _EmailSignupScreenState extends ConsumerState<EmailSignupScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 32),
+            SizedBox(height: 32),
 
             // 타이틀
-            const Text(
+            Text(
               '이메일을\n입력해주세요',
               style: AppTextStyles.display2.copyWith(color: AppColors.darkBlue),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Text(
               '로그인할 때 사용할 이메일이에요',
               style: AppTextStyles.body1.copyWith(color: AppColors.gray600),

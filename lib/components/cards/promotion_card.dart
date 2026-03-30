@@ -155,7 +155,7 @@ class PromotionCard extends StatelessWidget {
               const SizedBox(width: 8),
             ] else if (isLive) ...[
               _buildLiveBadge(),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
             ],
             _buildTypeBadge(),
           ],
@@ -196,13 +196,13 @@ class PromotionCard extends StatelessWidget {
           Container(
             width: 8,
             height: 8,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: AppColors.red,
               shape: BoxShape.circle,
             ),
           ),
-          const SizedBox(width: 6),
-          const Text(
+          SizedBox(width: 6),
+          Text(
             'LIVE',
             style: AppTextStyles.caption3.copyWith(color: AppColors.white),
           ),
@@ -487,7 +487,7 @@ class PromotionCardSmall extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(

@@ -322,7 +322,7 @@ class _BusinessBannerCarouselState extends State<_BusinessBannerCarousel> {
                       BoxShadow(
                         color: AppColors.primary.withValues(alpha: 0.2),
                         blurRadius: 12,
-                        offset: const Offset(0, 4),
+                        offset: Offset(0, 4),
                       ),
                     ],
                   ),
@@ -345,7 +345,7 @@ class _BusinessBannerCarouselState extends State<_BusinessBannerCarousel> {
                                 style: AppTextStyles.caption4.copyWith(color: Colors.white),
                               ),
                             ),
-                            const SizedBox(height: 6),
+                            SizedBox(height: 6),
                             Text(
                               wish.oneLiner,
                               maxLines: 2,
@@ -542,7 +542,7 @@ class _BuzzConfirmSheet extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -568,7 +568,7 @@ class _BuzzConfirmSheet extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           // 참여비 안내
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -579,7 +579,7 @@ class _BuzzConfirmSheet extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   '참여비',
                   style: AppTextStyles.title3.copyWith(color: AppColors.gray600),
                 ),

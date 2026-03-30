@@ -35,7 +35,7 @@ class _ReviewManagementScreenState extends State<ReviewManagementScreen> {
       child: Scaffold(
         backgroundColor: AppColors.white,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             '리뷰관리',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -88,7 +88,7 @@ class _ReviewManagementScreenState extends State<ReviewManagementScreen> {
                 color: AppColors.red,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.chevron_right,
                 size: 16,
                 color: AppColors.white,
@@ -126,7 +126,7 @@ class _ReviewManagementScreenState extends State<ReviewManagementScreen> {
             _buildGuidelineItem('3', '욕설, 비방, 광고 등 부적절한 내용은 삭제될 수 있습니다.'),
             const SizedBox(height: 12),
             _buildGuidelineItem('4', '작성된 리뷰는 블록픽 서비스 내 노출될 수 있습니다.'),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             _buildGuidelineItem('5', '리뷰 수정은 작성 후에도 가능합니다.'),
           ],
         ),
@@ -169,7 +169,7 @@ class _ReviewManagementScreenState extends State<ReviewManagementScreen> {
             ),
           ),
         ),
-        const SizedBox(width: 10),
+        SizedBox(width: 10),
         Expanded(
           child: Text(
             text,
@@ -199,7 +199,7 @@ class _ReviewManagementScreenState extends State<ReviewManagementScreen> {
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Text(
               '이벤트에 당첨되면\n리뷰를 작성할 수 있어요.',
               style: AppTextStyles.body3.copyWith(
@@ -258,7 +258,7 @@ class _ReviewManagementScreenState extends State<ReviewManagementScreen> {
                     Row(
                       children: [
                         _buildEventBadge(item.eventType),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8),
                         Text(
                           TimeUtils.getRelativeTime(item.participatedAt),
                           style: AppTextStyles.body4.copyWith(
@@ -267,7 +267,7 @@ class _ReviewManagementScreenState extends State<ReviewManagementScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     // 상품명
                     Text(
                       item.productName,
@@ -288,7 +288,7 @@ class _ReviewManagementScreenState extends State<ReviewManagementScreen> {
           ),
           // 작성된 리뷰 텍스트
           if (item.hasReview && item.reviewText != null) ...[
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(14),
@@ -364,7 +364,7 @@ class _ReviewManagementScreenState extends State<ReviewManagementScreen> {
       ),
       child: Text(
         type.displayName.toUpperCase(),
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 10,
           fontWeight: FontWeight.w700,
           color: AppColors.white,

@@ -22,7 +22,7 @@ class _AccordionSample2State extends State<AccordionSample2> {
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.darkBlue),
+          icon: Icon(Icons.arrow_back, color: AppColors.darkBlue),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -140,7 +140,7 @@ class _AccordionSample2State extends State<AccordionSample2> {
                       color: color,
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: 16),
                   Expanded(
                     child: Text(
                       title,
@@ -153,7 +153,7 @@ class _AccordionSample2State extends State<AccordionSample2> {
                   // 회전 애니메이션 아이콘
                   AnimatedRotation(
                     turns: isExpanded ? 0.5 : 0,
-                    duration: const Duration(milliseconds: 300),
+                    duration: Duration(milliseconds: 300),
                     child: Icon(
                       Icons.keyboard_arrow_down,
                       color: color,

@@ -170,7 +170,7 @@ class _DrawPickScreenState extends State<DrawPickScreen>
                     color: Colors.white.withValues(alpha: 0.2),
                   ),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.delete_outline_rounded, color: Colors.white, size: 18),
@@ -353,7 +353,7 @@ class _DrawPickScreenState extends State<DrawPickScreen>
                       ),
                     ],
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.auto_fix_high_rounded, color: Colors.white, size: 22),
@@ -387,7 +387,7 @@ class _DrawPickScreenState extends State<DrawPickScreen>
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 18, color: modeColor),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Text(
             text,
             style: AppTextStyles.caption2.copyWith(color: Colors.white.withValues(alpha: 0.8)),

@@ -20,7 +20,7 @@ class WinningHistoryScreen extends ConsumerWidget {
       child: Scaffold(
         backgroundColor: AppColors.gray100,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             '당첨 내역',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -53,7 +53,7 @@ class WinningHistoryScreen extends ConsumerWidget {
             size: 64,
             color: AppColors.gray400,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
             '당첨 내역이 없습니다',
             style: AppTextStyles.body2.copyWith(color: AppColors.gray500),
@@ -108,7 +108,7 @@ class _WinningItem extends StatelessWidget {
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,7 +130,7 @@ class _WinningItem extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(

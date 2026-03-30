@@ -27,7 +27,7 @@ class WinnerListItem extends StatelessWidget {
           children: [
             // 프로필 이미지
             _buildProfileImage(),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
 
             // 당첨 정보
             Expanded(
@@ -48,7 +48,7 @@ class WinnerListItem extends StatelessWidget {
                       _buildEventBadge(),
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
 
                   // 상품명
                   Text(
@@ -59,7 +59,7 @@ class WinnerListItem extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
 
                   // 이벤트 타입 + 시간
                   Row(
@@ -70,14 +70,14 @@ class WinnerListItem extends StatelessWidget {
                           color: AppColors.medium,
                         ),
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       Text(
                         '•',
                         style: AppTextStyles.body4.copyWith(
                           color: AppColors.medium,
                         ),
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       Text(
                         TimeUtils.getRelativeTime(winner.winDate),
                         style: AppTextStyles.body4.copyWith(

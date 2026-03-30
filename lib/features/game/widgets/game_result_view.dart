@@ -165,7 +165,7 @@ class GameResultView extends ConsumerWidget {
                           color: AppColors.orange,
                           borderRadius: BorderRadius.circular(4),
                         ),
-                        child: const Text(
+                        child: Text(
                           '즉석경품',
                           style: TextStyle(
                             fontSize: 9,
@@ -174,7 +174,7 @@ class GameResultView extends ConsumerWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6),
                     ],
                     Flexible(
                       child: Text(
@@ -191,7 +191,7 @@ class GameResultView extends ConsumerWidget {
                 ),
                 if (game.description != null &&
                     game.description!.isNotEmpty) ...[
-                  const SizedBox(height: 2),
+                  SizedBox(height: 2),
                   Text(
                     game.description!,
                     style: AppTextStyles.caption1.copyWith(
@@ -201,7 +201,7 @@ class GameResultView extends ConsumerWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ] else ...[
-                  const SizedBox(height: 2),
+                  SizedBox(height: 2),
                   Text(
                     gameRound.status.bannerMessage(),
                     style: AppTextStyles.caption1.copyWith(
@@ -276,12 +276,12 @@ class GameResultView extends ConsumerWidget {
     return Column(
       children: [
         Icon(icon, size: 18, color: AppColors.gray500),
-        const SizedBox(height: 4),
+        SizedBox(height: 4),
         Text(
           label,
           style: AppTextStyles.caption1.copyWith(color: AppColors.gray500),
         ),
-        const SizedBox(height: 2),
+        SizedBox(height: 2),
         Text(
           value,
           style: AppTextStyles.body3.copyWith(
@@ -307,14 +307,14 @@ class GameResultView extends ConsumerWidget {
       child: Row(
         children: [
           Icon(LucideIcons.gift, size: 20, color: AppColors.blue),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Text(
             '총 보상',
             style: AppTextStyles.body3.copyWith(
               color: AppColors.gray600,
             ),
           ),
-          const Spacer(),
+          Spacer(),
           Text(
             '$formatted P',
             style: AppTextStyles.body3.copyWith(
@@ -341,14 +341,14 @@ class GameResultView extends ConsumerWidget {
       child: Row(
         children: [
           Icon(LucideIcons.mapPin, size: 20, color: AppColors.orange),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Text(
             '당첨 위치',
             style: AppTextStyles.body3.copyWith(
               color: AppColors.gray600,
             ),
           ),
-          const Spacer(),
+          Spacer(),
           Text(
             _formatWinningCell(game.winningCell!),
             style: AppTextStyles.body3.copyWith(
@@ -392,12 +392,12 @@ class GameResultView extends ConsumerWidget {
       child: Row(
         children: [
           Icon(LucideIcons.calendar, size: 18, color: AppColors.gray500),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Text(
             '게임 기간',
             style: AppTextStyles.body3.copyWith(color: AppColors.gray600),
           ),
-          const Spacer(),
+          Spacer(),
           Text(
             periodText,
             style: AppTextStyles.body3.copyWith(
@@ -493,7 +493,7 @@ class GameResultView extends ConsumerWidget {
                           color: AppColors.yellow500,
                           borderRadius: BorderRadius.circular(3),
                         ),
-                        child: const Text(
+                        child: Text(
                           '대상',
                           style: TextStyle(
                             fontSize: 9,
@@ -502,7 +502,7 @@ class GameResultView extends ConsumerWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6),
                     ],
                     Flexible(
                       child: Text(
@@ -518,7 +518,7 @@ class GameResultView extends ConsumerWidget {
                   ],
                 ),
                 if (product.brand != null && product.brand!.isNotEmpty) ...[
-                  const SizedBox(height: 2),
+                  SizedBox(height: 2),
                   Text(
                     product.brand!,
                     style: AppTextStyles.caption1.copyWith(
@@ -558,7 +558,7 @@ class GameResultView extends ConsumerWidget {
           Row(
             children: [
               Icon(LucideIcons.shield, size: 16, color: AppColors.gray600),
-              const SizedBox(width: 6),
+              SizedBox(width: 6),
               Text(
                 '블록체인 검증',
                 style: AppTextStyles.caption1.copyWith(
@@ -576,7 +576,7 @@ class GameResultView extends ConsumerWidget {
             ),
           ],
           if (game.onchainContractAddr != null) ...[
-            const SizedBox(height: 4),
+            SizedBox(height: 4),
             _buildBlockchainLink(
               label: 'Contract',
               hash: game.onchainContractAddr!,
@@ -617,7 +617,7 @@ class GameResultView extends ConsumerWidget {
               ),
             ),
           ),
-          const SizedBox(width: 4),
+          SizedBox(width: 4),
           Icon(LucideIcons.externalLink, size: 12, color: AppColors.blue),
         ],
       ),
@@ -665,7 +665,7 @@ class GameResultView extends ConsumerWidget {
         children: [
           // 프로필 이미지 / 순위 (P1)
           _buildProfileAvatar(result),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
 
           // 닉네임 + txHash + 참여시각
           Expanded(
@@ -706,7 +706,7 @@ class GameResultView extends ConsumerWidget {
                   ],
                 ),
                 if (result.txHash != null) ...[
-                  const SizedBox(height: 2),
+                  SizedBox(height: 2),
                   Text(
                     'tx: ${result.txHash!.length > 14 ? '${result.txHash!.substring(0, 14)}...' : result.txHash!}',
                     style: AppTextStyles.caption1.copyWith(
@@ -717,7 +717,7 @@ class GameResultView extends ConsumerWidget {
                 ],
                 // 참여 시각 (P2)
                 if (result.joinedAt.isNotEmpty) ...[
-                  const SizedBox(height: 2),
+                  SizedBox(height: 2),
                   Text(
                     _formatDateTime(result.joinedAt),
                     style: AppTextStyles.caption1.copyWith(
@@ -820,7 +820,7 @@ class GameResultView extends ConsumerWidget {
             size: 48,
             color: AppColors.gray400,
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Text(
             '결과 데이터가 아직 없습니다',
             style: AppTextStyles.body3.copyWith(

@@ -79,7 +79,7 @@ class _RefundScreenState extends ConsumerState<RefundScreen> {
       child: Scaffold(
         backgroundColor: AppColors.gray100,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             '환불 신청',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -111,7 +111,7 @@ class _RefundScreenState extends ConsumerState<RefundScreen> {
                             color: AppColors.gray500,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8),
                         Text(
                           '${_formatNumber(balance)}원',
                           style: AppTextStyles.display2.copyWith(color: AppColors.darkBlue),
@@ -184,7 +184,7 @@ class _RefundScreenState extends ConsumerState<RefundScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
 
                   // 안내 사항
                   Container(

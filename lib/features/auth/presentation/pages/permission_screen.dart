@@ -42,13 +42,13 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 40),
+                      SizedBox(height: 40),
                       // 제목
-                      const Text(
+                      Text(
                         '앱 접근 권한 안내',
                         style: AppTextStyles.heading1.copyWith(color: AppColors.darkBlue),
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
                       // 안내 문구
                       Text(
                         '블록픽은 더 나은 서비스를 위해\n아래와 같은 권한이 필요해요.',
@@ -90,7 +90,7 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen> {
                         description: '프로필 사진, 상품 후기, QR코드 촬영',
                         color: AppColors.pink,
                       ),
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24),
 
                       // 안내 문구
                       Container(
@@ -180,10 +180,10 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen> {
           ),
           child: Text(
             isRequired ? '필수' : '선택',
-            style: AppTextStyles.caption2.copyWith(color: isRequired ? AppColors.blue : AppColors.gray600),
+            style: AppTextStyles.caption2,
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         Text(
           title,
           style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
@@ -220,7 +220,7 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen> {
               color: color,
             ),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,7 +229,7 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen> {
                   title,
                   style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   description,
                   style: AppTextStyles.body3.copyWith(color: AppColors.gray500),

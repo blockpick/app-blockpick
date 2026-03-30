@@ -56,7 +56,7 @@ class VerificationState {
 class Verification extends _$Verification {
   @override
   VerificationState build() {
-    return const VerificationState();
+    return VerificationState();
   }
 
   /// SMS 인증 완료 표시

@@ -122,8 +122,8 @@ class MyScreen extends ConsumerWidget {
                   color: AppColors.gray500,
                 ),
               ),
-              const SizedBox(height: 16),
-              const Text(
+              SizedBox(height: 16),
+              Text(
                 '로그인이 필요합니다',
                 style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
               ),
@@ -305,7 +305,7 @@ class MyScreen extends ConsumerWidget {
                       color: AppColors.darkBlue,
                     ),
                   ),
-                  const Spacer(),
+                  Spacer(),
                   Icon(
                     Icons.chevron_right_rounded,
                     size: 20,
@@ -330,7 +330,7 @@ class MyScreen extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
             children: [
-              const Text(
+              Text(
                 '포인트 추가 적립',
                 style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
               ),
@@ -407,7 +407,7 @@ class MyScreen extends ConsumerWidget {
                 size: 24,
                 color: AppColors.gray700,
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: Text(
                   title,
@@ -433,7 +433,7 @@ class MyScreen extends ConsumerWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
+            Text(
               '포인트 적립 안내',
               style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
             ),
@@ -537,7 +537,7 @@ class MyScreen extends ConsumerWidget {
                 title,
                 style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
               ),
-              const Spacer(),
+              Spacer(),
               Icon(
                 Icons.chevron_right_rounded,
                 size: 20,
@@ -560,7 +560,7 @@ class MyScreen extends ConsumerWidget {
 
   /// 회사 정보 푸터
   Widget _buildFooter(BuildContext context) {
-    const footerTextStyle = AppTextStyles.caption4.copyWith(color: AppColors.gray500);
+    final footerTextStyle = AppTextStyles.caption4.copyWith(color: AppColors.gray500);
 
     return Container(
       width: double.infinity,
@@ -570,23 +570,23 @@ class MyScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 회사명
-          const Text(
+          Text(
             'Blockpick, Inc.',
             style: AppTextStyles.caption2.copyWith(color: AppColors.gray700),
           ),
           const SizedBox(height: 6),
           // 주소
-          const Text(
+          Text(
             '8th Floor, 101, Ogeum-ro, Songpa-gu, Seoul, Republic of Korea, [05548]',
             style: footerTextStyle,
           ),
           const SizedBox(height: 2),
           // 연락처
-          const Text(
+          Text(
             'Contact : support@blockpick.com',
             style: footerTextStyle,
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           // 링크들
           Row(
             children: [
@@ -594,7 +594,7 @@ class MyScreen extends ConsumerWidget {
                 onTap: () {
                   // TODO: 사업자 정보 페이지
                 },
-                child: const Text(
+                child: Text(
                   'Business Information',
                   style: AppTextStyles.caption4.copyWith(color: AppColors.gray600, decoration: TextDecoration.underline),
                 ),
@@ -602,7 +602,7 @@ class MyScreen extends ConsumerWidget {
               _footerDot(),
               GestureDetector(
                 onTap: () => context.push('/settings/terms'),
-                child: const Text(
+                child: Text(
                   'Terms of Service',
                   style: AppTextStyles.caption4.copyWith(color: AppColors.gray600, decoration: TextDecoration.underline),
                 ),
@@ -610,7 +610,7 @@ class MyScreen extends ConsumerWidget {
               _footerDot(),
               GestureDetector(
                 onTap: () => context.push('/settings/privacy'),
-                child: const Text(
+                child: Text(
                   'Privacy Policy',
                   style: AppTextStyles.caption4.copyWith(color: AppColors.gray600, decoration: TextDecoration.underline),
                 ),
@@ -619,18 +619,18 @@ class MyScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 12),
           // 법적 고지
-          const Text(
+          Text(
             'Must be 18+ to participate in events. Void where prohibited by law.',
             style: footerTextStyle,
           ),
           const SizedBox(height: 4),
-          const Text(
+          Text(
             'Apple is not a sponsor of any contests or sweepstakes within this app.',
             style: footerTextStyle,
           ),
           const SizedBox(height: 12),
           // 저작권
-          const Text(
+          Text(
             '\u00a9 2025 Blockpick, Inc. All rights reserved.',
             style: footerTextStyle,
           ),

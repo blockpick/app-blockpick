@@ -262,7 +262,7 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
           size: 14,
           color: AppColors.gray500,
         ),
-        const SizedBox(width: 3),
+        SizedBox(width: 3),
         Text(
           value,
           style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
@@ -295,7 +295,7 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
             ),
           ),
         ),
-        const SizedBox(width: 12),
+        SizedBox(width: 12),
         // 타이머
         Text(
           '${_formatDuration(_remainingTime)} 남음',

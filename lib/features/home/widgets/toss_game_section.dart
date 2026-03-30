@@ -36,14 +36,14 @@ class TossGameSection extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
                     color: AppColors.darkBlue,
                     letterSpacing: -0.5,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   subtitle,
                   style: AppTextStyles.body3.copyWith(color: AppColors.gray500),
@@ -149,7 +149,7 @@ class _TossGameCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               child: _buildImage(),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: 16),
 
             // 정보
             Expanded(
@@ -169,7 +169,7 @@ class _TossGameCard extends StatelessWidget {
                       style: AppTextStyles.caption4.copyWith(color: _getCategoryColor()),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
 
                   // 제목
                   Text(
@@ -212,7 +212,7 @@ class _TossGameCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
 
                   // 가격
                   Row(
@@ -221,7 +221,7 @@ class _TossGameCard extends StatelessWidget {
                         '${_formatCurrency(game.currentPrice)}원',
                         style: AppTextStyles.buttonLarge.copyWith(color: AppColors.blue),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       Text(
                         '${_formatCurrency(game.originalPrice)}원',
                         style: AppTextStyles.caption1.copyWith(color: AppColors.gray400, decoration: TextDecoration.lineThrough),
@@ -386,7 +386,7 @@ class _TossVibeCard extends StatelessWidget {
                         style: AppTextStyles.caption4.copyWith(color: Colors.white),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
 
                     // 제목
                     Text(

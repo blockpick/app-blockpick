@@ -96,7 +96,7 @@ class GridSectionOverlay extends StatelessWidget {
               BoxShadow(
                 color: Colors.black.withOpacity(0.2),
                 blurRadius: 4,
-                offset: const Offset(0, 2),
+                offset: Offset(0, 2),
               ),
             ],
           ),
@@ -110,7 +110,7 @@ class GridSectionOverlay extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              const SizedBox(height: 2),
+              SizedBox(height: 2),
               Text(
                 '$pickCount picks',
                 style: AppTextStyles.caption1.copyWith(
@@ -132,7 +132,7 @@ class SectionListWidget extends StatelessWidget {
   final Function(GridSection)? onSectionTap;
   final int totalPicks;
 
-  const SectionListWidget({
+  SectionListWidget({
     super.key,
     required this.picksBySection,
     this.onSectionTap,
@@ -218,7 +218,7 @@ class SectionMiniGrid extends StatelessWidget {
   final int sectionsPerSide;
   final Function(GridSection)? onSectionTap;
 
-  const SectionMiniGrid({
+  SectionMiniGrid({
     super.key,
     required this.picksBySection,
     this.sectionsPerSide = 3,
@@ -284,7 +284,7 @@ class SectionMiniGrid extends StatelessWidget {
                             ),
                           ),
                           if (pickCount > 0) ...[
-                            const SizedBox(height: 4),
+                            SizedBox(height: 4),
                             Text(
                               '$pickCount',
                               style: AppTextStyles.heading1.copyWith(

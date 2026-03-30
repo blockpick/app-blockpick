@@ -314,7 +314,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                 style: TextStyle(fontSize: 14, color: AppColors.gray600),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               Row(
                 children: [
                   Expanded(
@@ -333,7 +333,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
@@ -348,7 +348,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         '재전송',
                         style: AppTextStyles.title2.copyWith(color: AppColors.white),
                       ),
@@ -402,7 +402,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                 style: TextStyle(fontSize: 14, color: AppColors.gray600),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -418,7 +418,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     '인증번호 재전송',
                     style: AppTextStyles.title2.copyWith(color: AppColors.white),
                   ),
@@ -470,7 +470,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                 style: TextStyle(fontSize: 14, color: AppColors.gray600),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -483,7 +483,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     '확인',
                     style: AppTextStyles.title2.copyWith(color: AppColors.white),
                   ),
@@ -654,7 +654,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                 style: TextStyle(fontSize: 14, color: AppColors.gray600),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -667,7 +667,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     '확인',
                     style: AppTextStyles.title2.copyWith(color: AppColors.white),
                   ),
@@ -750,7 +750,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                         color: AppColors.darkBlue,
                       ),
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Text(
                         '회원가입',
                         style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
@@ -802,7 +802,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                             letterSpacing: -0.5,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8),
                         Text(
                           _stepSubtitle,
                           style: AppTextStyles.body1.copyWith(color: AppColors.gray600),
@@ -852,7 +852,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                       elevation: 0,
                     ),
                     child: _isLoading
-                        ? const SizedBox(
+                        ? SizedBox(
                             width: 24,
                             height: 24,
                             child: CircularProgressIndicator(
@@ -878,11 +878,11 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           '이메일',
           style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         TextField(
           controller: _emailController,
           focusNode: _emailFocusNode,
@@ -919,11 +919,11 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // 이메일 표시 (비활성)
-        const Text(
+        Text(
           '이메일',
           style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -947,14 +947,14 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
             ],
           ),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
 
         // 인증번호 입력
-        const Text(
+        Text(
           '인증번호',
           style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         TextField(
           controller: _codeController,
           focusNode: _codeFocusNode,
@@ -1004,7 +1004,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
               style: TextStyle(fontSize: 13, color: AppColors.red),
             ),
           ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         Center(
           child: TextButton(
             onPressed: _resendCount < _maxResendCount ? _resendCode : null,
@@ -1023,11 +1023,11 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // 비밀번호
-        const Text(
+        Text(
           '비밀번호',
           style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         TextField(
           controller: _passwordController,
           focusNode: _passwordFocusNode,
@@ -1066,7 +1066,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
             ),
           ),
 
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
 
         // 비밀번호 규칙 체크
         _buildPasswordRule('8자 이상', _hasMinLength),
@@ -1074,14 +1074,14 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
         _buildPasswordRule('숫자 포함', _hasDigit),
         _buildPasswordRule('특수문자 포함', _hasSpecial),
 
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
 
         // 비밀번호 확인
-        const Text(
+        Text(
           '비밀번호 확인',
           style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         TextField(
           controller: _confirmPasswordController,
           focusNode: _confirmPasswordFocusNode,
@@ -1159,7 +1159,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
           const SizedBox(width: 8),
           Text(
             text,
-            style: AppTextStyles.body4.copyWith(color: isValid ? AppColors.green500 : AppColors.gray500),
+            style: AppTextStyles.body4,
           ),
         ],
       ),

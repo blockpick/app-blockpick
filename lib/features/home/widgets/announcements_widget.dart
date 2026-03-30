@@ -9,7 +9,7 @@ class AnnouncementsWidget extends StatelessWidget {
   final Function(AnnouncementModel)? onTapItem;
   final VoidCallback? onViewMore;
 
-  const AnnouncementsWidget({
+  AnnouncementsWidget({
     super.key,
     required this.announcements,
     this.onTapItem,
@@ -51,7 +51,7 @@ class AnnouncementsWidget extends StatelessWidget {
             },
           ),
 
-          const Divider(height: 1),
+          Divider(height: 1),
 
           // View More 버튼
           Padding(
@@ -107,7 +107,7 @@ class AnnouncementsWidget extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 6),
+            SizedBox(height: 6),
             Text(
               announcement.formattedDate,
               style: AppTextStyles.body4.copyWith(

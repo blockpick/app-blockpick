@@ -90,7 +90,7 @@ class _ListSample3State extends State<ListSample3>
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.darkBlue),
+          icon: Icon(Icons.arrow_back, color: AppColors.darkBlue),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -221,7 +221,7 @@ class _ListSample3State extends State<ListSample3>
                           size: 32,
                         ),
                       ),
-                      const Spacer(),
+                      Spacer(),
                       // 타이틀
                       Text(
                         item.title,
@@ -230,7 +230,7 @@ class _ListSample3State extends State<ListSample3>
                           color: AppColors.white,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       // 카운트
                       Text(
                         item.count,

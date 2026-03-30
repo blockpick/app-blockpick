@@ -158,7 +158,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
               BoxShadow(
                 color: AppColors.yellow500.withValues(alpha: 0.3),
                 blurRadius: 12,
-                offset: const Offset(0, 4),
+                offset: Offset(0, 4),
               ),
             ],
           ),
@@ -168,11 +168,11 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       '전 세계 어디서나,',
                       style: AppTextStyles.title3.copyWith(color: Color(0xFF664D03), height: 1.4),
                     ),
-                    const Text(
+                    Text(
                       '나를 위한 맞춤 경품 Event',
                       style: TextStyle(
                         fontSize: 17,
@@ -186,7 +186,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                       children: [
                         Text(
                           'Blockpick 서비스 알아보기',
-                          style: AppTextStyles.caption2.copyWith(color: const Color(0xFF664D03).withValues(alpha: 0.7)),
+                          style: AppTextStyles.caption2.copyWith(color: Color(0xFF664D03).withValues(alpha: 0.7)),
                         ),
                         const SizedBox(width: 4),
                         Icon(
@@ -266,8 +266,8 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                       color: AppColors.blue,
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  const Text(
+                  SizedBox(width: 12),
+                  Text(
                     '이벤트 포인트',
                     style: AppTextStyles.title2.copyWith(color: AppColors.gray700),
                   ),
@@ -278,7 +278,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                   if (isAuthenticated)
                     Text(
                       '${_formatNumber(points)} P',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w800,
                         color: AppColors.darkBlue,
@@ -291,7 +291,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                         color: AppColors.gray100,
                         borderRadius: BorderRadius.circular(6),
                       ),
-                      child: const Text(
+                      child: Text(
                         '로그인 필요',
                         style: AppTextStyles.body4.copyWith(color: AppColors.gray500),
                       ),
@@ -358,17 +358,17 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                       color: Color(0xFF664D03),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         '출석체크',
                         style: AppTextStyles.title2.copyWith(color: Color(0xFF664D03)),
                       ),
                       Text(
                         '매일 10P 적립',
-                        style: AppTextStyles.caption1.copyWith(color: const Color(0xFF664D03).withValues(alpha: 0.7)),
+                        style: AppTextStyles.caption1.copyWith(color: Color(0xFF664D03).withValues(alpha: 0.7)),
                       ),
                     ],
                   ),
@@ -377,10 +377,10 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF664D03),
+                  color: Color(0xFF664D03),
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: const Text(
+                child: Text(
                   'CHECK-IN',
                   style: AppTextStyles.caption3.copyWith(color: AppColors.white),
                 ),
@@ -505,7 +505,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                   size: 24,
                   color: AppColors.gray500,
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Text(
                   'AD Banner',
                   style: AppTextStyles.title3.copyWith(color: AppColors.gray500),
@@ -663,7 +663,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                       ],
                     ],
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   // 상품명
                   Text(
                     game.title,
@@ -671,7 +671,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   // 참여 인원 / 입찰 금액
                   Row(
                     children: [
@@ -680,7 +680,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                         '👥 ${game.participants}/${game.maxParticipants}',
                         style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12),
                       // 입찰 금액 범위
                       Text(
                         '${_formatPrice(game.currentPrice)}원 ~ ${_formatPrice(game.originalPrice)}원',
@@ -797,7 +797,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
             )
           else
             _buildCircleInitialAvatar(username),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           // 정보
           Expanded(
             child: Column(
@@ -807,7 +807,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                   username,
                   style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Text(
                   product,
                   style: AppTextStyles.body3.copyWith(color: AppColors.gray600),
@@ -992,7 +992,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                 )
               else
                 _buildSmallInitialAvatar(username),
-              const SizedBox(width: 10),
+              SizedBox(width: 10),
               Expanded(
                 child: Text(
                   username,
@@ -1002,7 +1002,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Expanded(
             child: Text(
               review,
@@ -1037,7 +1037,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
       const Color(0xFFC2185B),
       const Color(0xFF7B1FA2),
       const Color(0xFF388E3C),
-      const Color(0xFFF57C00),
+      Color(0xFFF57C00),
     ];
     final colorIndex = username.hashCode.abs() % colors.length;
 
@@ -1126,7 +1126,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                   letterSpacing: -0.3,
                 ),
               ),
-              const SizedBox(height: 2),
+              SizedBox(height: 2),
               Text(
                 subtitle,
                 style: AppTextStyles.body4.copyWith(color: AppColors.gray500),

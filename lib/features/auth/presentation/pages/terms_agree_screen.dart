@@ -74,10 +74,10 @@ class _TermsAgreeScreenState extends ConsumerState<TermsAgreeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 32),
+            SizedBox(height: 32),
 
             // 타이틀
-            const Text(
+            Text(
               '서비스 이용약관에\n동의해주세요',
               style: AppTextStyles.display2.copyWith(color: AppColors.darkBlue),
             ),
@@ -285,7 +285,7 @@ class _TermsDetailSheet extends StatelessWidget {
             ),
           ),
 
-          const Divider(height: 1),
+          Divider(height: 1),
 
           // 내용
           Expanded(

@@ -88,7 +88,7 @@ class WishStepPreview extends StatelessWidget {
                             style: const TextStyle(fontSize: 11, color: AppColors.gray600),
                           ),
                         ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10),
                       // 한줄평
                       Text(
                         '"$oneLiner"',
@@ -121,7 +121,7 @@ class WishStepPreview extends StatelessWidget {
                         child: Row(
                           children: [
                             const Icon(Icons.favorite, size: 14, color: AppColors.primary),
-                            const SizedBox(width: 6),
+                            SizedBox(width: 6),
                             Text(
                               '필요 공감: ${_calculateThreshold(productPrice)}명',
                               style: AppTextStyles.caption2.copyWith(color: AppColors.primary),

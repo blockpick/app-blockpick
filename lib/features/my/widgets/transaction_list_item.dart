@@ -55,7 +55,7 @@ class TransactionListItem extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(width: AppConstants.spacingMd),
+          SizedBox(width: AppConstants.spacingMd),
 
           // 거래 정보
           Expanded(

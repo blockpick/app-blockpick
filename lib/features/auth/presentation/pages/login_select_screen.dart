@@ -18,7 +18,7 @@ import '../widgets/auth_button.dart';
 /// - 이메일 로그인
 /// - 회원가입 안내
 class LoginSelectScreen extends ConsumerWidget {
-  const LoginSelectScreen({super.key});
+  LoginSelectScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -91,14 +91,14 @@ class LoginSelectScreen extends ConsumerWidget {
             ),
           ),
         ),
-        const SizedBox(height: 32),
+        SizedBox(height: 32),
 
         // 환영 메시지
-        const Text(
+        Text(
           '반가워요!',
           style: AppTextStyles.display2.copyWith(color: AppColors.darkBlue),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         Text(
           '로그인하고 블록픽을 시작하세요',
           style: AppTextStyles.body1.copyWith(color: AppColors.gray600),
@@ -161,7 +161,7 @@ class LoginSelectScreen extends ConsumerWidget {
             Expanded(child: Divider(color: AppColors.gray300, thickness: 1)),
           ],
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
         AuthButton(
           text: '이메일로 계속하기',
           onPressed: () => context.push('/auth/email-login'),
@@ -189,14 +189,14 @@ class LoginSelectScreen extends ConsumerWidget {
                 minimumSize: Size.zero,
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
-              child: const Text(
+              child: Text(
                 '회원가입',
                 style: AppTextStyles.title3.copyWith(color: AppColors.blue),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         Text(
           '로그인 시 이용약관과 개인정보처리방침에 동의하게 됩니다',
           style: AppTextStyles.caption1.copyWith(color: AppColors.gray500),
@@ -375,7 +375,7 @@ class _SocialButton extends StatelessWidget {
                 Icon(icon, size: 22, color: textColor)
               else if (customIcon != null)
                 customIcon!,
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Text(
                 text,
                 style: AppTextStyles.title2.copyWith(color: textColor),
@@ -417,7 +417,7 @@ class _MemberCheckDialog extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
+            Text(
               '처음 오셨네요!',
               style: TextStyle(
                 fontSize: 20,
@@ -425,7 +425,7 @@ class _MemberCheckDialog extends StatelessWidget {
                 color: AppColors.darkBlue,
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Text(
               '회원가입을 진행할까요?',
               style: AppTextStyles.body1.copyWith(color: AppColors.gray600),

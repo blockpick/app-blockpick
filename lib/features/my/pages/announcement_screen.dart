@@ -19,7 +19,7 @@ class AnnouncementScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: AppColors.gray100,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             '공지사항',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -38,7 +38,7 @@ class AnnouncementScreen extends StatelessWidget {
                       size: 64,
                       color: AppColors.gray400,
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
                     Text(
                       '공지사항이 없습니다',
                       style: AppTextStyles.body2.copyWith(color: AppColors.gray500),
@@ -111,7 +111,7 @@ class _AnnouncementItemState extends State<_AnnouncementItem> {
                           style: AppTextStyles.caption4.copyWith(color: AppColors.red),
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                     ],
                     Expanded(
                       child: Text(

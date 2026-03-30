@@ -8,7 +8,7 @@ class ParticipationFeedWidget extends StatelessWidget {
   final List<ParticipationFeedModel> participations;
   final VoidCallback? onViewMore;
 
-  const ParticipationFeedWidget({
+  ParticipationFeedWidget({
     super.key,
     required this.participations,
     this.onViewMore,
@@ -49,7 +49,7 @@ class ParticipationFeedWidget extends StatelessWidget {
             },
           ),
 
-          const Divider(height: 1),
+          Divider(height: 1),
 
           // View More 버튼
           Padding(
@@ -115,7 +115,7 @@ class ParticipationFeedWidget extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
 
           // 정보
           Expanded(
@@ -129,7 +129,7 @@ class ParticipationFeedWidget extends StatelessWidget {
                     fontSize: 15,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   participation.userName,
                   style: AppTextStyles.body4.copyWith(
@@ -141,7 +141,7 @@ class ParticipationFeedWidget extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
 
           // 시간 박스 (초록색)
           Container(

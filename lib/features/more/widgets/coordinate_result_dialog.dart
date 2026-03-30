@@ -230,7 +230,7 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
                                     ],
                                   ),
                                 ),
-                                const SizedBox(width: 10),
+                                SizedBox(width: 10),
                                 Text(
                                   widget.modeName.toUpperCase(),
                                   style: AppTextStyles.caption3.copyWith(color: widget.modeColor),
@@ -239,7 +239,7 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
                             ),
                           ),
 
-                          const SizedBox(height: 28),
+                          SizedBox(height: 28),
 
                           // 타이틀
                           Text(
@@ -456,7 +456,7 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
               color: AppColors.white.withValues(alpha: isPrimary ? 1 : 0.8),
               size: 20,
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             Text(
               label,
               style: AppTextStyles.title3.copyWith(color: AppColors.white.withValues(alpha: isPrimary ? 1 : 0.8)),

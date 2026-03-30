@@ -124,13 +124,13 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(height: 8),
-              const Text(
+              SizedBox(height: 8),
+              Text(
                 'Blockpick 회원 계정이 아니에요.\n다른 계정으로 로그인 하거나\n회원가입을 해주세요.',
                 style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               Row(
                 children: [
                   Expanded(
@@ -149,7 +149,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
@@ -164,7 +164,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         '회원가입 하기',
                         style: AppTextStyles.title2.copyWith(color: AppColors.white),
                       ),
@@ -317,13 +317,13 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(height: 8),
-              const Text(
+              SizedBox(height: 8),
+              Text(
                 '비밀번호 5회 실패로 보안을 위해\n계정이 잠겼어요.\n비밀번호 찾기를 이용해주세요.',
                 style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               Row(
                 children: [
                   Expanded(
@@ -342,7 +342,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
@@ -357,7 +357,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         '비밀번호찾기',
                         style: AppTextStyles.title2.copyWith(color: AppColors.white),
                       ),
@@ -386,7 +386,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
               // 헤더
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                child: const Text(
+                child: Text(
                   '로그인 하기',
                   style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
                   textAlign: TextAlign.center,
@@ -401,14 +401,14 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 40),
+                        SizedBox(height: 40),
 
                         // 이메일 입력
-                        const Text(
+                        Text(
                           '이메일',
                           style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8),
                         TextField(
                           controller: _emailController,
                           focusNode: _emailFocusNode,
@@ -441,14 +441,14 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                             ),
                           ),
 
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20),
 
                         // 비밀번호 입력
-                        const Text(
+                        Text(
                           '비밀번호',
                           style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8),
                         TextField(
                           controller: _passwordController,
                           focusNode: _passwordFocusNode,
@@ -527,7 +527,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                           ),
                         ),
 
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20),
 
                         // 회원가입 | 이메일 찾기 | 비밀번호 찾기
                         Row(
@@ -641,7 +641,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               icon,
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Text(
                 text,
                 style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),

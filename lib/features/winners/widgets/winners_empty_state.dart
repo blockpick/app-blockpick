@@ -10,7 +10,7 @@ class WinnersEmptyState extends StatelessWidget {
   final String buttonText;
   final VoidCallback? onButtonTap;
 
-  const WinnersEmptyState({
+  WinnersEmptyState({
     super.key,
     required this.message,
     required this.subMessage,
@@ -35,7 +35,7 @@ class WinnersEmptyState extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
             // 서브 메시지
             Text(
@@ -46,7 +46,7 @@ class WinnersEmptyState extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
 
             // 참여 버튼
             GestureDetector(

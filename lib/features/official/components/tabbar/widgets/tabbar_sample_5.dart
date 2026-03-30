@@ -41,7 +41,7 @@ class _TabBarSample5State extends State<TabBarSample5>
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.darkBlue),
+          icon: Icon(Icons.arrow_back, color: AppColors.darkBlue),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -78,7 +78,7 @@ class _TabBarSample5State extends State<TabBarSample5>
                   size: 100,
                   color: AppColors.blue,
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
                 Text(
                   tab.label,
                   style: AppTextStyles.display1.copyWith(

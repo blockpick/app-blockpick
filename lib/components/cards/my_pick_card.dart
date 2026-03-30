@@ -37,7 +37,7 @@ class MyPickCard extends StatelessWidget {
               BoxShadow(
                 color: AppColors.black.withOpacity(0.05),
                 blurRadius: 10,
-                offset: const Offset(0, 4),
+                offset: Offset(0, 4),
               ),
             ],
           ),
@@ -64,7 +64,7 @@ class MyPickCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
 
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
 
                     // 가격 정보
                     Row(
@@ -76,7 +76,7 @@ class MyPickCard extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(width: 4),
+                        SizedBox(width: 4),
                         Text(
                           '• ${(game.originalPrice / 1000).toStringAsFixed(1)}K',
                           style: AppTextStyles.body3.copyWith(
@@ -187,9 +187,9 @@ class MyPickCard extends StatelessWidget {
         children: [
           Text(
             emoji,
-            style: const TextStyle(fontSize: 14),
+            style: TextStyle(fontSize: 14),
           ),
-          const SizedBox(width: 4),
+          SizedBox(width: 4),
           Text(
             value,
             style: AppTextStyles.body4.copyWith(
@@ -245,7 +245,7 @@ class MyPickCard extends StatelessWidget {
           size: 16,
           color: timeColor,
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         Text(
           game.status.isEnded ? 'Ended' : 'Ends in ${game.timeLeft}',
           style: AppTextStyles.body3.copyWith(

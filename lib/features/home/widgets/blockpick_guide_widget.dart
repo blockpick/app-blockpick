@@ -28,7 +28,7 @@ class BlockPickGuideWidget extends StatelessWidget {
                   size: 24,
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Text(
                 'THIS IS HOW\nA FAIR GAME WORKS',
                 style: AppTextStyles.heading1.copyWith(
@@ -107,7 +107,7 @@ class BlockPickGuideWidget extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
 
           // 텍스트
           Expanded(
@@ -121,7 +121,7 @@ class BlockPickGuideWidget extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   description,
                   style: AppTextStyles.body3.copyWith(

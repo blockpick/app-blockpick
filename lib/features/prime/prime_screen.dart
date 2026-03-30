@@ -83,8 +83,8 @@ class PrimeScreen extends ConsumerWidget {
                         height: 1.5,
                       ),
                     ),
-                    const SizedBox(height: 32),
-                    const Text(
+                    SizedBox(height: 32),
+                    Text(
                       '곧 오픈 예정',
                       style: AppTextStyles.title2.copyWith(color: AppColors.gray400),
                     ),

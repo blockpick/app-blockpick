@@ -70,7 +70,7 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
       child: Scaffold(
         backgroundColor: AppColors.gray100,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             '캐시 충전',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -86,7 +86,7 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                 padding: const EdgeInsets.all(20),
                 children: [
                   // 충전 금액 선택
-                  const Text(
+                  Text(
                     '충전할 금액을 선택하세요',
                     style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
                   ),
@@ -118,14 +118,14 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                           child: Center(
                             child: Text(
                               '${_formatNumber(amount)}원',
-                              style: AppTextStyles.title2.copyWith(color: isSelected ? AppColors.white : AppColors.darkBlue),
+                              style: AppTextStyles.title2,
                             ),
                           ),
                         ),
                       );
                     },
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
 
                   // 안내 사항
                   Container(

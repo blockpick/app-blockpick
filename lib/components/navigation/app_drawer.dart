@@ -327,7 +327,7 @@ class AppDrawer extends ConsumerWidget {
                     color: AppColors.dark,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Row(
                   children: [
                     Container(
@@ -340,12 +340,12 @@ class AppDrawer extends ConsumerWidget {
                           width: 1,
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Level 5',
                         style: AppTextStyles.caption4.copyWith(color: AppColors.blue),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                       decoration: BoxDecoration(
@@ -356,7 +356,7 @@ class AppDrawer extends ConsumerWidget {
                           width: 1,
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Regular user',
                         style: AppTextStyles.caption4.copyWith(color: AppColors.purple),
                       ),
@@ -367,7 +367,7 @@ class AppDrawer extends ConsumerWidget {
             ),
           ),
           IconButton(
-            icon: const Icon(LucideIcons.chevronRight, color: AppColors.dark, size: 20),
+            icon: Icon(LucideIcons.chevronRight, color: AppColors.dark, size: 20),
             onPressed: () {
               Navigator.pop(context);
               // TODO: 프로필 페이지로 이동

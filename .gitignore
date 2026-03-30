@@ -86,3 +86,4 @@ ios/Flutter/Flutter.podspec
 # Test
 **/test_driver/
 .test_coverage.dart
+.omc/

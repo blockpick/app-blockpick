@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "754233958283",
+    "project_id": "blockpick-56e20",
+    "storage_bucket": "blockpick-56e20.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754233958283:android:b5b1a4a3d18b3785ca998e",
+        "android_client_info": {
+          "package_name": "net.blockpick.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-4B4UX0qBkUbfwNP6Yu2GqsyVvcB0nFE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

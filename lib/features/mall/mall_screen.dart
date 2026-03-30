@@ -468,7 +468,7 @@ class _MallScreenState extends State<MallScreen> {
           BoxShadow(
             color: AppColors.darkBlue.withValues(alpha: 0.3),
             blurRadius: 16,
-            offset: const Offset(0, 6),
+            offset: Offset(0, 6),
           ),
         ],
       ),
@@ -484,7 +484,7 @@ class _MallScreenState extends State<MallScreen> {
                     color: AppColors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(6),
                   ),
-                  child: const Text(
+                  child: Text(
                     '첫 구매 혜택',
                     style: AppTextStyles.caption2.copyWith(color: AppColors.white),
                   ),
@@ -599,7 +599,7 @@ class _MallScreenState extends State<MallScreen> {
                   letterSpacing: -0.3,
                 ),
               ),
-              const SizedBox(height: 2),
+              SizedBox(height: 2),
               Text(
                 subtitle,
                 style: AppTextStyles.body4.copyWith(color: AppColors.gray500),
@@ -750,7 +750,7 @@ class _MallScreenState extends State<MallScreen> {
                           BoxShadow(
                             color: AppColors.black.withValues(alpha: 0.1),
                             blurRadius: 4,
-                            offset: const Offset(0, 2),
+                            offset: Offset(0, 2),
                           ),
                         ],
                       ),
@@ -777,7 +777,7 @@ class _MallScreenState extends State<MallScreen> {
                     product['location'] as String,
                     style: AppTextStyles.caption4.copyWith(color: AppColors.gray500),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   // 상품명
                   Text(
                     product['name'] as String,
@@ -794,7 +794,7 @@ class _MallScreenState extends State<MallScreen> {
                         size: 14,
                         color: Colors.amber,
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       Text(
                         '${product['rating']}',
                         style: AppTextStyles.caption2.copyWith(color: AppColors.darkBlue),
@@ -808,7 +808,7 @@ class _MallScreenState extends State<MallScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   // 가격
                   Row(
                     children: [

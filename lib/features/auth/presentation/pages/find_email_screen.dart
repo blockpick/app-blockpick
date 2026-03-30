@@ -210,7 +210,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
+            Text(
               '해당번호로 가입된 계정이 없어요.',
               style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
               textAlign: TextAlign.center,
@@ -233,7 +233,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
               Navigator.pop(context);
               context.push('/signup');
             },
-            child: const Text(
+            child: Text(
               '회원가입 하기',
               style: TextStyle(color: AppColors.blue, fontWeight: FontWeight.w600),
             ),
@@ -255,10 +255,10 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
           backgroundColor: AppColors.white,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_rounded, color: AppColors.darkBlue),
+            icon: Icon(Icons.arrow_back_ios_rounded, color: AppColors.darkBlue),
             onPressed: () => context.pop(),
           ),
-          title: const Text(
+          title: Text(
             '이메일 찾기',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -274,9 +274,9 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24),
 
-                      const Text(
+                      Text(
                         '가입된 이메일을 찾기 위해\n휴대폰 번호 인증이 필요해요.',
                         style: AppTextStyles.heading2.copyWith(color: AppColors.darkBlue),
                       ),
@@ -342,7 +342,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
                         ),
                         elevation: 0,
                       ),
-                      child: const Text(
+                      child: Text(
                         '다음',
                         style: AppTextStyles.title2,
                       ),
@@ -360,7 +360,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           '휴대폰 번호',
           style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
@@ -382,7 +382,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
                 setState(() => _isPhoneValid = isValid);
               }
             },
-            selectorConfig: const SelectorConfig(
+            selectorConfig: SelectorConfig(
               selectorType: PhoneInputSelectorType.DIALOG,
               useBottomSheetSafeArea: true,
               leadingPadding: 16,
@@ -438,7 +438,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           '인증번호',
           style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
@@ -452,7 +452,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
             LengthLimitingTextInputFormatter(6),
           ],
           onChanged: (_) => setState(() {}),
-          style: const TextStyle(fontSize: 16, color: AppColors.darkBlue, letterSpacing: 8),
+          style: TextStyle(fontSize: 16, color: AppColors.darkBlue, letterSpacing: 8),
           decoration: InputDecoration(
             hintText: '인증번호 6자리',
             hintStyle: TextStyle(fontSize: 16, color: AppColors.gray400, letterSpacing: 0),
@@ -473,7 +473,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
             suffixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         Align(
           alignment: Alignment.centerRight,
           child: TextButton(

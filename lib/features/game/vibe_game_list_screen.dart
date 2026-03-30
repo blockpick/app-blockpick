@@ -78,7 +78,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
                           BoxShadow(
                             color: AppColors.red.withValues(alpha: 0.3),
                             blurRadius: 12,
-                            offset: const Offset(0, 4),
+                            offset: Offset(0, 4),
                           ),
                         ]
                       : [],
@@ -229,7 +229,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
                     overflow: TextOverflow.ellipsis,
                   ),
 
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
 
                   // 설명
                   if (game.description.isNotEmpty)
@@ -250,7 +250,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
                     children: [
                       // 참여자 수
                       Icon(LucideIcons.users, size: 16, color: AppColors.medium),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       Text(
                         '${game.participants}명',
                         style: AppTextStyles.body4.copyWith(
@@ -264,7 +264,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
                       // 남은 시간
                       if (game.timeLeft.isNotEmpty) ...[
                         Icon(LucideIcons.clock, size: 16, color: AppColors.medium),
-                        const SizedBox(width: 4),
+                        SizedBox(width: 4),
                         Text(
                           game.timeLeft,
                           style: AppTextStyles.body4.copyWith(
@@ -283,7 +283,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          gradient: const LinearGradient(
+                          gradient: LinearGradient(
                             colors: [
                               AppColors.red,
                               AppColors.yellow500,
@@ -346,7 +346,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
             size: 80,
             color: AppColors.buleGray,
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           Text(
             'No VIBE games yet',
             style: AppTextStyles.heading1.copyWith(
@@ -354,7 +354,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Text(
             'Check back soon for new experiences',
             style: AppTextStyles.body3.copyWith(
@@ -378,14 +378,14 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
             size: 64,
             color: AppColors.red,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
             'Error loading games',
             style: AppTextStyles.title1.copyWith(
               color: AppColors.red,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
             error.toString(),
             style: AppTextStyles.body4.copyWith(

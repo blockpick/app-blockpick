@@ -268,7 +268,7 @@ class _FarmPickScreenState extends State<FarmPickScreen>
                   color: AppColors.white.withValues(alpha: 0.2),
                 ),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(Icons.refresh_rounded, color: AppColors.white, size: 18),
@@ -429,8 +429,8 @@ class _FarmPickScreenState extends State<FarmPickScreen>
   Widget _buildStatusItem(String emoji, String label, String value) {
     return Column(
       children: [
-        Text(emoji, style: const TextStyle(fontSize: 20)),
-        const SizedBox(height: 4),
+        Text(emoji, style: TextStyle(fontSize: 20)),
+        SizedBox(height: 4),
         Text(
           label,
           style: AppTextStyles.caption4.copyWith(color: AppColors.white.withValues(alpha: 0.5)),
@@ -537,11 +537,11 @@ class _FarmPickScreenState extends State<FarmPickScreen>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text('🌾', style: TextStyle(fontSize: 22)),
-                      const SizedBox(width: 10),
+                      Text('🌾', style: TextStyle(fontSize: 22)),
+                      SizedBox(width: 10),
                       Text(
                         'HARVEST',
-                        style: AppTextStyles.buttonLarge.copyWith(color: _plantedCells.isNotEmpty),
+                        style: AppTextStyles.buttonLarge.copyWith(color: _plantedCells.isNotEmpty ? AppColors.white : AppColors.white.withValues(alpha: 0.3)),
                       ),
                     ],
                   ),
@@ -594,11 +594,11 @@ class _FarmPickScreenState extends State<FarmPickScreen>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(emoji, style: const TextStyle(fontSize: 18)),
-                const SizedBox(width: 8),
+                Text(emoji, style: TextStyle(fontSize: 18)),
+                SizedBox(width: 8),
                 Text(
                   label,
-                  style: AppTextStyles.title3.copyWith(color: enabled),
+                  style: AppTextStyles.title3.copyWith(color: enabled ? null : AppColors.white.withValues(alpha: 0.1)),
                 ),
               ],
             ),
@@ -617,7 +617,7 @@ class _FarmPickScreenState extends State<FarmPickScreen>
                     ),
                     child: Text(
                       badge,
-                      style: AppTextStyles.caption2.copyWith(color: enabled),
+                      style: AppTextStyles.caption2.copyWith(color: enabled ? null : AppColors.white.withValues(alpha: 0.1)),
                     ),
                   ),
                 ),

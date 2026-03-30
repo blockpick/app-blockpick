@@ -122,7 +122,7 @@ class _MyPickScreenState extends ConsumerState<MyPickScreen> with SingleTickerPr
             size: 80,
             color: AppColors.medium.withOpacity(0.5),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
             'No picks yet',
             style: AppTextStyles.heading1.copyWith(
@@ -130,7 +130,7 @@ class _MyPickScreenState extends ConsumerState<MyPickScreen> with SingleTickerPr
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
             'Start playing to see your picks here',
             style: AppTextStyles.body3.copyWith(
@@ -214,14 +214,14 @@ class _MyPickScreenState extends ConsumerState<MyPickScreen> with SingleTickerPr
                         color: AppColors.darkBlue,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     Text(
                       game.description,
                       style: AppTextStyles.body3.copyWith(
                         color: AppColors.medium,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
 
                     // 내 픽 리스트
                     Text(
@@ -231,7 +231,7 @@ class _MyPickScreenState extends ConsumerState<MyPickScreen> with SingleTickerPr
                         color: AppColors.darkBlue,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     Wrap(
                       spacing: 8,
                       runSpacing: 8,
@@ -256,7 +256,7 @@ class _MyPickScreenState extends ConsumerState<MyPickScreen> with SingleTickerPr
                         );
                       }).toList(),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24),
 
                     // 그리드로 보기 버튼
                     SizedBox(

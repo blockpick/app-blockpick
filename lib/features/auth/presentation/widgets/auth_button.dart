@@ -36,7 +36,7 @@ class AuthButton extends StatelessWidget {
         : AppColors.gray500;
 
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
+      duration: Duration(milliseconds: 200),
       height: height,
       width: double.infinity,
       child: Material(
@@ -133,7 +133,7 @@ class SocialLoginButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildIcon(),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Text(
                 text,
                 style: AppTextStyles.title2.copyWith(color: textColor),
@@ -177,7 +177,7 @@ class AuthTextButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final Color? textColor;
 
-  const AuthTextButton({
+  AuthTextButton({
     super.key,
     required this.text,
     this.onPressed,

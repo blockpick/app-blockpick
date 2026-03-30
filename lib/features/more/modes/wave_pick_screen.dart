@@ -158,7 +158,7 @@ class _WavePickScreenState extends State<WavePickScreen>
                     color: Colors.white.withValues(alpha: 0.2),
                   ),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.refresh_rounded, color: Colors.white, size: 18),
@@ -346,7 +346,7 @@ class _WavePickScreenState extends State<WavePickScreen>
                       ),
                     ],
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.water_drop_rounded, color: Colors.white, size: 22),
@@ -380,7 +380,7 @@ class _WavePickScreenState extends State<WavePickScreen>
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 18, color: modeColor),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Text(
             text,
             style: AppTextStyles.caption2.copyWith(color: Colors.white.withValues(alpha: 0.8)),

@@ -77,7 +77,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
         if (game == null) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Game Not Found'),
+              title: Text('Game Not Found'),
             ),
             body: Center(
               child: Column(
@@ -88,7 +88,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                     size: 64,
                     color: AppColors.red,
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   Text(
                     'Game not found',
                     style: AppTextStyles.heading1.copyWith(
@@ -243,7 +243,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
       ),
       error: (error, stack) => Scaffold(
         appBar: AppBar(
-          title: const Text('Error'),
+          title: Text('Error'),
         ),
         body: Center(
           child: Column(
@@ -254,14 +254,14 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                 size: 64,
                 color: AppColors.red,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Text(
                 'Error loading game',
                 style: AppTextStyles.heading1.copyWith(
                   color: AppColors.darkBlue,
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Text(
                 error.toString(),
                 style: AppTextStyles.body4.copyWith(
@@ -336,7 +336,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                       ),
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             // 상품 정보
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -392,7 +392,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
               // 뒤로가기
               IconButton(
                 onPressed: () => context.pop(),
-                icon: const Icon(
+                icon: Icon(
                   Icons.arrow_back_ios_new_rounded,
                   size: 22,
                   color: AppColors.darkBlue,
@@ -414,7 +414,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                         style: AppTextStyles.caption4.copyWith(color: AppColors.white),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10),
                     Expanded(
                       child: Text(
                         game.title,
@@ -495,7 +495,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Icon(Icons.schedule_rounded, size: 14, color: AppColors.red),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       Text(
                         game.timeLeft,
                         style: AppTextStyles.caption2.copyWith(color: AppColors.red),
@@ -532,7 +532,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       Text(
                         '${game.currentPrice}',
                         style: AppTextStyles.caption2.copyWith(color: AppColors.darkBlue),
@@ -630,7 +630,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
             color: AppColors.gray500,
           ),
         ),
-        const SizedBox(height: 2),
+        SizedBox(height: 2),
         Text(
           value,
           style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
@@ -686,8 +686,8 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                   size: 22,
                   color: AppColors.white,
                 ),
-                const SizedBox(width: 10),
-                const Text(
+                SizedBox(width: 10),
+                Text(
                   '블록 선택하고 참가하기',
                   style: AppTextStyles.buttonLarge.copyWith(color: AppColors.white),
                 ),
@@ -718,11 +718,11 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
             size: 20,
             color: statusColor,
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Expanded(
             child: Text(
               message,
-              style: AppTextStyles.caption2.copyWith(color: statusColor),
+              style: AppTextStyles.caption2.copyWith(color: statusColor.withValues(alpha: 0.1)),
             ),
           ),
         ],
@@ -748,7 +748,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
               size: 22,
               color: AppColors.gray500,
             ),
-            const SizedBox(width: 10),
+            SizedBox(width: 10),
             Text(
               buttonText,
               style: AppTextStyles.buttonLarge.copyWith(color: AppColors.gray500),

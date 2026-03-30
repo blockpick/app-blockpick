@@ -59,7 +59,7 @@ class CashAllocationCard extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: AppConstants.spacingMd),
+          SizedBox(height: AppConstants.spacingMd),
 
           // 제목
           Text(
@@ -92,7 +92,7 @@ class CashAllocationCard extends StatelessWidget {
               const SizedBox(width: 4),
               Text(
                 status,
-                style: AppTextStyles.caption4.copyWith(color: isRefundable ? AppColors.green500 : AppColors.error),
+                style: AppTextStyles.caption4,
               ),
             ],
           ),

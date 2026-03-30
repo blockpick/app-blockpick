@@ -16,7 +16,7 @@ class ReviewSectionWidget extends StatelessWidget {
           // 리뷰 이벤트 배너
           _buildReviewEventBanner(),
 
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
 
           // 리뷰 리스트
           Padding(
@@ -97,7 +97,7 @@ class ReviewSectionWidget extends StatelessWidget {
           BoxShadow(
             color: AppColors.purple.withValues(alpha: 0.3),
             blurRadius: 15,
-            offset: const Offset(0, 8),
+            offset: Offset(0, 8),
           ),
         ],
       ),
@@ -124,7 +124,7 @@ class ReviewSectionWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
                 Text(
                   'Review Event',
                   style: AppTextStyles.heading1.copyWith(
@@ -132,7 +132,7 @@ class ReviewSectionWidget extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   'Leave a review, win your spot!',
                   style: AppTextStyles.body3.copyWith(
@@ -172,7 +172,7 @@ class ReviewSectionWidget extends StatelessWidget {
           BoxShadow(
             color: AppColors.gray300.withValues(alpha: 0.3),
             blurRadius: 8,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -194,7 +194,7 @@ class ReviewSectionWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -218,7 +218,7 @@ class ReviewSectionWidget extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
 
           // 리뷰 내용
           Text(
@@ -249,7 +249,7 @@ class ReviewSectionWidget extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
           ],
 
           // 시간

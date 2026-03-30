@@ -31,7 +31,7 @@ class EventPointsScreen extends ConsumerWidget {
       child: Scaffold(
         backgroundColor: AppColors.white,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             '이벤트 포인트',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -109,7 +109,7 @@ class EventPointsScreen extends ConsumerWidget {
               style: AppTextStyles.title3,
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
         ],
       ),
     );
@@ -129,7 +129,7 @@ class EventPointsScreen extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 '적립/사용 내역',
                 style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
               ),
@@ -141,7 +141,7 @@ class EventPointsScreen extends ConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           // 테이블 헤더
           Container(
@@ -244,7 +244,7 @@ class EventPointsScreen extends ConsumerWidget {
             width: 70,
             child: Text(
               pointText,
-              style: AppTextStyles.caption2.copyWith(color: isPositive ? AppColors.blue : AppColors.red),
+              style: AppTextStyles.caption2,
               textAlign: TextAlign.right,
             ),
           ),

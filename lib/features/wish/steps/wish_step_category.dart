@@ -85,7 +85,7 @@ class _WishStepCategoryState extends State<WishStepCategory> {
               },
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           // 선택된 카테고리 표시
           if (_selected != null)
             Center(

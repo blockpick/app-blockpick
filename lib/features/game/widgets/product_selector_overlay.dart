@@ -100,7 +100,7 @@ class _ProductSelectorOverlayState extends State<ProductSelectorOverlay>
                     ],
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
 
                 // 상품명 (크게)
                 Padding(
@@ -235,7 +235,7 @@ class _ProductSelectorOverlayState extends State<ProductSelectorOverlay>
                                 size: 24,
                                 color: AppColors.white,
                               ),
-                              const SizedBox(width: 12),
+                              SizedBox(width: 12),
                               Text(
                                 'Select This Product',
                                 style: AppTextStyles.buttonLarge.copyWith(

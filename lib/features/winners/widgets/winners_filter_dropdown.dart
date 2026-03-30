@@ -22,7 +22,7 @@ class WinnersFilterDropdown<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton<T?>(
       onSelected: onChanged,
-      offset: const Offset(0, 40),
+      offset: Offset(0, 40),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppConstants.radiusMd),
       ),
@@ -46,7 +46,7 @@ class WinnersFilterDropdown<T> extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 4),
-            const Icon(
+            Icon(
               Icons.keyboard_arrow_down,
               size: 20,
               color: AppColors.darkBlue,

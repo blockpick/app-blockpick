@@ -30,7 +30,7 @@ class GameCard extends StatelessWidget {
               BoxShadow(
                 color: AppColors.black.withValues(alpha: 0.05),
                 blurRadius: 10,
-                offset: const Offset(0, 4),
+                offset: Offset(0, 4),
               ),
             ],
           ),
@@ -121,7 +121,7 @@ class GameCard extends StatelessWidget {
                       print('   이미지 URL: ${game.imageUrl}');
                       return Container(
                         color: AppColors.blueWhite,
-                        child: const Center(
+                        child: Center(
                           child: Icon(
                             LucideIcons.image,
                             size: 48,
@@ -224,7 +224,7 @@ class GameCard extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(icon, size: 14, color: AppColors.medium),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         Flexible(
           child: Text(
             value,
@@ -276,7 +276,7 @@ class GameCard extends StatelessWidget {
           child: Row(
             children: [
               const Icon(LucideIcons.clock, size: 14, color: AppColors.red),
-              const SizedBox(width: 4),
+              SizedBox(width: 4),
               Text(
                 game.timeLeft,
                 style: AppTextStyles.caption1.copyWith(

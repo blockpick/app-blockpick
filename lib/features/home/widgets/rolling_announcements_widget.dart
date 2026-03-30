@@ -100,7 +100,7 @@ class _RollingAnnouncementsWidgetState
                   child: PageView.builder(
                     controller: _pageController,
                     scrollDirection: Axis.vertical,
-                    physics: const NeverScrollableScrollPhysics(),
+                    physics: NeverScrollableScrollPhysics(),
                     itemCount: widget.announcements.length,
                     onPageChanged: (index) {
                       setState(() {
@@ -128,7 +128,7 @@ class _RollingAnnouncementsWidgetState
 
             // 페이지 인디케이터 (선택적)
             if (widget.announcements.length > 1) ...[
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Text(
                 '${_currentPage + 1}/${widget.announcements.length}',
                 style: AppTextStyles.body4.copyWith(

@@ -109,7 +109,7 @@ class _TransactionFloatingBannerState
         children: [
           // 상태 아이콘
           _buildStatusIcon(pending, icon, color),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
 
           // 텍스트
           Expanded(
@@ -125,7 +125,7 @@ class _TransactionFloatingBannerState
                   ),
                 ),
                 if (pending.gameTitle.isNotEmpty) ...[
-                  const SizedBox(height: 2),
+                  SizedBox(height: 2),
                   Text(
                     pending.gameTitle,
                     style: AppTextStyles.body4.copyWith(

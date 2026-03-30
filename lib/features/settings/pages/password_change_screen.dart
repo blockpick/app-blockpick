@@ -89,7 +89,7 @@ class _PasswordChangeScreenState extends ConsumerState<PasswordChangeScreen> {
       child: Scaffold(
         backgroundColor: AppColors.gray100,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             '비밀번호 변경',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -150,7 +150,7 @@ class _PasswordChangeScreenState extends ConsumerState<PasswordChangeScreen> {
                 },
               ),
 
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
 
               // 비밀번호 규칙 안내
               Container(

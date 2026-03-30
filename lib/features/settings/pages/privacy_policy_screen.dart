@@ -16,7 +16,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: AppColors.gray100,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             '개인정보처리방침',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),

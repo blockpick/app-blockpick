@@ -22,7 +22,7 @@ class TabBarSamplesScreen extends StatelessWidget {
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.darkBlue),
+          icon: Icon(Icons.arrow_back, color: AppColors.darkBlue),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -181,7 +181,7 @@ class TabBarSamplesScreen extends StatelessWidget {
             BoxShadow(
               color: AppColors.blue.withValues(alpha: 0.2),
               blurRadius: 12,
-              offset: const Offset(0, 4),
+              offset: Offset(0, 4),
             ),
           ],
         ),
@@ -212,7 +212,7 @@ class TabBarSamplesScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,7 +224,7 @@ class TabBarSamplesScreen extends StatelessWidget {
                       color: AppColors.darkBlue,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     description,
                     style: AppTextStyles.body3.copyWith(

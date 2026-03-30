@@ -20,7 +20,7 @@ class TransactionScreen extends ConsumerWidget {
       child: Scaffold(
         backgroundColor: AppColors.gray100,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             '거래내역',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -53,7 +53,7 @@ class TransactionScreen extends ConsumerWidget {
             size: 64,
             color: AppColors.gray400,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
             '거래내역이 없습니다',
             style: AppTextStyles.body2.copyWith(color: AppColors.gray500),
@@ -133,7 +133,7 @@ class _TransactionItem extends StatelessWidget {
               size: 22,
             ),
           ),
-          const SizedBox(width: 14),
+          SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,7 +155,7 @@ class _TransactionItem extends StatelessWidget {
           ),
           Text(
             '${isPositive ? '+' : ''}${_formatNumber(amount)}원',
-            style: AppTextStyles.title2.copyWith(color: isPositive ? AppColors.green500 : AppColors.red),
+            style: AppTextStyles.title2,
           ),
         ],
       ),

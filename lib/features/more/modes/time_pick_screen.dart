@@ -187,7 +187,7 @@ class _TimePickScreenState extends State<TimePickScreen>
                   ),
                   child: Text(
                     'MILLISECONDS',
-                    style: AppTextStyles.caption4.copyWith(color: modeColor),
+                    style: AppTextStyles.caption4.copyWith(color: modeColor.withValues(alpha: 0.4)),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -262,7 +262,7 @@ class _TimePickScreenState extends State<TimePickScreen>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     _buildLabelChip('ROW', true),
-                    const SizedBox(width: 80),
+                    SizedBox(width: 80),
                     _buildLabelChip('COL', false),
                   ],
                 ),

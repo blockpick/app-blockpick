@@ -17,7 +17,7 @@ class SettingsScreen extends ConsumerWidget {
     final authState = ref.watch(authProvider);
     final isAuthenticated = authState.valueOrNull?.isAuthenticated ?? false;
     final notificationSettings = ref.watch(notificationSettingsProvider).valueOrNull ??
-        const NotificationSettings();
+        NotificationSettings();
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark.copyWith(
@@ -26,7 +26,7 @@ class SettingsScreen extends ConsumerWidget {
       child: Scaffold(
         backgroundColor: AppColors.gray100,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             '설정',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -155,7 +155,7 @@ class SettingsScreen extends ConsumerWidget {
               ]),
             ],
 
-            const SizedBox(height: 40),
+            SizedBox(height: 40),
           ],
         ),
       ),
@@ -197,7 +197,7 @@ class SettingsScreen extends ConsumerWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        title: const Text(
+        title: Text(
           '로그아웃',
           style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
         ),
@@ -238,7 +238,7 @@ class SettingsScreen extends ConsumerWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        title: const Text(
+        title: Text(
           '회원 탈퇴',
           style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
         ),
@@ -282,7 +282,7 @@ class SettingsScreen extends ConsumerWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          title: const Text(
+          title: Text(
             '비밀번호 확인',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -443,7 +443,7 @@ class _SettingItem extends StatelessWidget {
                 size: 22,
                 color: textColor ?? AppColors.gray700,
               ),
-              const SizedBox(width: 14),
+              SizedBox(width: 14),
               Expanded(
                 child: Text(
                   title,
@@ -491,7 +491,7 @@ class _SettingToggleItem extends StatelessWidget {
             size: 22,
             color: AppColors.gray700,
           ),
-          const SizedBox(width: 14),
+          SizedBox(width: 14),
           Expanded(
             child: Text(
               title,

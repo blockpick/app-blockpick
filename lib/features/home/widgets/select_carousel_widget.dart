@@ -123,10 +123,10 @@ class _SelectCarouselWidgetState extends State<SelectCarouselWidget> {
                     textAlign: TextAlign.center,
                   ),
 
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
 
                   // 서브 텍스트
-                  const Text(
+                  Text(
                     'Join now and claim yours!',
                     style: AppTextStyles.title3.copyWith(color: AppColors.grayBlue),
                   ),

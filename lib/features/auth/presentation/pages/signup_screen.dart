@@ -35,10 +35,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           backgroundColor: AppColors.white,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_rounded, color: AppColors.darkBlue),
+            icon: Icon(Icons.arrow_back_ios_rounded, color: AppColors.darkBlue),
             onPressed: () => context.pop(),
           ),
-          title: const Text(
+          title: Text(
             '회원가입',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -97,7 +97,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 onTap: _isLoading ? null : () => _handleAppleSignup(),
               ),
 
-              const Spacer(),
+              Spacer(),
 
               // 하단 로그인 안내
               Row(
@@ -117,7 +117,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       minimumSize: Size.zero,
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
-                    child: const Text(
+                    child: Text(
                       '로그인',
                       style: AppTextStyles.title3.copyWith(color: AppColors.blue),
                     ),
@@ -183,7 +183,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       Icon(icon, size: 22, color: iconColor),
                 ),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: 16),
               Text(
                 text,
                 style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),

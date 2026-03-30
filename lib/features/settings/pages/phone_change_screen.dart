@@ -171,7 +171,7 @@ class _PhoneChangeScreenState extends ConsumerState<PhoneChangeScreen> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('인증이 완료되었어요.'),
+          content: Text('인증이 완료되었어요.'),
           backgroundColor: AppColors.darkBlue,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
@@ -192,7 +192,7 @@ class _PhoneChangeScreenState extends ConsumerState<PhoneChangeScreen> {
       child: Scaffold(
         backgroundColor: AppColors.white,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             '휴대폰 번호 변경',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -210,7 +210,7 @@ class _PhoneChangeScreenState extends ConsumerState<PhoneChangeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // 휴대폰 번호 섹션
-                    const Text(
+                    Text(
                       '휴대폰 번호',
                       style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
                     ),

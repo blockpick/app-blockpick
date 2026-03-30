@@ -266,7 +266,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
+              Text(
                 '비밀번호가 변경되었어요',
                 style: TextStyle(
                   fontSize: 20,
@@ -274,7 +274,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   color: AppColors.darkBlue,
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Text(
                 '새로운 비밀번호로 로그인해주세요',
                 style: AppTextStyles.body1.copyWith(color: AppColors.gray600),
@@ -354,12 +354,12 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 32),
-        const Text(
+        SizedBox(height: 32),
+        Text(
           '비밀번호를\n찾으시나요?',
           style: AppTextStyles.display2.copyWith(color: AppColors.darkBlue),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         Text(
           '가입하신 이메일로 인증번호를 보내드릴게요',
           style: AppTextStyles.body1.copyWith(color: AppColors.gray600),
@@ -384,17 +384,17 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 32),
-        const Text(
+        SizedBox(height: 32),
+        Text(
           '이메일로 전송된\n인증번호를 입력해주세요',
           style: AppTextStyles.display2.copyWith(color: AppColors.darkBlue),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         Text(
           _emailController.text.trim(),
           style: AppTextStyles.body2.copyWith(color: AppColors.blue),
         ),
-        const SizedBox(height: 40),
+        SizedBox(height: 40),
         AuthTextField(
           label: '인증번호',
           hint: '6자리 숫자 입력',
@@ -417,7 +417,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
             ],
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         Center(
           child: TextButton(
             onPressed: _isLoading ? null : _resendCode,
@@ -435,8 +435,8 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 32),
-        const Text(
+        SizedBox(height: 32),
+        Text(
           '새로운 비밀번호를\n설정해주세요',
           style: AppTextStyles.display2.copyWith(color: AppColors.darkBlue),
         ),
@@ -548,7 +548,7 @@ class _PasswordRuleItem extends StatelessWidget {
         const SizedBox(width: 8),
         Text(
           text,
-          style: AppTextStyles.body3.copyWith(color: isValid ? AppColors.green500 : AppColors.gray600),
+          style: AppTextStyles.body3,
         ),
       ],
     );

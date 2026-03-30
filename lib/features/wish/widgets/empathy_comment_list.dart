@@ -81,7 +81,7 @@ class _EmpathyCommentListState extends State<EmpathyCommentList> {
         const SizedBox(height: 16),
         // 댓글 목록
         if (widget.empathies.isEmpty)
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(vertical: 20),
             child: Center(
               child: Text(
@@ -130,7 +130,7 @@ class _CommentCard extends StatelessWidget {
               style: AppTextStyles.title3.copyWith(color: AppColors.gray600),
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -144,7 +144,7 @@ class PickSectionRedesignWidget extends StatelessWidget {
                       color: Colors.white.withValues(alpha: 0.18),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Text(
+                    child: Text(
                       'HOT PICK',
                       style: AppTextStyles.caption4.copyWith(color: Colors.white, letterSpacing: 0.4),
                     ),
@@ -159,7 +159,7 @@ class PickSectionRedesignWidget extends StatelessWidget {
                       letterSpacing: 1.2,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     subtitle,
                     style: AppTextStyles.title3.copyWith(color: Colors.white.withValues(alpha: 0.9)),
@@ -283,7 +283,7 @@ class PickSectionRedesignWidget extends StatelessWidget {
                           color: Colors.white,
                           size: 12,
                         ),
-                        const SizedBox(width: 4),
+                        SizedBox(width: 4),
                         Text(
                           label,
                           style: AppTextStyles.caption4.copyWith(color: Colors.white),

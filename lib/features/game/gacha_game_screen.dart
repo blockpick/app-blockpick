@@ -229,7 +229,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
           Row(
             children: [
               Icon(icon, color: AppColors.blue, size: 24),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Text(
                 title,
                 style: AppTextStyles.heading1.copyWith(
@@ -239,7 +239,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
             description,
             style: AppTextStyles.body4.copyWith(color: AppColors.navy),
@@ -342,7 +342,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                   color: AppColors.gray100,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.link_rounded, size: 20, color: AppColors.darkBlue),
@@ -502,7 +502,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                     color: AppColors.darkBlue,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       '확인',
                       style: AppTextStyles.title2.copyWith(color: AppColors.white),
@@ -879,7 +879,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
               ),
               child: const Icon(Icons.error_outline_rounded, color: AppColors.red, size: 40),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
               message,
               style: AppTextStyles.title2.copyWith(color: AppColors.gray700),
@@ -1209,7 +1209,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                   iconColor: AppColors.gray500,
                   text: '$gridW×$gridH',
                 ),
-                const Spacer(),
+                Spacer(),
                 // 카운트다운
                 if (_countdownText.isNotEmpty)
                   Text(
@@ -1247,7 +1247,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(icon, size: iconSize, color: iconColor),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         Text(
           text,
           style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
@@ -1357,7 +1357,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
             const SizedBox(width: 6),
             Text(
               label,
-              style: AppTextStyles.body4.copyWith(color: isActive ? AppColors.darkBlue : AppColors.gray600),
+              style: AppTextStyles.body4,
             ),
           ],
         ),
@@ -1398,8 +1398,8 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                 ),
               ),
             ),
-            const SizedBox(width: 4),
-            const Text(
+            SizedBox(width: 4),
+            Text(
               '상품 정보',
               style: AppTextStyles.body4.copyWith(color: AppColors.darkBlue),
             ),
@@ -1556,7 +1556,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                                             ),
                                     ),
                                   ),
-                                  const SizedBox(width: 12),
+                                  SizedBox(width: 12),
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1631,7 +1631,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                         color: AppColors.darkBlue,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Text(
                           '닫기',
                           style: AppTextStyles.title2.copyWith(color: AppColors.white),
@@ -1703,7 +1703,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                       color: AppColors.gray600,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
 
                   // 좌표 입력
                   Row(
@@ -1737,7 +1737,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(color: AppColors.darkBlue, width: 2),
+                                  borderSide: BorderSide(color: AppColors.darkBlue, width: 2),
                                 ),
                               ),
                               style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
@@ -1753,7 +1753,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                           ],
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12),
                       // Y (ROW)
                       Expanded(
                         child: Column(
@@ -1783,7 +1783,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(color: AppColors.darkBlue, width: 2),
+                                  borderSide: BorderSide(color: AppColors.darkBlue, width: 2),
                                 ),
                               ),
                               style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
@@ -1840,7 +1840,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                         color: AppColors.darkBlue,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Text(
                           '닫기',
                           style: AppTextStyles.title2.copyWith(color: AppColors.white),
@@ -2096,7 +2096,7 @@ class _TossStyleConfirmSheetState extends State<_TossStyleConfirmSheet> {
                       ),
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Text(
               prize.name,
               style: AppTextStyles.buttonLarge.copyWith(color: AppColors.darkBlue),
@@ -2124,7 +2124,7 @@ class _TossStyleConfirmSheetState extends State<_TossStyleConfirmSheet> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: _claiming
-                    ? const SizedBox(
+                    ? SizedBox(
                         width: 16,
                         height: 16,
                         child: CircularProgressIndicator(
@@ -2134,7 +2134,7 @@ class _TossStyleConfirmSheetState extends State<_TossStyleConfirmSheet> {
                       )
                     : Text(
                         _prizeClaimed ? '경품 수령 완료' : '경품받기',
-                        style: AppTextStyles.title3.copyWith(color: _prizeClaimed),
+                        style: AppTextStyles.title3.copyWith(color: _prizeClaimed ? AppColors.gray300 : AppColors.yellow),
                       ),
               ),
             ),
@@ -2164,8 +2164,8 @@ class _TossStyleConfirmSheetState extends State<_TossStyleConfirmSheet> {
                 size: 32,
               ),
             ),
-            const SizedBox(height: 16),
-            const Text(
+            SizedBox(height: 16),
+            Text(
               '선택한 좌표로 이벤트에 참여하시겠어요?',
               textAlign: TextAlign.center,
               style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
@@ -2183,7 +2183,7 @@ class _TossStyleConfirmSheetState extends State<_TossStyleConfirmSheet> {
             ),
           ),
 
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
 
           // 좌표 표시
           Container(
@@ -2202,7 +2202,7 @@ class _TossStyleConfirmSheetState extends State<_TossStyleConfirmSheet> {
                 const SizedBox(width: 8),
                 Text(
                   widget.col.toString().padLeft(4, '0'),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                     color: AppColors.darkBlue,
@@ -2233,7 +2233,7 @@ class _TossStyleConfirmSheetState extends State<_TossStyleConfirmSheet> {
             ),
           ),
 
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
 
           // 참여하기 버튼
           GestureDetector(
@@ -2517,7 +2517,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                                 color: AppColors.gray600,
                               ),
                             ),
-                            const SizedBox(height: 4),
+                            SizedBox(height: 4),
                             Text(
                               _eventTargets.isNotEmpty
                                   ? '랜덤 좌표에 보너스 상품이 숨겨져 있어요!'
@@ -2551,7 +2551,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                                 )
                               else
                                 const Icon(Icons.refresh_rounded, size: 18, color: Colors.white),
-                              const SizedBox(width: 6),
+                              SizedBox(width: 6),
                               Text(
                                 _isRefreshing ? '로딩...' : '새로고침',
                                 style: AppTextStyles.title3.copyWith(color: Colors.white),
@@ -2595,7 +2595,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                                 )
                               else
                                 Text(target.prize.emoji, style: const TextStyle(fontSize: 14)),
-                              const SizedBox(width: 6),
+                              SizedBox(width: 6),
                               Text(
                                 target.prize.name,
                                 style: AppTextStyles.caption2.copyWith(color: AppColors.yellow500),
@@ -2627,10 +2627,10 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
 
           const SizedBox(height: 20),
           const Divider(),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
 
           // 속도 조절 섹션
-          const Text(
+          Text(
             '속도 조절',
             style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
           ),
@@ -2665,10 +2665,10 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
 
           const SizedBox(height: 20),
           const Divider(),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
 
           // 가이드선 설정 섹션
-          const Text(
+          Text(
             '가이드선 설정',
             style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
           ),
@@ -2706,8 +2706,8 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                         size: 18,
                         color: AppColors.yellow500,
                       ),
-                      const SizedBox(width: 8),
-                      const Text(
+                      SizedBox(width: 8),
+                      Text(
                         '가이드 좌표 입력',
                         style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
                       ),
@@ -2721,7 +2721,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                       color: AppColors.gray500,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   Row(
                     children: [
                       // X 좌표 (COL) 입력
@@ -2759,7 +2759,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(color: AppColors.yellow500, width: 2),
+                                  borderSide: BorderSide(color: AppColors.yellow500, width: 2),
                                 ),
                               ),
                               style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
@@ -2776,7 +2776,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                           ],
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12),
                       // Y 좌표 (ROW) 입력
                       Expanded(
                         child: Column(
@@ -2812,7 +2812,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(color: AppColors.yellow500, width: 2),
+                                  borderSide: BorderSide(color: AppColors.yellow500, width: 2),
                                 ),
                               ),
                               style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
@@ -2857,7 +2857,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                             size: 16,
                             color: AppColors.gray600,
                           ),
-                          const SizedBox(width: 4),
+                          SizedBox(width: 4),
                           Text(
                             '초기화',
                             style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
@@ -2951,7 +2951,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             trackHeight: 4,
@@ -3120,7 +3120,7 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
 
           // 브랜드
           if (product.brand != null && product.brand!.isNotEmpty) ...[
-            const SizedBox(height: 4),
+            SizedBox(height: 4),
             Text(
               product.brand!,
               style: AppTextStyles.title3.copyWith(color: AppColors.gray500),
@@ -3172,14 +3172,14 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
                     color: AppColors.gray500,
                   ),
                   const SizedBox(width: 8),
-                  const Text(
+                  Text(
                     '정가',
                     style: TextStyle(
                       fontSize: 14,
                       color: AppColors.gray600,
                     ),
                   ),
-                  const Spacer(),
+                  Spacer(),
                   Text(
                     '${priceFormatter.format(product.originalPrice ?? product.price ?? 0)}원',
                     style: AppTextStyles.buttonLarge.copyWith(color: AppColors.darkBlue),
@@ -3191,8 +3191,8 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
           // 상품 설명
           if (product.description != null &&
               product.description!.isNotEmpty) ...[
-            const SizedBox(height: 20),
-            const Text(
+            SizedBox(height: 20),
+            Text(
               '상품 설명',
               style: AppTextStyles.title3.copyWith(color: AppColors.gray700),
             ),
@@ -3245,7 +3245,7 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
             color: AppColors.gray500,
           ),
         ),
-        const Spacer(),
+        Spacer(),
         Text(
           value,
           style: AppTextStyles.body4.copyWith(color: AppColors.gray700),

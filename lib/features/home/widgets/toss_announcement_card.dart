@@ -61,7 +61,7 @@ class TossAnnouncementCard extends StatelessWidget {
                           color: AppColors.red,
                           borderRadius: BorderRadius.circular(4),
                         ),
-                        child: const Text(
+                        child: Text(
                           'NEW',
                           style: TextStyle(
                             fontSize: 10,
@@ -70,7 +70,7 @@ class TossAnnouncementCard extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           '신규 회원 이벤트 진행 중!',
@@ -81,7 +81,7 @@ class TossAnnouncementCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     '첫 참여 시 500 포인트 즉시 지급',
                     style: AppTextStyles.body3.copyWith(color: AppColors.gray500),

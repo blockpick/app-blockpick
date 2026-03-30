@@ -25,7 +25,7 @@ class _SliderSample1State extends State<SliderSample1> {
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.darkBlue),
+          icon: Icon(Icons.arrow_back, color: AppColors.darkBlue),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -158,7 +158,7 @@ class _SliderSample1State extends State<SliderSample1> {
                 ),
                 child: Icon(icon, color: color),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: 16),
               Expanded(
                 child: Text(
                   label,
@@ -185,7 +185,7 @@ class _SliderSample1State extends State<SliderSample1> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
               activeTrackColor: color,

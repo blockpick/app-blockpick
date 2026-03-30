@@ -40,8 +40,8 @@ class MyWishesScreen extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Icon(Icons.auto_awesome, size: 48, color: AppColors.gray400),
-          const SizedBox(height: 16),
-          const Text(
+          SizedBox(height: 16),
+          Text(
             '등록한 소원이 없어요',
             style: AppTextStyles.title2.copyWith(color: AppColors.gray600),
           ),
@@ -217,7 +217,7 @@ class _WishListItem extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             // 정보
             Expanded(
               child: Column(

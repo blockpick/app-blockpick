@@ -85,7 +85,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
             ),
           ),
 
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
 
           // 설명
           RichText(
@@ -216,9 +216,9 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
         children: [
           Text(
             'DAY $day',
-            style: AppTextStyles.caption4.copyWith(color: isToday),
+            style: AppTextStyles.caption4,
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           if (isCompleted)
             Icon(
               Icons.check_rounded,
@@ -232,7 +232,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
                 color: AppColors.yellow500,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Text(
+              child: Text(
                 '+10P',
                 style: AppTextStyles.caption3.copyWith(color: Color(0xFF664D03)),
               ),
@@ -259,7 +259,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
           BoxShadow(
             color: AppColors.black.withValues(alpha: 0.05),
             blurRadius: 10,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -314,7 +314,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
                   shadows: [
                     Shadow(
                       color: Colors.orange.shade700,
-                      offset: const Offset(0, 2),
+                      offset: Offset(0, 2),
                       blurRadius: 4,
                     ),
                   ],
@@ -414,7 +414,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
 
           // 설명 텍스트
           Text(
@@ -435,7 +435,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
                 color: AppColors.darkBlue,
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: const Center(
+              child: Center(
                 child: Text(
                   '포인트 2배로 받기',
                   style: AppTextStyles.buttonLarge.copyWith(color: AppColors.white),
@@ -444,7 +444,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
             ),
           ),
 
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           // 오늘은 괜찮아요 텍스트 버튼
           GestureDetector(
@@ -458,7 +458,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
                     '오늘은 괜찮아요.',
                     style: AppTextStyles.title3.copyWith(color: AppColors.gray500),
                   ),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
                   Container(
                     width: 20,
                     height: 20,

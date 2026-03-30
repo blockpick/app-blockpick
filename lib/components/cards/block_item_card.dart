@@ -66,7 +66,7 @@ class BlockItemCard extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
 
               // 좌표 정보 "X NNNN | Y NNNN"
               Expanded(

@@ -54,7 +54,7 @@ class PickSectionWidget extends StatelessWidget {
             BoxShadow(
               color: AppColors.blue.withOpacity(0.3),
               blurRadius: 20,
-              offset: const Offset(0, 10),
+              offset: Offset(0, 10),
             ),
           ],
         ),
@@ -89,14 +89,14 @@ class PickSectionWidget extends StatelessWidget {
                       fontSize: 36,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Text(
                     'Join now and claim yours!',
                     style: AppTextStyles.body2.copyWith(
                       color: AppColors.white.withOpacity(0.9),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20,
@@ -169,7 +169,7 @@ class PickSectionWidget extends StatelessWidget {
                   size: 32,
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Text(
                 'DAILY',
                 style: AppTextStyles.heading1.copyWith(
@@ -177,7 +177,7 @@ class PickSectionWidget extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4),
               Text(
                 'Join the world',
                 style: AppTextStyles.body3.copyWith(
@@ -227,7 +227,7 @@ class PickSectionWidget extends StatelessWidget {
                   size: 32,
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Text(
                 'VIBE',
                 style: AppTextStyles.heading1.copyWith(
@@ -235,7 +235,7 @@ class PickSectionWidget extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4),
               Text(
                 'Play with Purpose',
                 style: AppTextStyles.body3.copyWith(
@@ -355,7 +355,7 @@ class PickSectionWidget extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   '\$${item.price.toStringAsFixed(2)}',
                   style: AppTextStyles.body4.copyWith(

@@ -440,9 +440,9 @@ class _DuoPickScreenState extends State<DuoPickScreen>
                       color: color.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Text(emoji, style: const TextStyle(fontSize: 20)),
+                    child: Text(emoji, style: TextStyle(fontSize: 20)),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -475,8 +475,8 @@ class _DuoPickScreenState extends State<DuoPickScreen>
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Text('🎲', style: TextStyle(fontSize: 14)),
-                          const SizedBox(width: 6),
+                          Text('🎲', style: TextStyle(fontSize: 14)),
+                          SizedBox(width: 6),
                           Text(
                             'RANDOM',
                             style: AppTextStyles.caption4.copyWith(color: color),
@@ -501,7 +501,7 @@ class _DuoPickScreenState extends State<DuoPickScreen>
                       color: color,
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: 16),
                   Expanded(
                     child: _buildInputField(
                       label: 'COL',
@@ -532,7 +532,7 @@ class _DuoPickScreenState extends State<DuoPickScreen>
           label,
           style: AppTextStyles.caption4.copyWith(color: Colors.white.withValues(alpha: 0.5)),
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6),
         TextField(
           controller: controller,
           keyboardType: TextInputType.number,
@@ -641,7 +641,7 @@ class _DuoPickScreenState extends State<DuoPickScreen>
               const SizedBox(height: 4),
               Text(
                 label,
-                style: AppTextStyles.caption3.copyWith(color: isSelected),
+                style: AppTextStyles.caption3,
               ),
             ],
           ),
@@ -681,11 +681,11 @@ class _DuoPickScreenState extends State<DuoPickScreen>
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('💫', style: TextStyle(fontSize: 22)),
-            const SizedBox(width: 10),
+            Text('💫', style: TextStyle(fontSize: 22)),
+            SizedBox(width: 10),
             Text(
               'COMBINE COORDINATES',
-              style: AppTextStyles.buttonLarge.copyWith(color: canCombine),
+              style: AppTextStyles.buttonLarge.copyWith(color: canCombine ? null : Colors.white.withValues(alpha: 0.1)),
             ),
           ],
         ),

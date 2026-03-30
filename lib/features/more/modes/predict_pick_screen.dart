@@ -204,7 +204,7 @@ class _PredictPickScreenState extends State<PredictPickScreen>
                   color: Colors.white.withValues(alpha: 0.2),
                 ),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text('🎲', style: TextStyle(fontSize: 14)),
@@ -423,7 +423,7 @@ class _PredictPickScreenState extends State<PredictPickScreen>
                   letterSpacing: 1.5,
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4),
               Text(
                 '${_pastWinners.length}',
                 style: AppTextStyles.heading1.copyWith(color: Colors.white),
@@ -531,7 +531,7 @@ class _PredictPickScreenState extends State<PredictPickScreen>
                       ),
                     ],
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 22),

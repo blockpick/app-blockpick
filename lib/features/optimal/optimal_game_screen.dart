@@ -106,7 +106,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
                         BoxShadow(
                           color: AppColors.black.withValues(alpha: 0.1),
                           blurRadius: 8,
-                          offset: const Offset(0, 2),
+                          offset: Offset(0, 2),
                         ),
                       ],
                     ),
@@ -135,7 +135,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
                           BoxShadow(
                             color: AppColors.black.withValues(alpha: 0.1),
                             blurRadius: 8,
-                            offset: const Offset(0, 2),
+                            offset: Offset(0, 2),
                           ),
                         ],
                       ),
@@ -186,7 +186,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.white,
         border: Border(
           bottom: BorderSide(color: AppColors.gray200, width: 1),
@@ -223,10 +223,10 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
                     ? AppColors.red
                     : AppColors.gray600,
               ),
-              const SizedBox(width: 4),
+              SizedBox(width: 4),
               Text(
                 _formatRemainingTime(remaining),
-                style: AppTextStyles.caption2.copyWith(color: remaining.inMinutes < 30),
+                style: AppTextStyles.caption2.copyWith(color: remaining.inMinutes < 30 ? AppColors.red : AppColors.gray600),
               ),
             ],
           ),
@@ -254,7 +254,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(icon, size: 16, color: AppColors.gray600),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         Text(
           text,
           style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
@@ -379,7 +379,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
             _buildInfoStep('3', '최대 인원을 달성하면 이벤트는 즉시 종료 및 정산을 합니다.'),
             const SizedBox(height: 12),
             _buildInfoStep('4', '가장 낮은 금액을 입찰한 단독 1인이 경품의 주인공이 돼요.'),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             _buildInfoStep('5', '전략적으로 입찰 금액을 선택해서 참여해보세요.'),
           ],
         ),
@@ -452,7 +452,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               // 상품명
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -511,7 +511,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         '확인',
                         style: AppTextStyles.title2,
                       ),
@@ -530,7 +530,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
       centerTitle: true,
-      title: const Text(
+      title: Text(
         'PRIME Events',
         style: AppTextStyles.buttonLarge.copyWith(color: AppColors.darkBlue),
       ),
@@ -572,7 +572,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
                   BoxShadow(
                     color: AppColors.black.withValues(alpha: 0.3),
                     blurRadius: 16,
-                    offset: const Offset(0, 6),
+                    offset: Offset(0, 6),
                   ),
                 ],
               ),
@@ -613,7 +613,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
                 BoxShadow(
                   color: AppColors.black.withValues(alpha: 0.1),
                   blurRadius: 8,
-                  offset: const Offset(0, 2),
+                  offset: Offset(0, 2),
                 ),
               ],
             ),
@@ -801,7 +801,7 @@ class _AnimatedTrendInfoState extends State<_AnimatedTrendInfo>
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(trend.icon, size: 11, color: trend.color),
-          const SizedBox(width: 3),
+          SizedBox(width: 3),
           Flexible(
             child: Text(
               trend.text,
@@ -893,7 +893,7 @@ class _AnimatedParticipantCountState extends State<_AnimatedParticipantCount>
         return Row(
           children: [
             const Icon(LucideIcons.users, size: 14, color: AppColors.grayBlue),
-            const SizedBox(width: 4),
+            SizedBox(width: 4),
             Text(
               '${_controller.isAnimating ? _countAnimation.value : _currentCount}명',
               style: AppTextStyles.title1.copyWith(

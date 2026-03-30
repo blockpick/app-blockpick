@@ -19,7 +19,7 @@ class AuthScaffold extends StatelessWidget {
   final bool resizeToAvoidBottomInset;
   final double? progress;
 
-  const AuthScaffold({
+  AuthScaffold({
     super.key,
     this.title,
     required this.body,
@@ -80,7 +80,7 @@ class AuthScaffold extends StatelessWidget {
               splashRadius: 24,
             )
           else
-            const SizedBox(width: 48),
+            SizedBox(width: 48),
 
           if (title != null)
             Expanded(

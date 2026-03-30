@@ -454,7 +454,7 @@ class _UnityBlockpickScreenState extends State<UnityBlockpickScreen> {
               ),
               Text(
                 format(value),
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.amber,
                   fontSize: 14,
                   fontWeight: FontWeight.bold,

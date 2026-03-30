@@ -72,7 +72,7 @@ class ZoomControls extends StatelessWidget {
           // Zoom In
           IconButton(
             onPressed: canZoomIn ? onZoomIn : null,
-            icon: const Icon(LucideIcons.plus),
+            icon: Icon(LucideIcons.plus),
             color: canZoomIn ? AppColors.darkBlue : AppColors.gray200,
             iconSize: 22,
             padding: const EdgeInsets.all(12),
@@ -169,7 +169,7 @@ class HorizontalZoomControls extends StatelessWidget {
                     ),
                   ),
                   if (lodLevel != null) ...[
-                    const SizedBox(width: 4),
+                    SizedBox(width: 4),
                     Text(
                       '(LOD$lodLevel)',
                       style: AppTextStyles.caption4.copyWith(color: AppColors.medium),

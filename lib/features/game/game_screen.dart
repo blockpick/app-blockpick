@@ -513,7 +513,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           Row(
             children: [
               Icon(icon, color: AppColors.blue, size: 24),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Text(
                 title,
                 style: AppTextStyles.heading1.copyWith(
@@ -523,7 +523,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
             description,
             style: AppTextStyles.body4.copyWith(color: AppColors.navy),
@@ -758,7 +758,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                     BoxShadow(
                       color: AppColors.black.withValues(alpha: 0.1),
                       blurRadius: 8,
-                      offset: const Offset(0, 2),
+                      offset: Offset(0, 2),
                     ),
                   ],
                 ),
@@ -801,7 +801,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                           BoxShadow(
                             color: AppColors.black.withValues(alpha: 0.1),
                             blurRadius: 8,
-                            offset: const Offset(0, 2),
+                            offset: Offset(0, 2),
                           ),
                         ],
                       ),
@@ -893,7 +893,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                         BoxShadow(
                           color: AppColors.black.withValues(alpha: 0.3),
                           blurRadius: 16,
-                          offset: const Offset(0, 6),
+                          offset: Offset(0, 6),
                         ),
                       ],
                     ),
@@ -996,7 +996,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                     // 뒤로가기
                     IconButton(
                       onPressed: () => context.go('/'),
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.arrow_back_ios_new_rounded,
                         size: 22,
                         color: AppColors.darkBlue,
@@ -1056,7 +1056,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       child: Container(
         height: 68,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: AppColors.white,
           border: Border(
             bottom: BorderSide(color: AppColors.gray200, width: 1),
@@ -1124,7 +1124,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     return Container(
       height: 84,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.white,
         border: Border(
           bottom: BorderSide(color: AppColors.gray200, width: 1),
@@ -1161,10 +1161,10 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                     ? AppColors.red
                     : AppColors.gray600,
               ),
-              const SizedBox(width: 4),
+              SizedBox(width: 4),
               Text(
                 _formatRemainingTime(remaining),
-                style: AppTextStyles.caption2.copyWith(color: remaining.inMinutes < 30),
+                style: AppTextStyles.caption2.copyWith(color: remaining.inMinutes < 30 ? AppColors.red : AppColors.gray600),
               ),
             ],
           ),
@@ -1208,7 +1208,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             ),
           ),
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         Text(
           _formatPrice(value),
           style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
@@ -1223,7 +1223,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(icon, size: 16, color: AppColors.gray600),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         Text(
           text,
           style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
@@ -1354,7 +1354,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                   BoxShadow(
                     color: AppColors.black.withValues(alpha: 0.3),
                     blurRadius: 16,
-                    offset: const Offset(0, 6),
+                    offset: Offset(0, 6),
                   ),
                 ],
               ),
@@ -1392,7 +1392,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                 BoxShadow(
                   color: AppColors.black.withValues(alpha: 0.1),
                   blurRadius: 8,
-                  offset: const Offset(0, 2),
+                  offset: Offset(0, 2),
                 ),
               ],
             ),
@@ -1646,7 +1646,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                                           ),
                                   ),
                                 ),
-                                const SizedBox(width: 12),
+                                SizedBox(width: 12),
                                 // 상품명 + 포인트
                                 Expanded(
                                   child: Column(
@@ -1683,7 +1683,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                                               ),
                                             ),
                                           ),
-                                          const SizedBox(width: 4),
+                                          SizedBox(width: 4),
                                           Text(
                                             _formatPrice(
                                                 product.price ?? 0),
@@ -1762,7 +1762,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               // 상품명 (전체 출력, 말줄임 없음)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),

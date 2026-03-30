@@ -72,6 +72,10 @@ import '../../features/more/modes/treasure_pick_screen.dart';
 // Unity 3D Game
 import '../../features/more/unity/unity_blockpick_screen.dart';
 import '../../features/more/unity/unity_game_select_screen.dart';
+// Wish (소원)
+import '../../features/wish/wish_create_screen.dart';
+import '../../features/wish/wish_detail_screen.dart';
+import '../../features/wish/my_wishes_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final isAuthenticated = ref.watch(isAuthenticatedProvider);
@@ -451,6 +455,23 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/my/event-points',
         builder: (context, state) => const EventPointsScreen(),
+      ),
+
+      // ============ 위시 (소원) ============
+      GoRoute(
+        path: '/my/wishes',
+        builder: (context, state) => const MyWishesScreen(),
+      ),
+      GoRoute(
+        path: '/wish/create',
+        builder: (context, state) => const WishCreateScreen(),
+      ),
+      GoRoute(
+        path: '/wish/:wishId',
+        builder: (context, state) {
+          final wishId = state.pathParameters['wishId']!;
+          return WishDetailScreen(wishId: wishId);
+        },
       ),
 
       // ============ 알림 ============

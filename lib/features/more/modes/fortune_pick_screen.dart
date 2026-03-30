@@ -216,7 +216,7 @@ class _FortunePickScreenState extends State<FortunePickScreen>
                     color: Colors.white.withValues(alpha: 0.2),
                   ),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.arrow_back_ios_rounded,
@@ -442,7 +442,7 @@ class _FortunePickScreenState extends State<FortunePickScreen>
                 ),
               ),
 
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
 
               Text(
                 question.question,
@@ -450,7 +450,7 @@ class _FortunePickScreenState extends State<FortunePickScreen>
                 style: AppTextStyles.heading1.copyWith(color: Colors.white),
               ),
 
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
 
               Text(
                 'Question ${_currentQuestion + 1} of ${_questions.length}',
@@ -542,7 +542,7 @@ class _FortunePickScreenState extends State<FortunePickScreen>
             Expanded(
               child: Text(
                 option,
-                style: AppTextStyles.title1.copyWith(color: isSelected),
+                style: AppTextStyles.title1,
               ),
             ),
             Icon(

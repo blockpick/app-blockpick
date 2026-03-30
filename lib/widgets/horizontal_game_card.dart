@@ -193,7 +193,7 @@ class HorizontalGameCard extends StatelessWidget {
               icon,
               style: const TextStyle(fontSize: 11),
             ),
-          const SizedBox(width: 4),
+          SizedBox(width: 4),
           Text(
             value,
             style: AppTextStyles.caption2.copyWith(color: AppColors.gray700),
@@ -231,7 +231,7 @@ class HorizontalGameCard extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(width: 10),
+        SizedBox(width: 10),
 
         // 남은 시간
         Text(

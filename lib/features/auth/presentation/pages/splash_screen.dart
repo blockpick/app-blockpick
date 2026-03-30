@@ -230,7 +230,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
               const SizedBox(height: 32),
 
               // 제목
-              const Text(
+              Text(
                 '연결이 잠시 끊겼어요.',
                 style: TextStyle(
                   fontSize: 20,
@@ -239,7 +239,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
 
               // 설명
               Text(

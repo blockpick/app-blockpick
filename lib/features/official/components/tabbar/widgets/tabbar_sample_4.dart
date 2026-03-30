@@ -23,7 +23,7 @@ class _TabBarSample4State extends State<TabBarSample4> {
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.darkBlue),
+          icon: Icon(Icons.arrow_back, color: AppColors.darkBlue),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -75,7 +75,7 @@ class _TabBarSample4State extends State<TabBarSample4> {
                                   BoxShadow(
                                     color: AppColors.darkBlue.withValues(alpha: 0.1),
                                     blurRadius: 8,
-                                    offset: const Offset(0, 2),
+                                    offset: Offset(0, 2),
                                   ),
                                 ]
                               : [],
@@ -100,7 +100,7 @@ class _TabBarSample4State extends State<TabBarSample4> {
               ),
             ),
           ),
-          const SizedBox(height: 40),
+          SizedBox(height: 40),
           // 컨텐츠
           Expanded(
             child: Center(

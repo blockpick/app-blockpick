@@ -24,7 +24,7 @@ class _SliderSample2State extends State<SliderSample2> {
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.darkBlue),
+          icon: Icon(Icons.arrow_back, color: AppColors.darkBlue),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -67,7 +67,7 @@ class _SliderSample2State extends State<SliderSample2> {
 
           // 별점 슬라이더
           _buildRatingSlider(),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
 
           // 가격 범위 슬라이더
           _buildPriceSlider(),
@@ -106,7 +106,7 @@ class _SliderSample2State extends State<SliderSample2> {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
               activeTrackColor: AppColors.white,
@@ -163,7 +163,7 @@ class _SliderSample2State extends State<SliderSample2> {
                       size: 28,
                     );
                   }),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   Text(
                     _ratingValue.toStringAsFixed(1),
                     style: AppTextStyles.heading1.copyWith(
@@ -175,7 +175,7 @@ class _SliderSample2State extends State<SliderSample2> {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
               activeTrackColor: AppColors.yellow500,
@@ -212,7 +212,7 @@ class _SliderSample2State extends State<SliderSample2> {
           BoxShadow(
             color: AppColors.darkBlue.withValues(alpha: 0.1),
             blurRadius: 12,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           ),
         ],
       ),
@@ -226,7 +226,7 @@ class _SliderSample2State extends State<SliderSample2> {
               color: AppColors.darkBlue,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
             '₩${(_priceValue * 1000).toInt().toString().replaceAllMapped(
                   RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
@@ -237,7 +237,7 @@ class _SliderSample2State extends State<SliderSample2> {
               color: AppColors.green500,
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
               activeTrackColor: AppColors.green500,

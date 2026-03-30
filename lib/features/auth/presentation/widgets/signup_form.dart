@@ -300,7 +300,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 'Already have an account?',
                 style: TextStyle(
                   fontSize: 13,
@@ -318,7 +318,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                 ),
-                child: const Text(
+                child: Text(
                   'Sign in',
                   style: AppTextStyles.caption2.copyWith(color: AppColors.primaryMain),
                 ),
@@ -503,10 +503,10 @@ class _SignupFormState extends ConsumerState<SignupForm> {
             return null;
           },
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         TextButton(
           onPressed: _handleSendCode,
-          child: const Text(
+          child: Text(
             'Resend Code',
             style: AppTextStyles.body4.copyWith(color: AppColors.primaryMain),
           ),

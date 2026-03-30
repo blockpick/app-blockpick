@@ -60,7 +60,7 @@ class _ListSample1State extends State<ListSample1> {
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.darkBlue),
+          icon: Icon(Icons.arrow_back, color: AppColors.darkBlue),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -157,7 +157,7 @@ class _ListSample1State extends State<ListSample1> {
                 size: 28,
               ),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: 16),
             // 텍스트
             Expanded(
               child: Column(
@@ -170,7 +170,7 @@ class _ListSample1State extends State<ListSample1> {
                       color: isSelected ? item.color : AppColors.darkBlue,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     item.subtitle,
                     style: AppTextStyles.body3.copyWith(
@@ -183,7 +183,7 @@ class _ListSample1State extends State<ListSample1> {
             // 카운트 배지
             AnimatedScale(
               scale: isSelected ? 1.1 : 1.0,
-              duration: const Duration(milliseconds: 300),
+              duration: Duration(milliseconds: 300),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(

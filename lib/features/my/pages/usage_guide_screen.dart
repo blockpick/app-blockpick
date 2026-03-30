@@ -16,7 +16,7 @@ class UsageGuideScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: AppColors.gray100,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             '이용 안내',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -133,7 +133,7 @@ class UsageGuideScreen extends StatelessWidget {
                     size: 20,
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Text(
                   title,
                   style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),

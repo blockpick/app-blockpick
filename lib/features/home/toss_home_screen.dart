@@ -235,7 +235,7 @@ class _TossHomeScreenState extends ConsumerState<TossHomeScreen> {
             ),
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
       ],
     );
   }

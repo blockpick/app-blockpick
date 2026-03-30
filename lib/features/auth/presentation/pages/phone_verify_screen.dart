@@ -259,7 +259,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                 style: TextStyle(fontSize: 14, color: AppColors.gray600, height: 1.4),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               Row(
                 children: [
                   Expanded(
@@ -281,7 +281,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
@@ -296,7 +296,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         '로그인하기',
                         style: AppTextStyles.title2.copyWith(color: AppColors.white),
                       ),
@@ -510,7 +510,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                 style: TextStyle(fontSize: 14, color: AppColors.gray600, height: 1.4),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               Row(
                 children: [
                   Expanded(
@@ -529,7 +529,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
@@ -544,7 +544,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         '로그인하기',
                         style: AppTextStyles.title2.copyWith(color: AppColors.white),
                       ),
@@ -598,7 +598,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                 style: TextStyle(fontSize: 14, color: AppColors.gray600),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               Row(
                 children: [
                   Expanded(
@@ -617,7 +617,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
@@ -632,7 +632,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         '재전송',
                         style: AppTextStyles.title2.copyWith(color: AppColors.white),
                       ),
@@ -686,7 +686,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                 style: TextStyle(fontSize: 14, color: AppColors.gray600),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -702,7 +702,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     '인증번호 재전송',
                     style: AppTextStyles.title2.copyWith(color: AppColors.white),
                   ),
@@ -754,7 +754,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                 style: TextStyle(fontSize: 14, color: AppColors.gray600),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -767,7 +767,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     '확인',
                     style: AppTextStyles.title2.copyWith(color: AppColors.white),
                   ),
@@ -821,7 +821,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                         color: AppColors.darkBlue,
                       ),
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Text(
                         '휴대폰 인증',
                         style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
@@ -855,7 +855,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                             letterSpacing: -0.5,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8),
                         Text(
                           _codeSent
                               ? '${_phoneNumber.dialCode} ${_phoneController.text}로 전송된 6자리 인증번호를 입력해 주세요.'
@@ -915,7 +915,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                       elevation: 0,
                     ),
                     child: _isLoading
-                        ? const SizedBox(
+                        ? SizedBox(
                             width: 24,
                             height: 24,
                             child: CircularProgressIndicator(
@@ -941,7 +941,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           '휴대폰 번호',
           style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
@@ -964,7 +964,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                 setState(() => _isPhoneValid = isValid);
               }
             },
-            selectorConfig: const SelectorConfig(
+            selectorConfig: SelectorConfig(
               selectorType: PhoneInputSelectorType.DIALOG,
               useBottomSheetSafeArea: true,
               leadingPadding: 16,
@@ -1023,11 +1023,11 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           '인증번호',
           style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         TextField(
           controller: _codeController,
           focusNode: _codeFocusNode,
@@ -1076,7 +1076,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
               style: TextStyle(fontSize: 13, color: AppColors.red),
             ),
           ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         Center(
           child: TextButton(
             onPressed: _resendCount < _maxResendCount ? _resendCode : null,

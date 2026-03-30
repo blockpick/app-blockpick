@@ -6,7 +6,7 @@ import '../../../core/theme/app_text_styles.dart';
 
 /// 게임 참여 내역 화면
 class GameHistoryScreen extends ConsumerWidget {
-  const GameHistoryScreen({super.key});
+  GameHistoryScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,7 +20,7 @@ class GameHistoryScreen extends ConsumerWidget {
       child: Scaffold(
         backgroundColor: AppColors.gray100,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             '게임 참여 내역',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -53,7 +53,7 @@ class GameHistoryScreen extends ConsumerWidget {
             size: 64,
             color: AppColors.gray400,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
             '참여한 게임이 없습니다',
             style: AppTextStyles.body2.copyWith(color: AppColors.gray500),
@@ -118,7 +118,7 @@ class _GameHistoryItem extends StatelessWidget {
                 ),
                 child: Text(
                   statusText,
-                  style: AppTextStyles.caption2.copyWith(color: statusColor),
+                  style: AppTextStyles.caption2.copyWith(color: statusColor.withValues(alpha: 0.1)),
                 ),
               ),
             ],
@@ -149,7 +149,7 @@ class _GameHistoryItem extends StatelessWidget {
             color: AppColors.gray500,
           ),
         ),
-        const SizedBox(height: 2),
+        SizedBox(height: 2),
         Text(
           value,
           style: AppTextStyles.body4.copyWith(color: AppColors.darkBlue),

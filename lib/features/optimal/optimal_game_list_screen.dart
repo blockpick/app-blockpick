@@ -76,7 +76,7 @@ class OptimalGameListScreen extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(width: 16),
+                SizedBox(width: 16),
 
                 // 게임 정보
                 Expanded(
@@ -93,7 +93,7 @@ class OptimalGameListScreen extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
 
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
 
                       // 가격 범위
                       Container(
@@ -124,7 +124,7 @@ class OptimalGameListScreen extends StatelessWidget {
                             size: 14,
                             color: AppColors.grayBlue,
                           ),
-                          const SizedBox(width: 4),
+                          SizedBox(width: 4),
                           Text(
                             '${game.participants}명',
                             style: AppTextStyles.body4.copyWith(
@@ -137,14 +137,14 @@ class OptimalGameListScreen extends StatelessWidget {
                             size: 14,
                             color: AppColors.yellow500,
                           ),
-                          const SizedBox(width: 4),
+                          SizedBox(width: 4),
                           Text(
                             game.timeLeft,
                             style: AppTextStyles.body4.copyWith(
                               color: AppColors.yellow500,
                             ),
                           ),
-                          const Spacer(),
+                          Spacer(),
                           Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 8,

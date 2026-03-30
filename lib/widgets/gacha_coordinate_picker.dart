@@ -351,7 +351,7 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
                         'X (COL)',
                         style: AppTextStyles.body4.copyWith(color: AppColors.gray500),
                       ),
-                      const Spacer(),
+                      Spacer(),
                       Text(
                         currentCol.toString().padLeft(4, '0'),
                         style: TextStyle(
@@ -417,7 +417,7 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
                         BoxShadow(
                           color: widget.accentColor.withValues(alpha: 0.3),
                           blurRadius: 12,
-                          offset: const Offset(0, 4),
+                          offset: Offset(0, 4),
                         ),
                       ]
                     : null,
@@ -692,7 +692,7 @@ class GachaCoordinatePickerState extends State<GachaCoordinatePicker>
                               BoxShadow(
                                 color: widget.accentColor.withValues(alpha: 0.3),
                                 blurRadius: 10,
-                                offset: const Offset(0, 4),
+                                offset: Offset(0, 4),
                               ),
                             ]
                           : null,

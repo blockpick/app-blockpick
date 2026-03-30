@@ -85,7 +85,7 @@ class _GameJoinButtonState extends ConsumerState<GameJoinButton> {
                         color: Colors.white,
                         size: 24,
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12),
                       Text(
                         '게임 참가하기',
                         style: AppTextStyles.body2.copyWith(
@@ -298,7 +298,7 @@ class GameJoinInfoCard extends StatelessWidget {
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -308,7 +308,7 @@ class GameJoinInfoCard extends StatelessWidget {
                       color: AppColors.gray500,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     hasSelection
                         ? '($selectedRow, $selectedCol)'
@@ -375,7 +375,7 @@ class GameJoinInfoCard extends StatelessWidget {
             size: 16,
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

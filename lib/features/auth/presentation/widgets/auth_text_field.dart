@@ -95,7 +95,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
 
         // 입력 필드
         AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
+          duration: Duration(milliseconds: 200),
           decoration: BoxDecoration(
             color: widget.enabled ? AppColors.gray50 : AppColors.gray100,
             borderRadius: BorderRadius.circular(12),
@@ -142,7 +142,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
                 size: 16,
                 color: AppColors.red,
               ),
-              const SizedBox(width: 4),
+              SizedBox(width: 4),
               Expanded(
                 child: Text(
                   widget.errorText!,

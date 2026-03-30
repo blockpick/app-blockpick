@@ -20,7 +20,7 @@ class OrderHistoryScreen extends ConsumerWidget {
       child: Scaffold(
         backgroundColor: AppColors.gray100,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             '쇼핑 주문 내역',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -53,7 +53,7 @@ class OrderHistoryScreen extends ConsumerWidget {
             size: 64,
             color: AppColors.gray400,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
             '주문 내역이 없습니다',
             style: AppTextStyles.body2.copyWith(color: AppColors.gray500),
@@ -121,7 +121,7 @@ class _OrderItem extends StatelessWidget {
                     color: AppColors.gray500,
                   ),
                 ),
-                const Spacer(),
+                Spacer(),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
@@ -130,7 +130,7 @@ class _OrderItem extends StatelessWidget {
                   ),
                   child: Text(
                     statusText,
-                    style: AppTextStyles.caption2.copyWith(color: statusColor),
+                    style: AppTextStyles.caption2.copyWith(color: statusColor.withValues(alpha: 0.1)),
                   ),
                 ),
               ],
@@ -156,7 +156,7 @@ class _OrderItem extends StatelessWidget {
                     color: AppColors.gray400,
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

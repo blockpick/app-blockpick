@@ -30,17 +30,17 @@ class EmpathyProgress extends StatelessWidget {
             const SizedBox(width: 6),
             Text(
               '공감 ${wish.empathyCount}/${wish.empathyThreshold}',
-              style: AppTextStyles.title3.copyWith(color: isReached ? AppColors.primary : AppColors.textBlack),
+              style: AppTextStyles.title3,
             ),
             if (isReached) ...[
-              const SizedBox(width: 6),
+              SizedBox(width: 6),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
                   color: AppColors.primary,
                   borderRadius: BorderRadius.circular(4),
                 ),
-                child: const Text(
+                child: Text(
                   '✅ 활성화',
                   style: AppTextStyles.caption4.copyWith(color: AppColors.white, fontWeight: FontWeight.w600),
                 ),

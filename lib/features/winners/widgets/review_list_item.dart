@@ -26,7 +26,7 @@ class ReviewListItem extends StatelessWidget {
           children: [
             // 프로필 이미지
             _buildProfileImage(),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
 
             // 리뷰 정보
             Expanded(
@@ -41,7 +41,7 @@ class ReviewListItem extends StatelessWidget {
                       color: AppColors.darkBlue,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
 
                   // 리뷰 내용 (최대 2줄)
                   Text(
@@ -53,7 +53,7 @@ class ReviewListItem extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
 
                   // 출처 + 시간
                   Row(
@@ -64,14 +64,14 @@ class ReviewListItem extends StatelessWidget {
                           color: AppColors.medium,
                         ),
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       Text(
                         '•',
                         style: AppTextStyles.body4.copyWith(
                           color: AppColors.medium,
                         ),
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       Text(
                         TimeUtils.getRelativeTime(review.createdAt),
                         style: AppTextStyles.body4.copyWith(

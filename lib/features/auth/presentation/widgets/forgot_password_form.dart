@@ -311,7 +311,7 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
+                Text(
                   'Remember your password?',
                   style: TextStyle(
                     fontSize: 13,
@@ -323,7 +323,7 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Sign in',
                     style: AppTextStyles.caption2.copyWith(color: AppColors.primaryMain),
                   ),
@@ -509,10 +509,10 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
             return null;
           },
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         TextButton(
           onPressed: _handleSendCode,
-          child: const Text(
+          child: Text(
             'Resend Code',
             style: AppTextStyles.body4.copyWith(color: AppColors.primaryMain),
           ),

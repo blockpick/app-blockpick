@@ -35,7 +35,7 @@ class OfficialScreen extends StatelessWidget {
                     size: 64,
                     color: AppColors.blue,
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   Text(
                     'OFFICIAL WEB',
                     style: AppTextStyles.heading1.copyWith(
@@ -43,7 +43,7 @@ class OfficialScreen extends StatelessWidget {
                       color: AppColors.dark,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Text(
                     'Service introduction & resources',
                     style: AppTextStyles.body3.copyWith(
@@ -185,7 +185,7 @@ class OfficialScreen extends StatelessWidget {
                 size: 32,
               ),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,7 +197,7 @@ class OfficialScreen extends StatelessWidget {
                       color: AppColors.darkBlue,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     description,
                     style: AppTextStyles.body3.copyWith(

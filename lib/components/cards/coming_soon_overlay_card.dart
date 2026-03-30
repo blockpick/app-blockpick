@@ -191,7 +191,7 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
           size: 14,
           color: AppColors.gray600,
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         Text(
           value,
           style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
@@ -249,7 +249,7 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
         ),
         child: Text(
           widget.gameType.toUpperCase(),
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w700,
             color: Colors.white,

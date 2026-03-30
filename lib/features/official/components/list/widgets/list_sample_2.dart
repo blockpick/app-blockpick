@@ -75,7 +75,7 @@ class _ListSample2State extends State<ListSample2>
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.darkBlue),
+          icon: Icon(Icons.arrow_back, color: AppColors.darkBlue),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -230,7 +230,7 @@ class _ListSample2State extends State<ListSample2>
                         size: 24,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -242,7 +242,7 @@ class _ListSample2State extends State<ListSample2>
                               color: AppColors.darkBlue,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: 4),
                           Text(
                             item.description,
                             style: AppTextStyles.body3.copyWith(

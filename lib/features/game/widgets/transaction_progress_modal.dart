@@ -200,7 +200,7 @@ class _TransactionProgressModalState extends ConsumerState<TransactionProgressMo
           ],
         ),
 
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
 
         // 제목 + 카운터
         Text(
@@ -210,7 +210,7 @@ class _TransactionProgressModalState extends ConsumerState<TransactionProgressMo
             fontWeight: FontWeight.w700,
           ),
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4),
         Text(
           '($step/$total)',
           style: AppTextStyles.body3.copyWith(
@@ -279,7 +279,7 @@ class _TransactionProgressModalState extends ConsumerState<TransactionProgressMo
         child: Row(
           children: [
             Icon(LucideIcons.link, size: 14, color: AppColors.grayBlue),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             Expanded(
               child: Text(
                 displayHash,
@@ -307,8 +307,8 @@ class _TransactionProgressModalState extends ConsumerState<TransactionProgressMo
               Navigator.of(context).pop();
               context.go('/');
             },
-            icon: const Icon(LucideIcons.bell, size: 18),
-            label: const Text('푸시 알림 받기'),
+            icon: Icon(LucideIcons.bell, size: 18),
+            label: Text('푸시 알림 받기'),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.darkBlue,
               foregroundColor: AppColors.white,
@@ -332,10 +332,10 @@ class _TransactionProgressModalState extends ConsumerState<TransactionProgressMo
           child: OutlinedButton.icon(
             onPressed: () => _showAdAndNavigate(),
             icon: const Icon(LucideIcons.play, size: 18),
-            label: const Text('광고 시청하고 이벤트 포인트 받기'),
+            label: Text('광고 시청하고 이벤트 포인트 받기'),
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.blue,
-              side: const BorderSide(color: AppColors.blue, width: 1.5),
+              side: BorderSide(color: AppColors.blue, width: 1.5),
               padding: const EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(14),

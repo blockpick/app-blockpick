@@ -81,10 +81,10 @@ class _FindEmailResultScreenState extends ConsumerState<FindEmailResultScreen> {
           backgroundColor: AppColors.white,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_rounded, color: AppColors.darkBlue),
+            icon: Icon(Icons.arrow_back_ios_rounded, color: AppColors.darkBlue),
             onPressed: () => context.pop(),
           ),
-          title: const Text(
+          title: Text(
             '이메일 찾기',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -111,10 +111,10 @@ class _FindEmailResultScreenState extends ConsumerState<FindEmailResultScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
 
           // 안내 문구
-          const Text(
+          Text(
             '입력하신 휴대폰 번호로\n가입된 계정을 찾았어요!',
             style: AppTextStyles.heading2.copyWith(color: AppColors.darkBlue),
           ),
@@ -193,9 +193,9 @@ class _FindEmailResultScreenState extends ConsumerState<FindEmailResultScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
 
-          const Text(
+          Text(
             '해당 번호로 가입된\n계정이 없어요',
             style: AppTextStyles.heading2.copyWith(color: AppColors.darkBlue),
           ),
@@ -287,7 +287,7 @@ class _FindEmailResultScreenState extends ConsumerState<FindEmailResultScreen> {
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            child: const Text('돌아가기'),
+            child: Text('돌아가기'),
           ),
         ],
       ),

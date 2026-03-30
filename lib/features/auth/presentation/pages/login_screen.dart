@@ -106,7 +106,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
+            Text(
               '비밀번호 5회 실패로 보안을 위해\n계정이 잠겼어요.',
               style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
               textAlign: TextAlign.center,
@@ -135,7 +135,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               Navigator.pop(context);
               context.push('/find-password');
             },
-            child: const Text(
+            child: Text(
               '비밀번호찾기',
               style: TextStyle(
                 color: AppColors.blue,
@@ -157,7 +157,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
+            Text(
               'Blockpick 회원 계정이 아니에요.',
               style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
               textAlign: TextAlign.center,
@@ -187,7 +187,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               Navigator.pop(context);
               context.push('/signup');
             },
-            child: const Text(
+            child: Text(
               '회원가입 하기',
               style: TextStyle(
                 color: AppColors.blue,
@@ -218,10 +218,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           backgroundColor: AppColors.white,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_rounded, color: AppColors.darkBlue),
+            icon: Icon(Icons.arrow_back_ios_rounded, color: AppColors.darkBlue),
             onPressed: () => context.pop(),
           ),
-          title: const Text(
+          title: Text(
             '로그인 하기',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -425,7 +425,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.blue, width: 1.5),
+              borderSide: BorderSide(color: AppColors.blue, width: 1.5),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -495,7 +495,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               icon,
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Text(
                 text,
                 style: AppTextStyles.title2.copyWith(color: textColor),

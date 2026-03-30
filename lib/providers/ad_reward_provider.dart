@@ -94,7 +94,7 @@ class AdRewardState {
 class AdRewardNotifier extends _$AdRewardNotifier {
   @override
   AdRewardState build() {
-    return const AdRewardState();
+    return AdRewardState();
   }
 
   /// 광고 시청 및 보상 받기

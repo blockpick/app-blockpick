@@ -91,7 +91,7 @@ class WishDetailScreen extends ConsumerWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Icon(Icons.campaign, size: 14, color: AppColors.white),
-                          const SizedBox(width: 4),
+                          SizedBox(width: 4),
                           Text(
                             wish.businessName ?? 'BRAND',
                             style: AppTextStyles.caption2.copyWith(color: AppColors.white),
@@ -137,7 +137,7 @@ class WishDetailScreen extends ConsumerWidget {
                     onTap: () {
                       // TODO: 인앱 웹뷰로 구매 URL 열기
                     },
-                    child: const Row(
+                    child: Row(
                       children: [
                         Icon(Icons.shopping_cart_outlined, size: 14, color: AppColors.primary),
                         SizedBox(width: 4),
@@ -186,7 +186,7 @@ class WishDetailScreen extends ConsumerWidget {
                     ),
                   // 업체 경품
                   if (wish.isBusinessWish && wish.prizeDescription != null) ...[
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(14),
@@ -197,7 +197,7 @@ class WishDetailScreen extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             '🎁 경품 안내',
                             style: AppTextStyles.title3.copyWith(color: AppColors.primary),
                           ),
@@ -419,7 +419,7 @@ class _EmpathyButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Icon(Icons.favorite_outline, size: 20, color: AppColors.red),
-            const SizedBox(height: 2),
+            SizedBox(height: 2),
             Text(
               '${wish.empathyCount}',
               style: AppTextStyles.caption4.copyWith(color: AppColors.red, fontWeight: FontWeight.w600),

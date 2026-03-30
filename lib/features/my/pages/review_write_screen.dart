@@ -126,7 +126,7 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
                 children: [
                   if (eventType != null) ...[
                     _buildEventBadge(eventType),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8),
                   ],
                   Text(
                     widget.participatedAt,
@@ -136,7 +136,7 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Text(
                 widget.productName,
                 style: AppTextStyles.body3.copyWith(
@@ -205,7 +205,7 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
       ),
       child: Text(
         type.displayName.toUpperCase(),
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 10,
           fontWeight: FontWeight.w700,
           color: AppColors.white,
@@ -235,7 +235,7 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
             fontWeight: FontWeight.w600,
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         Container(
           decoration: BoxDecoration(
             border: Border.all(color: AppColors.gray300),
@@ -261,7 +261,7 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
             ),
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         Align(
           alignment: Alignment.centerRight,
           child: Text(

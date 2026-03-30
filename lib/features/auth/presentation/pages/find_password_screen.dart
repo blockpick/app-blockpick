@@ -267,7 +267,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
 
     // 성공 토스트
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
+      SnackBar(
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -297,10 +297,10 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
           backgroundColor: AppColors.white,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_rounded, color: AppColors.darkBlue),
+            icon: Icon(Icons.arrow_back_ios_rounded, color: AppColors.darkBlue),
             onPressed: () => context.pop(),
           ),
-          title: const Text(
+          title: Text(
             '비밀번호 찾기',
             style: AppTextStyles.title1.copyWith(color: AppColors.darkBlue),
           ),
@@ -316,25 +316,25 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24),
 
                       if (_step < 3) ...[
-                        const Text(
+                        Text(
                           '소중한 회원님의 정보 보호를 위해\n이메일 인증 후,\n비밀번호 재설정이 필요해요.',
                           style: AppTextStyles.heading2.copyWith(color: AppColors.darkBlue),
                         ),
-                        const SizedBox(height: 32),
+                        SizedBox(height: 32),
                         _buildEmailSection(),
                       ],
 
                       if (_step == 3) ...[
-                        const Text(
+                        Text(
                           '보안을 위해,\n본인만의 비밀번호를\n재설정해 주세요!',
                           style: AppTextStyles.heading2.copyWith(color: AppColors.darkBlue),
                         ),
                         const SizedBox(height: 32),
                         _buildPasswordSection(),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16),
                         _buildPasswordRules(),
                       ],
                     ],
@@ -357,7 +357,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           '이메일',
           style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
@@ -407,8 +407,8 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
         ),
 
         if (_codeSent) ...[
-          const SizedBox(height: 16),
-          const Text(
+          SizedBox(height: 16),
+          Text(
             '인증번호',
             style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
           ),
@@ -422,7 +422,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
               LengthLimitingTextInputFormatter(6),
             ],
             onChanged: (_) => setState(() => _codeError = null),
-            style: const TextStyle(fontSize: 16, color: AppColors.darkBlue, letterSpacing: 4),
+            style: TextStyle(fontSize: 16, color: AppColors.darkBlue, letterSpacing: 4),
             decoration: InputDecoration(
               hintText: '인증번호 6자리',
               hintStyle: TextStyle(fontSize: 16, color: AppColors.gray400, letterSpacing: 0),
@@ -441,10 +441,10 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                   style: AppTextStyles.title3.copyWith(color: _remainingSeconds < 60 ? AppColors.red : AppColors.blue),
                 ),
               ),
-              suffixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+              suffixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(
@@ -464,7 +464,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           '새 비밀번호',
           style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),
@@ -496,9 +496,9 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
 
-        const Text(
+        Text(
           '비밀번호 확인',
           style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
         ),

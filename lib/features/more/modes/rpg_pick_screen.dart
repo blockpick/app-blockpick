@@ -222,8 +222,8 @@ class _RpgPickScreenState extends State<RpgPickScreen>
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text('⭐', style: TextStyle(fontSize: 16)),
-                    const SizedBox(width: 6),
+                    Text('⭐', style: TextStyle(fontSize: 16)),
+                    SizedBox(width: 6),
                     Text(
                       '$_score',
                       style: AppTextStyles.buttonLarge.copyWith(color: AppColors.yellow500),
@@ -383,7 +383,7 @@ class _RpgPickScreenState extends State<RpgPickScreen>
                           ),
                         ],
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.flag_rounded,
@@ -551,7 +551,7 @@ class _RpgPickScreenState extends State<RpgPickScreen>
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(emoji, style: const TextStyle(fontSize: 16)),
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,

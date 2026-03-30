@@ -141,7 +141,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ),
           ),
           if (unreadCount > 0) ...[
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
@@ -255,9 +255,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   const SizedBox(height: 6),
                   Text(
                     notification['message'] as String,
-                    style: AppTextStyles.body3.copyWith(color: isRead ? AppColors.gray500 : AppColors.gray700),
+                    style: AppTextStyles.body3,
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Text(
                     notification['time'] as String,
                     style: AppTextStyles.body4.copyWith(color: AppColors.gray400),
@@ -289,8 +289,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
               color: AppColors.gray400,
             ),
           ),
-          const SizedBox(height: 20),
-          const Text(
+          SizedBox(height: 20),
+          Text(
             '알림이 없습니다',
             style: AppTextStyles.title2.copyWith(color: AppColors.gray600),
           ),

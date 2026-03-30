@@ -267,7 +267,7 @@ class _SelectCarouselPremiumWidgetState extends State<SelectCarouselPremiumWidge
                           ),
                         ),
 
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8),
 
                         // 서브 텍스트
                         Text(

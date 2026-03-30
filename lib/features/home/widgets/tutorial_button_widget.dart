@@ -58,7 +58,7 @@ class TutorialButtonWidget extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(width: 16),
+              SizedBox(width: 16),
 
               // 텍스트
               Expanded(
@@ -72,7 +72,7 @@ class TutorialButtonWidget extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     Text(
                       '블록픽 참가하는 방법',
                       style: AppTextStyles.body3.copyWith(
@@ -115,7 +115,7 @@ class TutorialModal extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.85,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(24),
@@ -206,7 +206,7 @@ class TutorialModal extends StatelessWidget {
                           color: AppColors.blue,
                           size: 20,
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             '게임이 취소되면 참가비가 100% 환불됩니다.',
@@ -274,7 +274,7 @@ class TutorialModal extends StatelessWidget {
             size: 24,
           ),
         ),
-        const SizedBox(width: 16),
+        SizedBox(width: 16),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -286,7 +286,7 @@ class TutorialModal extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4),
               Text(
                 description,
                 style: AppTextStyles.body3.copyWith(

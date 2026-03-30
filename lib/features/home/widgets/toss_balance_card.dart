@@ -30,7 +30,7 @@ class TossBalanceCard extends StatelessWidget {
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 10,
-              offset: const Offset(0, 2),
+              offset: Offset(0, 2),
             ),
           ],
         ),
@@ -52,7 +52,7 @@ class TossBalanceCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
             // 금액
             if (isAuthenticated) ...[
@@ -63,7 +63,7 @@ class TossBalanceCard extends StatelessWidget {
                     _formatCurrency(balance),
                     style: AppTextStyles.display1.copyWith(color: AppColors.darkBlue, letterSpacing: -1),
                   ),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 4),
                     child: Text(
@@ -79,14 +79,14 @@ class TossBalanceCard extends StatelessWidget {
                 '로그인하고 자산을 확인하세요',
                 style: AppTextStyles.title1.copyWith(color: AppColors.gray500),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: AppColors.blue,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Text(
+                child: Text(
                   '로그인',
                   style: AppTextStyles.caption2.copyWith(color: Colors.white),
                 ),

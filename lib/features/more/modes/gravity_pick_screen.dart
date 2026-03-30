@@ -173,7 +173,7 @@ class _GravityPickScreenState extends State<GravityPickScreen>
                   color: Colors.white.withValues(alpha: 0.2),
                 ),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(Icons.refresh_rounded, color: Colors.white, size: 18),
@@ -342,7 +342,7 @@ class _GravityPickScreenState extends State<GravityPickScreen>
                       size: 20,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Text(
                     'Tilt your phone to move the ball',
                     style: AppTextStyles.title3.copyWith(color: Colors.white.withValues(alpha: 0.7)),
@@ -374,7 +374,7 @@ class _GravityPickScreenState extends State<GravityPickScreen>
                       ),
                     ],
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.gps_fixed_rounded, color: Colors.white, size: 22),

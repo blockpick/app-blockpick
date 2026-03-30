@@ -242,19 +242,19 @@ class _EmailVerifyScreenState extends ConsumerState<EmailVerifyScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 32),
+            SizedBox(height: 32),
 
             // 타이틀
-            const Text(
+            Text(
               '이메일로 전송된\n인증번호를 입력해주세요',
               style: AppTextStyles.display2.copyWith(color: AppColors.darkBlue),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Text(
               _maskedEmail,
               style: AppTextStyles.body2.copyWith(color: AppColors.blue),
             ),
-            const SizedBox(height: 40),
+            SizedBox(height: 40),
 
             // 인증번호 입력
             if (_isCodeSent) ...[
@@ -274,14 +274,14 @@ class _EmailVerifyScreenState extends ConsumerState<EmailVerifyScreen> {
                   children: [
                     Text(
                       _formattedTime,
-                      style: AppTextStyles.title3.copyWith(color: _remainingSeconds > 60),
+                      style: AppTextStyles.title3.copyWith(color: _remainingSeconds > 60 ? AppColors.blue : AppColors.red),
                     ),
                     const SizedBox(width: 8),
                   ],
                 ),
               ),
 
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
 
               // 재발송 안내
               Center(
@@ -291,7 +291,7 @@ class _EmailVerifyScreenState extends ConsumerState<EmailVerifyScreen> {
                       '이메일이 오지 않았나요?',
                       style: AppTextStyles.body3.copyWith(color: AppColors.gray500),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     TextButton(
                       onPressed: _isSending ? null : _resendCode,
                       child: Text(
@@ -317,7 +317,7 @@ class _EmailVerifyScreenState extends ConsumerState<EmailVerifyScreen> {
                             AlwaysStoppedAnimation<Color>(AppColors.blue),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20),
                     Text(
                       '인증번호를 발송하고 있어요',
                       style: AppTextStyles.body2.copyWith(color: AppColors.gray600),

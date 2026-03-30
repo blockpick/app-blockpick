@@ -129,7 +129,7 @@ class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
 
               // 좌표 개수 배지 + 전체선택/선택삭제 컨트롤
               Padding(
@@ -148,7 +148,7 @@ class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
                         style: AppTextStyles.caption2.copyWith(color: AppColors.blue),
                       ),
                     ),
-                    const Spacer(),
+                    Spacer(),
                     // 전체선택
                     GestureDetector(
                       onTap: () {
@@ -279,7 +279,7 @@ class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
                               BoxShadow(
                                 color: AppColors.darkBlue.withValues(alpha: 0.3),
                                 blurRadius: 12,
-                                offset: const Offset(0, 4),
+                                offset: Offset(0, 4),
                               ),
                             ],
                           ),
@@ -293,7 +293,7 @@ class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       // 취소 버튼
                       GestureDetector(
                         onTap: () => Navigator.of(context).pop(),

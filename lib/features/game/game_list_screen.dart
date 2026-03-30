@@ -90,7 +90,7 @@ class _GameListScreenState extends ConsumerState<GameListScreen> {
                             size: 16,
                             color: isSelected ? AppColors.white : AppColors.navy,
                           ),
-                          const SizedBox(width: 6),
+                          SizedBox(width: 6),
                         ],
                         Text(category['label'] as String),
                       ],
@@ -116,7 +116,7 @@ class _GameListScreenState extends ConsumerState<GameListScreen> {
             ),
           ),
 
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
 
           // 정렬 드롭다운
           Row(
@@ -232,14 +232,14 @@ class _GameListScreenState extends ConsumerState<GameListScreen> {
               size: 64,
               color: AppColors.red,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
               'Error loading games',
               style: AppTextStyles.title1.copyWith(
                 color: AppColors.red,
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Text(
               error.toString(),
               style: AppTextStyles.body4.copyWith(
@@ -327,14 +327,14 @@ class _GameListScreenState extends ConsumerState<GameListScreen> {
             size: 64,
             color: AppColors.buleGray,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
             'No games found',
             style: AppTextStyles.title1.copyWith(
               color: AppColors.medium,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
             'Try changing your filters',
             style: AppTextStyles.body3.copyWith(
