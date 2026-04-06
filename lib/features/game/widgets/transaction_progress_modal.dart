@@ -12,6 +12,7 @@ import '../../../providers/ad_reward_provider.dart';
 import '../../../core/auth/domain/providers/auth_provider.dart';
 import '../../../services/ad_reward_service.dart';
 import 'game_join_result_overlay.dart';
+import '../../../core/constants/app_constants.dart';
 
 /// 트랜잭션 생성/확인 모달
 ///
@@ -35,7 +36,7 @@ class TransactionProgressModal extends ConsumerStatefulWidget {
     showDialog(
       context: context,
       barrierDismissible: false,
-      barrierColor: Colors.black.withValues(alpha: 0.5),
+      barrierColor: AppColors.textBlack.withValues(alpha: 0.5),
       builder: (context) => TransactionProgressModal(
         gameId: gameId,
         gameTitle: gameTitle,
@@ -112,7 +113,7 @@ class _TransactionProgressModalState extends ConsumerState<TransactionProgressMo
           padding: const EdgeInsets.all(28),
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
             boxShadow: [
               BoxShadow(
                 color: AppColors.darkBlue.withValues(alpha: 0.15),
@@ -238,7 +239,7 @@ class _TransactionProgressModalState extends ConsumerState<TransactionProgressMo
           const SizedBox(height: 8),
           // TX 처리 진행 바
           ClipRRect(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(AppConstants.radiusSm),
             child: LinearProgressIndicator(
               value: totalTx > 0 ? txCount / totalTx : 0,
               backgroundColor: AppColors.gray200,
@@ -263,7 +264,7 @@ class _TransactionProgressModalState extends ConsumerState<TransactionProgressMo
           SnackBar(
             content: const Text('TX Hash가 복사되었습니다'),
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusLg)),
             duration: const Duration(seconds: 2),
           ),
         );
@@ -273,7 +274,7 @@ class _TransactionProgressModalState extends ConsumerState<TransactionProgressMo
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: AppColors.gray100,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
           border: Border.all(color: AppColors.gray200),
         ),
         child: Row(
@@ -310,11 +311,10 @@ class _TransactionProgressModalState extends ConsumerState<TransactionProgressMo
             icon: Icon(LucideIcons.bell, size: 18),
             label: Text('푸시 알림 받기'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.darkBlue,
               foregroundColor: AppColors.white,
               padding: const EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(AppConstants.radiusXl),
               ),
               textStyle: AppTextStyles.button.copyWith(
                 fontSize: 15,
@@ -338,7 +338,7 @@ class _TransactionProgressModalState extends ConsumerState<TransactionProgressMo
               side: BorderSide(color: AppColors.blue, width: 1.5),
               padding: const EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(AppConstants.radiusXl),
               ),
               textStyle: AppTextStyles.button.copyWith(
                 fontSize: 15,
@@ -381,7 +381,7 @@ class _TransactionProgressModalState extends ConsumerState<TransactionProgressMo
           content: Text('${result!.grantedAmount}P 적립 완료!'),
           backgroundColor: AppColors.green500,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusLg)),
         ),
       );
       ref.read(authProvider.notifier).refreshUser();

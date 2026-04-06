@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../../../../core/constants/app_constants.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -175,7 +176,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
               height: 100,
               decoration: BoxDecoration(
                 gradient: AppColors.gradientBlue,
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                 boxShadow: [
                   BoxShadow(
                     color: AppColors.blue.withValues(alpha: 0.3),
@@ -256,10 +257,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 child: ElevatedButton(
                   onPressed: _isChecking ? null : _retry,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.darkBlue,
                     foregroundColor: AppColors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     ),
                     elevation: 0,
                   ),

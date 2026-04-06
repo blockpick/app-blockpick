@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/auth/domain/providers/auth_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/constants/app_constants.dart';
 import '../../features/auth/presentation/dialogs/auth_dialogs.dart';
 
 /// 토스 스타일 메인 AppBar
@@ -37,19 +38,17 @@ class MainAppBar extends ConsumerWidget implements PreferredSizeWidget {
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppConstants.spacingLg,
+            vertical: AppConstants.spacingSm,
+          ),
           child: Row(
             children: [
               // 왼쪽: 메뉴 또는 로고
               if (showLogo)
-                const Text(
+                Text(
                   'BlockPick',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.darkBlue,
-                    letterSpacing: -0.5,
-                  ),
+                  style: AppTextStyles.title1.copyWith(color: AppColors.textBlack),
                 )
               else
                 GestureDetector(
@@ -59,11 +58,11 @@ class MainAppBar extends ConsumerWidget implements PreferredSizeWidget {
                     height: 40,
                     decoration: BoxDecoration(
                       color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     ),
                     child: const Icon(
                       Icons.menu_rounded,
-                      color: AppColors.darkBlue,
+                      color: AppColors.textBlack,
                       size: 24,
                     ),
                   ),
@@ -82,14 +81,14 @@ class MainAppBar extends ConsumerWidget implements PreferredSizeWidget {
                       height: 40,
                       decoration: BoxDecoration(
                         color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                       ),
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
                           const Icon(
                             Icons.notifications_none_rounded,
-                            color: AppColors.darkBlue,
+                            color: AppColors.textBlack,
                             size: 26,
                           ),
                           if (hasNotification)
@@ -110,7 +109,7 @@ class MainAppBar extends ConsumerWidget implements PreferredSizeWidget {
                     ),
                   ),
 
-                  SizedBox(width: 4),
+                  const SizedBox(width: AppConstants.spacingXs),
 
                   // 프로필 버튼
                   GestureDetector(
@@ -125,13 +124,13 @@ class MainAppBar extends ConsumerWidget implements PreferredSizeWidget {
                       height: 40,
                       decoration: BoxDecoration(
                         color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                       ),
                       child: Center(
                         child: isAuthenticated
                             ? CircleAvatar(
                                 radius: 15,
-                                backgroundColor: AppColors.darkBlue,
+                                backgroundColor: AppColors.textBlack,
                                 child: Text(
                                   (user?.nickname ?? user?.email ?? 'U')[0]
                                       .toUpperCase(),
@@ -140,7 +139,7 @@ class MainAppBar extends ConsumerWidget implements PreferredSizeWidget {
                               )
                             : CircleAvatar(
                                 radius: 15,
-                                backgroundColor: AppColors.gray300,
+                                backgroundColor: AppColors.gray200,
                                 child: const Icon(
                                   Icons.person_rounded,
                                   size: 18,

@@ -6,6 +6,7 @@ import '../widgets/game_join_button.dart';
 import '../widgets/game_join_loading_overlay.dart';
 import '../widgets/game_join_result_overlay.dart';
 import '../../../providers/game_participation_provider.dart';
+import '../../../core/constants/app_constants.dart';
 
 /// 게임 참가 기능 E2E 테스트 화면
 ///
@@ -53,7 +54,7 @@ class _GameJoinTestScreenState extends ConsumerState<GameJoinTestScreen> {
       appBar: AppBar(
         title: const Text('🧪 게임 참가 E2E 테스트'),
         backgroundColor: AppColors.blue,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
@@ -146,12 +147,12 @@ class _GameJoinTestScreenState extends ConsumerState<GameJoinTestScreen> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppColors.blue.withOpacity(0.1),
-            AppColors.purple.withOpacity(0.1),
+            AppColors.blue.withValues(alpha: 0.1),
+            AppColors.purple.withValues(alpha: 0.1),
           ],
         ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.blue.withOpacity(0.3)),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
+        border: Border.all(color: AppColors.blue.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,19 +182,19 @@ class _GameJoinTestScreenState extends ConsumerState<GameJoinTestScreen> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.orange.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.orange.withOpacity(0.3)),
+              color: AppColors.orange.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
+              border: Border.all(color: AppColors.orange.withValues(alpha: 0.3)),
             ),
             child: Row(
               children: [
-                Icon(Icons.warning_amber, color: Colors.orange, size: 20),
+                Icon(Icons.warning_amber, color: AppColors.orange, size: 20),
                 SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     'Ronin Mainnet 사용',
                     style: AppTextStyles.body4.copyWith(
-                      color: Colors.orange.shade800,
+                      color: AppColors.orange,
                     ),
                   ),
                 ),
@@ -228,7 +229,7 @@ class _GameJoinTestScreenState extends ConsumerState<GameJoinTestScreen> {
           decoration: InputDecoration(
             hintText: hint,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             ),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
@@ -245,10 +246,10 @@ class _GameJoinTestScreenState extends ConsumerState<GameJoinTestScreen> {
       onPressed: _isLoading ? null : _handleTest1,
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.blue,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         padding: const EdgeInsets.symmetric(vertical: 16),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
         ),
       ),
       child: Row(
@@ -272,10 +273,10 @@ class _GameJoinTestScreenState extends ConsumerState<GameJoinTestScreen> {
       onPressed: _isLoading ? null : _handleTest2,
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.purple,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         padding: const EdgeInsets.symmetric(vertical: 16),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
         ),
       ),
       child: Row(
@@ -299,10 +300,10 @@ class _GameJoinTestScreenState extends ConsumerState<GameJoinTestScreen> {
       onPressed: _isLoading ? null : _handleTest3,
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.green500,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         padding: const EdgeInsets.symmetric(vertical: 16),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
         ),
       ),
       child: Row(

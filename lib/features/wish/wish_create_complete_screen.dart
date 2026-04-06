@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../models/wish_model.dart';
@@ -58,7 +59,7 @@ class WishCreateCompleteScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: AppColors.primaryBg,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                 ),
                 child: const Column(
                   children: [
@@ -96,7 +97,7 @@ class WishCreateCompleteScreen extends StatelessWidget {
                     backgroundColor: AppColors.primary,
                     foregroundColor: AppColors.white,
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusXl)),
                     elevation: 0,
                   ),
                 ),
@@ -113,7 +114,7 @@ class WishCreateCompleteScreen extends StatelessWidget {
                     foregroundColor: AppColors.textBlack,
                     side: const BorderSide(color: AppColors.gray200),
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusXl)),
                   ),
                   child: const Text('내 소원 보기'),
                 ),

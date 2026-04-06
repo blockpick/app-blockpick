@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/constants/app_constants.dart';
 import '../../models/wish_model.dart';
 import '../../providers/wish_provider.dart';
 import 'widgets/category_filter_bar.dart';
@@ -34,12 +35,10 @@ class WishScreen extends ConsumerWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       '위시',
-                      style: TextStyle(
-                        fontSize: 22,
+                      style: AppTextStyles.heading2.copyWith(
                         fontWeight: FontWeight.w800,
-                        color: AppColors.textBlack,
                         letterSpacing: -0.5,
                       ),
                     ),
@@ -177,10 +176,8 @@ class WishScreen extends ConsumerWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF7C3AED), AppColors.primary],
-              ),
-              borderRadius: BorderRadius.circular(14),
+              gradient: AppColors.gradientDarkPurple,
+              borderRadius: BorderRadius.circular(AppConstants.radiusXl - 2),
               boxShadow: [
                 BoxShadow(
                   color: AppColors.primary.withValues(alpha: 0.3),
@@ -192,7 +189,7 @@ class WishScreen extends ConsumerWidget {
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(AppConstants.radiusXl - 2),
                 onTap: () => _buzzRandom(context, ref),
                 child: const Icon(Icons.auto_awesome, size: 20, color: AppColors.white),
               ),
@@ -203,10 +200,10 @@ class WishScreen extends ConsumerWidget {
           Container(
             decoration: BoxDecoration(
               color: AppColors.textBlack,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppConstants.radiusXl),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.2),
+                  color: AppColors.textBlack.withValues(alpha: 0.2),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -215,18 +212,18 @@ class WishScreen extends ConsumerWidget {
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                 onTap: () => _navigateToCreate(context),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.edit_outlined, size: 16, color: AppColors.white),
-                      SizedBox(width: 6),
+                      const Icon(Icons.edit_outlined, size: 16, color: AppColors.white),
+                      const SizedBox(width: 6),
                       Text(
                         '소원 등록',
-                        style: TextStyle(
+                        style: AppTextStyles.button.copyWith(
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: AppColors.white,
@@ -264,7 +261,7 @@ class WishScreen extends ConsumerWidget {
       context: context,
       backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.radiusBottomSheet)),
       ),
       builder: (context) => _BuzzConfirmSheet(wish: wish),
     );
@@ -315,9 +312,9 @@ class _BusinessBannerCarouselState extends State<_BusinessBannerCarousel> {
                     gradient: const LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [Color(0xFF5941F2), Color(0xFF7C3AED)],
+                      colors: [AppColors.primaryMain, AppColors.primaryLight],
                     ),
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                     boxShadow: [
                       BoxShadow(
                         color: AppColors.primary.withValues(alpha: 0.2),
@@ -338,7 +335,7 @@ class _BusinessBannerCarouselState extends State<_BusinessBannerCarousel> {
                               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                               decoration: BoxDecoration(
                                 color: Colors.white.withValues(alpha: 0.2),
-                                borderRadius: BorderRadius.circular(4),
+                                borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                               ),
                               child: Text(
                                 wish.businessName ?? 'BRAND',
@@ -357,7 +354,7 @@ class _BusinessBannerCarouselState extends State<_BusinessBannerCarousel> {
                       ),
                       const SizedBox(width: 12),
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                         child: Image.network(
                           wish.productImageUrl,
                           width: 64,
@@ -368,7 +365,7 @@ class _BusinessBannerCarouselState extends State<_BusinessBannerCarousel> {
                             height: 64,
                             decoration: BoxDecoration(
                               color: Colors.white.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                             ),
                             child: Center(
                               child: Text(
@@ -427,7 +424,7 @@ class _EmptyState extends StatelessWidget {
               gradient: LinearGradient(
                 colors: [
                   AppColors.primary.withValues(alpha: 0.15),
-                  const Color(0xFF7C3AED).withValues(alpha: 0.08),
+                  AppColors.primaryLight.withValues(alpha: 0.08),
                 ],
               ),
               shape: BoxShape.circle,
@@ -453,9 +450,9 @@ class _EmptyState extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                colors: [Color(0xFF7C3AED), AppColors.primary],
+                colors: [AppColors.primaryLight, AppColors.primary],
               ),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             ),
             child: ElevatedButton.icon(
               onPressed: onCreateTap,
@@ -465,7 +462,7 @@ class _EmptyState extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 foregroundColor: AppColors.white,
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusLg)),
                 elevation: 0,
                 shadowColor: Colors.transparent,
               ),
@@ -515,12 +512,12 @@ class _BuzzConfirmSheet extends StatelessWidget {
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: AppColors.gray100,
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(AppConstants.radiusXl),
             ),
             child: Row(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                   child: Image.network(
                     wish.productImageUrl,
                     width: 56,
@@ -531,7 +528,7 @@ class _BuzzConfirmSheet extends StatelessWidget {
                       height: 56,
                       decoration: BoxDecoration(
                         color: AppColors.primaryBg,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                       ),
                       child: Center(
                         child: Text(
@@ -574,7 +571,7 @@ class _BuzzConfirmSheet extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               color: isFree ? AppColors.primaryBg : AppColors.gray100,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -603,12 +600,12 @@ class _BuzzConfirmSheet extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: isFree
                     ? const LinearGradient(
-                        colors: [Color(0xFF7C3AED), AppColors.primary],
+                        colors: [AppColors.primaryLight, AppColors.primary],
                       )
                     : const LinearGradient(
                         colors: [Color(0xFF2D3436), Color(0xFF191F28)],
                       ),
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                 boxShadow: [
                   BoxShadow(
                     color: (isFree ? AppColors.primary : Colors.black).withValues(alpha: 0.2),
@@ -632,7 +629,7 @@ class _BuzzConfirmSheet extends StatelessWidget {
                   foregroundColor: AppColors.white,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                   ),
                   elevation: 0,
                   shadowColor: Colors.transparent,

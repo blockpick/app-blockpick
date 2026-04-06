@@ -9,6 +9,7 @@ import '../../data/mock_optimal_game_data.dart';
 import '../../models/optimal_game_model.dart';
 import 'widgets/price_keypad_input.dart';
 import 'widgets/price_wheel_selector.dart';
+import '../../core/constants/app_constants.dart';
 
 /// 최적가 게임 화면
 class OptimalGameScreen extends ConsumerStatefulWidget {
@@ -38,7 +39,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
     }
 
     return Scaffold(
-      backgroundColor: AppColors.deepWhite,
+      backgroundColor: AppColors.white,
       appBar: _buildAppBar(context),
       body: Column(
         children: [
@@ -101,7 +102,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
                         horizontal: 14, vertical: 8),
                     decoration: BoxDecoration(
                       color: AppColors.white,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                       boxShadow: [
                         BoxShadow(
                           color: AppColors.black.withValues(alpha: 0.1),
@@ -130,7 +131,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
                           horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
                         color: AppColors.white,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                         boxShadow: [
                           BoxShadow(
                             color: AppColors.black.withValues(alpha: 0.1),
@@ -233,7 +234,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
           const SizedBox(height: 8),
           // Progress bar
           ClipRRect(
-            borderRadius: BorderRadius.circular(2),
+            borderRadius: BorderRadius.circular(AppConstants.radiusSm),
             child: LinearProgressIndicator(
               value: progress,
               backgroundColor: AppColors.gray200,
@@ -348,7 +349,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
         padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
         decoration: const BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.radius2Xl)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -423,7 +424,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
         builder: (context, scrollController) => Container(
           decoration: const BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.radiusBottomSheet)),
           ),
           child: Column(
             children: [
@@ -434,7 +435,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
                 margin: const EdgeInsets.only(top: 12, bottom: 16),
                 decoration: BoxDecoration(
                   color: AppColors.gray200,
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                 ),
               ),
               // 타이틀
@@ -473,7 +474,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
                   child: Column(
                     children: [
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                         child: Image.asset(
                           _game!.imageUrl,
                           fit: BoxFit.fitWidth,
@@ -504,11 +505,10 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
                     child: ElevatedButton(
                       onPressed: () => Navigator.pop(context),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.darkBlue,
                         foregroundColor: AppColors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                         ),
                       ),
                       child: Text(
@@ -567,7 +567,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
                 color: hasBid
                     ? AppColors.textBlack.withValues(alpha: 0.85)
                     : AppColors.gray400.withValues(alpha: 0.6),
-                borderRadius: BorderRadius.circular(32),
+                borderRadius: BorderRadius.circular(AppConstants.radiusFull),
                 boxShadow: [
                   BoxShadow(
                     color: AppColors.black.withValues(alpha: 0.3),
@@ -584,7 +584,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
                       hasBid
                           ? '${_formatPrice(_selectedPrice!)}에 입찰하기'
                           : '가격을 선택하세요',
-                      style: AppTextStyles.title3.copyWith(color: Colors.white),
+                      style: AppTextStyles.title3.copyWith(color: AppColors.white),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -592,7 +592,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
                   const Icon(
                     Icons.chevron_right_rounded,
                     size: 20,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
                 ],
               ),
@@ -608,7 +608,7 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
               color: AppColors.white,
-              borderRadius: BorderRadius.circular(32),
+              borderRadius: BorderRadius.circular(AppConstants.radiusFull),
               boxShadow: [
                 BoxShadow(
                   color: AppColors.black.withValues(alpha: 0.1),
@@ -646,18 +646,18 @@ class _OptimalGameScreenState extends ConsumerState<OptimalGameScreen> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      barrierColor: AppColors.darkBlue.withOpacity(0.3), // 반투명 배경
+      barrierColor: AppColors.darkBlue.withValues(alpha: 0.3), // 반투명 배경
       builder: (context) => SafeArea(
         child: Container(
           constraints: BoxConstraints(
             maxHeight: MediaQuery.of(context).size.height * 0.6,
           ),
           decoration: BoxDecoration(
-            color: AppColors.white.withOpacity(0.95), // 약간 투명하게
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+            color: AppColors.white.withValues(alpha: 0.95), // 약간 투명하게
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(AppConstants.radius2Xl)),
             boxShadow: [
               BoxShadow(
-                color: AppColors.darkBlue.withOpacity(0.1),
+                color: AppColors.darkBlue.withValues(alpha: 0.1),
                 blurRadius: 30,
                 offset: const Offset(0, -10),
               ),

@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../../../core/constants/app_constants.dart';
 import 'dart:ui';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -163,7 +164,7 @@ class _TimePickScreenState extends State<TimePickScreen>
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
             decoration: BoxDecoration(
               color: Colors.black.withValues(alpha: 0.6),
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
               border: Border.all(
                 color: modeColor.withValues(alpha: 0.4),
                 width: 2,
@@ -183,7 +184,7 @@ class _TimePickScreenState extends State<TimePickScreen>
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                   decoration: BoxDecoration(
                     color: modeColor.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
                   ),
                   child: Text(
                     'MILLISECONDS',
@@ -218,7 +219,7 @@ class _TimePickScreenState extends State<TimePickScreen>
                                 .withValues(alpha: 0.05),
                           ],
                         ),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                         border: Border.all(
                           color: (isHighlight ? modeColor : Colors.white)
                               .withValues(alpha: 0.3),
@@ -279,7 +280,7 @@ class _TimePickScreenState extends State<TimePickScreen>
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
       ),
       child: Text(
         label,
@@ -320,7 +321,7 @@ class _TimePickScreenState extends State<TimePickScreen>
 
   Widget _buildBottomPanel() {
     return ClipRRect(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(AppConstants.radius2Xl)),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
@@ -365,7 +366,7 @@ class _TimePickScreenState extends State<TimePickScreen>
                             )
                           : null,
                       color: _isRunning ? null : Colors.white.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(18),
+                      borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                       boxShadow: _isRunning
                           ? [
                               BoxShadow(

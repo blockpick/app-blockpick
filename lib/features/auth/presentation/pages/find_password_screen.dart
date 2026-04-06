@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/auth/domain/providers/auth_provider.dart';
 
 /// SC-007: 비밀번호 찾기 화면
@@ -371,15 +372,15 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                 keyboardType: TextInputType.emailAddress,
                 enabled: !_codeSent,
                 onChanged: (_) => setState(() => _emailError = null),
-                style: const TextStyle(fontSize: 16, color: AppColors.darkBlue),
+                style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
                 decoration: InputDecoration(
                   hintText: '이메일을 입력해 주세요.',
-                  hintStyle: TextStyle(fontSize: 16, color: AppColors.gray400),
+                  hintStyle: AppTextStyles.body2.copyWith(color: AppColors.gray400),
                   errorText: _emailError,
                   filled: true,
                   fillColor: _codeSent ? AppColors.gray200 : AppColors.gray100,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     borderSide: BorderSide.none,
                   ),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -394,10 +395,9 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
                     ? null
                     : (_isEmailValid && !_isLoading ? _sendEmailCode : null),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.darkBlue,
                   foregroundColor: AppColors.white,
                   disabledBackgroundColor: AppColors.gray300,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusLg)),
                   elevation: 0,
                 ),
                 child: const Text('인증번호 전송', style: AppTextStyles.title3),
@@ -422,15 +422,15 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
               LengthLimitingTextInputFormatter(6),
             ],
             onChanged: (_) => setState(() => _codeError = null),
-            style: TextStyle(fontSize: 16, color: AppColors.darkBlue, letterSpacing: 4),
+            style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue, letterSpacing: 4),
             decoration: InputDecoration(
               hintText: '인증번호 6자리',
-              hintStyle: TextStyle(fontSize: 16, color: AppColors.gray400, letterSpacing: 0),
+              hintStyle: AppTextStyles.body2.copyWith(color: AppColors.gray400, letterSpacing: 0),
               errorText: _codeError,
               filled: true,
               fillColor: AppColors.gray100,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 borderSide: BorderSide.none,
               ),
               contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -474,15 +474,15 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
           focusNode: _passwordFocusNode,
           obscureText: _obscurePassword,
           onChanged: (_) => setState(() => _passwordError = null),
-          style: const TextStyle(fontSize: 16, color: AppColors.darkBlue),
+          style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
           decoration: InputDecoration(
             hintText: '문자,숫자,기호 조합 8자 이상',
-            hintStyle: TextStyle(fontSize: 16, color: AppColors.gray400),
+            hintStyle: AppTextStyles.body2.copyWith(color: AppColors.gray400),
             errorText: _passwordError,
             filled: true,
             fillColor: AppColors.gray100,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               borderSide: BorderSide.none,
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -508,15 +508,15 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
           focusNode: _confirmPasswordFocusNode,
           obscureText: _obscureConfirmPassword,
           onChanged: (_) => setState(() => _confirmPasswordError = null),
-          style: const TextStyle(fontSize: 16, color: AppColors.darkBlue),
+          style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
           decoration: InputDecoration(
             hintText: '동일한 비밀번호를 입력해 주세요.',
-            hintStyle: TextStyle(fontSize: 16, color: AppColors.gray400),
+            hintStyle: AppTextStyles.body2.copyWith(color: AppColors.gray400),
             errorText: _confirmPasswordError,
             filled: true,
             fillColor: AppColors.gray100,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               borderSide: BorderSide.none,
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -539,7 +539,7 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.gray100,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -563,9 +563,9 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('• ', style: TextStyle(fontSize: 12, color: AppColors.gray500)),
+          Text('• ', style: AppTextStyles.caption1.copyWith(color: AppColors.gray500)),
           Expanded(
-            child: Text(text, style: TextStyle(fontSize: 12, color: AppColors.gray500, height: 1.4)),
+            child: Text(text, style: AppTextStyles.caption1.copyWith(color: AppColors.gray500, height: 1.4)),
           ),
         ],
       ),
@@ -581,10 +581,9 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
         child: ElevatedButton(
           onPressed: canComplete && !_isLoading ? _resetPassword : null,
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.darkBlue,
             foregroundColor: AppColors.white,
             disabledBackgroundColor: AppColors.gray300,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusLg)),
             elevation: 0,
           ),
           child: _isLoading
@@ -607,10 +606,9 @@ class _FindPasswordScreenState extends ConsumerState<FindPasswordScreen> {
       child: ElevatedButton(
         onPressed: _codeSent && _codeController.text.length == 6 && !_isLoading ? _verifyCode : null,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.darkBlue,
           foregroundColor: AppColors.white,
           disabledBackgroundColor: AppColors.gray300,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusLg)),
           elevation: 0,
         ),
         child: _isLoading

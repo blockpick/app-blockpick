@@ -330,7 +330,7 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
                   width: 3.0,
                 ),
                 color: AppColors.blue.withValues(alpha: 0.3),
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                 boxShadow: [
                   BoxShadow(
                     color: AppColors.blue.withValues(alpha: 0.6),
@@ -343,7 +343,7 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
                 child: Icon(
                   Icons.touch_app_rounded,
                   size: cellSize * 0.5,
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
               ),
             ),
@@ -557,8 +557,8 @@ class _GameGridWidgetState extends ConsumerState<GameGridWidget>
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: AppColors.green500.withOpacity(0.9),
-              borderRadius: BorderRadius.circular(8),
+              color: AppColors.green500.withValues(alpha: 0.9),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               border: Border.all(color: AppColors.white, width: 2),
             ),
             child: Text(

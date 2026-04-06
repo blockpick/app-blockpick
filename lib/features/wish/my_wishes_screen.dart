@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/constants/app_constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
@@ -60,7 +61,7 @@ class MyWishesScreen extends ConsumerWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: AppColors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusLg)),
             ),
           ),
         ],
@@ -84,7 +85,7 @@ class MyWishesScreen extends ConsumerWidget {
             gradient: const LinearGradient(
               colors: [AppColors.primary, AppColors.primaryLight],
             ),
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           ),
           child: Column(
             children: [
@@ -130,7 +131,7 @@ class MyWishesScreen extends ConsumerWidget {
               foregroundColor: AppColors.primary,
               side: const BorderSide(color: AppColors.primary),
               padding: const EdgeInsets.symmetric(vertical: 14),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusXl)),
             ),
           ),
         ),
@@ -186,7 +187,7 @@ class _WishListItem extends StatelessWidget {
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           border: Border.all(color: AppColors.gray200),
         ),
         child: Row(
@@ -203,7 +204,7 @@ class _WishListItem extends StatelessWidget {
             const SizedBox(width: 12),
             // 이미지
             ClipRRect(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               child: Image.network(
                 wish.productImageUrl,
                 width: 50,
@@ -229,7 +230,7 @@ class _WishListItem extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
                           color: _statusColor(wish.status).withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                         ),
                         child: Text(
                           _statusLabel(wish.status),

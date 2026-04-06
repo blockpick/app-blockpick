@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/constants/app_constants.dart';
+import '../../../components/common/common_empty_state.dart';
 
 /// 쿠폰 화면
 class CouponScreen extends ConsumerStatefulWidget {
@@ -75,22 +77,9 @@ class _CouponScreenState extends ConsumerState<CouponScreen>
     final coupons = _mockCoupons;
 
     if (coupons.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.confirmation_number_outlined,
-              size: 64,
-              color: AppColors.gray400,
-            ),
-            SizedBox(height: 16),
-            Text(
-              '보유한 쿠폰이 없습니다',
-              style: AppTextStyles.body2.copyWith(color: AppColors.gray500),
-            ),
-          ],
-        ),
+      return const CommonEmptyState(
+        icon: Icons.confirmation_number_outlined,
+        message: '쿠폰이 없습니다',
       );
     }
 
@@ -119,7 +108,7 @@ class _CouponScreenState extends ConsumerState<CouponScreen>
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: AppColors.white,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppConstants.radiusXl),
             ),
             child: Column(
               children: [
@@ -130,15 +119,15 @@ class _CouponScreenState extends ConsumerState<CouponScreen>
                     hintText: '쿠폰 코드를 입력하세요',
                     hintStyle: TextStyle(color: AppColors.gray400),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                       borderSide: BorderSide(color: AppColors.gray200),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                       borderSide: BorderSide(color: AppColors.gray200),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                       borderSide: BorderSide(color: AppColors.blue),
                     ),
                     contentPadding: const EdgeInsets.symmetric(
@@ -160,16 +149,15 @@ class _CouponScreenState extends ConsumerState<CouponScreen>
                           backgroundColor: AppColors.green500,
                           behavior: SnackBarBehavior.floating,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                           ),
                         ),
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.darkBlue,
                       foregroundColor: AppColors.white,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                       ),
                       elevation: 0,
                     ),
@@ -202,7 +190,7 @@ class _CouponItem extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         border: isExpired
             ? Border.all(color: AppColors.gray300)
             : Border.all(color: AppColors.blue.withValues(alpha: 0.3)),
@@ -225,7 +213,7 @@ class _CouponItem extends StatelessWidget {
                         color: isExpired
                             ? AppColors.gray200
                             : AppColors.blue.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                       ),
                       child: Text(
                         coupon['type'] as String,
@@ -263,7 +251,7 @@ class _CouponItem extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: AppColors.gray400,
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                 ),
                 child: Text(
                   '만료',

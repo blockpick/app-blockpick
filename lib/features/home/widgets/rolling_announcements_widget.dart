@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../../../core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../core/theme/app_colors.dart';
@@ -81,7 +82,7 @@ class _RollingAnnouncementsWidgetState
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: AppColors.blue.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               ),
               child: const Icon(
                 LucideIcons.megaphone,

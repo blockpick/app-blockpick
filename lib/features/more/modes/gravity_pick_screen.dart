@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../../../core/constants/app_constants.dart';
 import 'dart:math';
 import 'dart:ui';
 import '../../../../core/theme/app_colors.dart';
@@ -168,7 +169,7 @@ class _GravityPickScreenState extends State<GravityPickScreen>
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
                 border: Border.all(
                   color: Colors.white.withValues(alpha: 0.2),
                 ),
@@ -296,7 +297,7 @@ class _GravityPickScreenState extends State<GravityPickScreen>
 
   Widget _buildBottomPanel() {
     return ClipRRect(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(AppConstants.radius2Xl)),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
@@ -315,7 +316,7 @@ class _GravityPickScreenState extends State<GravityPickScreen>
                 Colors.black.withValues(alpha: 0.8),
               ],
             ),
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(AppConstants.radius2Xl)),
             border: Border(
               top: BorderSide(
                 color: modeColor.withValues(alpha: 0.3),
@@ -365,7 +366,7 @@ class _GravityPickScreenState extends State<GravityPickScreen>
                         modeColor.withValues(alpha: 0.7),
                       ],
                     ),
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                     boxShadow: [
                       BoxShadow(
                         color: modeColor.withValues(alpha: 0.4),

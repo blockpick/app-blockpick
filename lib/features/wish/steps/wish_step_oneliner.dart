@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 
@@ -69,11 +70,11 @@ class _WishStepOnelinerState extends State<WishStepOneliner> {
               filled: true,
               fillColor: AppColors.gray100,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 borderSide: BorderSide.none,
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
               ),
               contentPadding: const EdgeInsets.all(16),
@@ -88,7 +89,7 @@ class _WishStepOnelinerState extends State<WishStepOneliner> {
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: AppColors.primaryBg,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,7 +120,7 @@ class _WishStepOnelinerState extends State<WishStepOneliner> {
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusXl)),
                 elevation: 0,
               ),
               child: const Text(

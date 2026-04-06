@@ -149,7 +149,7 @@ class _GridMinimapState extends State<GridMinimap> {
       decoration: BoxDecoration(
         color: AppColors.textBlack.withValues(alpha: 0.75),
         borderRadius: BorderRadius.circular(AppConstants.radiusMd),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.15), width: 1),
+        border: Border.all(color: AppColors.white.withValues(alpha: 0.15), width: 1),
         boxShadow: [
           BoxShadow(
             color: AppColors.black.withValues(alpha: 0.2),
@@ -312,7 +312,7 @@ class _MinimapPainter extends CustomPainter {
 
     // 4. 현재 뷰포트 영역 그리기 (반투명 파란색 - 강조)
     final viewportPaint = Paint()
-      ..color = AppColors.blue.withOpacity(0.4)
+      ..color = AppColors.blue.withValues(alpha: 0.4)
       ..style = PaintingStyle.fill;
 
     canvas.drawRect(viewportRect, viewportPaint);
@@ -327,7 +327,7 @@ class _MinimapPainter extends CustomPainter {
 
     // 6. 뷰포트 외곽 그림자 효과 (더 명확한 구분)
     final shadowPaint = Paint()
-      ..color = AppColors.blue.withOpacity(0.15)
+      ..color = AppColors.blue.withValues(alpha: 0.15)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 4.0;
 

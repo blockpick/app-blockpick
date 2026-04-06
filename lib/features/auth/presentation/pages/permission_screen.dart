@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import '../../../../core/constants/app_constants.dart';
 // dart:io는 웹에서 지원하지 않으므로 조건부로 사용
 import 'dart:io' if (dart.library.html) 'package:blockpick_flutter/utils/platform_stub.dart';
 import 'package:flutter/material.dart';
@@ -97,7 +98,7 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen> {
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color: AppColors.gray100,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                         ),
                         child: Text(
                           '선택 접근 권한은 관련 기능 이용 시 동의가 필요하며, 미동의 시에도 해당 기능 외 서비스는 이용 가능합니다.',
@@ -124,7 +125,7 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen> {
                             foregroundColor: AppColors.gray600,
                             side: BorderSide(color: AppColors.gray300),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                             ),
                           ),
                           child: const Text(
@@ -143,10 +144,9 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen> {
                         child: ElevatedButton(
                           onPressed: _continueToOnboarding,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.darkBlue,
                             foregroundColor: AppColors.white,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                             ),
                             elevation: 0,
                           ),
@@ -176,7 +176,7 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen> {
             color: isRequired
                 ? AppColors.blue.withValues(alpha: 0.1)
                 : AppColors.gray200,
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: BorderRadius.circular(AppConstants.radiusMd),
           ),
           child: Text(
             isRequired ? '필수' : '선택',
@@ -202,7 +202,7 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
         border: Border.all(color: AppColors.gray200),
       ),
       child: Row(
@@ -212,7 +212,7 @@ class _PermissionScreenState extends ConsumerState<PermissionScreen> {
             height: 48,
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             ),
             child: Icon(
               icon,

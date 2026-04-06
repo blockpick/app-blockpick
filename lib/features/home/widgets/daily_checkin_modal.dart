@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_constants.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
@@ -158,7 +159,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         boxShadow: [
           BoxShadow(
             color: AppColors.black.withValues(alpha: 0.05),
@@ -206,7 +207,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
         color: isToday
             ? AppColors.yellow500.withValues(alpha: 0.15)
             : AppColors.gray100,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
         border: isToday
             ? Border.all(color: AppColors.yellow500, width: 2)
             : null,
@@ -230,7 +231,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
                 color: AppColors.yellow500,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               ),
               child: Text(
                 '+10P',
@@ -254,7 +255,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         boxShadow: [
           BoxShadow(
             color: AppColors.black.withValues(alpha: 0.05),
@@ -338,7 +339,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
         height: 56,
         decoration: BoxDecoration(
           color: canCheckIn ? AppColors.darkBlue : AppColors.gray300,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         ),
         child: Center(
           child: Text(
@@ -433,7 +434,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
               height: 56,
               decoration: BoxDecoration(
                 color: AppColors.darkBlue,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(AppConstants.radiusXl),
               ),
               child: Center(
                 child: Text(

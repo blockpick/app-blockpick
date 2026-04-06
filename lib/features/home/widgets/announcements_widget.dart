@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../models/announcement_model.dart';
@@ -60,12 +61,12 @@ class AnnouncementsWidget extends StatelessWidget {
               onTap: onViewMore ?? () {
                 // TODO: 전체 리스트 페이지로 이동
               },
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 decoration: BoxDecoration(
                   color: AppColors.gray100,
-                  borderRadius: BorderRadius.circular(24),
+                  borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                 ),
                 child: Center(
                   child: Text(

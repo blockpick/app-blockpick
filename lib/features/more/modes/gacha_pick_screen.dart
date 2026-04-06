@@ -1,4 +1,5 @@
 import 'dart:math';
+import '../../../core/constants/app_constants.dart';
 import 'dart:ui';
 
 import '../../../../core/theme/app_colors.dart';
@@ -161,7 +162,7 @@ class _GachaPickScreenState extends State<GachaPickScreen>
                 ),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
                   border: Border.all(
                     color: Colors.white.withValues(alpha: 0.2),
                   ),
@@ -243,7 +244,7 @@ class _GachaPickScreenState extends State<GachaPickScreen>
                                 Colors.black.withValues(alpha: 0.8),
                               ],
                             ),
-                            borderRadius: BorderRadius.circular(24),
+                            borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                             border: Border.all(
                               color: modeColor.withValues(alpha: 0.5),
                               width: 3,
@@ -257,7 +258,7 @@ class _GachaPickScreenState extends State<GachaPickScreen>
                             ],
                           ),
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(21),
+                            borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                             child: LayoutBuilder(
                               builder: (context, constraints) {
                                 return Stack(
@@ -415,7 +416,7 @@ class _GachaPickScreenState extends State<GachaPickScreen>
             : isDone
             ? modeColor.withValues(alpha: 0.1)
             : Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
         border: Border.all(
           color: isActive
               ? modeColor
@@ -457,7 +458,7 @@ class _GachaPickScreenState extends State<GachaPickScreen>
 
   Widget _buildBottomPanel() {
     return ClipRRect(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(AppConstants.radius2Xl)),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
@@ -524,7 +525,7 @@ class _GachaPickScreenState extends State<GachaPickScreen>
                               Colors.grey.shade800,
                             ],
                           ),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
                     boxShadow: _phase < 2
                         ? [
                             BoxShadow(
@@ -594,7 +595,7 @@ class _GachaPickScreenState extends State<GachaPickScreen>
         color: isActive
             ? modeColor.withValues(alpha: 0.2)
             : Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
         border: Border.all(
           color: isActive
               ? modeColor.withValues(alpha: 0.5)

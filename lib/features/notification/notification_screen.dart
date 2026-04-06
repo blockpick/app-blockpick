@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/constants/app_constants.dart';
 
 /// 토스 스타일 알림 화면
 class NotificationScreen extends StatefulWidget {
@@ -132,10 +133,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
           ),
           const SizedBox(width: 4),
           // 타이틀
-          const Text(
+          Text(
             '알림',
-            style: TextStyle(
-              fontSize: 22,
+            style: AppTextStyles.heading2.copyWith(
               fontWeight: FontWeight.w800,
               color: AppColors.darkBlue,
             ),
@@ -146,7 +146,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
                 color: AppColors.red,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               ),
               child: Text(
                 '$unreadCount',
@@ -163,7 +163,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   color: AppColors.white,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                   boxShadow: [
                     BoxShadow(
                       color: AppColors.black.withValues(alpha: 0.05),
@@ -193,7 +193,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isRead ? AppColors.white : AppColors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           border: isRead
               ? null
               : Border.all(color: AppColors.blue.withValues(alpha: 0.3), width: 1.5),
@@ -214,7 +214,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               height: 44,
               decoration: BoxDecoration(
                 color: (notification['iconColor'] as Color).withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               ),
               child: Icon(
                 notification['icon'] as IconData,
@@ -233,8 +233,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       Expanded(
                         child: Text(
                           notification['title'] as String,
-                          style: TextStyle(
-                            fontSize: 15,
+                          style: AppTextStyles.title2.copyWith(
                             fontWeight: isRead ? FontWeight.w600 : FontWeight.w700,
                             color: AppColors.darkBlue,
                           ),
@@ -281,7 +280,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             height: 80,
             decoration: BoxDecoration(
               color: AppColors.gray200,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
             ),
             child: Icon(
               Icons.notifications_off_rounded,

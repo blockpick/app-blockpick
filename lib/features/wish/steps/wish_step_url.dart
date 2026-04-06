@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_constants.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
@@ -118,15 +119,15 @@ class _WishStepUrlState extends ConsumerState<WishStepUrl> {
               filled: true,
               fillColor: AppColors.gray100,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 borderSide: BorderSide.none,
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
               ),
               errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 borderSide: const BorderSide(color: AppColors.red, width: 1),
               ),
               contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -155,7 +156,7 @@ class _WishStepUrlState extends ConsumerState<WishStepUrl> {
                 foregroundColor: AppColors.gray600,
                 side: const BorderSide(color: AppColors.gray200),
                 padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusLg)),
               ),
             ),
           ),
@@ -165,7 +166,7 @@ class _WishStepUrlState extends ConsumerState<WishStepUrl> {
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: AppColors.primaryBg,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             ),
             child: const Row(
               children: [
@@ -191,7 +192,7 @@ class _WishStepUrlState extends ConsumerState<WishStepUrl> {
                 foregroundColor: AppColors.white,
                 disabledBackgroundColor: AppColors.gray200,
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusXl)),
                 elevation: 0,
               ),
               child: _isLoading

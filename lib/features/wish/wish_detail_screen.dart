@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/constants/app_constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
@@ -71,7 +72,7 @@ class WishDetailScreen extends ConsumerWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     decoration: BoxDecoration(
                       color: AppColors.gray100,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                     ),
                     child: Text(
                       '${wish.category.emoji} ${wish.category.label}',
@@ -85,7 +86,7 @@ class WishDetailScreen extends ConsumerWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       decoration: BoxDecoration(
                         color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -192,7 +193,7 @@ class WishDetailScreen extends ConsumerWidget {
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
                         color: AppColors.primaryBg,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -364,7 +365,7 @@ class WishDetailScreen extends ConsumerWidget {
     return ElevatedButton.styleFrom(
       backgroundColor: bg,
       padding: const EdgeInsets.symmetric(vertical: 16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusXl)),
       elevation: 0,
     );
   }
@@ -413,7 +414,7 @@ class _EmpathyButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           border: Border.all(color: AppColors.red.withValues(alpha: 0.3)),
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

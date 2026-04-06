@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_constants.dart';
 import '../../../../core/auth/domain/providers/auth_provider.dart';
 
 /// SC-004: 로그인 화면
@@ -101,7 +102,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusXl)),
         contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -114,10 +115,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             const SizedBox(height: 8),
             Text(
               '비밀번호 찾기를 이용해주세요.',
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.gray600,
-              ),
+              style: AppTextStyles.body3.copyWith(color: AppColors.gray600),
               textAlign: TextAlign.center,
             ),
           ],
@@ -127,7 +125,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             onPressed: () => Navigator.pop(context),
             child: Text(
               '취소',
-              style: TextStyle(color: AppColors.gray600),
+              style: AppTextStyles.body3.copyWith(color: AppColors.gray600),
             ),
           ),
           TextButton(
@@ -137,10 +135,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             },
             child: Text(
               '비밀번호찾기',
-              style: TextStyle(
-                color: AppColors.blue,
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTextStyles.title2.copyWith(color: AppColors.blue),
             ),
           ),
         ],
@@ -152,7 +147,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusXl)),
         contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -165,11 +160,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             const SizedBox(height: 8),
             Text(
               '다른 계정으로 로그인 하거나\n회원가입을 해주세요.',
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.gray600,
-                height: 1.5,
-              ),
+              style: AppTextStyles.body3.copyWith(color: AppColors.gray600, height: 1.5),
               textAlign: TextAlign.center,
             ),
           ],
@@ -179,7 +170,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             onPressed: () => Navigator.pop(context),
             child: Text(
               '취소',
-              style: TextStyle(color: AppColors.gray600),
+              style: AppTextStyles.body3.copyWith(color: AppColors.gray600),
             ),
           ),
           TextButton(
@@ -189,10 +180,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             },
             child: Text(
               '회원가입 하기',
-              style: TextStyle(
-                color: AppColors.blue,
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTextStyles.title2.copyWith(color: AppColors.blue),
             ),
           ),
         ],
@@ -297,11 +285,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         child: ElevatedButton(
                           onPressed: _isLoading ? null : _handleLogin,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.darkBlue,
                             foregroundColor: AppColors.white,
                             disabledBackgroundColor: AppColors.gray300,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                             ),
                             elevation: 0,
                           ),
@@ -330,10 +317,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Text(
                               '또는',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: AppColors.gray500,
-                              ),
+                              style: AppTextStyles.body3.copyWith(color: AppColors.gray500),
                             ),
                           ),
                           Expanded(child: Divider(color: AppColors.gray300, thickness: 1)),
@@ -398,41 +382,32 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           keyboardType: keyboardType,
           onChanged: onChanged,
           onEditingComplete: onEditingComplete,
-          style: const TextStyle(
-            fontSize: 16,
-            color: AppColors.darkBlue,
-          ),
+          style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: TextStyle(
-              fontSize: 16,
-              color: AppColors.gray400,
-            ),
+            hintStyle: AppTextStyles.body1.copyWith(color: AppColors.gray400),
             errorText: errorText,
-            errorStyle: TextStyle(
-              fontSize: 12,
-              color: AppColors.red,
-            ),
+            errorStyle: AppTextStyles.caption1.copyWith(color: AppColors.red),
             filled: true,
             fillColor: AppColors.gray100,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               borderSide: BorderSide.none,
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               borderSide: BorderSide.none,
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               borderSide: BorderSide(color: AppColors.blue, width: 1.5),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               borderSide: BorderSide(color: AppColors.red, width: 1),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               borderSide: BorderSide(color: AppColors.red, width: 1.5),
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -463,10 +438,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Text(
         '|',
-        style: TextStyle(
-          fontSize: 12,
-          color: AppColors.gray300,
-        ),
+        style: AppTextStyles.caption1.copyWith(color: AppColors.gray300),
       ),
     );
   }
@@ -481,14 +453,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }) {
     return Material(
       color: backgroundColor,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
         child: Container(
           height: 56,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             border: borderColor != null ? Border.all(color: borderColor) : null,
           ),
           child: Row(
@@ -525,7 +497,7 @@ class _GoogleLogoPainter extends CustomPainter {
     final paint = Paint()..style = PaintingStyle.fill;
 
     // 간단한 G 로고
-    paint.color = const Color(0xFF4285F4);
+    paint.color = const Color(0xFF4285F4); // Google brand color
     canvas.drawCircle(
       Offset(size.width / 2, size.height / 2),
       size.width / 2,

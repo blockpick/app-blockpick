@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import '../../../../../core/constants/app_constants.dart';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
@@ -139,7 +140,7 @@ class _TabBarSample3State extends State<TabBarSample3>
           Container(
             decoration: BoxDecoration(
               color: AppColors.white.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(45),
+              borderRadius: BorderRadius.circular(AppConstants.radiusFull),
               border: Border.all(
                 color: AppColors.white.withValues(alpha: 0.3),
                 width: 1.5,
@@ -153,7 +154,7 @@ class _TabBarSample3State extends State<TabBarSample3>
               ],
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(45),
+              borderRadius: BorderRadius.circular(AppConstants.radiusFull),
               child: BackdropFilter(
                 filter: ui.ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                 child: Container(
@@ -201,7 +202,7 @@ class _TabBarSample3State extends State<TabBarSample3>
       },
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(45),
+          borderRadius: BorderRadius.circular(AppConstants.radiusFull),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

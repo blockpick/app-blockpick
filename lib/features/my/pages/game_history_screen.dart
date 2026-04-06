@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/constants/app_constants.dart';
+import '../../../components/common/common_empty_state.dart';
 
 /// 게임 참여 내역 화면
 class GameHistoryScreen extends ConsumerWidget {
@@ -44,30 +46,9 @@ class GameHistoryScreen extends ConsumerWidget {
   }
 
   Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.videogame_asset_outlined,
-            size: 64,
-            color: AppColors.gray400,
-          ),
-          SizedBox(height: 16),
-          Text(
-            '참여한 게임이 없습니다',
-            style: AppTextStyles.body2.copyWith(color: AppColors.gray500),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            '홈에서 게임에 참여해보세요!',
-            style: TextStyle(
-              fontSize: 14,
-              color: AppColors.gray400,
-            ),
-          ),
-        ],
-      ),
+    return const CommonEmptyState(
+      icon: Icons.sports_esports_outlined,
+      message: '게임 기록이 없습니다',
     );
   }
 }
@@ -97,7 +78,7 @@ class _GameHistoryItem extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +95,7 @@ class _GameHistoryItem extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: statusColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 ),
                 child: Text(
                   statusText,

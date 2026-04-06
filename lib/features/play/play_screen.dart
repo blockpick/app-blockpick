@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
+import '../../components/common/common_empty_state.dart';
 
 /// PLAY 화면 (현재 진행 중인 게임)
 class PlayScreen extends StatelessWidget {
@@ -7,15 +9,10 @@ class PlayScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'PLAY\n(현재 진행 중인 게임)',
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 18,
-          color: AppColors.medium,
-        ),
-      ),
+    return const CommonEmptyState(
+      icon: Icons.sports_esports_outlined,
+      message: '진행 중인 게임이 없습니다',
+      subMessage: '게임에 참여해보세요',
     );
   }
 }

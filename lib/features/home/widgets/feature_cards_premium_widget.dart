@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import '../../../core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 
@@ -100,7 +101,7 @@ class _PremiumFeatureCardState extends State<_PremiumFeatureCard>
               // 메인 카드
               Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -122,7 +123,7 @@ class _PremiumFeatureCardState extends State<_PremiumFeatureCard>
                   ],
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
                   child: Stack(
                     children: [
                       // 배경 패턴
@@ -231,7 +232,7 @@ class _PremiumFeatureCardState extends State<_PremiumFeatureCard>
                               ),
                               decoration: BoxDecoration(
                                 color: Colors.white.withValues(alpha: 0.2),
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                                 border: Border.all(
                                   color: Colors.white.withValues(alpha: 0.3),
                                   width: 1,
@@ -287,7 +288,7 @@ class _PremiumFeatureCardState extends State<_PremiumFeatureCard>
                 Positioned.fill(
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
                       border: Border.all(
                         color: Colors.white.withValues(alpha: 0.5),
                         width: 2,
@@ -308,7 +309,7 @@ class _PremiumFeatureCardState extends State<_PremiumFeatureCard>
       height: 76,
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.25),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         border: Border.all(
           color: Colors.white.withValues(alpha: 0.4),
           width: 2,

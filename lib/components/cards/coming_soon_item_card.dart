@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/constants/app_constants.dart';
 import '../../models/game_round_model.dart';
 
 /// Coming Soon 아이템 카드
@@ -84,14 +85,14 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
     return GestureDetector(
       onTap: widget.onTap,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(12),
+        margin: const EdgeInsets.only(bottom: AppConstants.spacingMd),
+        padding: const EdgeInsets.all(AppConstants.spacingMd),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           boxShadow: [
             BoxShadow(
-              color: AppColors.black.withValues(alpha: 0.06),
+              color: AppColors.textBlack.withValues(alpha: 0.06),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -105,7 +106,7 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
               children: [
                 // 상품 이미지 (민트색 배경)
                 _buildProductImage(),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppConstants.spacingMd),
                 // 정보 영역
                 Expanded(
                   child: Column(
@@ -113,10 +114,10 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
                     children: [
                       // 태그들
                       _buildTags(),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: AppConstants.spacingSm),
                       // 제목
                       _buildTitle(),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: AppConstants.spacingSm),
                       // 가격, 참여자, 사이즈
                       _buildInfoRow(),
                     ],
@@ -124,7 +125,7 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppConstants.spacingMd),
             // 하단: 프로그레스바 + 타이머
             _buildProgressAndTimer(),
           ],
@@ -139,11 +140,11 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
       width: 72,
       height: 72,
       decoration: BoxDecoration(
-        color: AppColors.primaryBg, // 민트색 배경
-        borderRadius: BorderRadius.circular(10),
+        color: AppColors.primaryBg,
+        borderRadius: BorderRadius.circular(AppConstants.radiusMd + 2),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(AppConstants.radiusMd + 2),
         child: widget.game.imageUrl.isNotEmpty
             ? Image.network(
                 widget.game.imageUrl,
@@ -176,17 +177,18 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
       children: [
         // 게임 타입 태그
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppConstants.spacingSm,
+            vertical: AppConstants.spacingXs,
+          ),
           decoration: BoxDecoration(
             color: _getTypeBadgeColor(),
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(AppConstants.radiusSm),
           ),
           child: Text(
             widget.gameType.toUpperCase(),
-            style: const TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
+            style: AppTextStyles.caption4.copyWith(
+              color: AppColors.white,
               letterSpacing: 0.3,
             ),
           ),
@@ -195,16 +197,17 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
           const SizedBox(width: 6),
           // LAST CHANCE 태그
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppConstants.spacingSm,
+              vertical: AppConstants.spacingXs,
+            ),
             decoration: BoxDecoration(
               color: AppColors.primaryBg,
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(AppConstants.radiusSm),
             ),
-            child: const Text(
+            child: Text(
               'LAST CHANCE',
-              style: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
+              style: AppTextStyles.caption4.copyWith(
                 color: AppColors.red,
                 letterSpacing: 0.3,
               ),
@@ -234,13 +237,13 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
           icon: Icons.monetization_on_outlined,
           value: '${widget.game.currentPrice}',
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: AppConstants.spacingMd),
         // 참여자 수
         _buildInfoChip(
           icon: Icons.people_outline,
           value: _formatNumber(widget.game.participants),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: AppConstants.spacingMd),
         // 그리드 사이즈
         _buildInfoChip(
           icon: Icons.grid_view_outlined,
@@ -260,9 +263,9 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
         Icon(
           icon,
           size: 14,
-          color: AppColors.gray500,
+          color: AppColors.gray400,
         ),
-        SizedBox(width: 3),
+        const SizedBox(width: 3),
         Text(
           value,
           style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
@@ -295,11 +298,11 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
             ),
           ),
         ),
-        SizedBox(width: 12),
+        const SizedBox(width: AppConstants.spacingMd),
         // 타이머
         Text(
           '${_formatDuration(_remainingTime)} 남음',
-          style: AppTextStyles.body4.copyWith(color: AppColors.gray500),
+          style: AppTextStyles.body4.copyWith(color: AppColors.gray400),
         ),
       ],
     );
@@ -325,7 +328,7 @@ class _ComingSoonItemCardState extends State<ComingSoonItemCard> {
       case 'prime':
         return AppColors.primaryDark;
       default:
-        return AppColors.gray500;
+        return AppColors.gray400;
     }
   }
 }

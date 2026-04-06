@@ -6,6 +6,7 @@ import '../../core/theme/app_text_styles.dart';
 import '../../models/game_round_model.dart';
 import '../../providers/game_provider.dart';
 import '../../widgets/toss_game_card.dart';
+import '../../core/constants/app_constants.dart';
 
 /// 토스 스타일 게임 리스트 화면
 class TossGameListScreen extends ConsumerStatefulWidget {
@@ -87,7 +88,7 @@ class _TossGameListScreenState extends ConsumerState<TossGameListScreen> {
                       ),
                       decoration: BoxDecoration(
                         color: isSelected ? AppColors.darkBlue : AppColors.white,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                         border: Border.all(
                           color: isSelected ? AppColors.darkBlue : AppColors.gray300,
                         ),
@@ -153,7 +154,7 @@ class _TossGameListScreenState extends ConsumerState<TossGameListScreen> {
         });
       },
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
       ),
       offset: const Offset(0, 36),
       itemBuilder: (context) => _sortOptions.map((option) {
@@ -187,7 +188,7 @@ class _TossGameListScreenState extends ConsumerState<TossGameListScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
           color: AppColors.gray100,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppConstants.radiusMd),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -328,7 +329,7 @@ class _TossGameListScreenState extends ConsumerState<TossGameListScreen> {
           ),
           const SizedBox(height: 8),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
+            padding: const EdgeInsets.symmetric(horizontal: AppConstants.screenPaddingH),
             child: Text(
               error.toString(),
               style: TextStyle(
@@ -346,11 +347,10 @@ class _TossGameListScreenState extends ConsumerState<TossGameListScreen> {
               ref.invalidate(gamesByTypeProvider);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.darkBlue,
               foregroundColor: AppColors.white,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               ),
               elevation: 0,
             ),

@@ -28,16 +28,16 @@ class MyPickCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(AppConstants.radiusLg),
         child: Container(
-          margin: const EdgeInsets.only(bottom: 16),
+          margin: const EdgeInsets.only(bottom: AppConstants.spacingLg),
           decoration: BoxDecoration(
             color: AppColors.white,
             borderRadius: BorderRadius.circular(AppConstants.radiusLg),
-            border: Border.all(color: AppColors.buleGray, width: 1),
+            border: Border.all(color: AppColors.gray200, width: 1),
             boxShadow: [
               BoxShadow(
-                color: AppColors.black.withOpacity(0.05),
+                color: AppColors.textBlack.withValues(alpha: 0.05),
                 blurRadius: 10,
-                offset: Offset(0, 4),
+                offset: const Offset(0, 4),
               ),
             ],
           ),
@@ -49,7 +49,7 @@ class MyPickCard extends StatelessWidget {
 
               // 게임 정보
               Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(AppConstants.spacingLg),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -57,14 +57,13 @@ class MyPickCard extends StatelessWidget {
                     Text(
                       game.title,
                       style: AppTextStyles.heading1.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.darkBlue,
+                        color: AppColors.textBlack,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
 
-                    SizedBox(height: 8),
+                    const SizedBox(height: AppConstants.spacingSm),
 
                     // 가격 정보
                     Row(
@@ -73,40 +72,45 @@ class MyPickCard extends StatelessWidget {
                           '\$${(game.currentPrice / 100).toStringAsFixed(2)}',
                           style: AppTextStyles.heading1.copyWith(
                             color: AppColors.blue,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(width: 4),
+                        const SizedBox(width: AppConstants.spacingXs),
                         Text(
                           '• ${(game.originalPrice / 1000).toStringAsFixed(1)}K',
                           style: AppTextStyles.body3.copyWith(
-                            color: AppColors.medium,
+                            color: AppColors.gray600,
                           ),
                         ),
                       ],
                     ),
 
-                    const SizedBox(height: 12),
+                    const SizedBox(height: AppConstants.spacingMd),
 
                     // 게임 통계
                     _buildGameStats(),
 
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppConstants.spacingLg),
 
                     // 구분선
-                    Divider(color: AppColors.buleGray.withOpacity(0.3), height: 1),
+                    Divider(
+                      color: AppColors.gray200.withValues(alpha: 0.3),
+                      height: 1,
+                    ),
 
-                    const SizedBox(height: 12),
+                    const SizedBox(height: AppConstants.spacingMd),
 
                     // 내 픽 정보
                     _buildMyPicks(),
 
-                    const SizedBox(height: 12),
+                    const SizedBox(height: AppConstants.spacingMd),
 
                     // 구분선
-                    Divider(color: AppColors.buleGray.withOpacity(0.3), height: 1),
+                    Divider(
+                      color: AppColors.gray200.withValues(alpha: 0.3),
+                      height: 1,
+                    ),
 
-                    const SizedBox(height: 12),
+                    const SizedBox(height: AppConstants.spacingMd),
 
                     // 남은 시간
                     _buildTimeLeft(),
@@ -133,11 +137,11 @@ class MyPickCard extends StatelessWidget {
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) {
             return Container(
-              color: AppColors.blueWhite,
+              color: AppColors.primaryBg,
               child: const Center(
                 child: Icon(
                   Icons.image_not_supported,
-                  color: AppColors.medium,
+                  color: AppColors.gray600,
                   size: 48,
                 ),
               ),
@@ -157,19 +161,19 @@ class MyPickCard extends StatelessWidget {
           '${game.participants}',
           tooltip: 'Participants',
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: AppConstants.spacingLg),
         _buildStatItem(
           '📦',
           '${game.totalBlocks ~/ (game.actualGridWidth * game.actualGridHeight) * 100}/${game.totalBlocks ~/ (game.actualGridWidth * game.actualGridHeight) * 100}',
           tooltip: 'Blocks',
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: AppConstants.spacingLg),
         _buildStatItem(
           '✅',
           '${game.participants - 50}',
           tooltip: 'Required Pick',
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: AppConstants.spacingLg),
         _buildStatItem(
           '🏆',
           '${game.winners}',
@@ -187,14 +191,13 @@ class MyPickCard extends StatelessWidget {
         children: [
           Text(
             emoji,
-            style: TextStyle(fontSize: 14),
+            style: AppTextStyles.body3,
           ),
-          SizedBox(width: 4),
+          const SizedBox(width: AppConstants.spacingXs),
           Text(
             value,
             style: AppTextStyles.body4.copyWith(
-              color: AppColors.dark,
-              fontWeight: FontWeight.w500,
+              color: AppColors.gray800,
             ),
           ),
         ],
@@ -219,7 +222,7 @@ class MyPickCard extends StatelessWidget {
         Text(
           'Total $totalValue',
           style: AppTextStyles.body3.copyWith(
-            color: AppColors.dark,
+            color: AppColors.gray800,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -231,11 +234,11 @@ class MyPickCard extends StatelessWidget {
   Widget _buildTimeLeft() {
     Color timeColor;
     if (game.status.isEnded) {
-      timeColor = AppColors.medium;
+      timeColor = AppColors.gray600;
     } else if (game.timeLeft.contains('분') && !game.timeLeft.contains('시간')) {
       timeColor = AppColors.red;
     } else {
-      timeColor = AppColors.dark;
+      timeColor = AppColors.gray800;
     }
 
     return Row(
@@ -245,7 +248,7 @@ class MyPickCard extends StatelessWidget {
           size: 16,
           color: timeColor,
         ),
-        SizedBox(width: 4),
+        const SizedBox(width: AppConstants.spacingXs),
         Text(
           game.status.isEnded ? 'Ended' : 'Ends in ${game.timeLeft}',
           style: AppTextStyles.body3.copyWith(

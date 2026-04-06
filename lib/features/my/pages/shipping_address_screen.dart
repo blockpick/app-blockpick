@@ -144,7 +144,7 @@ class _ShippingAddressScreenState
       isScrollControlled: true,
       backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.radiusXl)),
       ),
       builder: (context) => _CountryPickerSheet(
         selectedCountry: _selectedCountry,
@@ -159,7 +159,7 @@ class _ShippingAddressScreenState
       isScrollControlled: true,
       backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.radiusXl)),
       ),
       builder: (context) => _CountryPickerSheet(
         selectedCountry: current,
@@ -210,7 +210,7 @@ class _ShippingAddressScreenState
           backgroundColor: AppColors.darkBlue,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
           ),
         ),
       );
@@ -591,7 +591,6 @@ class _ShippingAddressScreenState
           child: ElevatedButton(
             onPressed: isEnabled ? _submit : null,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.darkBlue,
               foregroundColor: AppColors.white,
               disabledBackgroundColor: AppColors.gray300,
               disabledForegroundColor: AppColors.white,
@@ -676,7 +675,7 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
               height: 4,
               decoration: BoxDecoration(
                 color: AppColors.gray300,
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(AppConstants.radiusSm),
               ),
             ),
 

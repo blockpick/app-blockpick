@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 
@@ -145,7 +146,7 @@ class _MallPreviewWidgetState extends State<MallPreviewWidget> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.pink : AppColors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
           border: Border.all(
             color: isSelected ? AppColors.pink : AppColors.pink.withValues(alpha: 0.3),
           ),
@@ -166,7 +167,7 @@ class _MallPreviewWidgetState extends State<MallPreviewWidget> {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
         border: Border.all(color: AppColors.buleGray),
       ),
       child: Column(
@@ -179,7 +180,7 @@ class _MallPreviewWidgetState extends State<MallPreviewWidget> {
               decoration: BoxDecoration(
                 color: AppColors.bgWhite,
                 borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(12),
+                  top: Radius.circular(AppConstants.radiusLg),
                 ),
               ),
               child: Center(

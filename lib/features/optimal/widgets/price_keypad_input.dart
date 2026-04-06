@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/constants/app_constants.dart';
 
 /// 숫자 키패드로 가격을 입력하는 위젯
 ///
@@ -138,7 +139,7 @@ class _PriceKeypadInputState extends State<PriceKeypadInput> {
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.radiusBottomSheet)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -149,7 +150,7 @@ class _PriceKeypadInputState extends State<PriceKeypadInput> {
             padding: const EdgeInsets.fromLTRB(24, 20, 24, 16),
             decoration: BoxDecoration(
               color: AppColors.textBlack,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.radiusBottomSheet)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,7 +185,7 @@ class _PriceKeypadInputState extends State<PriceKeypadInput> {
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                   decoration: BoxDecoration(
                     color: AppColors.white,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                     border: Border.all(
                       color: _showError ? AppColors.red : AppColors.gray200,
                       width: 1,
@@ -250,7 +251,7 @@ class _PriceKeypadInputState extends State<PriceKeypadInput> {
                   foregroundColor: AppColors.white,
                   disabledForegroundColor: AppColors.gray400,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                   ),
                   elevation: 0,
                 ),
@@ -280,7 +281,7 @@ class _PriceKeypadInputState extends State<PriceKeypadInput> {
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Material(
               color: AppColors.gray100,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               child: InkWell(
                 onTap: () {
                   if (key == 'AC') {
@@ -289,7 +290,7 @@ class _PriceKeypadInputState extends State<PriceKeypadInput> {
                     _handleNumberPress(key);
                   }
                 },
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                 child: Container(
                   height: 52,
                   alignment: Alignment.center,

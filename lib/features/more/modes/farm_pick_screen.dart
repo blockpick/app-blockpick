@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_constants.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -263,7 +264,7 @@ class _FarmPickScreenState extends State<FarmPickScreen>
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               decoration: BoxDecoration(
                 color: AppColors.white.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                 border: Border.all(
                   color: AppColors.white.withValues(alpha: 0.2),
                 ),
@@ -302,11 +303,11 @@ class _FarmPickScreenState extends State<FarmPickScreen>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      const Color(0xFF1a3a1a).withValues(alpha: 0.8),
-                      const Color(0xFF0d1f0d).withValues(alpha: 0.9),
+                      AppColors.green500.withValues(alpha: 0.2),
+                      AppColors.textBlack.withValues(alpha: 0.9),
                     ],
                   ),
-                  borderRadius: BorderRadius.circular(24),
+                  borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                   border: Border.all(
                     color: modeColor.withValues(alpha: 0.3),
                     width: 2,
@@ -320,7 +321,7 @@ class _FarmPickScreenState extends State<FarmPickScreen>
                   ],
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(22),
+                  borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                   child: Stack(
                     children: [
                       // 배경 패턴
@@ -367,10 +368,8 @@ class _FarmPickScreenState extends State<FarmPickScreen>
                               const SizedBox(height: 16),
                               Text(
                                 'Plant your first seed',
-                                style: TextStyle(
+                                style: AppTextStyles.title1.copyWith(
                                   color: AppColors.white.withValues(alpha: 0.3),
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
@@ -396,7 +395,7 @@ class _FarmPickScreenState extends State<FarmPickScreen>
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
         color: AppColors.white.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         border: Border.all(
           color: AppColors.white.withValues(alpha: 0.1),
         ),
@@ -429,7 +428,7 @@ class _FarmPickScreenState extends State<FarmPickScreen>
   Widget _buildStatusItem(String emoji, String label, String value) {
     return Column(
       children: [
-        Text(emoji, style: TextStyle(fontSize: 20)),
+        Text(emoji, style: AppTextStyles.heading3),
         SizedBox(height: 4),
         Text(
           label,
@@ -445,7 +444,7 @@ class _FarmPickScreenState extends State<FarmPickScreen>
 
   Widget _buildBottomPanel() {
     return ClipRRect(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(AppConstants.radius2Xl)),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
@@ -522,7 +521,7 @@ class _FarmPickScreenState extends State<FarmPickScreen>
                     color: _plantedCells.isEmpty
                         ? AppColors.white.withValues(alpha: 0.1)
                         : null,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                     boxShadow: _plantedCells.isNotEmpty
                         ? [
                             BoxShadow(
@@ -578,7 +577,7 @@ class _FarmPickScreenState extends State<FarmPickScreen>
                 )
               : null,
           color: enabled ? null : AppColors.white.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           boxShadow: enabled
               ? [
                   BoxShadow(
@@ -613,7 +612,7 @@ class _FarmPickScreenState extends State<FarmPickScreen>
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
                       color: AppColors.white.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     ),
                     child: Text(
                       badge,
@@ -703,7 +702,7 @@ class _IsometricFarmPainter extends CustomPainter {
         // 셀 배경
         final cellRect = RRect.fromRectAndRadius(
           Rect.fromLTWH(x + 4, y + 4, cellWidth - 8, cellHeight - 8),
-          const Radius.circular(8),
+          const Radius.circular(AppConstants.radiusMd),
         );
 
         if (isPlanted) {

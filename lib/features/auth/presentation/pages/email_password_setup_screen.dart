@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../../../../core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -279,7 +280,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet)),
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -290,7 +291,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                 height: 56,
                 decoration: BoxDecoration(
                   color: AppColors.red.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                 ),
                 child: const Icon(
                   Icons.error_outline_rounded,
@@ -324,7 +325,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         side: BorderSide(color: AppColors.gray300),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                         ),
                       ),
                       child: Text(
@@ -341,11 +342,10 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                         _resendCode();
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.darkBlue,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                         ),
                       ),
                       child: Text(
@@ -367,7 +367,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet)),
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -378,7 +378,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                 height: 56,
                 decoration: BoxDecoration(
                   color: AppColors.orange.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                 ),
                 child: Icon(
                   Icons.timer_off_rounded,
@@ -411,11 +411,10 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                     _resendCode();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.darkBlue,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     ),
                   ),
                   child: Text(
@@ -435,7 +434,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet)),
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -446,7 +445,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                 height: 56,
                 decoration: BoxDecoration(
                   color: AppColors.red.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                 ),
                 child: const Icon(
                   Icons.block_rounded,
@@ -476,11 +475,10 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                 child: ElevatedButton(
                   onPressed: () => Navigator.pop(context),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.darkBlue,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     ),
                   ),
                   child: Text(
@@ -541,7 +539,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                 height: 36,
                 decoration: BoxDecoration(
                   color: AppColors.white.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                 ),
                 child: const Icon(
                   Icons.check_rounded,
@@ -571,7 +569,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
           ),
           backgroundColor: AppColors.green500,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusLg)),
           duration: const Duration(seconds: 3),
           margin: const EdgeInsets.all(16),
         ),
@@ -619,7 +617,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet)),
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -630,7 +628,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                 height: 56,
                 decoration: BoxDecoration(
                   color: AppColors.red.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                 ),
                 child: const Icon(
                   Icons.error_outline_rounded,
@@ -660,11 +658,10 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                 child: ElevatedButton(
                   onPressed: () => Navigator.pop(context),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.darkBlue,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     ),
                   ),
                   child: Text(
@@ -842,12 +839,11 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
                   child: ElevatedButton(
                     onPressed: _canProceed ? _handleNext : null,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.darkBlue,
                       foregroundColor: AppColors.white,
                       disabledBackgroundColor: AppColors.gray300,
                       disabledForegroundColor: AppColors.white,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                       ),
                       elevation: 0,
                     ),
@@ -896,7 +892,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
             filled: true,
             fillColor: AppColors.gray100,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               borderSide: BorderSide.none,
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -929,7 +925,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           decoration: BoxDecoration(
             color: AppColors.gray200,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
           ),
           child: Row(
             children: [
@@ -977,7 +973,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
             filled: true,
             fillColor: AppColors.gray100,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               borderSide: BorderSide.none,
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
@@ -1043,7 +1039,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
             filled: true,
             fillColor: AppColors.gray100,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               borderSide: BorderSide.none,
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -1098,7 +1094,7 @@ class _EmailPasswordSetupScreenState extends ConsumerState<EmailPasswordSetupScr
             filled: true,
             fillColor: AppColors.gray100,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               borderSide: BorderSide.none,
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),

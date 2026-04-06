@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_constants.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
@@ -83,7 +84,7 @@ class PickSectionRedesignWidget extends StatelessWidget {
       child: Container(
         height: 200,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
           boxShadow: [
             BoxShadow(
               color: gradient.last.withValues(alpha: 0.26),
@@ -96,7 +97,7 @@ class PickSectionRedesignWidget extends StatelessWidget {
           children: [
             // 배경 이미지
             ClipRRect(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
               child: Image.asset(
                 backgroundImage,
                 fit: BoxFit.cover,
@@ -106,7 +107,7 @@ class PickSectionRedesignWidget extends StatelessWidget {
             // 그라데이션 오버레이
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -142,7 +143,7 @@ class PickSectionRedesignWidget extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.18),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     ),
                     child: Text(
                       'HOT PICK',
@@ -231,7 +232,7 @@ class PickSectionRedesignWidget extends StatelessWidget {
           end: Alignment.centerRight,
           colors: gradient,
         ),
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.2),
@@ -250,7 +251,7 @@ class PickSectionRedesignWidget extends StatelessWidget {
               height: 64,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               ),
               padding: const EdgeInsets.all(8),
               child: Image.asset(
@@ -273,7 +274,7 @@ class PickSectionRedesignWidget extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,

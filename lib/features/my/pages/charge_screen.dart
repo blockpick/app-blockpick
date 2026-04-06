@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/constants/app_constants.dart';
 
 /// 캐시 충전 화면
 class ChargeScreen extends ConsumerStatefulWidget {
@@ -35,7 +36,7 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
             backgroundColor: AppColors.green500,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             ),
           ),
         );
@@ -49,7 +50,7 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
             backgroundColor: AppColors.red,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             ),
           ),
         );
@@ -109,7 +110,7 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                         child: Container(
                           decoration: BoxDecoration(
                             color: isSelected ? AppColors.blue : AppColors.white,
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                             border: Border.all(
                               color: isSelected ? AppColors.blue : AppColors.gray200,
                               width: isSelected ? 2 : 1,
@@ -132,7 +133,7 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: AppColors.blue.withValues(alpha: 0.05),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,11 +170,10 @@ class _ChargeScreenState extends ConsumerState<ChargeScreen> {
                         ? _processCharge
                         : null,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.darkBlue,
                       foregroundColor: AppColors.white,
                       disabledBackgroundColor: AppColors.gray300,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                       ),
                       elevation: 0,
                     ),

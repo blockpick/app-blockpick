@@ -17,6 +17,9 @@ class AppConstants {
   /// 매우 큰 간격 (24px)
   static const double spacingXl = 24.0;
 
+  /// 화면 기본 horizontal 패딩 (20px)
+  static const double screenPaddingH = 20.0;
+
   /// 섹션 간격 (32px)
   static const double spacing2Xl = 32.0;
 
@@ -39,6 +42,9 @@ class AppConstants {
 
   /// 초대형 radius (24px)
   static const double radius2Xl = 24.0;
+
+  /// 바텀시트 radius (20px)
+  static const double radiusBottomSheet = 20.0;
 
   /// 원형 radius
   static const double radiusFull = 9999.0;

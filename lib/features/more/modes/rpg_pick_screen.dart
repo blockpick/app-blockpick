@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../../../core/constants/app_constants.dart';
 import 'dart:math';
 import 'dart:ui';
 import '../../../../core/theme/app_colors.dart';
@@ -206,7 +207,7 @@ class _RpgPickScreenState extends State<RpgPickScreen>
                       AppColors.yellow500.withValues(alpha: 0.1),
                     ],
                   ),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
                   border: Border.all(
                     color: AppColors.yellow500
                         .withValues(alpha: 0.5 * _glowAnimation.value),
@@ -254,7 +255,7 @@ class _RpgPickScreenState extends State<RpgPickScreen>
                       const Color(0xFF0d150d).withValues(alpha: 0.95),
                     ],
                   ),
-                  borderRadius: BorderRadius.circular(24),
+                  borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                   border: Border.all(
                     color: modeColor.withValues(alpha: 0.3),
                     width: 2,
@@ -268,7 +269,7 @@ class _RpgPickScreenState extends State<RpgPickScreen>
                   ],
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(22),
+                  borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       return AnimatedBuilder(
@@ -310,7 +311,7 @@ class _RpgPickScreenState extends State<RpgPickScreen>
 
   Widget _buildBottomPanel() {
     return ClipRRect(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(AppConstants.radius2Xl)),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
@@ -374,7 +375,7 @@ class _RpgPickScreenState extends State<RpgPickScreen>
                             modeColor.withValues(alpha: 0.7),
                           ],
                         ),
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                         boxShadow: [
                           BoxShadow(
                             color: modeColor.withValues(alpha: 0.5),
@@ -542,7 +543,7 @@ class _RpgPickScreenState extends State<RpgPickScreen>
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: AppColors.white.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
         border: Border.all(
           color: AppColors.white.withValues(alpha: 0.1),
         ),

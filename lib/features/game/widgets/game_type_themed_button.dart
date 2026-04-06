@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../models/game_round_model.dart';
+import '../../../core/constants/app_constants.dart';
 
 /// 게임 타입별 테마가 적용된 참가 버튼
 ///
@@ -40,7 +41,7 @@ class GameTypeThemedButton extends ConsumerWidget {
       height: 64,
       decoration: BoxDecoration(
         gradient: gradient,
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(AppConstants.radiusFull),
         boxShadow: [
           BoxShadow(
             color: _getShadowColor(gameType),
@@ -54,18 +55,18 @@ class GameTypeThemedButton extends ConsumerWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () => _handleJoinGame(context, ref),
-          borderRadius: BorderRadius.circular(32),
+          borderRadius: BorderRadius.circular(AppConstants.radiusFull),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, color: Colors.white, size: 24),
+                Icon(icon, color: AppColors.white, size: 24),
                 const SizedBox(width: 12),
                 Text(
                   text,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
@@ -128,13 +129,13 @@ class GameTypeThemedButton extends ConsumerWidget {
   Color _getShadowColor(GameType type) {
     switch (type) {
       case GameType.daily:
-        return AppColors.blue.withOpacity(0.4);
+        return AppColors.blue.withValues(alpha: 0.4);
       case GameType.select:
-        return AppColors.purple.withOpacity(0.4);
+        return AppColors.purple.withValues(alpha: 0.4);
       case GameType.vibe:
-        return AppColors.pink.withOpacity(0.4);
+        return AppColors.pink.withValues(alpha: 0.4);
       case GameType.prime:
-        return AppColors.yellow500.withOpacity(0.4);
+        return AppColors.yellow500.withValues(alpha: 0.4);
     }
   }
 

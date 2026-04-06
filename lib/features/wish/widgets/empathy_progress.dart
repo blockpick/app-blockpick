@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../models/wish_model.dart';
@@ -38,7 +39,7 @@ class EmpathyProgress extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
                   color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                 ),
                 child: Text(
                   '✅ 활성화',
@@ -51,7 +52,7 @@ class EmpathyProgress extends StatelessWidget {
         const SizedBox(height: 6),
         // 프로그레스 바
         ClipRRect(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(AppConstants.radiusSm),
           child: LinearProgressIndicator(
             value: wish.empathyProgress,
             minHeight: 6,

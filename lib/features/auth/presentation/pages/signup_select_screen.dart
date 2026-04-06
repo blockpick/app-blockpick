@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_constants.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -142,7 +143,7 @@ class SignupSelectScreen extends ConsumerWidget {
       width: 24,
       height: 24,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(AppConstants.radiusSm),
       ),
       child: Image.network(
         'https://www.google.com/favicon.ico',
@@ -190,13 +191,13 @@ class _SignupButton extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppConstants.radiusXl),
             border: Border.all(
               color: hasBorder ? AppColors.gray200 : AppColors.gray100,
               width: 1,
@@ -217,7 +218,7 @@ class _SignupButton extends StatelessWidget {
                 height: 44,
                 decoration: BoxDecoration(
                   color: iconBgColor,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                   border: hasBorder
                       ? Border.all(color: AppColors.gray200, width: 1)
                       : null,

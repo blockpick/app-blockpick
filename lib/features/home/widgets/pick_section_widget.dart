@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 
@@ -49,7 +50,7 @@ class PickSectionWidget extends StatelessWidget {
         height: 200,
         decoration: BoxDecoration(
           gradient: AppColors.gradientBluePurplePink,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           boxShadow: [
             BoxShadow(
               color: AppColors.blue.withOpacity(0.3),
@@ -104,7 +105,7 @@ class PickSectionWidget extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       color: AppColors.white,
-                      borderRadius: BorderRadius.circular(24),
+                      borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -148,7 +149,7 @@ class PickSectionWidget extends StatelessWidget {
             end: Alignment.bottomRight,
             colors: [AppColors.primaryBg, AppColors.primaryBg],
           ),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           border: Border.all(color: AppColors.blue.withOpacity(0.2)),
         ),
         child: Padding(
@@ -161,7 +162,7 @@ class PickSectionWidget extends StatelessWidget {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: AppColors.blue.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 ),
                 child: const Icon(
                   Icons.card_giftcard,
@@ -206,7 +207,7 @@ class PickSectionWidget extends StatelessWidget {
             end: Alignment.bottomRight,
             colors: [AppColors.pink.withValues(alpha: 0.15), AppColors.primaryBg],
           ),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           border: Border.all(color: AppColors.pink.withOpacity(0.2)),
         ),
         child: Padding(
@@ -219,7 +220,7 @@ class PickSectionWidget extends StatelessWidget {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: AppColors.pink.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 ),
                 child: const Icon(
                   Icons.music_note,
@@ -316,7 +317,7 @@ class PickSectionWidget extends StatelessWidget {
       width: 110,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
         border: Border.all(color: AppColors.buleGray),
       ),
       child: Column(
@@ -328,7 +329,7 @@ class PickSectionWidget extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.bgWhite,
               borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(12),
+                top: Radius.circular(AppConstants.radiusLg),
               ),
             ),
             child: Center(

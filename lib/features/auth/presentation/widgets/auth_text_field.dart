@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_constants.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -98,7 +99,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
           duration: Duration(milliseconds: 200),
           decoration: BoxDecoration(
             color: widget.enabled ? AppColors.gray50 : AppColors.gray100,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             border: Border.all(
               color: _borderColor,
               width: _isFocused ? 1.5 : 1,
@@ -304,11 +305,11 @@ class _AuthCodeInputState extends State<AuthCodeInput> {
                     ? AppColors.blue.withValues(alpha: 0.1)
                     : AppColors.gray100,
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                   borderSide: BorderSide.none,
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                   borderSide: const BorderSide(
                     color: AppColors.blue,
                     width: 2,

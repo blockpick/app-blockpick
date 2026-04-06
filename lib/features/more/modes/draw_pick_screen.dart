@@ -1,4 +1,5 @@
 import 'dart:ui';
+import '../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +105,7 @@ class _DrawPickScreenState extends State<DrawPickScreen>
           content: const Text('Draw something first!'),
           backgroundColor: modeColor,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusLg)),
         ),
       );
       return;
@@ -165,7 +166,7 @@ class _DrawPickScreenState extends State<DrawPickScreen>
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
                   border: Border.all(
                     color: Colors.white.withValues(alpha: 0.2),
                   ),
@@ -198,7 +199,7 @@ class _DrawPickScreenState extends State<DrawPickScreen>
                 margin: const EdgeInsets.fromLTRB(16, 100, 16, 16),
                 decoration: BoxDecoration(
                   color: Colors.black.withValues(alpha: 0.3),
-                  borderRadius: BorderRadius.circular(24),
+                  borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                   border: Border.all(
                     color: modeColor.withValues(alpha: 0.3),
                     width: 2,
@@ -212,7 +213,7 @@ class _DrawPickScreenState extends State<DrawPickScreen>
                   ],
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(22),
+                  borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                   child: Stack(
                     children: [
                       // 배경 그리드
@@ -291,7 +292,7 @@ class _DrawPickScreenState extends State<DrawPickScreen>
 
   Widget _buildBottomPanel() {
     return ClipRRect(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(AppConstants.radius2Xl)),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
@@ -344,7 +345,7 @@ class _DrawPickScreenState extends State<DrawPickScreen>
                         modeColor.withValues(alpha: 0.7),
                       ],
                     ),
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                     boxShadow: [
                       BoxShadow(
                         color: modeColor.withValues(alpha: 0.4),
@@ -378,7 +379,7 @@ class _DrawPickScreenState extends State<DrawPickScreen>
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
         border: Border.all(
           color: Colors.white.withValues(alpha: 0.15),
         ),

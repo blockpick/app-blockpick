@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/constants/app_constants.dart';
 
 /// 게임 참가 진행 중 전체화면 오버레이 (토스 스타일)
 ///
@@ -66,8 +67,8 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              AppColors.blue.withOpacity(0.95),
-              AppColors.purple.withOpacity(0.95),
+              AppColors.blue.withValues(alpha: 0.95),
+              AppColors.purple.withValues(alpha: 0.95),
             ],
           ),
         ),
@@ -89,7 +90,7 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
                 Text(
                   '게임에 참가하고 있어요',
                   style: AppTextStyles.heading1.copyWith(
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
@@ -97,7 +98,7 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
                     .animate(onPlay: (controller) => controller.repeat())
                     .shimmer(
                       duration: 2000.ms,
-                      color: Colors.white.withOpacity(0.3),
+                      color: AppColors.white.withValues(alpha: 0.3),
                     ),
 
                 SizedBox(height: 16),
@@ -106,7 +107,7 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
                 Text(
                   widget.currentStep,
                   style: AppTextStyles.body3.copyWith(
-                    color: Colors.white.withOpacity(0.9),
+                    color: AppColors.white.withValues(alpha: 0.9),
                   ),
                   textAlign: TextAlign.center,
                 )
@@ -125,7 +126,7 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
                 Text(
                   '${widget.stepNumber}/${widget.totalSteps}',
                   style: AppTextStyles.body4.copyWith(
-                    color: Colors.white.withOpacity(0.7),
+                    color: AppColors.white.withValues(alpha: 0.7),
                   ),
                 ),
 
@@ -135,24 +136,24 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
+                    color: AppColors.white.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     border: Border.all(
-                      color: Colors.white.withOpacity(0.2),
+                      color: AppColors.white.withValues(alpha: 0.2),
                     ),
                   ),
                   child: Column(
                     children: [
                       Icon(
                         Icons.info_outline,
-                        color: Colors.white.withOpacity(0.8),
+                        color: AppColors.white.withValues(alpha: 0.8),
                         size: 20,
                       ),
                       SizedBox(height: 8),
                       Text(
                         '블록체인에 트랜잭션을 전송하고 있습니다.\n잠시만 기다려주세요.',
                         style: AppTextStyles.body4.copyWith(
-                          color: Colors.white.withOpacity(0.8),
+                          color: AppColors.white.withValues(alpha: 0.8),
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -188,7 +189,7 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: Colors.white.withOpacity(0.2),
+                color: AppColors.white.withValues(alpha: 0.2),
                 width: 2,
               ),
             ),
@@ -203,7 +204,7 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: Colors.white.withOpacity(0.4),
+                color: AppColors.white.withValues(alpha: 0.4),
                 width: 2,
               ),
             ),
@@ -217,7 +218,7 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
             height: 50,
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white,
+              color: AppColors.white,
             ),
             child: Icon(
               Icons.rocket_launch_rounded,
@@ -240,7 +241,7 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
     return Column(
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
           child: SizedBox(
             height: 8,
             child: Stack(
@@ -248,7 +249,7 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
                 // 배경
                 Container(
                   width: double.infinity,
-                  color: Colors.white.withOpacity(0.2),
+                  color: AppColors.white.withValues(alpha: 0.2),
                 ),
                 // 진행률
                 FractionallySizedBox(
@@ -256,12 +257,12 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
                   child: Container(
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
-                        colors: [Colors.white, Colors.white70],
+                        colors: [AppColors.white, Colors.white70],
                       ),
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.white.withOpacity(0.5),
+                          color: AppColors.white.withValues(alpha: 0.5),
                           blurRadius: 8,
                           spreadRadius: 2,
                         ),
@@ -271,7 +272,7 @@ class _GameJoinLoadingOverlayState extends State<GameJoinLoadingOverlay> {
                       .animate()
                       .shimmer(
                         duration: 1500.ms,
-                        color: Colors.white.withOpacity(0.5),
+                        color: AppColors.white.withValues(alpha: 0.5),
                       ),
                 ),
               ],

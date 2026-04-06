@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../models/wish_model.dart';
 
@@ -62,7 +63,7 @@ class _FilterChip extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
             color: isSelected ? AppColors.primary : AppColors.gray100,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/auth/domain/providers/auth_provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_constants.dart';
 
 /// 재사용 가능한 로그인 폼 위젯
 /// 페이지와 다이얼로그에서 모두 사용 가능
@@ -161,20 +162,14 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           textInputAction: TextInputAction.next,
           onChanged: (_) => setState(() => _emailError = null),
           onEditingComplete: () => _passwordFocusNode.requestFocus(),
-          style: const TextStyle(
-            fontSize: 16,
-            color: AppColors.darkBlue,
-          ),
+          style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
           decoration: InputDecoration(
             hintText: '이메일을 입력해 주세요.',
-            hintStyle: TextStyle(
-              fontSize: 16,
-              color: AppColors.gray400,
-            ),
+            hintStyle: AppTextStyles.body1.copyWith(color: AppColors.gray400),
             filled: true,
             fillColor: AppColors.gray100,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               borderSide: BorderSide.none,
             ),
             contentPadding: const EdgeInsets.symmetric(
@@ -188,7 +183,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             padding: const EdgeInsets.only(top: 8, left: 4),
             child: Text(
               _emailError!,
-              style: TextStyle(fontSize: 13, color: AppColors.red),
+              style: AppTextStyles.body3.copyWith(color: AppColors.red),
             ),
           ),
         SizedBox(height: 16),
@@ -206,20 +201,14 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           textInputAction: TextInputAction.done,
           onChanged: (_) => setState(() => _passwordError = null),
           onEditingComplete: _handleLogin,
-          style: const TextStyle(
-            fontSize: 16,
-            color: AppColors.darkBlue,
-          ),
+          style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue),
           decoration: InputDecoration(
             hintText: '비밀번호를 입력해 주세요.',
-            hintStyle: TextStyle(
-              fontSize: 16,
-              color: AppColors.gray400,
-            ),
+            hintStyle: AppTextStyles.body1.copyWith(color: AppColors.gray400),
             filled: true,
             fillColor: AppColors.gray100,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               borderSide: BorderSide.none,
             ),
             contentPadding: const EdgeInsets.symmetric(
@@ -247,7 +236,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             padding: const EdgeInsets.only(top: 8, left: 4),
             child: Text(
               _passwordError!,
-              style: TextStyle(fontSize: 13, color: AppColors.red),
+              style: AppTextStyles.body3.copyWith(color: AppColors.red),
             ),
           ),
         const SizedBox(height: 24),
@@ -259,11 +248,10 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           child: ElevatedButton(
             onPressed: _isLoading ? null : _handleLogin,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.darkBlue,
               foregroundColor: AppColors.white,
               disabledBackgroundColor: AppColors.gray300,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               ),
               elevation: 0,
             ),
@@ -312,10 +300,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             ),
             Text(
               '|',
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.gray300,
-              ),
+              style: AppTextStyles.body3.copyWith(color: AppColors.gray300),
             ),
             TextButton(
               onPressed: () {

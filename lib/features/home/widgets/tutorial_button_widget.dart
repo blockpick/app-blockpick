@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_constants.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
@@ -21,7 +22,7 @@ class TutorialButtonWidget extends StatelessWidget {
         onTap: onTap ?? () {
           _showTutorialModal(context);
         },
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
@@ -30,7 +31,7 @@ class TutorialButtonWidget extends StatelessWidget {
               end: Alignment.bottomRight,
               colors: [AppColors.primaryBg, AppColors.primaryBg],
             ),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             border: Border.all(
               color: AppColors.blue.withValues(alpha: 0.2),
             ),
@@ -42,7 +43,7 @@ class TutorialButtonWidget extends StatelessWidget {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   gradient: AppColors.gradientBlue,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                   boxShadow: [
                     BoxShadow(
                       color: AppColors.blue.withValues(alpha: 0.3),
@@ -118,7 +119,7 @@ class TutorialModal extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.vertical(
-          top: Radius.circular(24),
+          top: Radius.circular(AppConstants.radius2Xl),
         ),
       ),
       child: Column(
@@ -197,7 +198,7 @@ class TutorialModal extends StatelessWidget {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: AppColors.blueWhite,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     ),
                     child: Row(
                       children: [
@@ -235,7 +236,7 @@ class TutorialModal extends StatelessWidget {
                   foregroundColor: AppColors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                   ),
                   elevation: 0,
                 ),
@@ -266,7 +267,7 @@ class TutorialModal extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: iconColor.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
           ),
           child: Icon(
             icon,

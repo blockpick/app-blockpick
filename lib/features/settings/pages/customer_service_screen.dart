@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/constants/app_constants.dart';
 
 /// 고객센터 화면
 class CustomerServiceScreen extends StatelessWidget {
@@ -34,7 +35,7 @@ class CustomerServiceScreen extends StatelessWidget {
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
                 gradient: AppColors.gradientBlue,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(AppConstants.radiusXl),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,13 +129,13 @@ class CustomerServiceScreen extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Row(
@@ -144,7 +145,7 @@ class CustomerServiceScreen extends StatelessWidget {
                   height: 48,
                   decoration: BoxDecoration(
                     color: AppColors.gray100,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                   ),
                   child: Icon(
                     icon,
@@ -196,7 +197,7 @@ class CustomerServiceScreen extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
       ),
       child: Column(
         children: faqs.asMap().entries.map((entry) {
@@ -256,7 +257,7 @@ class _FAQItemState extends State<_FAQItem> {
                     height: 24,
                     decoration: BoxDecoration(
                       color: AppColors.blue.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                     ),
                     child: Center(
                       child: Text(
@@ -290,7 +291,7 @@ class _FAQItemState extends State<_FAQItem> {
                       height: 24,
                       decoration: BoxDecoration(
                         color: AppColors.green500.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                       ),
                       child: Center(
                         child: Text(

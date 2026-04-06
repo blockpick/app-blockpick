@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/constants/app_constants.dart';
 
 /// 비밀번호 변경 화면
 class PasswordChangeScreen extends ConsumerStatefulWidget {
@@ -54,7 +55,7 @@ class _PasswordChangeScreenState extends ConsumerState<PasswordChangeScreen> {
             backgroundColor: AppColors.green500,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             ),
           ),
         );
@@ -68,7 +69,7 @@ class _PasswordChangeScreenState extends ConsumerState<PasswordChangeScreen> {
             backgroundColor: AppColors.red,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             ),
           ),
         );
@@ -157,7 +158,7 @@ class _PasswordChangeScreenState extends ConsumerState<PasswordChangeScreen> {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: AppColors.blue.withValues(alpha: 0.05),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -202,11 +203,10 @@ class _PasswordChangeScreenState extends ConsumerState<PasswordChangeScreen> {
                 child: ElevatedButton(
                   onPressed: _isFormValid && !_isLoading ? _changePassword : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.darkBlue,
                     foregroundColor: AppColors.white,
                     disabledBackgroundColor: AppColors.gray300,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     ),
                     elevation: 0,
                   ),
@@ -243,7 +243,7 @@ class _PasswordChangeScreenState extends ConsumerState<PasswordChangeScreen> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -260,19 +260,19 @@ class _PasswordChangeScreenState extends ConsumerState<PasswordChangeScreen> {
               hintText: label,
               hintStyle: TextStyle(color: AppColors.gray400),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 borderSide: BorderSide(color: AppColors.gray200),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 borderSide: BorderSide(color: AppColors.gray200),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 borderSide: BorderSide(color: AppColors.blue),
               ),
               errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 borderSide: BorderSide(color: AppColors.red),
               ),
               contentPadding: const EdgeInsets.symmetric(

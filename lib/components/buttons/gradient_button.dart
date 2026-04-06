@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/constants/app_constants.dart';
 
 /// 그라데이션 배경의 재사용 가능한 버튼 컴포넌트
 ///
@@ -30,12 +31,12 @@ class GradientButton extends StatelessWidget {
         gradient: isDisabled
             ? AppColors.gradientDisable
             : AppColors.gradientBluePurplePink,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         boxShadow: isDisabled
             ? []
             : [
                 BoxShadow(
-                  color: AppColors.blue.withOpacity(0.3),
+                  color: AppColors.blue.withValues(alpha: 0.3),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -45,7 +46,7 @@ class GradientButton extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: isDisabled ? null : onPressed,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           child: Center(
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -56,7 +57,7 @@ class GradientButton extends StatelessWidget {
                     size: 20,
                     color: AppColors.white,
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: AppConstants.spacingSm),
                 ],
                 Text(
                   label,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/constants/app_constants.dart';
 
 /// 개인정보처리방침 화면
 class PrivacyPolicyScreen extends StatelessWidget {
@@ -32,7 +33,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: AppColors.white,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(AppConstants.radiusXl),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

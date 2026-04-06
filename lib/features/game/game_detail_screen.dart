@@ -16,6 +16,7 @@ import '../../components/minimap/grid_minimap.dart';
 import '../../widgets/zoom_controls.dart';
 import '../../utils/zoom_calculator.dart';
 import 'widgets/game_result_view.dart';
+import '../../core/constants/app_constants.dart';
 
 /// 게임 상세 화면 (토스 스타일)
 class GameDetailScreen extends ConsumerStatefulWidget {
@@ -77,7 +78,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
         if (game == null) {
           return Scaffold(
             appBar: AppBar(
-              title: Text('Game Not Found'),
+              title: const Text('게임을 찾을 수 없습니다'),
             ),
             body: Center(
               child: Column(
@@ -90,7 +91,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    'Game not found',
+                    '게임을 찾을 수 없습니다',
                     style: AppTextStyles.heading1.copyWith(
                       color: AppColors.darkBlue,
                     ),
@@ -98,7 +99,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () => Navigator.pop(context),
-                    child: const Text('Go Back'),
+                    child: const Text('돌아가기'),
                   ),
                 ],
               ),
@@ -182,7 +183,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                             backgroundColor: AppColors.gray800,
                             behavior: SnackBarBehavior.floating,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                             ),
                           ),
                         );
@@ -233,7 +234,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
       },
       loading: () => Scaffold(
         appBar: AppBar(
-          title: const Text('Loading...'),
+          title: const Text('불러오는 중...'),
         ),
         body: const Center(
           child: CircularProgressIndicator(
@@ -243,7 +244,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
       ),
       error: (error, stack) => Scaffold(
         appBar: AppBar(
-          title: Text('Error'),
+          title: const Text('오류'),
         ),
         body: Center(
           child: Column(
@@ -256,7 +257,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
               ),
               SizedBox(height: 16),
               Text(
-                'Error loading game',
+                '게임을 불러올 수 없습니다',
                 style: AppTextStyles.heading1.copyWith(
                   color: AppColors.darkBlue,
                 ),
@@ -278,7 +279,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                   backgroundColor: AppColors.blue,
                   foregroundColor: AppColors.white,
                 ),
-                child: const Text('Retry'),
+                child: const Text('다시 시도'),
               ),
             ],
           ),
@@ -298,7 +299,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           boxShadow: [
             BoxShadow(
               color: AppColors.black.withValues(alpha: 0.1),
@@ -312,7 +313,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
           children: [
             // 상품 이미지
             ClipRRect(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               child: Container(
                 width: 44,
                 height: 44,
@@ -351,10 +352,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                 const SizedBox(height: 2),
                 Text(
                   '$productCount개 중 ${_selectedProductIndex + 1}번째',
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: AppColors.gray500,
-                  ),
+                  style: AppTextStyles.caption4.copyWith(color: AppColors.gray500),
                 ),
               ],
             ),
@@ -364,7 +362,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
                 color: AppColors.gray100,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               ),
               child: const Icon(
                 Icons.swap_horiz_rounded,
@@ -407,7 +405,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: _getTypeColor(game.type),
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                       ),
                       child: Text(
                         _getTypeText(game.type),
@@ -469,7 +467,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
         padding: EdgeInsets.all(_isInfoExpanded ? 16 : 12),
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           boxShadow: [
             BoxShadow(
               color: AppColors.black.withValues(alpha: 0.08),
@@ -489,7 +487,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
                     color: AppColors.red.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -509,7 +507,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
                     color: AppColors.gray100,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -521,10 +519,10 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                           color: AppColors.darkBlue,
                           shape: BoxShape.circle,
                         ),
-                        child: const Center(
+                        child: Center(
                           child: Text(
                             'P',
-                            style: TextStyle(
+                            style: AppTextStyles.caption4.copyWith(
                               fontSize: 9,
                               fontWeight: FontWeight.w700,
                               color: AppColors.white,
@@ -625,10 +623,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
         const SizedBox(height: 6),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 11,
-            color: AppColors.gray500,
-          ),
+          style: AppTextStyles.caption4.copyWith(color: AppColors.gray500),
         ),
         SizedBox(height: 2),
         Text(
@@ -644,7 +639,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.darkBlue,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         boxShadow: [
           BoxShadow(
             color: AppColors.darkBlue.withValues(alpha: 0.3),
@@ -670,12 +665,12 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
                 backgroundColor: AppColors.darkBlue,
                 behavior: SnackBarBehavior.floating,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 ),
               ),
             );
           },
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
             child: Row(
@@ -708,7 +703,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: statusColor.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
         border: Border.all(color: statusColor.withValues(alpha: 0.3)),
       ),
       child: Row(
@@ -736,7 +731,7 @@ class _GameDetailScreenState extends ConsumerState<GameDetailScreen> {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.gray200,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),

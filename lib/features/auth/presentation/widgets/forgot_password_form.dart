@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_constants.dart';
 import '../../../../core/auth/domain/providers/auth_provider.dart';
 import '../../../../core/auth/domain/exceptions/auth_exception.dart';
 
@@ -74,7 +75,7 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Verification code sent to your email'),
-              backgroundColor: Colors.green,
+              backgroundColor: AppColors.green500,
             ),
           );
         }
@@ -124,7 +125,7 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Code verified successfully'),
-              backgroundColor: Colors.green,
+              backgroundColor: AppColors.green500,
             ),
           );
         }
@@ -245,11 +246,7 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
                   ],
                   const Text(
                     'Forgot Password?',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.2,
-                    ),
+                    style: AppTextStyles.heading3,
                   ),
                 ],
               ),
@@ -283,7 +280,7 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: AppColors.red.withValues(alpha: 0.05),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                 border: Border.all(color: AppColors.red.withValues(alpha: 0.2)),
               ),
               child: Row(
@@ -293,10 +290,7 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
                   Expanded(
                     child: Text(
                       _errorMessage!,
-                      style: const TextStyle(
-                        color: AppColors.red,
-                        fontSize: 13,
-                      ),
+                      style: AppTextStyles.body3.copyWith(color: AppColors.red),
                     ),
                   ),
                 ],
@@ -313,10 +307,7 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
               children: [
                 Text(
                   'Remember your password?',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: AppColors.gray600,
-                  ),
+                  style: AppTextStyles.body3.copyWith(color: AppColors.gray600),
                 ),
                 TextButton(
                   onPressed: _handleBackToLogin,
@@ -359,10 +350,8 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
       child: Center(
         child: Text(
           '$step',
-          style: TextStyle(
+          style: AppTextStyles.title3.copyWith(
             color: isActive ? AppColors.white : AppColors.gray600,
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
           ),
         ),
       ),
@@ -383,10 +372,7 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
       children: [
         const Text(
           'Enter the email address you used to sign up',
-          style: TextStyle(
-            fontSize: 12,
-            color: AppColors.gray600,
-          ),
+          style: AppTextStyles.caption1,
         ),
         const SizedBox(height: 16),
         const Text(
@@ -398,23 +384,23 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
           controller: _emailController,
           decoration: InputDecoration(
             hintText: 'Enter email',
-            hintStyle: const TextStyle(color: AppColors.gray400, fontSize: 14),
+            hintStyle: AppTextStyles.hint.copyWith(color: AppColors.gray400),
             filled: true,
             fillColor: AppColors.gray100,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               borderSide: const BorderSide(color: AppColors.gray200),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               borderSide: const BorderSide(color: AppColors.gray200),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               borderSide: const BorderSide(color: AppColors.primaryMain),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               borderSide: const BorderSide(color: AppColors.red),
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -443,7 +429,7 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
                     backgroundColor: AppColors.primaryMain,
                     foregroundColor: AppColors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                     ),
                     elevation: 0,
                   ),
@@ -464,10 +450,7 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
       children: [
         Text(
           'Enter the verification code sent to ${_emailController.text}',
-          style: const TextStyle(
-            fontSize: 12,
-            color: AppColors.gray600,
-          ),
+          style: AppTextStyles.caption1,
         ),
         const SizedBox(height: 16),
         const Text(
@@ -479,23 +462,23 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
           controller: _codeController,
           decoration: InputDecoration(
             hintText: 'Enter 6-digit code',
-            hintStyle: const TextStyle(color: AppColors.gray400, fontSize: 14),
+            hintStyle: AppTextStyles.hint.copyWith(color: AppColors.gray400),
             filled: true,
             fillColor: AppColors.gray100,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               borderSide: const BorderSide(color: AppColors.gray200),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               borderSide: const BorderSide(color: AppColors.gray200),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               borderSide: const BorderSide(color: AppColors.primaryMain),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               borderSide: const BorderSide(color: AppColors.red),
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -533,7 +516,7 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
                     backgroundColor: AppColors.primaryMain,
                     foregroundColor: AppColors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                     ),
                     elevation: 0,
                   ),
@@ -554,10 +537,7 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
       children: [
         const Text(
           'Enter your new password',
-          style: TextStyle(
-            fontSize: 12,
-            color: AppColors.gray600,
-          ),
+          style: AppTextStyles.caption1,
         ),
         const SizedBox(height: 16),
 
@@ -572,23 +552,23 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
           obscureText: !_isPasswordVisible,
           decoration: InputDecoration(
             hintText: '••••••••••••',
-            hintStyle: const TextStyle(color: AppColors.gray400, fontSize: 14),
+            hintStyle: AppTextStyles.hint.copyWith(color: AppColors.gray400),
             filled: true,
             fillColor: AppColors.gray100,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               borderSide: const BorderSide(color: AppColors.gray200),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               borderSide: const BorderSide(color: AppColors.gray200),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               borderSide: const BorderSide(color: AppColors.primaryMain),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               borderSide: const BorderSide(color: AppColors.red),
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -627,23 +607,23 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
           obscureText: !_isConfirmPasswordVisible,
           decoration: InputDecoration(
             hintText: 'Confirm Password',
-            hintStyle: const TextStyle(color: AppColors.gray400, fontSize: 14),
+            hintStyle: AppTextStyles.hint.copyWith(color: AppColors.gray400),
             filled: true,
             fillColor: AppColors.gray100,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               borderSide: const BorderSide(color: AppColors.gray200),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               borderSide: const BorderSide(color: AppColors.gray200),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               borderSide: const BorderSide(color: AppColors.primaryMain),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               borderSide: const BorderSide(color: AppColors.red),
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -687,7 +667,7 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
                     backgroundColor: AppColors.primaryMain,
                     foregroundColor: AppColors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                     ),
                     elevation: 0,
                   ),
@@ -712,23 +692,16 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
           color: AppColors.primaryMain,
         ),
         const SizedBox(height: 16),
-        const Text(
+        Text(
           'Password Reset Successful!',
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: AppColors.primaryMain,
-          ),
+          style: AppTextStyles.title1.copyWith(color: AppColors.primaryMain),
         ),
         const SizedBox(height: 8),
         const Text(
           'Your password has been successfully reset.',
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 14,
-            color: AppColors.gray800,
-          ),
+          style: AppTextStyles.body3,
         ),
         const SizedBox(height: 24),
         SizedBox(
@@ -740,7 +713,7 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
               backgroundColor: AppColors.primaryMain,
               foregroundColor: AppColors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               ),
               elevation: 0,
             ),

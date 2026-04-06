@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/constants/app_constants.dart';
 import '../../models/game_round_model.dart';
 
 /// SC-008 프로모션 카드 (오픈 버전)
@@ -28,49 +29,49 @@ class PromotionCard extends StatelessWidget {
       child: Opacity(
         opacity: _isInactive ? 0.7 : 1.0,
         child: Container(
-        height: 220,
-        margin: const EdgeInsets.only(bottom: 16),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.black.withValues(alpha: 0.15),
-              blurRadius: 20,
-              offset: const Offset(0, 8),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              // 배경 이미지
-              _buildBackgroundImage(),
-
-              // 그라데이션 오버레이
-              _buildGradientOverlay(),
-
-              // 콘텐츠
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // 상단: 뱃지들 + 숫자 + 상태
-                    _buildTopRow(),
-
-                    const Spacer(),
-
-                    // 하단: 제목 + 플레이 버튼
-                    _buildBottomContent(),
-                  ],
-                ),
+          height: 220,
+          margin: const EdgeInsets.only(bottom: AppConstants.spacingLg),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.textBlack.withValues(alpha: 0.15),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
               ),
             ],
           ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                // 배경 이미지
+                _buildBackgroundImage(),
+
+                // 그라데이션 오버레이
+                _buildGradientOverlay(),
+
+                // 콘텐츠
+                Padding(
+                  padding: const EdgeInsets.all(AppConstants.spacing2Xl),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // 상단: 뱃지들 + 숫자 + 상태
+                      _buildTopRow(),
+
+                      const Spacer(),
+
+                      // 하단: 제목 + 플레이 버튼
+                      _buildBottomContent(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-      ),
       ),
     );
   }
@@ -79,12 +80,12 @@ class PromotionCard extends StatelessWidget {
   Widget _buildBackgroundImage() {
     if (game.imageUrl.isEmpty) {
       return Container(
-        color: AppColors.gray700,
+        color: AppColors.gray600,
         child: Center(
           child: Icon(
             Icons.image_outlined,
             size: 48,
-            color: AppColors.gray500,
+            color: AppColors.gray400,
           ),
         ),
       );
@@ -96,7 +97,7 @@ class PromotionCard extends StatelessWidget {
       loadingBuilder: (context, child, loadingProgress) {
         if (loadingProgress == null) return child;
         return Container(
-          color: AppColors.gray700,
+          color: AppColors.gray600,
           child: Center(
             child: CircularProgressIndicator(
               strokeWidth: 2,
@@ -107,12 +108,12 @@ class PromotionCard extends StatelessWidget {
       },
       errorBuilder: (context, error, stackTrace) {
         return Container(
-          color: AppColors.gray700,
+          color: AppColors.gray600,
           child: Center(
             child: Icon(
               Icons.image_outlined,
               size: 48,
-              color: AppColors.gray500,
+              color: AppColors.gray400,
             ),
           ),
         );
@@ -129,8 +130,8 @@ class PromotionCard extends StatelessWidget {
           end: Alignment.bottomCenter,
           colors: [
             Colors.transparent,
-            AppColors.black.withValues(alpha: 0.3),
-            AppColors.black.withValues(alpha: 0.7),
+            AppColors.textBlack.withValues(alpha: 0.3),
+            AppColors.textBlack.withValues(alpha: 0.7),
           ],
           stops: const [0.0, 0.5, 1.0],
         ),
@@ -152,10 +153,10 @@ class PromotionCard extends StatelessWidget {
           children: [
             if (_isInactive) ...[
               _buildStatusBadge(),
-              const SizedBox(width: 8),
+              const SizedBox(width: AppConstants.spacingSm),
             ] else if (isLive) ...[
               _buildLiveBadge(),
-              SizedBox(width: 8),
+              const SizedBox(width: AppConstants.spacingSm),
             ],
             _buildTypeBadge(),
           ],
@@ -170,10 +171,13 @@ class PromotionCard extends StatelessWidget {
   /// 상태 뱃지 (종료됨, 예정 등)
   Widget _buildStatusBadge() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppConstants.spacingMd - 2,
+        vertical: 6,
+      ),
       decoration: BoxDecoration(
-        color: AppColors.black.withValues(alpha: 0.6),
-        borderRadius: BorderRadius.circular(6),
+        color: AppColors.textBlack.withValues(alpha: 0.6),
+        borderRadius: BorderRadius.circular(AppConstants.radiusMd - 2),
       ),
       child: Text(
         game.status.badgeText,
@@ -185,10 +189,13 @@ class PromotionCard extends StatelessWidget {
   /// LIVE 뱃지 (빨간 점 + 텍스트)
   Widget _buildLiveBadge() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppConstants.spacingMd - 2,
+        vertical: 6,
+      ),
       decoration: BoxDecoration(
-        color: AppColors.black.withValues(alpha: 0.6),
-        borderRadius: BorderRadius.circular(6),
+        color: AppColors.textBlack.withValues(alpha: 0.6),
+        borderRadius: BorderRadius.circular(AppConstants.radiusMd - 2),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -196,12 +203,12 @@ class PromotionCard extends StatelessWidget {
           Container(
             width: 8,
             height: 8,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: AppColors.red,
               shape: BoxShape.circle,
             ),
           ),
-          SizedBox(width: 6),
+          const SizedBox(width: 6),
           Text(
             'LIVE',
             style: AppTextStyles.caption3.copyWith(color: AppColors.white),
@@ -214,10 +221,13 @@ class PromotionCard extends StatelessWidget {
   /// 타입 뱃지 (DAILY, SELECT, VIBE, PRIME)
   Widget _buildTypeBadge() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppConstants.spacingMd - 2,
+        vertical: 6,
+      ),
       decoration: BoxDecoration(
         color: _getTypeBadgeColor(),
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(AppConstants.radiusMd - 2),
       ),
       child: Text(
         gameType.toUpperCase(),
@@ -238,8 +248,7 @@ class PromotionCard extends StatelessWidget {
       child: Center(
         child: Text(
           '$rankNumber',
-          style: const TextStyle(
-            fontSize: 14,
+          style: AppTextStyles.button.copyWith(
             fontWeight: FontWeight.w800,
             color: AppColors.white,
           ),
@@ -256,12 +265,10 @@ class PromotionCard extends StatelessWidget {
         // 제목 (최대 2줄)
         Text(
           game.title,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
+          style: AppTextStyles.title1.copyWith(
             color: AppColors.white,
             height: 1.3,
-            shadows: [
+            shadows: const [
               Shadow(
                 color: Colors.black54,
                 blurRadius: 4,
@@ -273,24 +280,26 @@ class PromotionCard extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
 
-        const SizedBox(height: 16),
+        const SizedBox(height: AppConstants.spacingLg),
 
         // 플레이 버튼
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppConstants.spacing2Xl,
+            vertical: AppConstants.spacingMd,
+          ),
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 _isInactive ? '결과 보기' : '${game.currentPrice}P PLAY',
-                style: const TextStyle(
-                  fontSize: 14,
+                style: AppTextStyles.button.copyWith(
                   fontWeight: FontWeight.w800,
-                  color: AppColors.darkBlue,
+                  color: AppColors.textBlack,
                   letterSpacing: 0.5,
                 ),
               ),
@@ -298,7 +307,7 @@ class PromotionCard extends StatelessWidget {
               Icon(
                 _isInactive ? Icons.visibility_outlined : Icons.arrow_forward_rounded,
                 size: 16,
-                color: AppColors.darkBlue,
+                color: AppColors.textBlack,
               ),
             ],
           ),
@@ -316,9 +325,9 @@ class PromotionCard extends StatelessWidget {
       case 'vibe':
         return AppColors.primaryLight;
       case 'prime':
-        return AppColors.darkBlue;
+        return AppColors.textBlack;
       default:
-        return AppColors.gray500;
+        return AppColors.gray400;
     }
   }
 }
@@ -344,19 +353,19 @@ class PromotionCardSmall extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 160,
-        margin: const EdgeInsets.only(bottom: 12),
+        margin: const EdgeInsets.only(bottom: AppConstants.spacingMd),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           boxShadow: [
             BoxShadow(
-              color: AppColors.black.withValues(alpha: 0.1),
+              color: AppColors.textBlack.withValues(alpha: 0.1),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           child: Stack(
             fit: StackFit.expand,
             children: [
@@ -368,7 +377,7 @@ class PromotionCardSmall extends StatelessWidget {
 
               // 콘텐츠
               Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(AppConstants.spacingLg),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -391,14 +400,14 @@ class PromotionCardSmall extends StatelessWidget {
 
   Widget _buildBackgroundImage() {
     if (game.imageUrl.isEmpty) {
-      return Container(color: AppColors.gray700);
+      return Container(color: AppColors.gray600);
     }
 
     return Image.network(
       game.imageUrl,
       fit: BoxFit.cover,
       errorBuilder: (context, error, stackTrace) {
-        return Container(color: AppColors.gray700);
+        return Container(color: AppColors.gray600);
       },
     );
   }
@@ -411,7 +420,7 @@ class PromotionCardSmall extends StatelessWidget {
           end: Alignment.bottomCenter,
           colors: [
             Colors.transparent,
-            AppColors.black.withValues(alpha: 0.6),
+            AppColors.textBlack.withValues(alpha: 0.6),
           ],
         ),
       ),
@@ -423,10 +432,13 @@ class PromotionCardSmall extends StatelessWidget {
       children: [
         if (isLive) ...[
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppConstants.spacingSm,
+              vertical: AppConstants.spacingXs,
+            ),
             decoration: BoxDecoration(
-              color: AppColors.black.withValues(alpha: 0.6),
-              borderRadius: BorderRadius.circular(4),
+              color: AppColors.textBlack.withValues(alpha: 0.6),
+              borderRadius: BorderRadius.circular(AppConstants.radiusSm),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -439,14 +451,10 @@ class PromotionCardSmall extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                 ),
-                const SizedBox(width: 4),
-                const Text(
+                const SizedBox(width: AppConstants.spacingXs),
+                Text(
                   'LIVE',
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.white,
-                  ),
+                  style: AppTextStyles.caption4.copyWith(color: AppColors.white),
                 ),
               ],
             ),
@@ -454,18 +462,17 @@ class PromotionCardSmall extends StatelessWidget {
           const SizedBox(width: 6),
         ],
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppConstants.spacingSm,
+            vertical: AppConstants.spacingXs,
+          ),
           decoration: BoxDecoration(
             color: _getTypeBadgeColor(),
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(AppConstants.radiusSm),
           ),
           child: Text(
             gameType.toUpperCase(),
-            style: const TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w700,
-              color: AppColors.white,
-            ),
+            style: AppTextStyles.caption4.copyWith(color: AppColors.white),
           ),
         ),
       ],
@@ -478,34 +485,35 @@ class PromotionCardSmall extends StatelessWidget {
       children: [
         Text(
           game.title,
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
+          style: AppTextStyles.title2.copyWith(
             color: AppColors.white,
             height: 1.3,
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: AppConstants.spacingMd - 2),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 14,
+            vertical: AppConstants.spacingSm,
+          ),
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 '${game.currentPrice}P PLAY',
-                style: AppTextStyles.caption3.copyWith(color: AppColors.darkBlue),
+                style: AppTextStyles.caption3.copyWith(color: AppColors.textBlack),
               ),
-              const SizedBox(width: 4),
+              const SizedBox(width: AppConstants.spacingXs),
               const Icon(
                 Icons.arrow_forward_rounded,
                 size: 14,
-                color: AppColors.darkBlue,
+                color: AppColors.textBlack,
               ),
             ],
           ),
@@ -523,9 +531,9 @@ class PromotionCardSmall extends StatelessWidget {
       case 'vibe':
         return AppColors.primaryLight;
       case 'prime':
-        return AppColors.darkBlue;
+        return AppColors.textBlack;
       default:
-        return AppColors.gray500;
+        return AppColors.gray400;
     }
   }
 }

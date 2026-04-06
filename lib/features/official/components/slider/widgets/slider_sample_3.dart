@@ -226,7 +226,7 @@ class _SliderSample3State extends State<SliderSample3>
                     height: 16,
                     decoration: BoxDecoration(
                       color: AppColors.white.withValues(alpha: 0.3),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                     ),
                   ),
                   // 활성 트랙
@@ -236,7 +236,7 @@ class _SliderSample3State extends State<SliderSample3>
                       height: 16,
                       decoration: BoxDecoration(
                         color: AppColors.white,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                         boxShadow: [
                           BoxShadow(
                             color: AppColors.white
@@ -279,7 +279,7 @@ class _SliderSample3State extends State<SliderSample3>
                         color: isActive
                             ? AppColors.white
                             : AppColors.white.withValues(alpha: 0.3),
-                        borderRadius: BorderRadius.circular(2),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                       ),
                     ),
                   );

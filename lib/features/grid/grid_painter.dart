@@ -270,8 +270,8 @@ class GridPainter extends CustomPainter {
         // 체스판 패턴 (짝수/홀수로 색상 교차)
         final isEven = (row + col) % 2 == 0;
         final bgColor = isEven
-            ? _getRegionColor(row, col).withOpacity(baseOpacity)
-            : _getRegionColor(row, col).withOpacity(baseOpacity * 0.5);
+            ? _getRegionColor(row, col).withValues(alpha: baseOpacity)
+            : _getRegionColor(row, col).withValues(alpha: baseOpacity * 0.5);
 
         final bgPaint = Paint()
           ..color = bgColor
@@ -298,7 +298,7 @@ class GridPainter extends CustomPainter {
         }
 
         final borderPaint = Paint()
-          ..color = borderColor.withOpacity(borderOpacity)
+          ..color = borderColor.withValues(alpha: borderOpacity)
           ..strokeWidth = math.max(1.0, 2.0 / zoom)
           ..style = PaintingStyle.stroke;
 
@@ -340,14 +340,14 @@ class GridPainter extends CustomPainter {
 
       // 셀 배경 (지뢰찾기 스타일)
       final bgPaint = Paint()
-        ..color = highlightColor.withOpacity(opacity)
+        ..color = highlightColor.withValues(alpha: opacity)
         ..style = PaintingStyle.fill;
 
       canvas.drawRect(cellRect, bgPaint);
 
       // 셀 테두리 (진하게)
       final borderPaint = Paint()
-        ..color = highlightColor.withOpacity(0.8)
+        ..color = highlightColor.withValues(alpha: 0.8)
         ..strokeWidth = math.max(2.0, 3.0 / zoom)
         ..style = PaintingStyle.stroke;
 
@@ -425,14 +425,14 @@ class GridPainter extends CustomPainter {
       // 구역 배경색 (지뢰찾기 스타일)
       final bgPaint = Paint()
         ..color = _getRegionColor(regionRow, regionCol)
-            .withOpacity(highlightOpacity * intensityMultiplier)
+            .withValues(alpha: highlightOpacity * intensityMultiplier)
         ..style = PaintingStyle.fill;
 
       canvas.drawRect(regionRect, bgPaint);
 
       // 구역 테두리 (LOD별 다른 색상)
       final borderPaint = Paint()
-        ..color = borderColor.withOpacity(0.9)
+        ..color = borderColor.withValues(alpha: 0.9)
         ..strokeWidth = borderWidth
         ..style = PaintingStyle.stroke;
 
@@ -443,12 +443,12 @@ class GridPainter extends CustomPainter {
         final textSpan = TextSpan(
           text: '×$blockCount',
           style: TextStyle(
-            color: Colors.white,
+            color: AppColors.white,
             fontSize: (regionWidth * 0.15 / zoom).clamp(12.0, 24.0),
             fontWeight: FontWeight.bold,
             shadows: [
               Shadow(
-                color: Colors.black.withOpacity(0.7),
+                color: AppColors.textBlack.withValues(alpha: 0.7),
                 offset: Offset(1.0 / zoom, 1.0 / zoom),
                 blurRadius: 2.0 / zoom,
               ),
@@ -484,8 +484,8 @@ class GridPainter extends CustomPainter {
     // 줌에 상관없이 화면에서 1픽셀로 보이도록 선 두께 조정
     // Canvas가 이미 scale(zoom)되었으므로, 1/zoom으로 보정
     final paint = Paint()
-      ..color = Colors.black
-          .withOpacity(opacity) // 검은색 그리드
+      ..color = AppColors.textBlack
+          .withValues(alpha: opacity) // 검은색 그리드
       ..strokeWidth =
           1.0 / zoom // 줌 레벨에 따라 조정 (화면에서 항상 1px)
       ..style = PaintingStyle.stroke;
@@ -672,7 +672,7 @@ class GridPainter extends CustomPainter {
       final textSpan = TextSpan(
         text: '${block.row},${block.col}',
         style: TextStyle(
-          color: Colors.white,
+          color: AppColors.white,
           fontSize: (scaledCellSize * 0.2).clamp(10, 16),
           fontWeight: FontWeight.w600,
         ),

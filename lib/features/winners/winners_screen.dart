@@ -71,7 +71,7 @@ class _WinnersScreenState extends State<WinnersScreen>
   /// App Bar
   Widget _buildAppBar() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: AppConstants.screenPaddingH, vertical: 12),
       child: Text(
         'Winners',
         style: AppTextStyles.heading1.copyWith(
@@ -86,7 +86,7 @@ class _WinnersScreenState extends State<WinnersScreen>
   /// Tab Bar (역대 당첨자 / 리뷰)
   Widget _buildTabBar() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+      margin: const EdgeInsets.symmetric(horizontal: AppConstants.screenPaddingH),
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -122,7 +122,7 @@ class _WinnersScreenState extends State<WinnersScreen>
     final isWinnersTab = _tabController.index == 0;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: AppConstants.screenPaddingH, vertical: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -197,7 +197,7 @@ class _WinnersScreenState extends State<WinnersScreen>
     }
 
     return ListView.separated(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: AppConstants.screenPaddingH),
       itemCount: winners.length,
       separatorBuilder: (context, index) => const Divider(
         height: 1,
@@ -231,7 +231,7 @@ class _WinnersScreenState extends State<WinnersScreen>
     }
 
     return ListView.separated(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: AppConstants.screenPaddingH),
       itemCount: reviews.length,
       separatorBuilder: (context, index) => const Divider(
         height: 1,

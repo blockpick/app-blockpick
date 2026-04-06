@@ -170,7 +170,7 @@ class _EmailChangeScreenState extends ConsumerState<EmailChangeScreen> {
           backgroundColor: AppColors.darkBlue,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
           ),
         ),
       );
@@ -312,7 +312,6 @@ class _EmailChangeScreenState extends ConsumerState<EmailChangeScreen> {
       child: ElevatedButton(
         onPressed: isEnabled ? _sendVerificationCode : null,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.darkBlue,
           foregroundColor: AppColors.white,
           disabledBackgroundColor: AppColors.gray300,
           disabledForegroundColor: AppColors.white,
@@ -454,7 +453,6 @@ class _EmailChangeScreenState extends ConsumerState<EmailChangeScreen> {
           child: ElevatedButton(
             onPressed: isEnabled ? _verifyAndChangeEmail : null,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.darkBlue,
               foregroundColor: AppColors.white,
               disabledBackgroundColor: AppColors.gray300,
               disabledForegroundColor: AppColors.white,

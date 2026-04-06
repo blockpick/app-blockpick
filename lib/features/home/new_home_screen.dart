@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/theme/app_constants.dart';
 import '../../core/auth/domain/providers/auth_provider.dart';
 import '../../models/game_round_model.dart';
 import '../../providers/game_provider.dart';
@@ -153,7 +154,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppConstants.radiusXl),
             boxShadow: [
               BoxShadow(
                 color: AppColors.yellow500.withValues(alpha: 0.3),
@@ -170,14 +171,13 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                   children: [
                     Text(
                       '전 세계 어디서나,',
-                      style: AppTextStyles.title3.copyWith(color: Color(0xFF664D03), height: 1.4),
+                      style: AppTextStyles.title3.copyWith(color: const Color(0xFF664D03), height: 1.4), // 브랜드 배너 전용 색상
                     ),
                     Text(
                       '나를 위한 맞춤 경품 Event',
-                      style: TextStyle(
-                        fontSize: 17,
+                      style: AppTextStyles.title1.copyWith(
                         fontWeight: FontWeight.w800,
-                        color: Color(0xFF664D03),
+                        color: const Color(0xFF664D03), // 브랜드 배너 전용 색상
                         height: 1.4,
                       ),
                     ),
@@ -186,13 +186,13 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                       children: [
                         Text(
                           'Blockpick 서비스 알아보기',
-                          style: AppTextStyles.caption2.copyWith(color: Color(0xFF664D03).withValues(alpha: 0.7)),
+                          style: AppTextStyles.caption2.copyWith(color: const Color(0xFF664D03).withValues(alpha: 0.7)), // 브랜드 배너 전용 색상
                         ),
                         const SizedBox(width: 4),
                         Icon(
                           Icons.arrow_forward_rounded,
                           size: 14,
-                          color: const Color(0xFF664D03).withValues(alpha: 0.7),
+                          color: const Color(0xFF664D03).withValues(alpha: 0.7), // 브랜드 배너 전용 색상
                         ),
                       ],
                     ),
@@ -205,12 +205,12 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                 height: 56,
                 decoration: BoxDecoration(
                   color: AppColors.white.withValues(alpha: 0.6),
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 ),
                 child: const Icon(
                   Icons.card_giftcard_rounded,
                   size: 28,
-                  color: Color(0xFF664D03),
+                  color: Color(0xFF664D03), // 브랜드 배너 전용 색상
                 ),
               ),
             ],
@@ -239,7 +239,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             boxShadow: [
               BoxShadow(
                 color: AppColors.black.withValues(alpha: 0.05),
@@ -258,7 +258,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                     height: 32,
                     decoration: BoxDecoration(
                       color: AppColors.blue.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                     ),
                     child: Icon(
                       Icons.monetization_on_rounded,
@@ -278,8 +278,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                   if (isAuthenticated)
                     Text(
                       '${_formatNumber(points)} P',
-                      style: TextStyle(
-                        fontSize: 18,
+                      style: AppTextStyles.title1.copyWith(
                         fontWeight: FontWeight.w800,
                         color: AppColors.darkBlue,
                       ),
@@ -289,7 +288,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
                         color: AppColors.gray100,
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                       ),
                       child: Text(
                         '로그인 필요',
@@ -331,7 +330,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
             ),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             boxShadow: [
               BoxShadow(
                 color: AppColors.yellow500.withValues(alpha: 0.2),
@@ -350,7 +349,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                     height: 32,
                     decoration: BoxDecoration(
                       color: AppColors.yellow500,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                     ),
                     child: const Icon(
                       Icons.calendar_today_rounded,
@@ -364,11 +363,11 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                     children: [
                       Text(
                         '출석체크',
-                        style: AppTextStyles.title2.copyWith(color: Color(0xFF664D03)),
+                        style: AppTextStyles.title2.copyWith(color: const Color(0xFF664D03)), // 브랜드 배너 전용 색상
                       ),
                       Text(
                         '매일 10P 적립',
-                        style: AppTextStyles.caption1.copyWith(color: Color(0xFF664D03).withValues(alpha: 0.7)),
+                        style: AppTextStyles.caption1.copyWith(color: const Color(0xFF664D03).withValues(alpha: 0.7)), // 브랜드 배너 전용 색상
                       ),
                     ],
                   ),
@@ -377,8 +376,8 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: Color(0xFF664D03),
-                  borderRadius: BorderRadius.circular(16),
+                  color: const Color(0xFF664D03), // 브랜드 배너 전용 색상
+                  borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                 ),
                 child: Text(
                   'CHECK-IN',
@@ -493,7 +492,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
           height: 80,
           decoration: BoxDecoration(
             color: AppColors.gray200,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             border: Border.all(color: AppColors.gray300, width: 1),
           ),
           child: Center(
@@ -581,7 +580,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
           boxShadow: [
             BoxShadow(
               color: AppColors.black.withValues(alpha: 0.04),
@@ -594,7 +593,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
           children: [
             // 이미지
             ClipRRect(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               child: SizedBox(
                 width: 80,
                 height: 80,
@@ -629,15 +628,11 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                             horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
                           color: AppColors.yellow500,
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                         ),
                         child: const Text(
                           'PRIME',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.white,
-                          ),
+                          style: AppTextStyles.caption4, // fontSize:11/semibold, 가장 가까운 토큰
                         ),
                       ),
                       if (_isNew(game)) ...[
@@ -647,17 +642,13 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                               horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
                             color: AppColors.green500.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(4),
+                            borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                             border: Border.all(
                                 color: AppColors.green500.withValues(alpha: 0.3)),
                           ),
                           child: const Text(
                             'NEW',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.green500,
-                            ),
+                            style: AppTextStyles.caption4, // fontSize:11/semibold, 가장 가까운 토큰
                           ),
                         ),
                       ],
@@ -697,10 +688,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                       const SizedBox(width: 4),
                       Text(
                         '${game.timeLeft} 남음',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: AppColors.gray400,
-                        ),
+                        style: AppTextStyles.caption4.copyWith(color: AppColors.gray400),
                       ),
                     ],
                   ),
@@ -817,10 +805,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                 const SizedBox(height: 4),
                 Text(
                   '$type • $time',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: AppColors.gray400,
-                  ),
+                  style: AppTextStyles.caption1.copyWith(color: AppColors.gray400),
                 ),
               ],
             ),
@@ -831,6 +816,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
   }
 
   Widget _buildCircleInitialAvatar(String username) {
+    // 아바타 랜덤 배경/텍스트 색상 — Material 팔레트 기반, 디자인 토큰 미적용
     final colors = [
       const Color(0xFFE3F2FD),
       const Color(0xFFFCE4EC),
@@ -857,8 +843,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
       child: Center(
         child: Text(
           username.isNotEmpty ? username[0].toUpperCase() : '?',
-          style: TextStyle(
-            fontSize: 18,
+          style: AppTextStyles.title1.copyWith(
             fontWeight: FontWeight.w700,
             color: textColors[colorIndex],
           ),
@@ -868,6 +853,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
   }
 
   Widget _buildInitialAvatar(String username) {
+    // 아바타 랜덤 배경/텍스트 색상 — Material 팔레트 기반, 디자인 토큰 미적용
     final colors = [
       const Color(0xFFE3F2FD),
       const Color(0xFFFCE4EC),
@@ -889,13 +875,12 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
       height: 44,
       decoration: BoxDecoration(
         color: colors[colorIndex],
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
       ),
       child: Center(
         child: Text(
           username.isNotEmpty ? username[0].toUpperCase() : '?',
-          style: TextStyle(
-            fontSize: 18,
+          style: AppTextStyles.title1.copyWith(
             fontWeight: FontWeight.w700,
             color: textColors[colorIndex],
           ),
@@ -958,7 +943,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
         boxShadow: [
           BoxShadow(
             color: AppColors.black.withValues(alpha: 0.04),
@@ -977,10 +962,10 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                   width: 32,
                   height: 32,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                     child: Image.network(
                       'https://i.pravatar.cc/100?u=$username',
                       fit: BoxFit.cover,
@@ -1014,10 +999,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
           const SizedBox(height: 8),
           Text(
             time,
-            style: TextStyle(
-              fontSize: 11,
-              color: AppColors.gray400,
-            ),
+            style: AppTextStyles.caption4.copyWith(color: AppColors.gray400),
           ),
         ],
       ),
@@ -1025,6 +1007,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
   }
 
   Widget _buildSmallInitialAvatar(String username) {
+    // 아바타 랜덤 배경/텍스트 색상 — Material 팔레트 기반, 디자인 토큰 미적용
     final colors = [
       const Color(0xFFE3F2FD),
       const Color(0xFFFCE4EC),
@@ -1046,7 +1029,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
       height: 32,
       decoration: BoxDecoration(
         color: colors[colorIndex],
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppConstants.radiusMd),
       ),
       child: Center(
         child: Text(
@@ -1066,10 +1049,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
         child: Center(
           child: Text(
             '© 2025 Blockpick, Inc',
-            style: TextStyle(
-              fontSize: 12,
-              color: AppColors.gray400,
-            ),
+            style: AppTextStyles.caption1.copyWith(color: AppColors.gray400),
           ),
         ),
       ),
@@ -1085,7 +1065,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
         height: 48,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
           boxShadow: [
             BoxShadow(
               color: AppColors.black.withValues(alpha: 0.15),
@@ -1119,8 +1099,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
             children: [
               Text(
                 title,
-                style: const TextStyle(
-                  fontSize: 18,
+                style: AppTextStyles.title1.copyWith(
                   fontWeight: FontWeight.w800,
                   color: AppColors.darkBlue,
                   letterSpacing: -0.3,
@@ -1222,13 +1201,12 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(AppConstants.radiusSm),
         border: Border.all(color: color.withValues(alpha: 0.3), width: 1),
       ),
       child: Text(
         label,
-        style: TextStyle(
-          fontSize: 10,
+        style: AppTextStyles.caption4.copyWith(
           fontWeight: FontWeight.w700,
           color: color,
         ),
@@ -1246,7 +1224,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
             const SizedBox(height: 12),
             Text(
               '진행 중인 이벤트가 없습니다',
-              style: TextStyle(fontSize: 14, color: AppColors.gray500),
+              style: AppTextStyles.body3.copyWith(color: AppColors.gray500),
             ),
           ],
         ),
@@ -1275,7 +1253,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
             const SizedBox(height: 12),
             Text(
               '데이터를 불러오는데 실패했습니다',
-              style: TextStyle(fontSize: 14, color: AppColors.gray500),
+              style: AppTextStyles.body3.copyWith(color: AppColors.gray500),
             ),
           ],
         ),

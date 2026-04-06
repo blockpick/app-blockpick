@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../../../core/constants/app_constants.dart';
 import 'dart:math';
 import 'dart:ui';
 import '../../../../core/theme/app_colors.dart';
@@ -140,7 +141,7 @@ class _PredictPickScreenState extends State<PredictPickScreen>
           content: const Text('Enter coordinates between 1-1000'),
           backgroundColor: modeColor,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusLg)),
         ),
       );
       return;
@@ -199,7 +200,7 @@ class _PredictPickScreenState extends State<PredictPickScreen>
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
                 border: Border.all(
                   color: Colors.white.withValues(alpha: 0.2),
                 ),
@@ -259,14 +260,14 @@ class _PredictPickScreenState extends State<PredictPickScreen>
                             Colors.black.withValues(alpha: 0.5),
                           ],
                         ),
-                        borderRadius: BorderRadius.circular(24),
+                        borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                         border: Border.all(
                           color: modeColor.withValues(alpha: 0.3),
                           width: 2,
                         ),
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(22),
+                        borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                         child: Stack(
                           children: [
                             // Animated heatmap
@@ -332,14 +333,14 @@ class _PredictPickScreenState extends State<PredictPickScreen>
 
   Widget _buildLegend() {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: Colors.black.withValues(alpha: 0.5),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             border: Border.all(
               color: Colors.white.withValues(alpha: 0.1),
             ),
@@ -399,14 +400,14 @@ class _PredictPickScreenState extends State<PredictPickScreen>
 
   Widget _buildStats() {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: Colors.black.withValues(alpha: 0.5),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             border: Border.all(
               color: Colors.white.withValues(alpha: 0.1),
             ),
@@ -437,7 +438,7 @@ class _PredictPickScreenState extends State<PredictPickScreen>
 
   Widget _buildBottomPanel() {
     return ClipRRect(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(AppConstants.radius2Xl)),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
@@ -481,7 +482,7 @@ class _PredictPickScreenState extends State<PredictPickScreen>
                             horizontal: 14, vertical: 8),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
                           border: Border.all(
                             color: modeColor.withValues(alpha: 0.3),
                           ),
@@ -522,7 +523,7 @@ class _PredictPickScreenState extends State<PredictPickScreen>
                         modeColor.withValues(alpha: 0.7),
                       ],
                     ),
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                     boxShadow: [
                       BoxShadow(
                         color: modeColor.withValues(alpha: 0.4),
@@ -554,7 +555,7 @@ class _PredictPickScreenState extends State<PredictPickScreen>
   Widget _buildInputField(String label, TextEditingController controller, FocusNode focusNode) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         border: Border.all(
           color: modeColor.withValues(alpha: 0.3),
         ),
@@ -566,14 +567,14 @@ class _PredictPickScreenState extends State<PredictPickScreen>
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.05),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppConstants.radiusXl),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

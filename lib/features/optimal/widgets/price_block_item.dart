@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/constants/app_constants.dart';
 
 /// 가격 블록 아이템 위젯 (글라스모피즘 스타일)
 ///
@@ -41,7 +42,7 @@ class PriceBlockItem extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppConstants.radiusMd),
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
             child: Container(
@@ -49,12 +50,12 @@ class PriceBlockItem extends StatelessWidget {
               decoration: BoxDecoration(
                 // Figma: Fill #222222 20%
                 color: const Color(0xFF222222).withValues(alpha: 0.20),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               ),
               // 선택된 블록: 그라데이션 보더 (파랑→보라→분홍)
               foregroundDecoration: isSelected
                   ? BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                       border: GradientBorder(
                         gradient: LinearGradient(
                           colors: [

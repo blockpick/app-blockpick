@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import '../../../core/constants/app_constants.dart';
 
 import 'package:flutter/material.dart';
 
@@ -161,7 +162,7 @@ class _SelectCarouselWidgetState extends State<SelectCarouselWidget> {
                     ),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusFull),
                       border: Border.all(
                         color: AppColors.primaryMain,
                         width: 2,
@@ -288,7 +289,7 @@ class _SelectHeroItem extends StatelessWidget {
               child: Container(
                 height: 14,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(24),
+                  borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                   color: Colors.black.withValues(alpha: 0.05),
                   boxShadow: [
                     BoxShadow(

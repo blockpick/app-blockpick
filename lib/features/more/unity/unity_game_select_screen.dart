@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
@@ -17,7 +18,7 @@ class UnityGameSelectScreen extends ConsumerWidget {
     final gamesAsync = ref.watch(gamesProvider);
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: AppColors.textBlack,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -70,7 +71,7 @@ class UnityGameSelectScreen extends ConsumerWidget {
                 return _buildGameList(context, gameRounds);
               },
               loading: () => const Center(
-                child: CircularProgressIndicator(color: Colors.amber),
+                child: CircularProgressIndicator(color: AppColors.yellow500),
               ),
               error: (error, stack) => Center(
                 child: Column(
@@ -116,8 +117,8 @@ class UnityGameSelectScreen extends ConsumerWidget {
               icon: const Icon(Icons.play_arrow),
               label: const Text('데모 게임 시작'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.amber,
-                foregroundColor: Colors.black,
+                backgroundColor: AppColors.yellow500,
+                foregroundColor: AppColors.textBlack,
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               ),
             ),
@@ -150,16 +151,16 @@ class UnityGameSelectScreen extends ConsumerWidget {
               Colors.grey[850]!,
             ],
           ),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.grey[800]!, width: 1),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
+          border: Border.all(color: AppColors.gray800, width: 1),
         ),
         child: Row(
           children: [
             // 이미지
             ClipRRect(
               borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                bottomLeft: Radius.circular(16),
+                topLeft: Radius.circular(AppConstants.radiusXl),
+                bottomLeft: Radius.circular(AppConstants.radiusXl),
               ),
               child: SizedBox(
                 width: 120,
@@ -220,7 +221,7 @@ class UnityGameSelectScreen extends ConsumerWidget {
                           ),
                           decoration: BoxDecoration(
                             color: AppColors.primary.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                           ),
                           child: Text(
                             '3D로 플레이',
@@ -248,7 +249,7 @@ class UnityGameSelectScreen extends ConsumerWidget {
 
   Widget _buildPlaceholder() {
     return Container(
-      color: Colors.grey[800],
+      color: AppColors.gray800,
       child: Center(
         child: Icon(Icons.image, color: Colors.grey[600], size: 32),
       ),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import '../../../core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_embed_unity/flutter_embed_unity.dart';
 import '../../../core/theme/app_colors.dart';
@@ -138,7 +139,7 @@ class _UnityBlockpickScreenState extends State<UnityBlockpickScreen> {
       builder: (context) => Container(
         decoration: const BoxDecoration(
           color: AppColors.textBlack,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.radiusBottomSheet)),
         ),
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -181,8 +182,8 @@ class _UnityBlockpickScreenState extends State<UnityBlockpickScreen> {
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Colors.black26,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.grey[800]!),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
+                border: Border.all(color: AppColors.gray800),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -208,17 +209,17 @@ class _UnityBlockpickScreenState extends State<UnityBlockpickScreen> {
               width: double.infinity,
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.green.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(8),
+                color: AppColors.green500.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               ),
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.check_circle, color: Colors.green, size: 16),
+                  Icon(Icons.check_circle, color: AppColors.green500, size: 16),
                   SizedBox(width: 8),
                   Text(
                     'Unity ↔ Flutter 통신 정상',
-                    style: TextStyle(color: Colors.green, fontSize: 14),
+                    style: TextStyle(color: AppColors.green500, fontSize: 14),
                   ),
                 ],
               ),
@@ -231,11 +232,11 @@ class _UnityBlockpickScreenState extends State<UnityBlockpickScreen> {
               child: ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey[800],
+                  backgroundColor: AppColors.gray800,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                   ),
                 ),
                 child: const Text('닫기'),
@@ -279,7 +280,7 @@ class _UnityBlockpickScreenState extends State<UnityBlockpickScreen> {
         builder: (context, setModalState) => Container(
           decoration: const BoxDecoration(
             color: AppColors.textBlack,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.radiusBottomSheet)),
           ),
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -380,8 +381,8 @@ class _UnityBlockpickScreenState extends State<UnityBlockpickScreen> {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: Colors.black26,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.grey[800]!),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusMd),
+                  border: Border.all(color: AppColors.gray800),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -414,11 +415,11 @@ class _UnityBlockpickScreenState extends State<UnityBlockpickScreen> {
                 child: ElevatedButton(
                   onPressed: () => Navigator.of(context).pop(),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey[800],
+                    backgroundColor: AppColors.gray800,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                     ),
                   ),
                   child: const Text('닫기'),
@@ -466,7 +467,7 @@ class _UnityBlockpickScreenState extends State<UnityBlockpickScreen> {
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
               activeTrackColor: Colors.amber,
-              inactiveTrackColor: Colors.grey[700],
+              inactiveTrackColor: AppColors.gray600,
               thumbColor: Colors.amber,
               overlayColor: Colors.amber.withOpacity(0.2),
             ),
@@ -604,7 +605,7 @@ class _UnityBlockpickScreenState extends State<UnityBlockpickScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: AppColors.textBlack,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -641,7 +642,7 @@ class _UnityBlockpickScreenState extends State<UnityBlockpickScreen> {
                         : '블록 선택 알림 OFF',
                   ),
                   duration: const Duration(seconds: 1),
-                  backgroundColor: _showBlockInfoBottomSheet ? Colors.green : Colors.grey[700],
+                  backgroundColor: _showBlockInfoBottomSheet ? AppColors.green500 : AppColors.gray600,
                 ),
               );
             },
@@ -690,7 +691,7 @@ class _UnityBlockpickScreenState extends State<UnityBlockpickScreen> {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: Colors.red.withOpacity(0.8),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                 ),
                 child: Text(
                   _errorMessage!,

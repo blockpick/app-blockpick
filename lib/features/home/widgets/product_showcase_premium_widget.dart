@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_colors.dart';
 
 /// 프리미엄 상품 쇼케이스 위젯
@@ -101,7 +102,7 @@ class _PremiumProductCardState extends State<_PremiumProductCard>
         transform: Matrix4.identity()..scale(_isHovered ? 1.03 : 1.0),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -122,7 +123,7 @@ class _PremiumProductCardState extends State<_PremiumProductCard>
             ],
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
             child: Stack(
               children: [
                 // 배경 패턴
@@ -208,7 +209,7 @@ class _PremiumProductCardState extends State<_PremiumProductCard>
                                     widget.product.accentColor.withValues(alpha: 0.15),
                                   ],
                                 ),
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                                 border: Border.all(
                                   color: widget.product.accentColor.withValues(alpha: 0.3),
                                   width: 1.5,
@@ -304,7 +305,7 @@ class _PremiumProductCardState extends State<_PremiumProductCard>
       height: 70,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         boxShadow: [
           BoxShadow(
             color: widget.product.accentColor.withValues(alpha: 0.3),
@@ -324,7 +325,7 @@ class _PremiumProductCardState extends State<_PremiumProductCard>
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                 gradient: RadialGradient(
                   colors: [
                     widget.product.accentColor.withValues(alpha: 0.05),
@@ -361,7 +362,7 @@ class _PremiumProductCardState extends State<_PremiumProductCard>
                   ],
                 ),
                 borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(10),
+                  top: Radius.circular(AppConstants.radiusLg),
                 ),
               ),
             ),

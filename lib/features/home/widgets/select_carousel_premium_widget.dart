@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import '../../../core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
@@ -69,7 +70,7 @@ class _SelectCarouselPremiumWidgetState extends State<SelectCarouselPremiumWidge
       },
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -93,7 +94,7 @@ class _SelectCarouselPremiumWidgetState extends State<SelectCarouselPremiumWidge
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
           child: Stack(
             children: [
               // 배경 패턴 레이어
@@ -288,7 +289,7 @@ class _SelectCarouselPremiumWidgetState extends State<SelectCarouselPremiumWidge
                               height: 8,
                               margin: const EdgeInsets.symmetric(horizontal: 4),
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
+                                borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                                 gradient: isActive
                                     ? LinearGradient(
                                         colors: [
@@ -366,7 +367,7 @@ class _SelectCarouselPremiumWidgetState extends State<SelectCarouselPremiumWidge
               width: 230,
               height: 230,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -494,7 +495,7 @@ class _SelectCarouselPremiumWidgetState extends State<SelectCarouselPremiumWidge
   Widget _buildPremiumButton() {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
         gradient: LinearGradient(
           colors: [
             _games[_currentPage].accentColor1,
@@ -518,7 +519,7 @@ class _SelectCarouselPremiumWidgetState extends State<SelectCarouselPremiumWidge
         color: Colors.transparent,
         child: InkWell(
           onTap: () {},
-          borderRadius: BorderRadius.circular(32),
+          borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
             child: Row(

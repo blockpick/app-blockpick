@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import 'partner_game_webview.dart';
+import '../../core/constants/app_constants.dart';
 
 /// 파트너 이벤트 상세 화면
 /// 시안 기반: 브랜드 콜라보 헤더 + 경품 이미지 + 혜택 + 참여방법 + 유의사항 + CTA
@@ -65,11 +66,11 @@ class PartnerDetailScreen extends StatelessWidget {
                   // 오늘의 행운 문구
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 12),
-                    color: Color(0xFFF8F7FF),
+                    color: AppColors.primaryBg,
                     child: Text(
                       '오늘의 행운 꿈기 🍀',
                       textAlign: TextAlign.center,
-                      style: AppTextStyles.title3.copyWith(color: Color(0xFF5941F2)),
+                      style: AppTextStyles.title3.copyWith(color: AppColors.primaryMain),
                     ),
                   ),
 
@@ -107,8 +108,8 @@ class PartnerDetailScreen extends StatelessWidget {
                       margin: const EdgeInsets.symmetric(horizontal: 40),
                       height: 200,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF2F4F6),
-                        borderRadius: BorderRadius.circular(16),
+                        color: AppColors.gray100,
+                        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                       ),
                       clipBehavior: Clip.antiAlias,
                       child: Image.network(
@@ -176,7 +177,7 @@ class PartnerDetailScreen extends StatelessWidget {
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w900,
-              color: Color(0xFF5941F2),
+              color: AppColors.primaryMain,
               letterSpacing: 1,
             ),
           ),
@@ -200,7 +201,7 @@ class PartnerDetailScreen extends StatelessWidget {
           const SizedBox(height: 10),
           _BenefitCard(
             icon: Icons.add_circle_outline_rounded,
-            iconColor: const Color(0xFF5941F2),
+            iconColor: AppColors.primaryMain,
             title: '추가 혜택',
             description: '블록픽 이벤트 1회 응모권\n100% 지급',
           ),
@@ -208,7 +209,7 @@ class PartnerDetailScreen extends StatelessWidget {
             const SizedBox(height: 10),
             _BenefitCard(
               icon: Icons.flash_on_rounded,
-              iconColor: const Color(0xFF3182F6),
+              iconColor: AppColors.blue,
               title: '즉석 혜택',
               description: '즉석경품 당첨 기회!\n바로 확인 가능합니다',
             ),
@@ -225,8 +226,8 @@ class PartnerDetailScreen extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Color(0xFFF8F7FF),
-          borderRadius: BorderRadius.circular(16),
+          color: AppColors.primaryBg,
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -255,13 +256,13 @@ class PartnerDetailScreen extends StatelessWidget {
             width: 24,
             height: 24,
             decoration: BoxDecoration(
-              color: Color(0xFF5941F2),
-              borderRadius: BorderRadius.circular(8),
+              color: AppColors.primaryMain,
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
             ),
             child: Center(
               child: Text(
                 number,
-                style: AppTextStyles.caption3.copyWith(color: Colors.white),
+                style: AppTextStyles.caption3.copyWith(color: AppColors.white),
               ),
             ),
           ),
@@ -293,7 +294,7 @@ class PartnerDetailScreen extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: const Color(0xFFFFF8E1),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -339,7 +340,7 @@ class PartnerDetailScreen extends StatelessWidget {
         color: AppColors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: AppColors.textBlack.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),
@@ -360,10 +361,10 @@ class PartnerDetailScreen extends StatelessWidget {
             );
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF5941F2),
-            foregroundColor: Colors.white,
+            backgroundColor: AppColors.primaryMain,
+            foregroundColor: AppColors.white,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(AppConstants.radiusXl),
             ),
             elevation: 0,
           ),
@@ -402,7 +403,7 @@ class _BenefitCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         border: Border.all(color: AppColors.gray200),
       ),
       child: Row(
@@ -411,8 +412,8 @@ class _BenefitCard extends StatelessWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12),
+              color: iconColor.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             ),
             child: Icon(icon, color: iconColor, size: 24),
           ),

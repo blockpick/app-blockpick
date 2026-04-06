@@ -1,4 +1,5 @@
 import 'dart:math';
+import '../../../core/constants/app_constants.dart';
 import 'dart:ui';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -115,7 +116,7 @@ class _DuoPickScreenState extends State<DuoPickScreen>
           backgroundColor: modeColor,
           behavior: SnackBarBehavior.floating,
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusLg)),
         ),
       );
       return;
@@ -277,7 +278,7 @@ class _DuoPickScreenState extends State<DuoPickScreen>
                 Colors.transparent,
               ],
             ),
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
             border: Border.all(
               color: Colors.white.withValues(alpha: 0.1),
             ),
@@ -408,7 +409,7 @@ class _DuoPickScreenState extends State<DuoPickScreen>
     required bool hasValue,
   }) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: Container(
@@ -422,7 +423,7 @@ class _DuoPickScreenState extends State<DuoPickScreen>
                 color.withValues(alpha: hasValue ? 0.1 : 0.05),
               ],
             ),
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
             border: Border.all(
               color: color.withValues(alpha: hasValue ? 0.4 : 0.2),
               width: 1.5,
@@ -438,7 +439,7 @@ class _DuoPickScreenState extends State<DuoPickScreen>
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       color: color.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     ),
                     child: Text(emoji, style: TextStyle(fontSize: 20)),
                   ),
@@ -467,7 +468,7 @@ class _DuoPickScreenState extends State<DuoPickScreen>
                           horizontal: 14, vertical: 8),
                       decoration: BoxDecoration(
                         color: color.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                         border: Border.all(
                           color: color.withValues(alpha: 0.3),
                         ),
@@ -553,11 +554,11 @@ class _DuoPickScreenState extends State<DuoPickScreen>
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               borderSide: BorderSide.none,
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               borderSide: BorderSide(color: color, width: 2),
             ),
           ),
@@ -571,7 +572,7 @@ class _DuoPickScreenState extends State<DuoPickScreen>
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         border: Border.all(
           color: Colors.white.withValues(alpha: 0.1),
         ),
@@ -619,7 +620,7 @@ class _DuoPickScreenState extends State<DuoPickScreen>
                   )
                 : null,
             color: isSelected ? null : Colors.white.withValues(alpha: 0.05),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             border: Border.all(
               color: isSelected
                   ? Colors.transparent
@@ -667,7 +668,7 @@ class _DuoPickScreenState extends State<DuoPickScreen>
                 )
               : null,
           color: canCombine ? null : Colors.white.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           boxShadow: canCombine
               ? [
                   BoxShadow(

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_constants.dart';
 import '../../../../core/auth/data/services/google_auth_service.dart';
 import '../../../../core/auth/data/services/apple_auth_service.dart';
 
@@ -54,15 +55,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               const SizedBox(height: 32),
 
               // 안내 문구
-              const Text(
+              Text(
                 '반가워요!\nBlockpick에서 게임을\n시작해볼까요?',
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.darkBlue,
-                  height: 1.3,
-                  letterSpacing: -0.5,
-                ),
+                style: AppTextStyles.heading1.copyWith(color: AppColors.darkBlue),
               ),
               const SizedBox(height: 48),
 
@@ -105,10 +100,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 children: [
                   Text(
                     '이미 계정이 있으신가요?',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: AppColors.gray600,
-                    ),
+                    style: AppTextStyles.body3.copyWith(color: AppColors.gray600),
                   ),
                   TextButton(
                     onPressed: () => context.push('/login'),
@@ -155,15 +147,15 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   }) {
     return Material(
       color: AppColors.white,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
         child: Container(
           height: 60,
           padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             border: Border.all(color: borderColor ?? AppColors.gray200),
           ),
           child: Row(
@@ -173,7 +165,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 height: 40,
                 decoration: BoxDecoration(
                   color: iconBgColor,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                   border: iconBgColor == AppColors.white
                       ? Border.all(color: AppColors.gray200)
                       : null,
@@ -292,7 +284,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         content: Text(message),
         backgroundColor: AppColors.red,
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusLg)),
       ),
     );
   }
@@ -302,7 +294,7 @@ class _GoogleLogoPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..style = PaintingStyle.fill;
-    paint.color = const Color(0xFF4285F4);
+    paint.color = const Color(0xFF4285F4); // Google brand color
     canvas.drawCircle(
       Offset(size.width / 2, size.height / 2),
       size.width / 2,

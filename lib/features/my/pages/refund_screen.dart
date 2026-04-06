@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/auth/domain/providers/auth_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/constants/app_constants.dart';
 
 /// 환불 신청 화면
 class RefundScreen extends ConsumerStatefulWidget {
@@ -41,7 +42,7 @@ class _RefundScreenState extends ConsumerState<RefundScreen> {
             backgroundColor: AppColors.green500,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             ),
           ),
         );
@@ -55,7 +56,7 @@ class _RefundScreenState extends ConsumerState<RefundScreen> {
             backgroundColor: AppColors.red,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             ),
           ),
         );
@@ -99,7 +100,7 @@ class _RefundScreenState extends ConsumerState<RefundScreen> {
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       color: AppColors.white,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,7 +127,7 @@ class _RefundScreenState extends ConsumerState<RefundScreen> {
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       color: AppColors.white,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,15 +155,15 @@ class _RefundScreenState extends ConsumerState<RefundScreen> {
                               fontWeight: FontWeight.w500,
                             ),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                               borderSide: BorderSide(color: AppColors.gray200),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                               borderSide: BorderSide(color: AppColors.gray200),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                               borderSide: BorderSide(color: AppColors.blue),
                             ),
                             contentPadding: const EdgeInsets.symmetric(
@@ -191,7 +192,7 @@ class _RefundScreenState extends ConsumerState<RefundScreen> {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: AppColors.red.withValues(alpha: 0.05),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -228,11 +229,10 @@ class _RefundScreenState extends ConsumerState<RefundScreen> {
                         ? _processRefund
                         : null,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.darkBlue,
                       foregroundColor: AppColors.white,
                       disabledBackgroundColor: AppColors.gray300,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                       ),
                       elevation: 0,
                     ),
@@ -270,7 +270,7 @@ class _RefundScreenState extends ConsumerState<RefundScreen> {
           foregroundColor: AppColors.gray700,
           side: BorderSide(color: AppColors.gray300),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(AppConstants.radiusMd),
           ),
           padding: const EdgeInsets.symmetric(vertical: 10),
         ),

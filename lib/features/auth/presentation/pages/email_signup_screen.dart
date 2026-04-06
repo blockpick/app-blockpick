@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_constants.dart';
 import '../widgets/auth_scaffold.dart';
 import '../widgets/auth_button.dart';
 import '../widgets/auth_text_field.dart';
@@ -74,7 +75,7 @@ class _EmailSignupScreenState extends ConsumerState<EmailSignupScreen> {
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radius2Xl)),
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -85,7 +86,7 @@ class _EmailSignupScreenState extends ConsumerState<EmailSignupScreen> {
                 height: 64,
                 decoration: BoxDecoration(
                   color: AppColors.blue.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                 ),
                 child: const Icon(
                   Icons.person_outline_rounded,
@@ -96,11 +97,7 @@ class _EmailSignupScreenState extends ConsumerState<EmailSignupScreen> {
               const SizedBox(height: 20),
               Text(
                 '이미 가입된 계정이에요',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.darkBlue,
-                ),
+                style: AppTextStyles.heading3.copyWith(color: AppColors.darkBlue),
               ),
               SizedBox(height: 8),
               Text(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
 import 'widgets/mode_card.dart';
 
 /// 10가지 좌표 선택 모드 체험 화면
@@ -116,17 +117,14 @@ class MoreScreen extends StatelessWidget {
                 children: [
                   Text(
                     '좌표 선택 체험',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.darkBlue,
+                    style: AppTextStyles.heading3.copyWith(
+                      color: AppColors.textBlack,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     '12가지 독창적인 방법으로 좌표를 선택해보세요',
-                    style: TextStyle(
-                      fontSize: 14,
+                    style: AppTextStyles.body3.copyWith(
                       color: AppColors.gray600,
                     ),
                   ),

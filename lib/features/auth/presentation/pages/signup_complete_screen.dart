@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -26,7 +27,7 @@ class SignupCompleteScreen extends ConsumerWidget {
                 height: 120,
                 decoration: BoxDecoration(
                   gradient: AppColors.gradientBlue,
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusFull),
                   boxShadow: [
                     BoxShadow(
                       color: AppColors.blue.withValues(alpha: 0.3),

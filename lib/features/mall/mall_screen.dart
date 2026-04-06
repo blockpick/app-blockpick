@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/constants/app_constants.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
@@ -363,7 +364,7 @@ class _MallScreenState extends State<MallScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(AppConstants.radiusXl),
             boxShadow: [
               BoxShadow(
                 color: AppColors.black.withValues(alpha: 0.04),
@@ -400,7 +401,7 @@ class _MallScreenState extends State<MallScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         boxShadow: [
           BoxShadow(
             color: AppColors.black.withValues(alpha: 0.04),
@@ -425,7 +426,7 @@ class _MallScreenState extends State<MallScreen> {
                     color: isSelected
                         ? AppColors.darkBlue.withValues(alpha: 0.1)
                         : AppColors.gray100,
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                   ),
                   child: Icon(
                     category['icon'] as IconData,
@@ -463,7 +464,7 @@ class _MallScreenState extends State<MallScreen> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
         boxShadow: [
           BoxShadow(
             color: AppColors.darkBlue.withValues(alpha: 0.3),
@@ -482,7 +483,7 @@ class _MallScreenState extends State<MallScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                     color: AppColors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(6),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                   ),
                   child: Text(
                     '첫 구매 혜택',
@@ -515,7 +516,7 @@ class _MallScreenState extends State<MallScreen> {
             height: 80,
             decoration: BoxDecoration(
               color: AppColors.white.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
             ),
             child: const Icon(
               Icons.flight_takeoff_rounded,
@@ -578,7 +579,7 @@ class _MallScreenState extends State<MallScreen> {
             height: 32,
             decoration: BoxDecoration(
               color: AppColors.blue.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             ),
             child: Icon(
               Icons.luggage_rounded,
@@ -630,7 +631,7 @@ class _MallScreenState extends State<MallScreen> {
       child: Container(
         decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         boxShadow: [
           BoxShadow(
             color: AppColors.black.withValues(alpha: 0.05),
@@ -647,13 +648,13 @@ class _MallScreenState extends State<MallScreen> {
             height: 120,
             decoration: BoxDecoration(
               color: AppColors.gray200,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(AppConstants.radiusXl)),
             ),
             child: Stack(
               children: [
                 // 네트워크 이미지
                 ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(AppConstants.radiusXl)),
                   child: imageUrl != null
                       ? Image.network(
                           imageUrl,
@@ -700,7 +701,7 @@ class _MallScreenState extends State<MallScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: _getTagColor(tag),
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                         boxShadow: [
                           BoxShadow(
                             color: _getTagColor(tag).withValues(alpha: 0.4),
@@ -816,7 +817,7 @@ class _MallScreenState extends State<MallScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
                           color: AppColors.red.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                         ),
                         child: Text(
                           '${product['discount']}%',

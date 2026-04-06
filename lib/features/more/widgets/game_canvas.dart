@@ -1,4 +1,5 @@
 import 'dart:ui';
+import '../../../core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/app_colors.dart';
@@ -157,14 +158,14 @@ class _CoordinateHUD extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             decoration: BoxDecoration(
               color: AppColors.textBlack.withValues(alpha: 0.4),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppConstants.radiusXl),
               border: Border.all(
                 color: accentColor.withValues(alpha: 0.3),
                 width: 1,
@@ -382,7 +383,7 @@ class BottomControlPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(AppConstants.radius2Xl)),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
@@ -401,7 +402,7 @@ class BottomControlPanel extends StatelessWidget {
                 AppColors.textBlack.withValues(alpha: 0.8),
               ],
             ),
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(AppConstants.radius2Xl)),
             border: Border(
               top: BorderSide(
                 color: accentColor.withValues(alpha: 0.2),

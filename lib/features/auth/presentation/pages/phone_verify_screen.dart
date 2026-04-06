@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../../../../core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -139,7 +140,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
           content: const Text('필수 약관에 동의해 주세요.'),
           backgroundColor: AppColors.red,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusLg)),
         ),
       );
       return;
@@ -224,7 +225,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet)),
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -235,7 +236,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                 height: 56,
                 decoration: BoxDecoration(
                   color: AppColors.blue.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                 ),
                 child: const Icon(
                   Icons.person_outline_rounded,
@@ -272,7 +273,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         side: BorderSide(color: AppColors.gray300),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                         ),
                       ),
                       child: Text(
@@ -289,11 +290,10 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                         context.go('/login');
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.darkBlue,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                         ),
                       ),
                       child: Text(
@@ -475,7 +475,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet)),
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -486,7 +486,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                 height: 56,
                 decoration: BoxDecoration(
                   color: AppColors.red.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                 ),
                 child: const Icon(
                   Icons.error_outline_rounded,
@@ -520,7 +520,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         side: BorderSide(color: AppColors.gray300),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                         ),
                       ),
                       child: Text(
@@ -537,11 +537,10 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                         context.go('/login');
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.darkBlue,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                         ),
                       ),
                       child: Text(
@@ -563,7 +562,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet)),
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -574,7 +573,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                 height: 56,
                 decoration: BoxDecoration(
                   color: AppColors.red.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                 ),
                 child: const Icon(
                   Icons.error_outline_rounded,
@@ -608,7 +607,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         side: BorderSide(color: AppColors.gray300),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                         ),
                       ),
                       child: Text(
@@ -625,11 +624,10 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                         _resendCode();
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.darkBlue,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                         ),
                       ),
                       child: Text(
@@ -651,7 +649,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet)),
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -662,7 +660,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                 height: 56,
                 decoration: BoxDecoration(
                   color: AppColors.orange.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                 ),
                 child: Icon(
                   Icons.timer_off_rounded,
@@ -695,11 +693,10 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                     _resendCode();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.darkBlue,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     ),
                   ),
                   child: Text(
@@ -719,7 +716,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet)),
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -730,7 +727,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                 height: 56,
                 decoration: BoxDecoration(
                   color: AppColors.red.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                 ),
                 child: const Icon(
                   Icons.block_rounded,
@@ -760,11 +757,10 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                 child: ElevatedButton(
                   onPressed: () => Navigator.pop(context),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.darkBlue,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     ),
                   ),
                   child: Text(
@@ -905,12 +901,11 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
                         ? (_canComplete && !_isLoading ? _verifyAndContinue : null)
                         : (_canSendCode ? _sendCode : null),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.darkBlue,
                       foregroundColor: AppColors.white,
                       disabledBackgroundColor: AppColors.gray300,
                       disabledForegroundColor: AppColors.white,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                       ),
                       elevation: 0,
                     ),
@@ -949,7 +944,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
         Container(
           decoration: BoxDecoration(
             color: _codeSent ? AppColors.gray200 : AppColors.gray100,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
           ),
           child: InternationalPhoneNumberInput(
             onInputChanged: (PhoneNumber number) {
@@ -996,11 +991,11 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
               hintStyle: TextStyle(color: AppColors.gray400),
               prefixIcon: Icon(Icons.search, color: AppColors.gray500),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 borderSide: BorderSide(color: AppColors.gray300),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 borderSide: BorderSide(color: AppColors.blue, width: 2),
               ),
             ),
@@ -1050,7 +1045,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
             filled: true,
             fillColor: AppColors.gray100,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               borderSide: BorderSide.none,
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
@@ -1095,7 +1090,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.gray50,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1174,7 +1169,7 @@ class _PhoneVerifyScreenState extends ConsumerState<PhoneVerifyScreen> {
             height: 24,
             decoration: BoxDecoration(
               color: value ? AppColors.blue : AppColors.white,
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               border: value ? null : Border.all(color: AppColors.gray300, width: 1.5),
             ),
             child: value

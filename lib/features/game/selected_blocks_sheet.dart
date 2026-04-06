@@ -12,6 +12,7 @@ import '../../core/auth/domain/providers/auth_provider.dart';
 import '../auth/presentation/dialogs/auth_dialogs.dart';
 import 'widgets/game_join_loading_overlay.dart';
 import 'widgets/game_join_result_overlay.dart';
+import '../../core/constants/app_constants.dart';
 
 /// 참여하기 모달 바텀시트 (기획 SC-009-17)
 ///
@@ -70,7 +71,7 @@ class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
         return Container(
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(AppConstants.radius2Xl)),
             boxShadow: [
               BoxShadow(
                 color: AppColors.black.withValues(alpha: 0.1),
@@ -91,7 +92,7 @@ class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
                     height: 4,
                     decoration: BoxDecoration(
                       color: AppColors.buleGray,
-                      borderRadius: BorderRadius.circular(2),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                     ),
                   ),
                 ),
@@ -141,7 +142,7 @@ class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
                         color: AppColors.blue.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                       ),
                       child: Text(
                         '${selectedBlocks.length}개 좌표',
@@ -274,7 +275,7 @@ class _SelectedBlocksSheetState extends ConsumerState<SelectedBlocksSheet> {
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           decoration: BoxDecoration(
                             color: AppColors.darkBlue,
-                            borderRadius: BorderRadius.circular(14),
+                            borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                             boxShadow: [
                               BoxShadow(
                                 color: AppColors.darkBlue.withValues(alpha: 0.3),

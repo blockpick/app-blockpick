@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/constants/app_constants.dart';
+import '../../../components/common/common_empty_state.dart';
 
 /// 쇼핑 주문 내역 화면
 class OrderHistoryScreen extends ConsumerWidget {
@@ -44,30 +46,9 @@ class OrderHistoryScreen extends ConsumerWidget {
   }
 
   Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.shopping_bag_outlined,
-            size: 64,
-            color: AppColors.gray400,
-          ),
-          SizedBox(height: 16),
-          Text(
-            '주문 내역이 없습니다',
-            style: AppTextStyles.body2.copyWith(color: AppColors.gray500),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'MALL에서 쇼핑을 즐겨보세요!',
-            style: TextStyle(
-              fontSize: 14,
-              color: AppColors.gray400,
-            ),
-          ),
-        ],
-      ),
+    return const CommonEmptyState(
+      icon: Icons.shopping_bag_outlined,
+      message: '주문 내역이 없습니다',
     );
   }
 }
@@ -105,7 +86,7 @@ class _OrderItem extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,7 +107,7 @@ class _OrderItem extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                     color: statusColor.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                   ),
                   child: Text(
                     statusText,
@@ -149,7 +130,7 @@ class _OrderItem extends StatelessWidget {
                   height: 60,
                   decoration: BoxDecoration(
                     color: AppColors.gray100,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                   ),
                   child: Icon(
                     Icons.image_outlined,

@@ -1,4 +1,5 @@
 import 'dart:ui';
+import '../../../core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/app_colors.dart';
@@ -113,7 +114,7 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
       child: Padding(
         padding: const EdgeInsets.all(28),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(32),
+          borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
             child: AnimatedBuilder(
@@ -138,7 +139,7 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
                     ],
                     stops: const [0.0, 0.5, 1.0],
                   ),
-                  borderRadius: BorderRadius.circular(32),
+                  borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                   border: Border.all(
                     color: widget.modeColor.withValues(alpha: 0.4),
                     width: 1.5,
@@ -164,7 +165,7 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
                       builder: (context, child) {
                         return Positioned.fill(
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(32),
+                            borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                             child: ShaderMask(
                               shaderCallback: (bounds) {
                                 return LinearGradient(
@@ -208,7 +209,7 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
                                   widget.modeColor.withValues(alpha: 0.15),
                                 ],
                               ),
-                              borderRadius: BorderRadius.circular(24),
+                              borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                               border: Border.all(
                                 color: widget.modeColor.withValues(alpha: 0.4),
                               ),
@@ -277,7 +278,7 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
                             ),
                             decoration: BoxDecoration(
                               color: AppColors.textBlack.withValues(alpha: 0.4),
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
                               border: Border.all(
                                 color: widget.modeColor.withValues(alpha: 0.2),
                               ),
@@ -432,7 +433,7 @@ class _CoordinateResultDialogState extends State<CoordinateResultDialog>
                 )
               : null,
           color: isPrimary ? null : AppColors.white.withValues(alpha: 0.08),
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           border: Border.all(
             color: isPrimary
                 ? widget.modeColor.withValues(alpha: 0.6)

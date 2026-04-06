@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -168,7 +169,7 @@ class _AgreementItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => onChanged(!isChecked),
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: isAllAgree ? 16 : 0,
@@ -177,7 +178,7 @@ class _AgreementItem extends StatelessWidget {
         decoration: isAllAgree
             ? BoxDecoration(
                 color: AppColors.gray50,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               )
             : null,
         child: Row(
@@ -189,7 +190,7 @@ class _AgreementItem extends StatelessWidget {
               height: 24,
               decoration: BoxDecoration(
                 color: isChecked ? AppColors.blue : Colors.transparent,
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                 border: Border.all(
                   color: isChecked ? AppColors.blue : AppColors.gray400,
                   width: 2,
@@ -248,7 +249,7 @@ class _TermsDetailSheet extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.85,
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.radiusBottomSheet)),
       ),
       child: Column(
         children: [

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_constants.dart';
 import 'dart:async';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
@@ -105,7 +106,7 @@ class _EventBannerCarouselState extends State<EventBannerCarousel> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -149,7 +150,7 @@ class _EventBannerCarouselState extends State<EventBannerCarousel> {
       height: 8,
       decoration: BoxDecoration(
         color: isActive ? AppColors.primaryMain : AppColors.gray200,
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(AppConstants.radiusSm),
       ),
     );
   }

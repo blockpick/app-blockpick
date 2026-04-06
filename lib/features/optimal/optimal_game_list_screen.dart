@@ -5,6 +5,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../data/mock_optimal_game_data.dart';
 import '../../models/optimal_game_model.dart';
+import '../../core/constants/app_constants.dart';
 
 /// 최적가 게임 리스트 화면
 class OptimalGameListScreen extends StatelessWidget {
@@ -32,11 +33,11 @@ class OptimalGameListScreen extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         border: Border.all(color: AppColors.buleGray),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withOpacity(0.05),
+            color: AppColors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -46,7 +47,7 @@ class OptimalGameListScreen extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () => context.go('/optimal/${game.id}'),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Row(
@@ -57,11 +58,11 @@ class OptimalGameListScreen extends StatelessWidget {
                   height: 80,
                   decoration: BoxDecoration(
                     color: AppColors.bgWhite,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     border: Border.all(color: AppColors.buleGray),
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     child: Image.asset(
                       game.imageUrl,
                       fit: BoxFit.cover,
@@ -103,7 +104,7 @@ class OptimalGameListScreen extends StatelessWidget {
                         ),
                         decoration: BoxDecoration(
                           gradient: AppColors.gradientLight,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                         ),
                         child: Text(
                           '${_formatPrice(game.minPrice)} ~ ${_formatPrice(game.maxPrice)}',
@@ -152,7 +153,7 @@ class OptimalGameListScreen extends StatelessWidget {
                             ),
                             decoration: BoxDecoration(
                               gradient: AppColors.gradientBluePurplePink,
-                              borderRadius: BorderRadius.circular(6),
+                              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                             ),
                             child: Text(
                               '최적가',

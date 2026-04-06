@@ -120,7 +120,7 @@ class _MyPickScreenState extends ConsumerState<MyPickScreen> with SingleTickerPr
           Icon(
             Icons.inbox_outlined,
             size: 80,
-            color: AppColors.medium.withOpacity(0.5),
+            color: AppColors.medium.withValues(alpha: 0.5),
           ),
           SizedBox(height: 16),
           Text(
@@ -179,8 +179,8 @@ class _MyPickScreenState extends ConsumerState<MyPickScreen> with SingleTickerPr
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: AppColors.medium.withOpacity(0.3),
-                borderRadius: BorderRadius.circular(2),
+                color: AppColors.medium.withValues(alpha: 0.3),
+                borderRadius: BorderRadius.circular(AppConstants.radiusSm),
               ),
             ),
 
@@ -242,9 +242,9 @@ class _MyPickScreenState extends ConsumerState<MyPickScreen> with SingleTickerPr
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.blue.withOpacity(0.1),
+                            color: AppColors.blue.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(AppConstants.radiusSm),
-                            border: Border.all(color: AppColors.blue.withOpacity(0.3)),
+                            border: Border.all(color: AppColors.blue.withValues(alpha: 0.3)),
                           ),
                           child: Text(
                             'X${block.col}-Y${block.row}',

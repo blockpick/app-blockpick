@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_constants.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -111,10 +112,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                       child: ElevatedButton(
                         onPressed: _goToLogin,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.darkBlue,
                           foregroundColor: AppColors.white,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                           ),
                           elevation: 0,
                         ),
@@ -136,7 +136,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                           foregroundColor: AppColors.gray600,
                           side: BorderSide(color: AppColors.gray300),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                           ),
                         ),
                         child: const Text(
@@ -167,7 +167,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             height: 120,
             decoration: BoxDecoration(
               color: content.color.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(32),
+              borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
             ),
             child: Icon(
               content.icon,
@@ -211,7 +211,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       height: 8,
       decoration: BoxDecoration(
         color: isActive ? AppColors.blue : AppColors.gray300,
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(AppConstants.radiusSm),
       ),
     );
   }

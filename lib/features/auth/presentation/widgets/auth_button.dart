@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 
@@ -119,7 +120,7 @@ class SocialLoginButton extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         border: borderColor != null
             ? Border.all(color: borderColor!, width: 1)
             : null,
@@ -128,7 +129,7 @@ class SocialLoginButton extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: onPressed,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -191,7 +192,7 @@ class AuthTextButton extends StatelessWidget {
       style: TextButton.styleFrom(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppConstants.radiusMd),
         ),
       ),
       child: Text(

@@ -30,6 +30,7 @@ import 'widgets/game_join_progress_overlay.dart';
 import 'widgets/game_join_result_overlay.dart';
 import 'widgets/product_selector_overlay.dart';
 import 'widgets/transaction_progress_modal.dart';
+import '../../core/constants/app_constants.dart';
 
 /// Gacha 스타일 게임 화면 (토스 디자인)
 class GachaGameScreen extends ConsumerStatefulWidget {
@@ -213,7 +214,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
         boxShadow: [
           BoxShadow(
             color: AppColors.black.withValues(alpha: 0.2),
@@ -296,7 +297,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
       builder: (context) => Container(
         decoration: const BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.radius2Xl)),
         ),
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -308,7 +309,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                 height: 4,
                 decoration: BoxDecoration(
                   color: AppColors.gray300,
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                 ),
               ),
             ),
@@ -331,7 +332,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                   SnackBar(
                     content: const Text('링크가 복사되었습니다'),
                     behavior: SnackBarBehavior.floating,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusLg)),
                   ),
                 );
               },
@@ -340,7 +341,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 decoration: BoxDecoration(
                   color: AppColors.gray100,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -456,7 +457,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
       context: context,
       builder: (context) => Dialog(
         backgroundColor: AppColors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusXl)),
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -500,7 +501,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   decoration: BoxDecoration(
                     color: AppColors.darkBlue,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                   ),
                   child: Center(
                     child: Text(
@@ -568,7 +569,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(result.message ?? '경품 수령에 실패했습니다.'),
-            backgroundColor: Colors.orange,
+            backgroundColor: AppColors.orange,
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -742,7 +743,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
         content: Text(message),
         backgroundColor: AppColors.red,
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusLg)),
       ),
     );
   }
@@ -963,7 +964,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
   /// 전체 화면 모드
   Widget _buildFullScreenMode(GameRound game) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: AppColors.textBlack,
       body: Stack(
         children: [
           // 전체 화면 게임 캔버스
@@ -1045,7 +1046,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.15),
+              color: AppColors.textBlack.withValues(alpha: 0.15),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -1221,7 +1222,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
             const SizedBox(height: 8),
             // 마감 게이지
             ClipRRect(
-              borderRadius: BorderRadius.circular(2),
+              borderRadius: BorderRadius.circular(AppConstants.radiusSm),
               child: LinearProgressIndicator(
                 value: _getDeadlineProgress(),
                 minHeight: 3,
@@ -1338,7 +1339,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
           color: isActive
               ? AppColors.darkBlue.withValues(alpha: 0.08)
               : AppColors.gray100,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
           border: Border.all(
             color: isActive ? AppColors.darkBlue.withValues(alpha: 0.3) : AppColors.gray200,
           ),
@@ -1374,7 +1375,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
           color: AppColors.darkBlue.withValues(alpha: 0.06),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
           border: Border.all(
             color: AppColors.darkBlue.withValues(alpha: 0.2),
           ),
@@ -1387,7 +1388,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
               decoration: BoxDecoration(
                 color: AppColors.darkBlue,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               ),
               child: Text(
                 '$productCount',
@@ -1447,12 +1448,12 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
 
     showDialog(
       context: context,
-      barrierColor: Colors.black.withValues(alpha: 0.5),
+      barrierColor: AppColors.textBlack.withValues(alpha: 0.5),
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) {
           return Dialog(
             backgroundColor: AppColors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radius2Xl)),
             insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 80),
             child: Padding(
               padding: const EdgeInsets.all(24),
@@ -1533,12 +1534,12 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                                     height: 40,
                                     decoration: BoxDecoration(
                                       color: AppColors.gray100,
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                                     ),
                                     child: Center(
                                       child: target.prize.hasImage
                                           ? ClipRRect(
-                                              borderRadius: BorderRadius.circular(8),
+                                              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                                               child: Image.network(
                                                 target.prize.displayImageUrl!,
                                                 width: 36,
@@ -1582,7 +1583,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                       decoration: BoxDecoration(
                                         color: tapCount >= 7 ? AppColors.red : AppColors.gray300,
-                                        borderRadius: BorderRadius.circular(8),
+                                        borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                                       ),
                                       child: Text(
                                         '$tapCount/10',
@@ -1606,7 +1607,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
                         color: AppColors.gray100,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                       ),
                       child: Center(
                         child: Text(
@@ -1629,7 +1630,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       decoration: BoxDecoration(
                         color: AppColors.darkBlue,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                       ),
                       child: Center(
                         child: Text(
@@ -1657,12 +1658,12 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
 
     showDialog(
       context: context,
-      barrierColor: Colors.black.withValues(alpha: 0.5),
+      barrierColor: AppColors.textBlack.withValues(alpha: 0.5),
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) {
           return Dialog(
             backgroundColor: AppColors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radius2Xl)),
             insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 80),
             child: Padding(
               padding: const EdgeInsets.all(24),
@@ -1728,15 +1729,15 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                                 filled: true,
                                 fillColor: AppColors.gray100,
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                                   borderSide: BorderSide(color: AppColors.gray200),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                                   borderSide: BorderSide(color: AppColors.gray200),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                                   borderSide: BorderSide(color: AppColors.darkBlue, width: 2),
                                 ),
                               ),
@@ -1774,15 +1775,15 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                                 filled: true,
                                 fillColor: AppColors.gray100,
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                                   borderSide: BorderSide(color: AppColors.gray200),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                                   borderSide: BorderSide(color: AppColors.gray200),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                                   borderSide: BorderSide(color: AppColors.darkBlue, width: 2),
                                 ),
                               ),
@@ -1838,7 +1839,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       decoration: BoxDecoration(
                         color: AppColors.darkBlue,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                       ),
                       child: Center(
                         child: Text(
@@ -1898,10 +1899,10 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
   void _showHelpSheet() {
     showDialog(
       context: context,
-      barrierColor: Colors.black.withValues(alpha: 0.5),
+      barrierColor: AppColors.textBlack.withValues(alpha: 0.5),
       builder: (context) => Dialog(
         backgroundColor: AppColors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radius2Xl)),
         insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -1952,7 +1953,7 @@ class _GachaGameScreenState extends ConsumerState<GachaGameScreen> {
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
                   color: AppColors.gray100,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -2050,7 +2051,7 @@ class _TossStyleConfirmSheetState extends State<_TossStyleConfirmSheet> {
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.radius2Xl)),
       ),
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -2062,7 +2063,7 @@ class _TossStyleConfirmSheetState extends State<_TossStyleConfirmSheet> {
             height: 4,
             decoration: BoxDecoration(
               color: AppColors.gray300,
-              borderRadius: BorderRadius.circular(2),
+              borderRadius: BorderRadius.circular(AppConstants.radiusSm),
             ),
           ),
           const SizedBox(height: 24),
@@ -2121,7 +2122,7 @@ class _TossStyleConfirmSheetState extends State<_TossStyleConfirmSheet> {
                   color: _prizeClaimed
                       ? AppColors.gray300
                       : AppColors.yellow500,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                 ),
                 child: _claiming
                     ? SizedBox(
@@ -2190,7 +2191,7 @@ class _TossStyleConfirmSheetState extends State<_TossStyleConfirmSheet> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               color: AppColors.gray100,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -2243,7 +2244,7 @@ class _TossStyleConfirmSheetState extends State<_TossStyleConfirmSheet> {
               padding: const EdgeInsets.symmetric(vertical: 16),
               decoration: BoxDecoration(
                 color: AppColors.darkBlue,
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(AppConstants.radiusXl),
               ),
               child: Center(
                 child: Text(
@@ -2424,7 +2425,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
       ),
       decoration: const BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.radius2Xl)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -2438,7 +2439,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                 height: 4,
                 decoration: BoxDecoration(
                   color: AppColors.gray300,
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                 ),
               ),
             ),
@@ -2498,7 +2499,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: AppColors.yellow500.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 border: Border.all(color: AppColors.yellow500.withValues(alpha: 0.3)),
               ),
               child: Column(
@@ -2535,7 +2536,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                             color: _isRefreshing
                                 ? AppColors.yellow500.withValues(alpha: 0.5)
                                 : AppColors.yellow500,
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -2546,15 +2547,15 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                                   height: 16,
                                   child: CircularProgressIndicator(
                                     strokeWidth: 2,
-                                    color: Colors.white,
+                                    color: AppColors.white,
                                   ),
                                 )
                               else
-                                const Icon(Icons.refresh_rounded, size: 18, color: Colors.white),
+                                const Icon(Icons.refresh_rounded, size: 18, color: AppColors.white),
                               SizedBox(width: 6),
                               Text(
                                 _isRefreshing ? '로딩...' : '새로고침',
-                                style: AppTextStyles.title3.copyWith(color: Colors.white),
+                                style: AppTextStyles.title3.copyWith(color: AppColors.white),
                               ),
                             ],
                           ),
@@ -2573,7 +2574,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                           decoration: BoxDecoration(
                             color: AppColors.yellow500.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                             border: Border.all(color: AppColors.yellow500.withValues(alpha: 0.3)),
                           ),
                           child: Row(
@@ -2581,7 +2582,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                             children: [
                               if (target.prize.hasImage)
                                 ClipRRect(
-                                  borderRadius: BorderRadius.circular(4),
+                                  borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                                   child: Image.network(
                                     target.prize.displayImageUrl!,
                                     width: 18,
@@ -2693,7 +2694,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: AppColors.yellow500.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 border: Border.all(color: AppColors.yellow500.withValues(alpha: 0.3)),
               ),
               child: Column(
@@ -2750,15 +2751,15 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                                 filled: true,
                                 fillColor: AppColors.white,
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                                   borderSide: BorderSide(color: AppColors.gray200),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                                   borderSide: BorderSide(color: AppColors.gray200),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                                   borderSide: BorderSide(color: AppColors.yellow500, width: 2),
                                 ),
                               ),
@@ -2803,15 +2804,15 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                                 filled: true,
                                 fillColor: AppColors.white,
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                                   borderSide: BorderSide(color: AppColors.gray200),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                                   borderSide: BorderSide(color: AppColors.gray200),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                                   borderSide: BorderSide(color: AppColors.yellow500, width: 2),
                                 ),
                               ),
@@ -2847,7 +2848,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
                         color: AppColors.gray100,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -2942,7 +2943,7 @@ class _EventSettingsSheetState extends State<_EventSettingsSheet> {
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
                 color: AppColors.gray100,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               ),
               child: Text(
                 valueText,
@@ -3007,7 +3008,7 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
       height: MediaQuery.of(context).size.height * 0.75,
       decoration: const BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.radiusBottomSheet)),
       ),
       child: Column(
         children: [
@@ -3019,7 +3020,7 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
               height: 4,
               decoration: BoxDecoration(
                 color: AppColors.gray300,
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(AppConstants.radiusSm),
               ),
             ),
           ),
@@ -3073,10 +3074,9 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
               child: ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.darkBlue,
                   foregroundColor: AppColors.white,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                   ),
                   elevation: 0,
                 ),
@@ -3132,7 +3132,7 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
           // 상품 이미지
           if (imageUrl != null && imageUrl.isNotEmpty)
             ClipRRect(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               child: Image.network(
                 imageUrl,
                 width: double.infinity,
@@ -3141,7 +3141,7 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
                   height: 200,
                   decoration: BoxDecoration(
                     color: AppColors.gray100,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                   ),
                   child: const Center(
                     child: Icon(
@@ -3162,7 +3162,7 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: AppColors.gray50,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               ),
               child: Row(
                 children: [
@@ -3214,7 +3214,7 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: AppColors.gray50,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               ),
               child: Column(
                 children: [

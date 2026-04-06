@@ -6,6 +6,7 @@ import '../../core/theme/app_text_styles.dart';
 import '../../models/game_round_model.dart';
 import '../../providers/game_provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import '../../core/constants/app_constants.dart';
 
 /// VIBE 게임 리스트 화면 (세로 스크롤 카드 방식)
 class VibeGameListScreen extends ConsumerStatefulWidget {
@@ -19,7 +20,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
   String _selectedTheme = 'ALL';
 
   final List<Map<String, dynamic>> _themes = [
-    {'label': 'All', 'value': 'ALL'},
+    {'label': '전체', 'value': 'ALL'},
     {'label': 'Tribute', 'value': 'Tribute'},
     {'label': 'Charity', 'value': 'Charity'},
     {'label': 'Art', 'value': 'Art'},
@@ -71,8 +72,8 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
                 decoration: BoxDecoration(
                   color: isSelected
                       ? AppColors.red
-                      : Colors.white,
-                  borderRadius: BorderRadius.circular(12),
+                      : AppColors.white,
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                   boxShadow: isSelected
                       ? [
                           BoxShadow(
@@ -86,7 +87,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
                 child: Text(
                   theme['label'] as String,
                   style: AppTextStyles.body4.copyWith(
-                    color: isSelected ? Colors.white : AppColors.medium,
+                    color: isSelected ? AppColors.white : AppColors.medium,
                     fontWeight: FontWeight.w600,
                   ),
                   textAlign: TextAlign.center,
@@ -154,11 +155,11 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.06),
+              color: AppColors.textBlack.withValues(alpha: 0.06),
               blurRadius: 16,
               offset: const Offset(0, 4),
             ),
@@ -169,7 +170,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
           children: [
             // 이미지
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(AppConstants.radiusBottomSheet)),
               child: AspectRatio(
                 aspectRatio: 16 / 10,
                 child: Stack(
@@ -196,12 +197,12 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
                         ),
                         decoration: BoxDecoration(
                           color: AppColors.red,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                         ),
                         child: Text(
                           game.category,
                           style: AppTextStyles.caption1.copyWith(
-                            color: Colors.white,
+                            color: AppColors.white,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -289,7 +290,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
                               AppColors.yellow500,
                             ],
                           ),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -297,7 +298,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
                             Text(
                               'Join',
                               style: AppTextStyles.body4.copyWith(
-                                color: Colors.white,
+                                color: AppColors.white,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
@@ -305,7 +306,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
                             const Icon(
                               LucideIcons.arrowRight,
                               size: 14,
-                              color: Colors.white,
+                              color: AppColors.white,
                             ),
                           ],
                         ),
@@ -348,7 +349,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
           ),
           SizedBox(height: 24),
           Text(
-            'No VIBE games yet',
+            'VIBE 게임이 없습니다',
             style: AppTextStyles.heading1.copyWith(
               color: AppColors.medium,
               fontWeight: FontWeight.w600,
@@ -356,7 +357,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
           ),
           SizedBox(height: 12),
           Text(
-            'Check back soon for new experiences',
+            '곧 새로운 게임이 열립니다',
             style: AppTextStyles.body3.copyWith(
               color: AppColors.medium,
             ),
@@ -380,7 +381,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
           ),
           SizedBox(height: 16),
           Text(
-            'Error loading games',
+            '게임을 불러올 수 없습니다',
             style: AppTextStyles.title1.copyWith(
               color: AppColors.red,
             ),
@@ -402,7 +403,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
               backgroundColor: AppColors.red,
               foregroundColor: AppColors.white,
             ),
-            child: const Text('Retry'),
+            child: const Text('다시 시도'),
           ),
         ],
       ),

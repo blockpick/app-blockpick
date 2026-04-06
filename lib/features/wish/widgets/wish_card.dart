@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../models/wish_model.dart';
 
 /// 소원 카드 위젯 — 위시 탭 그리드용
@@ -23,18 +24,18 @@ class WishCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           border: wish.isBusinessWish
               ? Border.all(color: AppColors.primary.withValues(alpha: 0.3), width: 1.5)
               : Border.all(color: AppColors.gray200.withValues(alpha: 0.6), width: 1),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.06),
+              color: AppColors.textBlack.withValues(alpha: 0.06),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.02),
+              color: AppColors.textBlack.withValues(alpha: 0.02),
               blurRadius: 2,
               offset: Offset(0, 1),
             ),
@@ -65,16 +66,13 @@ class WishCard extends StatelessWidget {
                       wish.productName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 11,
-                        color: AppColors.gray600,
-                      ),
+                      style: AppTextStyles.caption4.copyWith(color: AppColors.gray600),
                     ),
                     const SizedBox(height: 2),
                     // 가격
                     Text(
                       '${_formatPrice(wish.productPrice)}원',
-                      style: const TextStyle(
+                      style: AppTextStyles.title1.copyWith(
                         fontSize: 15,
                         fontWeight: FontWeight.w800,
                         color: AppColors.textBlack,
@@ -111,7 +109,7 @@ class WishCard extends StatelessWidget {
     return Stack(
       children: [
         ClipRRect(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.radiusXl - 1)),
           child: AspectRatio(
             aspectRatio: 1.1,
             child: Image.network(
@@ -132,9 +130,9 @@ class WishCard extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.55),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.15), width: 0.5),
+              color: AppColors.textBlack.withValues(alpha: 0.55),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
+              border: Border.all(color: AppColors.white.withValues(alpha: 0.15), width: 0.5),
             ),
             child: Text(
               '${wish.category.emoji} ${wish.category.label.split('/').first}',
@@ -150,10 +148,8 @@ class WishCard extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF7C3AED), AppColors.primary],
-                ),
-                borderRadius: BorderRadius.circular(8),
+                gradient: AppColors.gradientDarkPurple,
+                borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                 boxShadow: [
                   BoxShadow(
                     color: AppColors.primary.withValues(alpha: 0.3),
@@ -169,8 +165,7 @@ class WishCard extends StatelessWidget {
                   const SizedBox(width: 4),
                   Text(
                     wish.businessName ?? 'BRAND',
-                    style: const TextStyle(
-                      fontSize: 10,
+                    style: AppTextStyles.caption4.copyWith(
                       color: AppColors.white,
                       fontWeight: FontWeight.w700,
                     ),
@@ -229,21 +224,21 @@ class WishCard extends StatelessWidget {
   List<Color> get _categoryColors {
     switch (wish.category) {
       case WishCategory.food:
-        return [const Color(0xFFFF6B6B), const Color(0xFFFFE66D)];
+        return [AppColors.orange, AppColors.yellow500];
       case WishCategory.beauty:
-        return [const Color(0xFFE91E63), const Color(0xFFFF80AB)];
+        return [AppColors.pink, AppColors.red200];
       case WishCategory.fashion:
-        return [const Color(0xFF1A237E), const Color(0xFF5C6BC0)];
+        return [AppColors.primaryDark, AppColors.primaryLight];
       case WishCategory.electronics:
-        return [const Color(0xFF37474F), const Color(0xFF78909C)];
+        return [AppColors.gray800, AppColors.gray600];
       case WishCategory.figure:
-        return [const Color(0xFF5941F2), const Color(0xFFB39DDB)];
+        return [AppColors.primaryMain, AppColors.primaryBg];
       case WishCategory.travel:
-        return [const Color(0xFF00BCD4), const Color(0xFF80DEEA)];
+        return [AppColors.blue, AppColors.blue200];
       case WishCategory.lifestyle:
-        return [const Color(0xFF4CAF50), const Color(0xFFA5D6A7)];
+        return [AppColors.green500, AppColors.green200];
       case WishCategory.etc:
-        return [const Color(0xFF9E9E9E), const Color(0xFFE0E0E0)];
+        return [AppColors.gray400, AppColors.gray200];
     }
   }
 
@@ -251,7 +246,7 @@ class WishCard extends StatelessWidget {
     return Row(
       children: [
         if (!wish.isBusinessWish) ...[
-          Icon(Icons.favorite, size: 12, color: Colors.red.shade300),
+          Icon(Icons.favorite, size: 12, color: AppColors.red200),
           SizedBox(width: 3),
           Text(
             '${wish.empathyCount}',
@@ -268,7 +263,7 @@ class WishCard extends StatelessWidget {
         const Spacer(),
         Text(
           '@${wish.userName ?? ''}',
-          style: const TextStyle(fontSize: 10, color: AppColors.gray400),
+          style: AppTextStyles.caption4.copyWith(color: AppColors.gray400),
         ),
       ],
     );
@@ -278,19 +273,19 @@ class WishCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF3E0),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFFFFCC80), width: 0.5),
+        color: AppColors.yellow200,
+        borderRadius: BorderRadius.circular(AppConstants.radiusMd),
+        border: Border.all(color: AppColors.yellow500.withValues(alpha: 0.5), width: 0.5),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('🎁', style: TextStyle(fontSize: 11)),
+          Text('🎁', style: AppTextStyles.caption4.copyWith(fontSize: 11)),
           SizedBox(width: 4),
           Flexible(
             child: Text(
               '경품: ${_formatPrice(wish.prizeValue ?? 0)}원 상당',
-              style: AppTextStyles.caption4.copyWith(color: Color(0xFFE65100)),
+              style: AppTextStyles.caption4.copyWith(color: AppColors.orange),
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -310,7 +305,7 @@ class WishCard extends StatelessWidget {
             const SizedBox(width: 4),
             Text(
               '${_formatCount(wish.currentExposures ?? 0)} / ${_formatCount(wish.maxExposures ?? 0)}명',
-              style: const TextStyle(fontSize: 10, color: AppColors.gray600),
+              style: AppTextStyles.caption4.copyWith(color: AppColors.gray600),
             ),
             Spacer(),
             Text(
@@ -321,13 +316,13 @@ class WishCard extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         ClipRRect(
-          borderRadius: BorderRadius.circular(3),
+          borderRadius: BorderRadius.circular(AppConstants.radiusSm),
           child: LinearProgressIndicator(
             value: progress,
             minHeight: 4,
             backgroundColor: AppColors.gray200,
             valueColor: AlwaysStoppedAnimation(
-              progress > 0.7 ? AppColors.primary : Color(0xFF7C3AED),
+              progress > 0.7 ? AppColors.primary : AppColors.primaryLight,
             ),
           ),
         ),
@@ -347,7 +342,7 @@ class WishCard extends StatelessWidget {
           foregroundColor: AppColors.white,
           padding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
           ),
           elevation: 0,
           shadowColor: Colors.transparent,
@@ -357,19 +352,17 @@ class WishCard extends StatelessWidget {
         child: Ink(
           decoration: BoxDecoration(
             gradient: isBusinessFree
-                ? const LinearGradient(
-                    colors: [Color(0xFF7C3AED), AppColors.primary],
-                  )
-                : const LinearGradient(
-                    colors: [Color(0xFF2D3436), Color(0xFF191F28)],
+                ? AppColors.gradientDarkPurple
+                : LinearGradient(
+                    colors: [AppColors.gray800, AppColors.textBlack],
                   ),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
           ),
           child: Container(
             alignment: Alignment.center,
             child: Text(
               isBusinessFree ? '✨ 소문내기 무료' : '✨ 소문내기 10원',
-              style: const TextStyle(
+              style: AppTextStyles.button.copyWith(
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
                 color: AppColors.white,

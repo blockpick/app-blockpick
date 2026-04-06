@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_constants.dart';
+import '../../../core/theme/app_text_styles.dart';
 import '../more_screen.dart';
 
 /// 모드 선택 카드 위젯
@@ -21,17 +23,17 @@ class ModeCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
           boxShadow: [
             BoxShadow(
-              color: mode.color.withOpacity(0.15),
+              color: mode.color.withValues(alpha:0.15),
               blurRadius: 20,
               offset: const Offset(0, 8),
             ),
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
           child: Stack(
             children: [
               // 그라데이션 배경
@@ -45,8 +47,8 @@ class ModeCard extends StatelessWidget {
                     shape: BoxShape.circle,
                     gradient: RadialGradient(
                       colors: [
-                        mode.color.withOpacity(0.3),
-                        mode.color.withOpacity(0.0),
+                        mode.color.withValues(alpha:0.3),
+                        mode.color.withValues(alpha:0.0),
                       ],
                     ),
                   ),
@@ -64,8 +66,8 @@ class ModeCard extends StatelessWidget {
                       width: 48,
                       height: 48,
                       decoration: BoxDecoration(
-                        color: mode.color.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(14),
+                        color: mode.color.withValues(alpha:0.1),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                       ),
                       child: Center(
                         child: Text(
@@ -80,10 +82,8 @@ class ModeCard extends StatelessWidget {
                     // 이름
                     Text(
                       mode.name,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.darkBlue,
+                      style: AppTextStyles.title1.copyWith(
+                        color: AppColors.textBlack,
                       ),
                     ),
 
@@ -92,9 +92,8 @@ class ModeCard extends StatelessWidget {
                     // 설명
                     Text(
                       mode.description,
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: AppColors.gray500,
+                      style: AppTextStyles.caption1.copyWith(
+                        color: AppColors.gray400,
                         height: 1.3,
                       ),
                       maxLines: 2,
@@ -112,8 +111,8 @@ class ModeCard extends StatelessWidget {
                   width: 28,
                   height: 28,
                   decoration: BoxDecoration(
-                    color: mode.color.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
+                    color: mode.color.withValues(alpha:0.1),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                   ),
                   child: Icon(
                     Icons.arrow_forward_rounded,

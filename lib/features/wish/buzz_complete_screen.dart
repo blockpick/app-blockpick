@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../models/wish_model.dart';
@@ -48,12 +49,12 @@ class BuzzCompleteScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
                   color: AppColors.gray100,
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                 ),
                 child: Row(
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                       child: Image.network(
                         wish.productImageUrl,
                         width: 50,
@@ -100,7 +101,7 @@ class BuzzCompleteScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
                   color: AppColors.primaryBg,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 ),
                 child: Column(
                   children: [
@@ -128,7 +129,7 @@ class BuzzCompleteScreen extends StatelessWidget {
                     backgroundColor: AppColors.primary,
                     foregroundColor: AppColors.white,
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusXl)),
                     elevation: 0,
                   ),
                   child: const Text(
@@ -150,7 +151,7 @@ class BuzzCompleteScreen extends StatelessWidget {
                     foregroundColor: AppColors.gray600,
                     side: const BorderSide(color: AppColors.gray200),
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusXl)),
                   ),
                 ),
               ),

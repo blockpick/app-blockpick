@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/constants/app_constants.dart';
+import '../../../components/common/common_empty_state.dart';
 
 /// 당첨 내역 화면
 class WinningHistoryScreen extends ConsumerWidget {
@@ -44,30 +46,9 @@ class WinningHistoryScreen extends ConsumerWidget {
   }
 
   Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.emoji_events_outlined,
-            size: 64,
-            color: AppColors.gray400,
-          ),
-          SizedBox(height: 16),
-          Text(
-            '당첨 내역이 없습니다',
-            style: AppTextStyles.body2.copyWith(color: AppColors.gray500),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            '게임에 참여하고 행운을 잡아보세요!',
-            style: TextStyle(
-              fontSize: 14,
-              color: AppColors.gray400,
-            ),
-          ),
-        ],
-      ),
+    return const CommonEmptyState(
+      icon: Icons.emoji_events_outlined,
+      message: '당첨 내역이 없습니다',
     );
   }
 }
@@ -84,7 +65,7 @@ class _WinningItem extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         border: Border.all(
           color: AppColors.green500.withValues(alpha: 0.3),
           width: 1,
@@ -100,7 +81,7 @@ class _WinningItem extends StatelessWidget {
                 height: 40,
                 decoration: BoxDecoration(
                   color: AppColors.green500.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 ),
                 child: Icon(
                   Icons.emoji_events_rounded,
@@ -135,7 +116,7 @@ class _WinningItem extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: AppColors.gray100,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

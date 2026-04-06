@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_styles.dart';
+import '../../../../../core/constants/app_constants.dart';
 
 /// TabBar 샘플 #2 - 3D Floating + 리플 파동 효과
 class TabBarSample2 extends StatefulWidget {
@@ -159,7 +160,7 @@ class _TabBarSample2State extends State<TabBarSample2>
                   child: Container(
                     height: 20,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(45),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusFull),
                       boxShadow: [
                         BoxShadow(
                           color: AppColors.textBlack.withValues(alpha: 0.3),
@@ -182,7 +183,7 @@ class _TabBarSample2State extends State<TabBarSample2>
                         Color(0xFF1F1F30),
                       ],
                     ),
-                    borderRadius: BorderRadius.circular(40),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusFull),
                     border: Border.all(
                       color: AppColors.white.withValues(alpha: 0.1),
                       width: 1.5,
@@ -249,7 +250,7 @@ class _TabBarSample2State extends State<TabBarSample2>
                           Colors.transparent,
                         ],
                 ),
-                borderRadius: BorderRadius.circular(32),
+                borderRadius: BorderRadius.circular(AppConstants.radiusFull),
                 boxShadow: isSelected
                     ? [
                         BoxShadow(
@@ -266,14 +267,14 @@ class _TabBarSample2State extends State<TabBarSample2>
                   Icon(
                     tab.icon,
                     size: 28,
-                    color: isSelected ? AppColors.white : Colors.grey,
+                    color: isSelected ? AppColors.white : AppColors.gray400,
                   ),
                   const SizedBox(height: 4),
                   Text(
                     tab.label,
                     style: TextStyle(
                       fontSize: 11,
-                      color: isSelected ? AppColors.white : Colors.grey,
+                      color: isSelected ? AppColors.white : AppColors.gray400,
                       fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                     ),
                   ),

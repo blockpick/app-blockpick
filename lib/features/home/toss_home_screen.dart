@@ -178,8 +178,7 @@ class _TossHomeScreenState extends ConsumerState<TossHomeScreen> {
           // 로고
           Text(
             'BlockPick',
-            style: TextStyle(
-              fontSize: 22,
+            style: AppTextStyles.heading2.copyWith(
               fontWeight: FontWeight.w800,
               color: AppColors.darkBlue,
               letterSpacing: -0.5,
@@ -252,10 +251,7 @@ class _TossHomeScreenState extends ConsumerState<TossHomeScreen> {
           const SizedBox(height: 12),
           Text(
             '블록을 선택하고 행운을 잡으세요',
-            style: TextStyle(
-              fontSize: 13,
-              color: AppColors.gray500,
-            ),
+            style: AppTextStyles.caption1.copyWith(color: AppColors.gray500),
           ),
           const SizedBox(height: 16),
           Row(
@@ -271,10 +267,7 @@ class _TossHomeScreenState extends ConsumerState<TossHomeScreen> {
           const SizedBox(height: 12),
           Text(
             '© 2025 BlockPick. All rights reserved.',
-            style: TextStyle(
-              fontSize: 12,
-              color: AppColors.gray400,
-            ),
+            style: AppTextStyles.caption1.copyWith(color: AppColors.gray400),
           ),
         ],
       ),
@@ -286,10 +279,7 @@ class _TossHomeScreenState extends ConsumerState<TossHomeScreen> {
       onTap: () {},
       child: Text(
         text,
-        style: TextStyle(
-          fontSize: 12,
-          color: AppColors.gray600,
-        ),
+        style: AppTextStyles.caption1.copyWith(color: AppColors.gray600),
       ),
     );
   }

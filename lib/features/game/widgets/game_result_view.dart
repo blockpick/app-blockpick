@@ -9,6 +9,7 @@ import '../../../core/theme/app_text_styles.dart';
 import '../../../models/game_model.dart';
 import '../../../models/game_round_model.dart';
 import '../../../providers/game_result_provider.dart';
+import '../../../core/constants/app_constants.dart';
 
 /// 종료된 게임 결과 화면
 class GameResultView extends ConsumerWidget {
@@ -110,7 +111,7 @@ class GameResultView extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
         color: AppColors.gray100,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
       ),
       child: Row(
         children: [
@@ -143,7 +144,7 @@ class GameResultView extends ConsumerWidget {
                             horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
                           color: _getGameTypeColor(game.gameType!),
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                         ),
                         child: Text(
                           game.gameType!.toUpperCase(),
@@ -163,7 +164,7 @@ class GameResultView extends ConsumerWidget {
                             horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
                           color: AppColors.orange,
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                         ),
                         child: Text(
                           '즉석경품',
@@ -240,7 +241,7 @@ class GameResultView extends ConsumerWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.gray100,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
       ),
       child: Row(
         children: [
@@ -301,7 +302,7 @@ class GameResultView extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: AppColors.blue.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
         border: Border.all(color: AppColors.blue.withValues(alpha: 0.2)),
       ),
       child: Row(
@@ -335,7 +336,7 @@ class GameResultView extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: AppColors.yellow500.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
         border: Border.all(color: AppColors.yellow500.withValues(alpha: 0.4)),
       ),
       child: Row(
@@ -387,7 +388,7 @@ class GameResultView extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: AppColors.gray100,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
       ),
       child: Row(
         children: [
@@ -444,7 +445,7 @@ class GameResultView extends ConsumerWidget {
         color: isGrand
             ? AppColors.yellow500.withValues(alpha: 0.08)
             : AppColors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
         border: Border.all(
           color: isGrand
               ? AppColors.yellow500.withValues(alpha: 0.4)
@@ -455,7 +456,7 @@ class GameResultView extends ConsumerWidget {
         children: [
           // 상품 이미지
           ClipRRect(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(AppConstants.radiusMd),
             child: Container(
               width: 56,
               height: 56,
@@ -491,7 +492,7 @@ class GameResultView extends ConsumerWidget {
                             horizontal: 5, vertical: 1),
                         decoration: BoxDecoration(
                           color: AppColors.yellow500,
-                          borderRadius: BorderRadius.circular(3),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                         ),
                         child: Text(
                           '대상',
@@ -550,7 +551,7 @@ class GameResultView extends ConsumerWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.gray100,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -654,7 +655,7 @@ class GameResultView extends ConsumerWidget {
         color: isWinner
             ? AppColors.yellow500.withValues(alpha: 0.1)
             : AppColors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
         border: Border.all(
           color: isWinner
               ? AppColors.yellow500.withValues(alpha: 0.5)
@@ -691,7 +692,7 @@ class GameResultView extends ConsumerWidget {
                             horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
                           color: AppColors.yellow500,
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                         ),
                         child: const Text(
                           '당첨',

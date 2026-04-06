@@ -58,7 +58,7 @@ class _WithdrawalScreenState extends ConsumerState<WithdrawalScreen> {
             backgroundColor: AppColors.darkBlue,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             ),
             duration: Duration(seconds: 3),
           ),
@@ -276,7 +276,6 @@ class _WithdrawalScreenState extends ConsumerState<WithdrawalScreen> {
           child: ElevatedButton(
             onPressed: _isValid ? _handleWithdrawal : null,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.darkBlue,
               foregroundColor: AppColors.white,
               disabledBackgroundColor: AppColors.gray300,
               disabledForegroundColor: AppColors.white,

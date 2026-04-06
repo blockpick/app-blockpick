@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_constants.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -126,7 +127,7 @@ class _FindEmailResultScreenState extends ConsumerState<FindEmailResultScreen> {
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: AppColors.gray100,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppConstants.radiusXl),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,7 +151,7 @@ class _FindEmailResultScreenState extends ConsumerState<FindEmailResultScreen> {
                 foregroundColor: AppColors.darkBlue,
                 side: BorderSide(color: AppColors.gray300),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 ),
               ),
               child: const Text(
@@ -168,10 +169,9 @@ class _FindEmailResultScreenState extends ConsumerState<FindEmailResultScreen> {
             child: ElevatedButton(
               onPressed: () => context.go('/login'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.darkBlue,
                 foregroundColor: AppColors.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 ),
                 elevation: 0,
               ),
@@ -221,7 +221,7 @@ class _FindEmailResultScreenState extends ConsumerState<FindEmailResultScreen> {
                 foregroundColor: AppColors.darkBlue,
                 side: BorderSide(color: AppColors.gray300),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 ),
               ),
               child: const Text(
@@ -239,10 +239,9 @@ class _FindEmailResultScreenState extends ConsumerState<FindEmailResultScreen> {
             child: ElevatedButton(
               onPressed: () => context.push('/signup'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.darkBlue,
                 foregroundColor: AppColors.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 ),
                 elevation: 0,
               ),
@@ -281,10 +280,9 @@ class _FindEmailResultScreenState extends ConsumerState<FindEmailResultScreen> {
           ElevatedButton(
             onPressed: () => context.pop(),
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.darkBlue,
               foregroundColor: AppColors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               ),
             ),
             child: Text('돌아가기'),

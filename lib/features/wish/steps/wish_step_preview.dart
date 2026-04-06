@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../models/wish_model.dart';
@@ -42,7 +43,7 @@ class WishStepPreview extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               color: AppColors.white,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppConstants.radiusXl),
               border: Border.all(color: AppColors.gray200),
               boxShadow: [
                 BoxShadow(
@@ -57,7 +58,7 @@ class WishStepPreview extends StatelessWidget {
               children: [
                 // 이미지
                 ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(AppConstants.radiusLg)),
                   child: AspectRatio(
                     aspectRatio: 1.2,
                     child: productImageUrl != null
@@ -81,7 +82,7 @@ class WishStepPreview extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
                             color: AppColors.gray100,
-                            borderRadius: BorderRadius.circular(6),
+                            borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                           ),
                           child: Text(
                             '${category!.emoji} ${category!.label}',
@@ -116,7 +117,7 @@ class WishStepPreview extends StatelessWidget {
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: AppColors.primaryBg,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                         ),
                         child: Row(
                           children: [
@@ -141,7 +142,7 @@ class WishStepPreview extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: AppColors.gray100,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             ),
             child: const Row(
               children: [
@@ -166,7 +167,7 @@ class WishStepPreview extends StatelessWidget {
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusXl)),
                 elevation: 0,
               ),
               child: const Text(

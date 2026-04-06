@@ -7,6 +7,7 @@ import '../../core/auth/data/repositories/auth_repository.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../providers/notification_settings_provider.dart';
+import '../../core/constants/app_constants.dart';
 
 /// 토스 스타일 설정 화면
 class SettingsScreen extends ConsumerWidget {
@@ -176,7 +177,7 @@ class SettingsScreen extends ConsumerWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
       ),
       child: Column(children: children),
     );
@@ -195,7 +196,7 @@ class SettingsScreen extends ConsumerWidget {
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         ),
         title: Text(
           '로그아웃',
@@ -236,7 +237,7 @@ class SettingsScreen extends ConsumerWidget {
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         ),
         title: Text(
           '회원 탈퇴',
@@ -280,7 +281,7 @@ class SettingsScreen extends ConsumerWidget {
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           ),
           title: Text(
             '비밀번호 확인',
@@ -305,7 +306,7 @@ class SettingsScreen extends ConsumerWidget {
                   filled: true,
                   fillColor: AppColors.gray100,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     borderSide: BorderSide.none,
                   ),
                   contentPadding: const EdgeInsets.symmetric(
@@ -365,7 +366,7 @@ class SettingsScreen extends ConsumerWidget {
                                 backgroundColor: AppColors.darkBlue,
                                 behavior: SnackBarBehavior.floating,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                                 ),
                               ),
                             );
@@ -433,7 +434,7 @@ class _SettingItem extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           child: Row(

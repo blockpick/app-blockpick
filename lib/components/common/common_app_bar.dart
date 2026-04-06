@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/constants/app_constants.dart';
 
 /// 공통 앱바 컴포넌트
 /// 모든 메인 탭 화면에서 일관된 스타일로 사용
@@ -33,12 +33,7 @@ class CommonAppBar extends StatelessWidget {
           else if (title != null)
             Text(
               title!,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w800,
-                color: AppColors.darkBlue,
-                letterSpacing: -0.5,
-              ),
+              style: AppTextStyles.title1.copyWith(color: AppColors.textBlack),
             ),
 
           // 우측: trailing 위젯
@@ -55,8 +50,8 @@ class CommonAppBar extends StatelessWidget {
           width: 28,
           height: 28,
           decoration: BoxDecoration(
-            color: AppColors.darkBlue,
-            borderRadius: BorderRadius.circular(8),
+            color: AppColors.textBlack,
+            borderRadius: BorderRadius.circular(AppConstants.radiusMd),
           ),
           child: const Icon(
             Icons.check_rounded,
@@ -65,14 +60,9 @@ class CommonAppBar extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 10),
-        const Text(
+        Text(
           'Blockpick',
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w800,
-            color: AppColors.darkBlue,
-            letterSpacing: -0.5,
-          ),
+          style: AppTextStyles.title1.copyWith(color: AppColors.textBlack),
         ),
       ],
     );
@@ -99,10 +89,10 @@ class NotificationButton extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
           boxShadow: [
             BoxShadow(
-              color: AppColors.black.withValues(alpha: 0.05),
+              color: AppColors.textBlack.withValues(alpha: 0.05),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -111,10 +101,10 @@ class NotificationButton extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Icon(
+            const Icon(
               Icons.notifications_none_rounded,
               size: 24,
-              color: AppColors.darkBlue,
+              color: AppColors.textBlack,
             ),
             if (hasNotification)
               Positioned(
@@ -154,19 +144,19 @@ class SettingsButton extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
           boxShadow: [
             BoxShadow(
-              color: AppColors.black.withValues(alpha: 0.05),
+              color: AppColors.textBlack.withValues(alpha: 0.05),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
           ],
         ),
-        child: Icon(
+        child: const Icon(
           Icons.settings_rounded,
           size: 22,
-          color: AppColors.darkBlue,
+          color: AppColors.textBlack,
         ),
       ),
     );
@@ -192,10 +182,10 @@ class PointBadge extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
           boxShadow: [
             BoxShadow(
-              color: AppColors.black.withValues(alpha: 0.05),
+              color: AppColors.textBlack.withValues(alpha: 0.05),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -208,24 +198,20 @@ class PointBadge extends StatelessWidget {
               width: 20,
               height: 20,
               decoration: const BoxDecoration(
-                color: AppColors.darkBlue,
+                color: AppColors.textBlack,
                 shape: BoxShape.circle,
               ),
-              child: const Center(
+              child: Center(
                 child: Text(
                   'P',
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.white,
-                  ),
+                  style: AppTextStyles.caption4.copyWith(color: AppColors.white),
                 ),
               ),
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             Text(
               _formatNumber(balance),
-              style: AppTextStyles.title3.copyWith(color: AppColors.darkBlue),
+              style: AppTextStyles.title3.copyWith(color: AppColors.textBlack),
             ),
           ],
         ),

@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_constants.dart';
 import '../../../../core/auth/domain/providers/auth_provider.dart';
 import '../../../../core/auth/data/services/google_auth_service.dart';
 import '../../../../core/auth/data/services/apple_auth_service.dart';
@@ -118,7 +119,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet)),
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -140,7 +141,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         side: BorderSide(color: AppColors.gray300),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                         ),
                       ),
                       child: Text(
@@ -157,11 +158,10 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                         context.push('/auth/signup-select');
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.darkBlue,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                         ),
                       ),
                       child: Text(
@@ -219,7 +219,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Google 로그인에 실패했습니다: ${e.toString()}'),
-            backgroundColor: Colors.red,
+            backgroundColor: AppColors.red,
           ),
         );
       }
@@ -234,7 +234,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Apple 로그인은 iOS에서만 지원됩니다.'),
-          backgroundColor: Colors.red,
+          backgroundColor: AppColors.red,
         ),
       );
       return;
@@ -246,7 +246,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Apple 로그인을 사용할 수 없습니다.'),
-            backgroundColor: Colors.red,
+            backgroundColor: AppColors.red,
           ),
         );
       }
@@ -290,7 +290,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Apple 로그인에 실패했습니다: ${e.toString()}'),
-            backgroundColor: Colors.red,
+            backgroundColor: AppColors.red,
           ),
         );
       }
@@ -311,7 +311,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet)),
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -333,7 +333,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         side: BorderSide(color: AppColors.gray300),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                         ),
                       ),
                       child: Text(
@@ -350,11 +350,10 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                         context.push('/find-password');
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.darkBlue,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                         ),
                       ),
                       child: Text(
@@ -423,7 +422,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                             filled: true,
                             fillColor: AppColors.gray100,
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                               borderSide: BorderSide.none,
                             ),
                             contentPadding: const EdgeInsets.symmetric(
@@ -437,7 +436,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                             padding: const EdgeInsets.only(top: 8, left: 4),
                             child: Text(
                               _emailError!,
-                              style: TextStyle(fontSize: 13, color: AppColors.red),
+                              style: AppTextStyles.body3.copyWith(color: AppColors.red),
                             ),
                           ),
 
@@ -463,7 +462,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                             filled: true,
                             fillColor: AppColors.gray100,
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                               borderSide: BorderSide.none,
                             ),
                             contentPadding: const EdgeInsets.symmetric(
@@ -488,7 +487,7 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                             padding: const EdgeInsets.only(top: 8, left: 4),
                             child: Text(
                               _passwordError!,
-                              style: TextStyle(fontSize: 13, color: AppColors.red),
+                              style: AppTextStyles.body3.copyWith(color: AppColors.red),
                             ),
                           ),
 
@@ -501,12 +500,11 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
                           child: ElevatedButton(
                             onPressed: _isFormValid && !_isLoading ? _handleLogin : null,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.darkBlue,
                               foregroundColor: AppColors.white,
                               disabledBackgroundColor: AppColors.gray300,
                               disabledForegroundColor: AppColors.white,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
+                                borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                               ),
                               elevation: 0,
                             ),
@@ -629,13 +627,13 @@ class _EmailLoginScreenState extends ConsumerState<EmailLoginScreen> {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 16),
           decoration: BoxDecoration(
             color: AppColors.gray100,
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

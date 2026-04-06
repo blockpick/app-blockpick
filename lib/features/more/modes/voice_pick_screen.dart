@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
@@ -320,7 +321,7 @@ class _VoicePickScreenState extends State<VoicePickScreen>
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
       decoration: BoxDecoration(
         color: Colors.black.withValues(alpha: 0.4),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
         border: Border.all(
           color: modeColor.withValues(alpha: 0.3),
         ),
@@ -376,14 +377,14 @@ class _VoicePickScreenState extends State<VoicePickScreen>
 
   Widget _buildBottomPanel() {
     return ClipRRect(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(AppConstants.radius2Xl)),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
           padding: EdgeInsets.fromLTRB(
+            AppConstants.screenPaddingH,
             24,
-            24,
-            24,
+            AppConstants.screenPaddingH,
             MediaQuery.of(context).padding.bottom + 24,
           ),
           decoration: BoxDecoration(
@@ -433,7 +434,7 @@ class _VoicePickScreenState extends State<VoicePickScreen>
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                     decoration: BoxDecoration(
                       color: modeColor.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                       border: Border.all(
                         color: modeColor.withValues(alpha: 0.4),
                       ),
@@ -464,7 +465,7 @@ class _VoicePickScreenState extends State<VoicePickScreen>
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
         border: Border.all(
           color: Colors.white.withValues(alpha: 0.15),
         ),

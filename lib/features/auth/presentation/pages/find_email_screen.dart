@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/auth/data/repositories/auth_repository.dart';
 import '../../../../core/auth/domain/providers/verification_state_provider.dart';
 
@@ -206,7 +207,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusXl)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -218,7 +219,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
             const SizedBox(height: 8),
             Text(
               '회원가입을 하시겠어요?',
-              style: TextStyle(fontSize: 14, color: AppColors.gray600),
+              style: AppTextStyles.body3.copyWith(color: AppColors.gray600),
               textAlign: TextAlign.center,
             ),
           ],
@@ -292,11 +293,10 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
                           child: ElevatedButton(
                             onPressed: _isPhoneValid && !_isLoading ? _sendCode : null,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.darkBlue,
                               foregroundColor: AppColors.white,
                               disabledBackgroundColor: AppColors.gray300,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                               ),
                               elevation: 0,
                             ),
@@ -334,11 +334,10 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
                     child: ElevatedButton(
                       onPressed: _isCodeValid ? _verifyAndSearch : null,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.darkBlue,
                         foregroundColor: AppColors.white,
                         disabledBackgroundColor: AppColors.gray300,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                         ),
                         elevation: 0,
                       ),
@@ -368,7 +367,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
         Container(
           decoration: BoxDecoration(
             color: _codeSent ? AppColors.gray200 : AppColors.gray100,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
           ),
           child: InternationalPhoneNumberInput(
             onInputChanged: (PhoneNumber number) {
@@ -414,11 +413,11 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
               hintStyle: TextStyle(color: AppColors.gray400),
               prefixIcon: Icon(Icons.search, color: AppColors.gray500),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 borderSide: BorderSide(color: AppColors.gray300),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 borderSide: BorderSide(color: AppColors.blue, width: 2),
               ),
             ),
@@ -428,7 +427,7 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
         if (_phoneError != null)
           Padding(
             padding: const EdgeInsets.only(top: 8, left: 4),
-            child: Text(_phoneError!, style: TextStyle(fontSize: 12, color: AppColors.red)),
+            child: Text(_phoneError!, style: AppTextStyles.caption1.copyWith(color: AppColors.red)),
           ),
       ],
     );
@@ -452,14 +451,14 @@ class _FindEmailScreenState extends ConsumerState<FindEmailScreen> {
             LengthLimitingTextInputFormatter(6),
           ],
           onChanged: (_) => setState(() {}),
-          style: TextStyle(fontSize: 16, color: AppColors.darkBlue, letterSpacing: 8),
+          style: AppTextStyles.body2.copyWith(color: AppColors.darkBlue, letterSpacing: 8),
           decoration: InputDecoration(
             hintText: '인증번호 6자리',
-            hintStyle: TextStyle(fontSize: 16, color: AppColors.gray400, letterSpacing: 0),
+            hintStyle: AppTextStyles.body2.copyWith(color: AppColors.gray400, letterSpacing: 0),
             filled: true,
             fillColor: AppColors.gray100,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               borderSide: BorderSide.none,
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),

@@ -104,7 +104,7 @@ class MyScreen extends ConsumerWidget {
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           ),
           child: Column(
             children: [
@@ -144,10 +144,9 @@ class MyScreen extends ConsumerWidget {
                     context.push('/login');
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.darkBlue,
                     foregroundColor: AppColors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     ),
                     elevation: 0,
                   ),
@@ -428,7 +427,7 @@ class MyScreen extends ConsumerWidget {
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.white,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

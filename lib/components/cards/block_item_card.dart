@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../models/block_model.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/constants/app_constants.dart';
 
 /// 선택된 블록 아이템 카드 (기획 SC-009-17)
 ///
@@ -30,18 +31,21 @@ class BlockItemCard extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppConstants.spacingLg,
+            vertical: AppConstants.spacingMd,
+          ),
           decoration: BoxDecoration(
             color: isChecked
                 ? AppColors.blue.withValues(alpha: 0.05)
-                : AppColors.blueWhite,
-            borderRadius: BorderRadius.circular(12),
+                : AppColors.primaryBg,
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             border: Border.all(
               color: isChecked
                   ? AppColors.blue.withValues(alpha: 0.3)
-                  : AppColors.buleGray,
+                  : AppColors.gray200,
             ),
           ),
           child: Row(
@@ -66,13 +70,13 @@ class BlockItemCard extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(width: 12),
+              const SizedBox(width: AppConstants.spacingMd),
 
               // 좌표 정보 "X NNNN | Y NNNN"
               Expanded(
                 child: Text(
                   'X ${block.col.toString().padLeft(4, '0')}  |  Y ${block.row.toString().padLeft(4, '0')}',
-                  style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
+                  style: AppTextStyles.title2.copyWith(color: AppColors.textBlack),
                 ),
               ),
 
@@ -80,7 +84,7 @@ class BlockItemCard extends StatelessWidget {
               GestureDetector(
                 onTap: onRemove,
                 child: const Padding(
-                  padding: EdgeInsets.all(4),
+                  padding: EdgeInsets.all(AppConstants.spacingXs),
                   child: Icon(
                     Icons.delete_outline_rounded,
                     size: 20,

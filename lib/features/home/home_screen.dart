@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/constants/app_constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -150,7 +151,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 decoration: BoxDecoration(
                   color: isSelected ? AppColors.darkBlue : AppColors.white,
-                  borderRadius: BorderRadius.circular(24),
+                  borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                   border: Border.all(
                     color: isSelected ? AppColors.darkBlue : AppColors.gray300,
                     width: 1.5,
@@ -299,7 +300,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           boxShadow: [
             BoxShadow(
               color: AppColors.darkBlue.withValues(alpha: 0.3),
@@ -316,7 +317,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               height: 48,
               decoration: BoxDecoration(
                 color: AppColors.white.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               ),
               child: adRewardState.isLoading || adRewardState.isShowingAd
                   ? const Center(
@@ -359,7 +360,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 color: AppColors.white,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
               ),
               child: Text(
                 '+20P',

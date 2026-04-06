@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 
 /// 게임 참여 진행 상태
 enum GameJoinStep {
@@ -38,14 +40,14 @@ class GameJoinProgressOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black.withOpacity(0.7),
+      color: AppColors.textBlack.withValues(alpha: 0.7),
       child: Center(
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 24),
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -54,7 +56,7 @@ class GameJoinProgressOverlay extends StatelessWidget {
               if (isError)
                 const Icon(
                   Icons.error_outline,
-                  color: Colors.red,
+                  color: AppColors.red,
                   size: 64,
                 )
               else
@@ -82,7 +84,7 @@ class GameJoinProgressOverlay extends StatelessWidget {
                   statusMessage!,
                   style: TextStyle(
                     fontSize: 14,
-                    color: isError ? Colors.red : Colors.grey[700],
+                    color: isError ? AppColors.red : AppColors.gray600,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -94,14 +96,14 @@ class GameJoinProgressOverlay extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.red[50],
-                    borderRadius: BorderRadius.circular(8),
+                    color: AppColors.red200,
+                    borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                   ),
                   child: Text(
                     errorMessage!,
                     style: const TextStyle(
                       fontSize: 13,
-                      color: Colors.red,
+                      color: AppColors.red,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -114,8 +116,8 @@ class GameJoinProgressOverlay extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    borderRadius: BorderRadius.circular(8),
+                    color: AppColors.gray100,
+                    borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,7 +126,7 @@ class GameJoinProgressOverlay extends StatelessWidget {
                         'TX Hash:',
                         style: TextStyle(
                           fontSize: 11,
-                          color: Colors.grey,
+                          color: AppColors.gray400,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -148,8 +150,8 @@ class GameJoinProgressOverlay extends StatelessWidget {
                 const SizedBox(height: 8),
                 LinearProgressIndicator(
                   value: (currentStep.index + 1) / GameJoinStep.values.length,
-                  backgroundColor: Colors.grey[200],
-                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+                  backgroundColor: AppColors.gray200,
+                  valueColor: const AlwaysStoppedAnimation<Color>(AppColors.blue),
                 ),
               ],
 

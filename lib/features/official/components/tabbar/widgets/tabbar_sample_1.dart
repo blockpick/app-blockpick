@@ -86,7 +86,7 @@ class _TabBarSample1State extends State<TabBarSample1>
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         color: const Color(0xFF0F1535),
-        borderRadius: BorderRadius.circular(40),
+        borderRadius: BorderRadius.circular(AppConstants.radiusFull),
         border: Border.all(
           color: const Color(0xFF1E2749),
           width: 2,
@@ -115,7 +115,7 @@ class _TabBarSample1State extends State<TabBarSample1>
                   height: 60,
                   decoration: BoxDecoration(
                     gradient: _tabs[_selectedIndex].gradient,
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusFull),
                     boxShadow: [
                       BoxShadow(
                         color: _tabs[_selectedIndex].gradient.colors.first
@@ -162,7 +162,7 @@ class _TabBarSample1State extends State<TabBarSample1>
       child: Container(
         height: 80,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(40),
+          borderRadius: BorderRadius.circular(AppConstants.radiusFull),
         ),
         child: AnimatedBuilder(
           animation: _morphController,
@@ -181,7 +181,7 @@ class _TabBarSample1State extends State<TabBarSample1>
                         return tab.gradient.createShader(bounds);
                       }
                       return const LinearGradient(
-                        colors: [Colors.grey, Colors.grey],
+                        colors: [AppColors.gray400, AppColors.gray400],
                       ).createShader(bounds);
                     },
                     child: Icon(
@@ -202,7 +202,7 @@ class _TabBarSample1State extends State<TabBarSample1>
                         return tab.gradient.createShader(bounds);
                       }
                       return LinearGradient(
-                        colors: [Colors.grey, Colors.grey],
+                        colors: [AppColors.gray400, AppColors.gray400],
                       ).createShader(bounds);
                     },
                     child: Text(

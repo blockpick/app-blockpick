@@ -31,7 +31,7 @@ class TransactionListItem extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withOpacity(0.03),
+            color: AppColors.black.withValues(alpha: 0.03),
             blurRadius: 6,
             offset: const Offset(0, 2),
           ),

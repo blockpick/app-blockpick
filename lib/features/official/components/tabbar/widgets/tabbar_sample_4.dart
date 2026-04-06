@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_styles.dart';
+import '../../../../../core/constants/app_constants.dart';
 
 /// TabBar 샘플 #4 - iOS 스타일 Segmented Control
 class TabBarSample4 extends StatefulWidget {
@@ -51,7 +52,7 @@ class _TabBarSample4State extends State<TabBarSample4> {
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
                 color: AppColors.bgWhite,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               ),
               child: Row(
                 children: List.generate(_tabs.length, (index) {
@@ -69,7 +70,7 @@ class _TabBarSample4State extends State<TabBarSample4> {
                           color: _selectedIndex == index
                               ? AppColors.white
                               : Colors.transparent,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                           boxShadow: _selectedIndex == index
                               ? [
                                   BoxShadow(

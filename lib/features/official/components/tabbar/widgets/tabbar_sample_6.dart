@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_styles.dart';
+import '../../../../../core/constants/app_constants.dart';
 
 /// TabBar 샘플 #6 - 카카오톡 스타일 TabBar
 class TabBarSample6 extends StatefulWidget {
@@ -114,13 +115,13 @@ class _TabBarSample6State extends State<TabBarSample6> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(10),
+                        color: AppColors.red,
+                        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                       ),
                       child: Text(
                         tab.badge!,
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.white,
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
                         ),

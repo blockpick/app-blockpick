@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
+import '../../core/constants/app_constants.dart';
 
 /// 하단 네비게이션 바
 /// 홈 / 데일리 / 위시 / 프라임 / MY (5개 탭)
@@ -18,7 +20,7 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppColors.white,
         border: Border(
           top: BorderSide(
@@ -31,7 +33,7 @@ class BottomNavBar extends StatelessWidget {
         top: false,
         child: Container(
           height: 60,
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: AppConstants.spacingSm),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -104,7 +106,7 @@ class _NavItem extends StatelessWidget {
         onTap: onTap,
         behavior: HitTestBehavior.opaque,
         child: Padding(
-          padding: const EdgeInsets.only(top: 8),
+          padding: const EdgeInsets.only(top: AppConstants.spacingSm),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -114,7 +116,7 @@ class _NavItem extends StatelessWidget {
                   Icon(
                     isSelected ? activeIcon : icon,
                     size: 24,
-                    color: isSelected ? AppColors.darkBlue : AppColors.gray400,
+                    color: isSelected ? AppColors.textBlack : AppColors.gray400,
                   ),
                   // 알림 뱃지 (빨간 점)
                   if (showBadge)
@@ -132,23 +134,22 @@ class _NavItem extends StatelessWidget {
                     ),
                 ],
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: AppConstants.spacingXs),
               Text(
                 label,
-                style: TextStyle(
-                  fontSize: 10,
+                style: AppTextStyles.caption4.copyWith(
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                  color: isSelected ? AppColors.darkBlue : AppColors.gray400,
+                  color: isSelected ? AppColors.textBlack : AppColors.gray400,
                 ),
               ),
               // 선택된 탭 아래 인디케이터 라인
-              const SizedBox(height: 4),
+              const SizedBox(height: AppConstants.spacingXs),
               AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
                 width: isSelected ? 16 : 0,
                 height: 2,
                 decoration: BoxDecoration(
-                  color: AppColors.darkBlue,
+                  color: AppColors.textBlack,
                   borderRadius: BorderRadius.circular(1),
                 ),
               ),

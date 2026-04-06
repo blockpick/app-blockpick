@@ -7,6 +7,8 @@ import '../../models/game_round_model.dart';
 import '../../providers/game_provider.dart';
 import '../../widgets/game_card.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import '../../core/constants/app_constants.dart';
+import '../../components/common/common_empty_state.dart';
 
 /// 게임 리스트 화면
 class GameListScreen extends ConsumerStatefulWidget {
@@ -34,16 +36,16 @@ class _GameListScreenState extends ConsumerState<GameListScreen> {
   ];
 
   final List<Map<String, String>> _sortOptions = [
-    {'label': 'Most Popular', 'value': 'popular'},
-    {'label': 'Newest', 'value': 'newest'},
-    {'label': 'Ending Soon', 'value': 'ending_soon'},
-    {'label': 'Price Low to High', 'value': 'price_low'},
+    {'label': '인기순', 'value': 'popular'},
+    {'label': '최신순', 'value': 'newest'},
+    {'label': '마감임박', 'value': 'ending_soon'},
+    {'label': '가격 낮은순', 'value': 'price_low'},
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.deepWhite,
+      backgroundColor: AppColors.gray100,
       body: Column(
         children: [
           // 필터 바
@@ -137,7 +139,7 @@ class _GameListScreenState extends ConsumerState<GameListScreen> {
                   );
 
                   return Text(
-                    '$count games',
+                    '총 $count개',
                     style: AppTextStyles.body4.copyWith(
                       color: AppColors.medium,
                     ),
@@ -161,7 +163,7 @@ class _GameListScreenState extends ConsumerState<GameListScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
                     border: Border.all(color: AppColors.buleGray),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -223,43 +225,13 @@ class _GameListScreenState extends ConsumerState<GameListScreen> {
           valueColor: AlwaysStoppedAnimation<Color>(AppColors.blue),
         ),
       ),
-      error: (error, stack) => Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              LucideIcons.alertCircle,
-              size: 64,
-              color: AppColors.red,
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Error loading games',
-              style: AppTextStyles.title1.copyWith(
-                color: AppColors.red,
-              ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              error.toString(),
-              style: AppTextStyles.body4.copyWith(
-                color: AppColors.medium,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                ref.invalidate(gamesByTypeProvider);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.blue,
-                foregroundColor: AppColors.white,
-              ),
-              child: const Text('Retry'),
-            ),
-          ],
-        ),
+      error: (error, stack) => CommonEmptyState(
+        icon: LucideIcons.alertCircle,
+        message: '게임을 불러올 수 없습니다',
+        buttonText: '다시 시도',
+        onButtonPressed: () {
+          ref.invalidate(gamesByTypeProvider);
+        },
       ),
     );
   }
@@ -272,7 +244,7 @@ class _GameListScreenState extends ConsumerState<GameListScreen> {
     if (isWeb) {
       // 웹: 2열 그리드 with Wrap
       return SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: AppConstants.screenPaddingH, vertical: 16),
         child: Wrap(
           spacing: 16,
           runSpacing: 16,
@@ -296,7 +268,7 @@ class _GameListScreenState extends ConsumerState<GameListScreen> {
     } else {
       // 모바일: 1열 리스트
       return ListView.separated(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: AppConstants.screenPaddingH, vertical: 16),
         itemCount: games.length,
         separatorBuilder: (context, index) => const SizedBox(height: 16),
         itemBuilder: (context, index) {
@@ -318,31 +290,10 @@ class _GameListScreenState extends ConsumerState<GameListScreen> {
 
   /// 빈 상태
   Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            LucideIcons.inbox,
-            size: 64,
-            color: AppColors.buleGray,
-          ),
-          SizedBox(height: 16),
-          Text(
-            'No games found',
-            style: AppTextStyles.title1.copyWith(
-              color: AppColors.medium,
-            ),
-          ),
-          SizedBox(height: 8),
-          Text(
-            'Try changing your filters',
-            style: AppTextStyles.body3.copyWith(
-              color: AppColors.medium,
-            ),
-          ),
-        ],
-      ),
+    return const CommonEmptyState(
+      icon: LucideIcons.inbox,
+      message: '게임이 없습니다',
+      subMessage: '필터를 변경해보세요',
     );
   }
 

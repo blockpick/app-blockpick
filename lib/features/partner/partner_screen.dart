@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import 'partner_detail_screen.dart';
+import '../../core/constants/app_constants.dart';
 
 /// 파트너 이벤트 목록 화면
 /// 시안 기반: 상단 배너 + 카테고리 탭 + 2열 그리드
@@ -186,11 +187,11 @@ class _PartnerScreenState extends ConsumerState<PartnerScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF5941F2), Color(0xFF3182F6)],
+          colors: [AppColors.primaryMain, AppColors.blue],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
       ),
       child: Row(
         children: [
@@ -213,18 +214,18 @@ class _PartnerScreenState extends ConsumerState<PartnerScreen> {
                 SizedBox(height: 10),
                 Text(
                   '4대 편의점 사용 가능!\n모바일상품권 10000원 획득하기',
-                  style: AppTextStyles.title3.copyWith(color: Colors.white),
+                  style: AppTextStyles.title3.copyWith(color: AppColors.white),
                 ),
                 SizedBox(height: 8),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(20),
+                    color: AppColors.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                   ),
                   child: Text(
                     '이벤트 참여하면 +1000P',
-                    style: AppTextStyles.caption4.copyWith(color: Colors.white),
+                    style: AppTextStyles.caption4.copyWith(color: AppColors.white),
                   ),
                 ),
               ],
@@ -240,8 +241,8 @@ class _PartnerScreenState extends ConsumerState<PartnerScreen> {
       width: 32,
       height: 32,
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(AppConstants.radiusMd),
       ),
       child: Center(
         child: Text(
@@ -278,18 +279,18 @@ class _PartnerScreenState extends ConsumerState<PartnerScreen> {
                   height: 44,
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? const Color(0xFF5941F2).withOpacity(0.1)
-                        : const Color(0xFFF2F4F6),
-                    borderRadius: BorderRadius.circular(14),
+                        ? AppColors.primaryMain.withValues(alpha: 0.1)
+                        : AppColors.gray100,
+                    borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                     border: isSelected
-                        ? Border.all(color: const Color(0xFF5941F2), width: 1.5)
+                        ? Border.all(color: AppColors.primaryMain, width: 1.5)
                         : null,
                   ),
                   child: Icon(
                     cat['icon'] as IconData,
                     size: 22,
                     color: isSelected
-                        ? const Color(0xFF5941F2)
+                        ? AppColors.primaryMain
                         : AppColors.gray500,
                   ),
                 ),
@@ -300,7 +301,7 @@ class _PartnerScreenState extends ConsumerState<PartnerScreen> {
                     fontSize: 11,
                     fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                     color: isSelected
-                        ? const Color(0xFF5941F2)
+                        ? AppColors.primaryMain
                         : AppColors.gray500,
                   ),
                 ),
@@ -423,7 +424,7 @@ class _GameGridCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           border: Border.all(color: AppColors.gray200),
         ),
         clipBehavior: Clip.antiAlias,
@@ -434,7 +435,7 @@ class _GameGridCard extends StatelessWidget {
             AspectRatio(
               aspectRatio: 1.1,
               child: Container(
-                color: Color(0xFFF2F4F6),
+                color: AppColors.gray100,
                 child: imageUrl != null
                     ? Image.network(
                         imageUrl,
@@ -478,7 +479,7 @@ class _GameGridCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xFF5941F2),
+                        color: AppColors.primaryMain,
                       ),
                     ),
                   ],

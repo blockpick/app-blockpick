@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/auth/domain/providers/auth_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/constants/app_constants.dart';
 
 /// SC-011-02: 내 정보 수정 화면
 class ProfileEditScreen extends ConsumerStatefulWidget {
@@ -281,7 +282,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
           return AlertDialog(
             backgroundColor: AppColors.white,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppConstants.radiusXl),
             ),
             title: Text(
               '닉네임 변경',
@@ -302,19 +303,19 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                           hintText: '닉네임을 입력해 주세요.',
                           hintStyle: TextStyle(color: AppColors.gray400),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                             borderSide: BorderSide(color: AppColors.gray200),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                             borderSide: BorderSide(color: AppColors.gray200),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                             borderSide: BorderSide(color: AppColors.darkBlue),
                           ),
                           errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                             borderSide: BorderSide(color: AppColors.red),
                           ),
                           contentPadding: const EdgeInsets.symmetric(
@@ -353,11 +354,10 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                               }
                             : null,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.darkBlue,
                           foregroundColor: AppColors.white,
                           disabledBackgroundColor: AppColors.gray300,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                           ),
                           elevation: 0,
                         ),
@@ -408,7 +408,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                         foregroundColor: AppColors.darkBlue,
                         side: BorderSide(color: AppColors.gray300),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                         ),
                         padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
@@ -428,18 +428,17 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                                   backgroundColor: AppColors.darkBlue,
                                   behavior: SnackBarBehavior.floating,
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                                   ),
                                 ),
                               );
                             }
                           : null,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.darkBlue,
                         foregroundColor: AppColors.white,
                         disabledBackgroundColor: AppColors.gray300,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                         ),
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         elevation: 0,
@@ -462,7 +461,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
       context: context,
       backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.radiusBottomSheet)),
       ),
       builder: (context) => SafeArea(
         child: Padding(
@@ -511,7 +510,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
       builder: (dialogContext) => AlertDialog(
         backgroundColor: AppColors.white,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         ),
         title: Text(
           '로그아웃 하시겠어요?',
@@ -536,7 +535,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                     foregroundColor: AppColors.darkBlue,
                     side: BorderSide(color: AppColors.gray300),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
@@ -552,10 +551,9 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                     context.go('/');
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.darkBlue,
                     foregroundColor: AppColors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     elevation: 0,

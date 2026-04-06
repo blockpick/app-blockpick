@@ -10,6 +10,7 @@ import '../../../providers/game_join_progress_provider.dart';
 import 'game_join_result_overlay.dart';
 import 'game_join_progress_overlay.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import '../../../core/constants/app_constants.dart';
 
 /// 게임 참가 버튼 (토스 스타일 애니메이션)
 class GameJoinButton extends ConsumerStatefulWidget {
@@ -60,10 +61,10 @@ class _GameJoinButtonState extends ConsumerState<GameJoinButton> {
                   AppColors.purple,
                 ],
               ),
-              borderRadius: BorderRadius.circular(32),
+              borderRadius: BorderRadius.circular(AppConstants.radiusFull),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.blue.withOpacity(0.4),
+                  color: AppColors.blue.withValues(alpha: 0.4),
                   blurRadius: 20,
                   spreadRadius: 2,
                   offset: const Offset(0, 8),
@@ -74,7 +75,7 @@ class _GameJoinButtonState extends ConsumerState<GameJoinButton> {
               color: Colors.transparent,
               child: InkWell(
                 onTap: _handleJoinGame,
-                borderRadius: BorderRadius.circular(32),
+                borderRadius: BorderRadius.circular(AppConstants.radiusFull),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Row(
@@ -82,21 +83,21 @@ class _GameJoinButtonState extends ConsumerState<GameJoinButton> {
                     children: [
                       const Icon(
                         LucideIcons.zap,
-                        color: Colors.white,
+                        color: AppColors.white,
                         size: 24,
                       ),
                       SizedBox(width: 12),
                       Text(
                         '게임 참가하기',
                         style: AppTextStyles.body2.copyWith(
-                          color: Colors.white,
+                          color: AppColors.white,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(width: 8),
                       const Icon(
                         LucideIcons.arrowRight,
-                        color: Colors.white,
+                        color: AppColors.white,
                         size: 20,
                       ),
                     ],
@@ -108,7 +109,7 @@ class _GameJoinButtonState extends ConsumerState<GameJoinButton> {
               .animate(onPlay: (controller) => controller.repeat(reverse: true))
               .shimmer(
                 duration: 2000.ms,
-                color: Colors.white.withOpacity(0.3),
+                color: AppColors.white.withValues(alpha: 0.3),
               ),
         ),
       ),
@@ -268,11 +269,11 @@ class GameJoinInfoCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: AppColors.textBlack.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -288,9 +289,9 @@ class GameJoinInfoCard extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: hasSelection
-                      ? AppColors.blue.withOpacity(0.1)
+                      ? AppColors.blue.withValues(alpha: 0.1)
                       : AppColors.gray200,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 ),
                 child: Icon(
                   LucideIcons.mapPin,
@@ -366,8 +367,8 @@ class GameJoinInfoCard extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8),
+            color: color.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(AppConstants.radiusMd),
           ),
           child: Icon(
             icon,

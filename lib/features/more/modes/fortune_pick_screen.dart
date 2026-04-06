@@ -1,4 +1,5 @@
 import 'dart:convert';
+import '../../../core/constants/app_constants.dart';
 import 'dart:math';
 import 'dart:ui';
 import '../../../../core/theme/app_colors.dart';
@@ -211,7 +212,7 @@ class _FortunePickScreenState extends State<FortunePickScreen>
                     const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
                   border: Border.all(
                     color: Colors.white.withValues(alpha: 0.2),
                   ),
@@ -317,7 +318,7 @@ class _FortunePickScreenState extends State<FortunePickScreen>
                 color: !isCompleted && !isCurrent
                     ? Colors.white.withValues(alpha: 0.1)
                     : null,
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                 border: Border.all(
                   color: isCurrent
                       ? Colors.white.withValues(alpha: 0.5)
@@ -388,7 +389,7 @@ class _FortunePickScreenState extends State<FortunePickScreen>
 
   Widget _buildQuestionCard(_FortuneQuestion question) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(28),
+      borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
         child: Container(
@@ -402,7 +403,7 @@ class _FortunePickScreenState extends State<FortunePickScreen>
                 AppColors.pink.withValues(alpha: 0.1),
               ],
             ),
-            borderRadius: BorderRadius.circular(28),
+            borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
             border: Border.all(
               color: modeColor.withValues(alpha: 0.3),
               width: 2,
@@ -506,7 +507,7 @@ class _FortunePickScreenState extends State<FortunePickScreen>
                 )
               : null,
           color: isSelected ? null : Colors.white.withValues(alpha: 0.08),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           border: Border.all(
             color: isSelected
                 ? Colors.transparent
@@ -532,7 +533,7 @@ class _FortunePickScreenState extends State<FortunePickScreen>
                 color: isSelected
                     ? Colors.white.withValues(alpha: 0.2)
                     : Colors.white.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               ),
               child: Center(
                 child: Text(emoji, style: const TextStyle(fontSize: 22)),

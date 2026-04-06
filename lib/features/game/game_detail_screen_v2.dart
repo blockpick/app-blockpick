@@ -8,6 +8,7 @@ import '../../models/block_model.dart';
 import '../../providers/grid_state_provider.dart';
 import '../grid/game_grid_widget.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import '../../core/constants/app_constants.dart';
 
 /// 게임 상세 화면 V2 (제품 이미지 배경 + 우측 패널)
 class GameDetailScreenV2 extends ConsumerStatefulWidget {
@@ -79,25 +80,25 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
   Widget build(BuildContext context) {
     if (_loading) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Loading...')),
+        appBar: AppBar(title: const Text('불러오는 중...')),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
 
     if (_game == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Game Not Found')),
+        appBar: AppBar(title: const Text('게임을 찾을 수 없습니다')),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(LucideIcons.alertCircle, size: 64, color: AppColors.red),
               const SizedBox(height: 16),
-              Text('Game not found', style: AppTextStyles.heading1),
+              Text('게임을 찾을 수 없습니다', style: AppTextStyles.heading1),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Go Back'),
+                child: const Text('돌아가기'),
               ),
             ],
           ),
@@ -109,7 +110,7 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
     final isMobile = MediaQuery.of(context).size.width < 900;
 
     return Scaffold(
-      backgroundColor: AppColors.deepWhite,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         title: Text(_game!.title),
         backgroundColor: AppColors.white,
@@ -455,7 +456,7 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
                 backgroundColor: isDisabled ? AppColors.buleGray : AppColors.blue,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 ),
               ),
               child: Text(
@@ -478,10 +479,10 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(AppConstants.radiusBottomSheet)),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withOpacity(0.1),
+            color: AppColors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: Offset(0, -4),
           ),
@@ -497,7 +498,7 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
             height: 4,
             decoration: BoxDecoration(
               color: AppColors.buleGray,
-              borderRadius: BorderRadius.circular(2),
+              borderRadius: BorderRadius.circular(AppConstants.radiusSm),
             ),
           ),
 

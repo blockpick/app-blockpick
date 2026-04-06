@@ -497,7 +497,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
         boxShadow: [
           BoxShadow(
             color: AppColors.black.withValues(alpha: 0.2),
@@ -590,7 +590,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         return _buildGameScreen(context, gameId);
       },
       loading: () => Scaffold(
-        appBar: AppBar(title: const Text('Loading...')),
+        appBar: AppBar(title: const Text('불러오는 중...')),
         body: const Center(
           child: CircularProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(AppColors.blue),
@@ -598,8 +598,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         ),
       ),
       error: (error, stack) => Scaffold(
-        appBar: AppBar(title: const Text('Error')),
-        body: Center(child: Text('Error: $error')),
+        appBar: AppBar(title: const Text('오류')),
+        body: Center(child: Text('오류: $error')),
       ),
     );
   }
@@ -631,7 +631,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: AppColors.textBlack,
       appBar: _buildAppBar(context),
       body: Stack(
         children: [
@@ -673,7 +673,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                           backgroundColor: AppColors.gray800,
                           behavior: SnackBarBehavior.floating,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                           ),
                         ),
                       );
@@ -753,7 +753,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   color: AppColors.white,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                   boxShadow: [
                     BoxShadow(
                       color: AppColors.black.withValues(alpha: 0.1),
@@ -796,7 +796,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                           horizontal: 14, vertical: 8),
                       decoration: BoxDecoration(
                         color: AppColors.white,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                         boxShadow: [
                           BoxShadow(
                             color: AppColors.black.withValues(alpha: 0.1),
@@ -888,7 +888,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                         horizontal: 20, vertical: 14),
                     decoration: BoxDecoration(
                       color: AppColors.textBlack.withValues(alpha: 0.85),
-                      borderRadius: BorderRadius.circular(32),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusFull),
                       boxShadow: [
                         BoxShadow(
                           color: AppColors.black.withValues(alpha: 0.3),
@@ -902,23 +902,22 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                       children: [
                         Text(
                           '$selectedCount',
-                          style: TextStyle(
-                            fontSize: 15,
+                          style: AppTextStyles.title2.copyWith(
                             fontWeight: FontWeight.w700,
                             color: selectedCount > 0
                                 ? AppColors.blue
-                                : Colors.white,
+                                : AppColors.white,
                           ),
                         ),
                         Text(
                           '/$_pickMax개 선택',
-                          style: AppTextStyles.title2.copyWith(color: Colors.white),
+                          style: AppTextStyles.title2.copyWith(color: AppColors.white),
                         ),
                         const SizedBox(width: 4),
                         const Icon(
                           Icons.chevron_right_rounded,
                           size: 20,
-                          color: Colors.white,
+                          color: AppColors.white,
                         ),
                       ],
                     ),
@@ -1171,7 +1170,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           const SizedBox(height: 8),
           // Progress bar
           ClipRRect(
-            borderRadius: BorderRadius.circular(2),
+            borderRadius: BorderRadius.circular(AppConstants.radiusSm),
             child: LinearProgressIndicator(
               value: progress,
               backgroundColor: AppColors.gray200,
@@ -1201,7 +1200,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           alignment: Alignment.center,
           child: Text(
             'P',
-            style: TextStyle(
+            style: AppTextStyles.caption4.copyWith(
               fontSize: 9,
               fontWeight: FontWeight.w700,
               color: AppColors.gray600,
@@ -1349,7 +1348,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                 color: hasBid
                     ? AppColors.textBlack.withValues(alpha: 0.85)
                     : AppColors.gray400.withValues(alpha: 0.6),
-                borderRadius: BorderRadius.circular(32),
+                borderRadius: BorderRadius.circular(AppConstants.radiusFull),
                 boxShadow: [
                   BoxShadow(
                     color: AppColors.black.withValues(alpha: 0.3),
@@ -1365,13 +1364,13 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                     hasBid
                         ? '${_formatPrice(_selectedBidPrice!)}원에 입찰하기'
                         : '가격을 선택하세요',
-                    style: AppTextStyles.title3.copyWith(color: Colors.white),
+                    style: AppTextStyles.title3.copyWith(color: AppColors.white),
                   ),
                   const SizedBox(width: 4),
                   const Icon(
                     Icons.chevron_right_rounded,
                     size: 20,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
                 ],
               ),
@@ -1387,7 +1386,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
               color: AppColors.white,
-              borderRadius: BorderRadius.circular(32),
+              borderRadius: BorderRadius.circular(AppConstants.radiusFull),
               boxShadow: [
                 BoxShadow(
                   color: AppColors.black.withValues(alpha: 0.1),
@@ -1435,7 +1434,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         child: Container(
           decoration: const BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.radius2Xl)),
           ),
           padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
           child: Column(
@@ -1449,15 +1448,14 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                   height: 4,
                   decoration: BoxDecoration(
                     color: AppColors.gray200,
-                    borderRadius: BorderRadius.circular(2),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                   ),
                 ),
               ),
               const SizedBox(height: 20),
               Text(
                 '입찰 가격 입력',
-                style: TextStyle(
-                  fontSize: 18,
+                style: AppTextStyles.title1.copyWith(
                   fontWeight: FontWeight.w700,
                   color: AppColors.darkBlue,
                 ),
@@ -1465,10 +1463,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               const SizedBox(height: 8),
               Text(
                 '입찰가능 ${_formatBidPrice(bidRange.$1)}~${_formatBidPrice(bidRange.$2)}원',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: AppColors.gray600,
-                ),
+                style: AppTextStyles.caption1.copyWith(color: AppColors.gray600),
               ),
               const SizedBox(height: 20),
               TextField(
@@ -1479,11 +1474,11 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                   hintText: '금액을 입력하세요',
                   suffixText: '원',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     borderSide: BorderSide(color: AppColors.gray200),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     borderSide:
                         BorderSide(color: AppColors.darkBlue, width: 1.5),
                   ),
@@ -1517,11 +1512,10 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                     Navigator.pop(sheetContext);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.darkBlue,
                     foregroundColor: AppColors.white,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     ),
                   ),
                   child: const Text(
@@ -1557,7 +1551,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
     showDialog(
       context: context,
-      barrierColor: Colors.black.withValues(alpha: 0.2),
+      barrierColor: AppColors.textBlack.withValues(alpha: 0.2),
       builder: (dialogContext) {
         return Stack(
           children: [
@@ -1577,7 +1571,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: AppColors.white,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                     boxShadow: [
                       BoxShadow(
                         color: AppColors.black.withValues(alpha: 0.15),
@@ -1601,7 +1595,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                             });
                             Navigator.pop(dialogContext);
                           },
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                           child: Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 12,
@@ -1612,7 +1606,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                               border: isSelected
                                   ? Border.all(
                                       color: AppColors.darkBlue, width: 1.5)
@@ -1622,7 +1616,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                               children: [
                                 // 썸네일
                                 ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                                   child: Container(
                                     width: 48,
                                     height: 48,
@@ -1733,7 +1727,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         builder: (context, scrollController) => Container(
           decoration: const BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.radiusBottomSheet)),
           ),
           child: Column(
             children: [
@@ -1744,7 +1738,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                 margin: const EdgeInsets.only(top: 12, bottom: 16),
                 decoration: BoxDecoration(
                   color: AppColors.gray200,
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                 ),
               ),
               // 타이틀
@@ -1754,8 +1748,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     '상품 정보',
-                    style: TextStyle(
-                      fontSize: 18,
+                    style: AppTextStyles.title1.copyWith(
                       fontWeight: FontWeight.w700,
                       color: AppColors.darkBlue,
                     ),
@@ -1784,7 +1777,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                     child: Column(
                       children: [
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                           child: Image.network(
                             selectedProduct.defaultImage!
                                 .replaceAll(' ', '%20'),
@@ -1840,11 +1833,10 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                     child: ElevatedButton(
                       onPressed: () => Navigator.pop(context),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.darkBlue,
                         foregroundColor: AppColors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                         ),
                       ),
                       child: const Text(
@@ -1880,7 +1872,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      barrierColor: Colors.black.withValues(alpha: 0.3),
+      barrierColor: AppColors.textBlack.withValues(alpha: 0.3),
       builder: (context) => SelectedBlocksSheet(
         gridConfig: _gridConfig!,
         game: _game,

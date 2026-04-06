@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/constants/app_constants.dart';
 import '../../models/game_round_model.dart';
 
 /// Coming Soon 글래스모피즘 카드
@@ -78,20 +79,20 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
       onTap: widget.onTap,
       child: Container(
         height: 180,
-        margin: const EdgeInsets.only(bottom: 16),
+        margin: const EdgeInsets.only(bottom: AppConstants.spacingLg),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
+              color: AppColors.textBlack.withValues(alpha: 0.1),
               blurRadius: 16,
               offset: const Offset(0, 6),
             ),
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
           child: Stack(
             fit: StackFit.expand,
             children: [
@@ -145,8 +146,8 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
   /// 하단 정보 (블러 뒤에 표시될 콘텐츠)
   Widget _buildBottomInfoBehindBlur() {
     return Positioned(
-      left: 16,
-      right: 16,
+      left: AppConstants.spacingLg,
+      right: AppConstants.spacingLg,
       bottom: 14,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,9 +155,7 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
           // 제목
           Text(
             widget.game.title,
-            style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w700,
+            style: AppTextStyles.title2.copyWith(
               color: AppColors.textBlack,
               height: 1.2,
             ),
@@ -186,12 +185,8 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(
-          icon,
-          size: 14,
-          color: AppColors.gray600,
-        ),
-        SizedBox(width: 4),
+        Icon(icon, size: 14, color: AppColors.gray600),
+        const SizedBox(width: AppConstants.spacingXs),
         Text(
           value,
           style: AppTextStyles.body4.copyWith(color: AppColors.gray600),
@@ -204,7 +199,7 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
   Widget _buildFullGlassOverlay() {
     return Positioned.fill(
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
           child: Container(
@@ -213,15 +208,15 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.white.withValues(alpha: 0.4),
-                  Colors.white.withValues(alpha: 0.6),
+                  AppColors.white.withValues(alpha: 0.4),
+                  AppColors.white.withValues(alpha: 0.6),
                 ],
               ),
               border: Border.all(
-                color: Colors.white.withValues(alpha: 0.5),
+                color: AppColors.white.withValues(alpha: 0.5),
                 width: 1,
               ),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
             ),
           ),
         ),
@@ -235,10 +230,13 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
       top: 14,
       left: 14,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppConstants.spacingMd,
+          vertical: 6,
+        ),
         decoration: BoxDecoration(
           color: _getTypeBadgeColor(),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
           boxShadow: [
             BoxShadow(
               color: _getTypeBadgeColor().withValues(alpha: 0.4),
@@ -249,10 +247,8 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
         ),
         child: Text(
           widget.gameType.toUpperCase(),
-          style: TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w700,
-            color: Colors.white,
+          style: AppTextStyles.caption4.copyWith(
+            color: AppColors.white,
             letterSpacing: 0.5,
           ),
         ),
@@ -269,18 +265,18 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
           // COMING SOON 텍스트
           Text(
             'COMING SOON',
-            style: AppTextStyles.caption2.copyWith(color: AppColors.gray800.withValues(alpha: 0.8)),
+            style: AppTextStyles.caption2.copyWith(
+              color: AppColors.gray800.withValues(alpha: 0.8),
+            ),
           ),
           const SizedBox(height: 6),
           // 타이머
           Text(
             _formatDuration(_remainingTime),
-            style: const TextStyle(
-              fontSize: 36,
-              fontWeight: FontWeight.w700,
+            style: AppTextStyles.display1.copyWith(
               color: AppColors.textBlack,
               letterSpacing: 2,
-              fontFeatures: [FontFeature.tabularFigures()],
+              fontFeatures: const [FontFeature.tabularFigures()],
             ),
           ),
         ],
@@ -308,7 +304,7 @@ class _ComingSoonOverlayCardState extends State<ComingSoonOverlayCard> {
       case 'prime':
         return AppColors.primaryDark;
       default:
-        return AppColors.gray500;
+        return AppColors.gray400;
     }
   }
 }

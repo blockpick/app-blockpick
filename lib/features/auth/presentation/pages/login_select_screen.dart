@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_constants.dart';
 import '../../../../core/auth/data/services/apple_auth_service.dart';
 import '../../../../core/auth/data/services/google_auth_service.dart';
 import '../../../../core/auth/domain/providers/auth_provider.dart';
@@ -71,7 +72,7 @@ class LoginSelectScreen extends ConsumerWidget {
           height: 80,
           decoration: BoxDecoration(
             gradient: AppColors.gradientBlue,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
             boxShadow: [
               BoxShadow(
                 color: AppColors.blue.withValues(alpha: 0.25),
@@ -84,8 +85,8 @@ class LoginSelectScreen extends ConsumerWidget {
             child: Text(
               'B',
               style: TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.w800,
+                fontSize: 32,
+                fontWeight: FontWeight.w700,
                 color: AppColors.white,
               ),
             ),
@@ -356,14 +357,14 @@ class _SocialButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: backgroundColor,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(AppConstants.radiusXl),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         child: Container(
           height: 56,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppConstants.radiusXl),
             border: borderColor != null
                 ? Border.all(color: borderColor!, width: 1)
                 : null,
@@ -397,7 +398,7 @@ class _MemberCheckDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radius2Xl)),
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -408,7 +409,7 @@ class _MemberCheckDialog extends StatelessWidget {
               height: 64,
               decoration: BoxDecoration(
                 color: AppColors.blue.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(AppConstants.radiusXl),
               ),
               child: const Icon(
                 Icons.person_outline_rounded,
@@ -419,11 +420,7 @@ class _MemberCheckDialog extends StatelessWidget {
             const SizedBox(height: 20),
             Text(
               '처음 오셨네요!',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                color: AppColors.darkBlue,
-              ),
+              style: AppTextStyles.heading3.copyWith(color: AppColors.darkBlue),
             ),
             SizedBox(height: 8),
             Text(
@@ -457,7 +454,7 @@ class _GoogleLogoPainter extends CustomPainter {
     final paint = Paint()..style = PaintingStyle.fill;
 
     // 간단한 G 로고 (실제로는 SVG 사용 권장)
-    paint.color = const Color(0xFF4285F4);
+    paint.color = const Color(0xFF4285F4); // Google brand color
     canvas.drawCircle(
       Offset(size.width / 2, size.height / 2),
       size.width / 2,

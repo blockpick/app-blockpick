@@ -175,7 +175,7 @@ class _PhoneChangeScreenState extends ConsumerState<PhoneChangeScreen> {
           backgroundColor: AppColors.darkBlue,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
           ),
         ),
       );
@@ -370,7 +370,6 @@ class _PhoneChangeScreenState extends ConsumerState<PhoneChangeScreen> {
       child: ElevatedButton(
         onPressed: isEnabled ? _sendVerificationCode : null,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.darkBlue,
           foregroundColor: AppColors.white,
           disabledBackgroundColor: AppColors.gray300,
           disabledForegroundColor: AppColors.white,
@@ -514,7 +513,6 @@ class _PhoneChangeScreenState extends ConsumerState<PhoneChangeScreen> {
           child: ElevatedButton(
             onPressed: isEnabled ? _verifyAndChangePhone : null,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.darkBlue,
               foregroundColor: AppColors.white,
               disabledBackgroundColor: AppColors.gray300,
               disabledForegroundColor: AppColors.white,

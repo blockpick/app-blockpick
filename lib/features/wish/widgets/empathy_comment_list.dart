@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../models/wish_model.dart';
@@ -44,7 +45,7 @@ class _EmpathyCommentListState extends State<EmpathyCommentList> {
                   filled: true,
                   fillColor: AppColors.gray100,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     borderSide: BorderSide.none,
                   ),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -71,7 +72,7 @@ class _EmpathyCommentListState extends State<EmpathyCommentList> {
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 ),
                 child: const Icon(Icons.send, size: 18, color: AppColors.white),
               ),

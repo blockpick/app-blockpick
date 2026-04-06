@@ -3,6 +3,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../models/game_model.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import '../../../core/constants/app_constants.dart';
 
 /// SELECT 게임 상품 선택 오버레이
 class ProductSelectorOverlay extends StatefulWidget {
@@ -75,7 +76,7 @@ class _ProductSelectorOverlayState extends State<ProductSelectorOverlay>
     return GestureDetector(
       onTap: _close,
       child: Container(
-        color: Colors.black.withValues(alpha: 0.85),
+        color: AppColors.textBlack.withValues(alpha: 0.85),
         child: FadeTransition(
           opacity: _animation,
           child: GestureDetector(
@@ -137,7 +138,7 @@ class _ProductSelectorOverlayState extends State<ProductSelectorOverlay>
                           margin: const EdgeInsets.symmetric(horizontal: 40),
                           decoration: BoxDecoration(
                             color: AppColors.white,
-                            borderRadius: BorderRadius.circular(24),
+                            borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                             boxShadow: [
                               BoxShadow(
                                 color: AppColors.black.withValues(alpha: 0.3),
@@ -147,7 +148,7 @@ class _ProductSelectorOverlayState extends State<ProductSelectorOverlay>
                             ],
                           ),
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(24),
+                            borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                             child: product.defaultImage != null &&
                                     product.defaultImage!.isNotEmpty
                                 ? Image.network(
@@ -194,7 +195,7 @@ class _ProductSelectorOverlayState extends State<ProductSelectorOverlay>
                       height: 8,
                       margin: const EdgeInsets.symmetric(horizontal: 4),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                         color: _currentIndex == index
                             ? AppColors.purple
                             : AppColors.white.withValues(alpha: 0.3),
@@ -211,7 +212,7 @@ class _ProductSelectorOverlayState extends State<ProductSelectorOverlay>
                     width: double.infinity,
                     decoration: BoxDecoration(
                       gradient: AppColors.gradientBluePurplePink,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                       boxShadow: [
                         BoxShadow(
                           color: AppColors.purple.withValues(alpha: 0.4),
@@ -224,7 +225,7 @@ class _ProductSelectorOverlayState extends State<ProductSelectorOverlay>
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: _selectProduct,
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 18),
                           child: Row(

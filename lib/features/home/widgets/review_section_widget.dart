@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 
@@ -92,7 +93,7 @@ class ReviewSectionWidget extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: AppColors.gradientPurple,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         boxShadow: [
           BoxShadow(
             color: AppColors.purple.withValues(alpha: 0.3),
@@ -114,7 +115,7 @@ class ReviewSectionWidget extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                   ),
                   child: Text(
                     '✨ nice win',
@@ -146,7 +147,7 @@ class ReviewSectionWidget extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: AppColors.white,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             ),
             child: const Icon(
               Icons.rate_review,
@@ -166,7 +167,7 @@ class ReviewSectionWidget extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         border: Border.all(color: AppColors.buleGray),
         boxShadow: [
           BoxShadow(
@@ -239,7 +240,7 @@ class ReviewSectionWidget extends StatelessWidget {
               height: 80,
               decoration: BoxDecoration(
                 color: AppColors.bgWhite,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               ),
               child: Center(
                 child: Icon(

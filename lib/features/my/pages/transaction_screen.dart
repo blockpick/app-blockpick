@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/constants/app_constants.dart';
+import '../../../components/common/common_empty_state.dart';
 
 /// 거래내역 화면
 class TransactionScreen extends ConsumerWidget {
@@ -44,22 +46,9 @@ class TransactionScreen extends ConsumerWidget {
   }
 
   Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.receipt_long_outlined,
-            size: 64,
-            color: AppColors.gray400,
-          ),
-          SizedBox(height: 16),
-          Text(
-            '거래내역이 없습니다',
-            style: AppTextStyles.body2.copyWith(color: AppColors.gray500),
-          ),
-        ],
-      ),
+    return const CommonEmptyState(
+      icon: Icons.receipt_long_outlined,
+      message: '거래 내역이 없습니다',
     );
   }
 }
@@ -116,7 +105,7 @@ class _TransactionItem extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
       ),
       child: Row(
         children: [
@@ -125,7 +114,7 @@ class _TransactionItem extends StatelessWidget {
             height: 44,
             decoration: BoxDecoration(
               color: iconColor.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             ),
             child: Icon(
               icon,

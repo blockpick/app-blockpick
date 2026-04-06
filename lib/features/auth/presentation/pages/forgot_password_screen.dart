@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../../../../core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -246,7 +247,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       context: context,
       barrierDismissible: false,
       builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet)),
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -257,7 +258,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 height: 64,
                 decoration: BoxDecoration(
                   color: AppColors.green500.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                 ),
                 child: const Icon(
                   Icons.check_circle_outline_rounded,
@@ -473,7 +474,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.gray50,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -535,7 +536,7 @@ class _PasswordRuleItem extends StatelessWidget {
           height: 20,
           decoration: BoxDecoration(
             color: isValid ? AppColors.green500 : Colors.transparent,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             border: Border.all(
               color: isValid ? AppColors.green500 : AppColors.gray400,
               width: 2,

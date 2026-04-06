@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_constants.dart';
 import 'package:syncfusion_flutter_treemap/treemap.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
@@ -80,7 +81,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: AppColors.pink.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                   ),
                   child: const Icon(
                     Icons.show_chart,
@@ -254,7 +255,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       decoration: BoxDecoration(
         color: AppColors.gray100,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
       ),
       child: Column(
         children: [
@@ -294,7 +295,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
           _selectedPeriod = period;
         });
       },
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -308,7 +309,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
                 )
               : null,
           color: isSelected ? null : AppColors.gray100,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
           boxShadow: isSelected
               ? [
                   BoxShadow(
@@ -380,7 +381,7 @@ class _EventCashWidgetState extends State<EventCashWidget> {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
                 color: Colors.black87,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               ),
               child: Text(
                 chartData[tile.indices[0]].label,

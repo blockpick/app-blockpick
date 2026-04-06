@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_constants.dart';
 import '../../../../core/auth/domain/providers/auth_provider.dart';
 import '../widgets/auth_scaffold.dart';
 import '../widgets/auth_button.dart';
@@ -200,7 +201,7 @@ class _PasswordSetupScreenState extends ConsumerState<PasswordSetupScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.gray50,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -258,7 +259,7 @@ class _PasswordRuleItem extends StatelessWidget {
           height: 20,
           decoration: BoxDecoration(
             color: isValid ? AppColors.green500 : Colors.transparent,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             border: Border.all(
               color: isValid ? AppColors.green500 : AppColors.gray400,
               width: 2,
@@ -268,7 +269,7 @@ class _PasswordRuleItem extends StatelessWidget {
               ? const Icon(
                   Icons.check_rounded,
                   size: 14,
-                  color: Colors.white,
+                  color: AppColors.white,
                 )
               : null,
         ),

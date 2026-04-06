@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../models/event_prize.dart';
+import '../../../core/constants/app_constants.dart';
 
 /// 이벤트 당첨 팝업
 class EventPrizePopup extends StatefulWidget {
@@ -29,7 +30,7 @@ class EventPrizePopup extends StatefulWidget {
     return showGeneralDialog(
       context: context,
       barrierDismissible: false,
-      barrierColor: Colors.black.withValues(alpha: 0.7),
+      barrierColor: AppColors.textBlack.withValues(alpha: 0.7),
       transitionDuration: const Duration(milliseconds: 400),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         return ScaleTransition(
@@ -199,7 +200,7 @@ class _EventPrizePopupState extends State<EventPrizePopup>
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.w900,
-                color: Colors.white,
+                color: AppColors.white,
                 letterSpacing: 2,
               ),
             ),
@@ -215,7 +216,7 @@ class _EventPrizePopupState extends State<EventPrizePopup>
       builder: (context, child) {
         return Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
             boxShadow: [
               BoxShadow(
                 color: _gradeColor.withValues(alpha: 0.4),
@@ -225,7 +226,7 @@ class _EventPrizePopupState extends State<EventPrizePopup>
             ],
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
             child: Stack(
               children: [
                 // 카드 배경
@@ -236,7 +237,7 @@ class _EventPrizePopupState extends State<EventPrizePopup>
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        Colors.white,
+                        AppColors.white,
                         _gradeColor.withValues(alpha: 0.1),
                       ],
                     ),
@@ -252,11 +253,11 @@ class _EventPrizePopupState extends State<EventPrizePopup>
                           ),
                           decoration: BoxDecoration(
                             color: _gradeColor,
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                           ),
                           child: Text(
                             EventPrize.getGradeName(widget.prize.grade),
-                            style: AppTextStyles.caption3.copyWith(color: Colors.white),
+                            style: AppTextStyles.caption3.copyWith(color: AppColors.white),
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -329,7 +330,7 @@ class _EventPrizePopupState extends State<EventPrizePopup>
                           ),
                           decoration: BoxDecoration(
                             color: AppColors.gray100,
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -387,7 +388,7 @@ class _EventPrizePopupState extends State<EventPrizePopup>
               _gradeColor.withValues(alpha: 0.8),
             ],
           ),
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(AppConstants.radiusFull),
           boxShadow: [
             BoxShadow(
               color: _gradeColor.withValues(alpha: 0.4),
@@ -404,11 +405,11 @@ class _EventPrizePopupState extends State<EventPrizePopup>
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
-                color: Colors.white,
+                color: AppColors.white,
               ),
             ),
             SizedBox(width: 8),
-            Icon(Icons.arrow_forward_rounded, color: Colors.white),
+            Icon(Icons.arrow_forward_rounded, color: AppColors.white),
           ],
         ),
       ),
@@ -481,7 +482,7 @@ class _ShinePainter extends CustomPainter {
         colors: [
           Colors.transparent,
           color.withValues(alpha: 0.2),
-          Colors.white.withValues(alpha: 0.4),
+          AppColors.white.withValues(alpha: 0.4),
           color.withValues(alpha: 0.2),
           Colors.transparent,
         ],

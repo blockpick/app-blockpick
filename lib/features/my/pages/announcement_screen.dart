@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/constants/app_constants.dart';
 
 /// 공지사항 화면
 class AnnouncementScreen extends StatelessWidget {
@@ -79,7 +80,7 @@ class _AnnouncementItemState extends State<_AnnouncementItem> {
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         border: isImportant
             ? Border.all(color: AppColors.red.withValues(alpha: 0.3))
             : null,
@@ -88,7 +89,7 @@ class _AnnouncementItemState extends State<_AnnouncementItem> {
         color: Colors.transparent,
         child: InkWell(
           onTap: () => setState(() => _isExpanded = !_isExpanded),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -104,7 +105,7 @@ class _AnnouncementItemState extends State<_AnnouncementItem> {
                         ),
                         decoration: BoxDecoration(
                           color: AppColors.red.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(6),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                         ),
                         child: Text(
                           '중요',

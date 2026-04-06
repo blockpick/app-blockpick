@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/constants/app_constants.dart';
 
 /// 재사용 가능한 드래그 가능 바텀시트 컴포넌트
 ///
@@ -165,10 +166,12 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
         return Container(
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(AppConstants.radius2Xl),
+            ),
             boxShadow: [
               BoxShadow(
-                color: AppColors.black.withValues(alpha: 0.1),
+                color: AppColors.textBlack.withValues(alpha: 0.1),
                 blurRadius: 20,
                 offset: const Offset(0, -4),
               ),
@@ -197,12 +200,12 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
                 SafeArea(
                   top: false,
                   child: Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(AppConstants.spacingLg),
                     decoration: BoxDecoration(
                       color: AppColors.white,
                       border: Border(
                         top: BorderSide(
-                          color: AppColors.buleGray.withValues(alpha: 0.2),
+                          color: AppColors.gray200.withValues(alpha: 0.2),
                           width: 1,
                         ),
                       ),
@@ -237,13 +240,13 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
         child: Container(
           // 드래그 영역 확대 (전체 너비)
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 12),
+          padding: const EdgeInsets.symmetric(vertical: AppConstants.spacingMd),
           child: Center(
             child: Container(
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: AppColors.buleGray,
+                color: AppColors.gray200,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),

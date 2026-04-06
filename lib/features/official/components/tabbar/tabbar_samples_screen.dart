@@ -194,7 +194,7 @@ class TabBarSamplesScreen extends StatelessWidget {
                 gradient: LinearGradient(
                   colors: [AppColors.blue, AppColors.purple],
                 ),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 boxShadow: [
                   BoxShadow(
                     color: AppColors.blue.withValues(alpha: 0.5),

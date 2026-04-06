@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_constants.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
@@ -90,12 +91,12 @@ class _WishStepInfoState extends State<WishStepInfo> {
                 height: 160,
                 decoration: BoxDecoration(
                   color: AppColors.gray100,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                   border: Border.all(color: AppColors.gray200),
                 ),
                 child: _imageUrl != null
                     ? ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                         child: Image.network(
                           _imageUrl!,
                           fit: BoxFit.cover,
@@ -130,11 +131,11 @@ class _WishStepInfoState extends State<WishStepInfo> {
               filled: true,
               fillColor: AppColors.gray100,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 borderSide: BorderSide.none,
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
               ),
               contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -158,11 +159,11 @@ class _WishStepInfoState extends State<WishStepInfo> {
               filled: true,
               fillColor: AppColors.gray100,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 borderSide: BorderSide.none,
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
               ),
               contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -182,7 +183,7 @@ class _WishStepInfoState extends State<WishStepInfo> {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
                 color: AppColors.gray100,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppConstants.radiusMd),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -206,7 +207,7 @@ class _WishStepInfoState extends State<WishStepInfo> {
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusXl)),
                 elevation: 0,
               ),
               child: const Text(

@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import '../../../core/constants/app_constants.dart';
 
 /// 게임 참가 결과 전체화면 오버레이 (성공/실패)
 class GameJoinResultOverlay extends StatelessWidget {
@@ -37,12 +38,12 @@ class GameJoinResultOverlay extends StatelessWidget {
             end: Alignment.bottomRight,
             colors: success
                 ? [
-                    AppColors.green500.withOpacity(0.95),
-                    AppColors.blue.withOpacity(0.95),
+                    AppColors.green500.withValues(alpha: 0.95),
+                    AppColors.blue.withValues(alpha: 0.95),
                   ]
                 : [
-                    AppColors.red.withOpacity(0.95),
-                    AppColors.pink.withOpacity(0.95),
+                    AppColors.red.withValues(alpha: 0.95),
+                    AppColors.pink.withValues(alpha: 0.95),
                   ],
           ),
         ),
@@ -64,7 +65,7 @@ class GameJoinResultOverlay extends StatelessWidget {
                 Text(
                   success ? '게임 참가 완료!' : '참가에 실패했어요',
                   style: AppTextStyles.heading1.copyWith(
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 28,
                   ),
@@ -82,7 +83,7 @@ class GameJoinResultOverlay extends StatelessWidget {
                       ? '블록체인에 안전하게 기록되었어요.\n이제 게임 결과를 기다려주세요!'
                       : errorMessage ?? '다시 시도해주세요.',
                   style: AppTextStyles.body3.copyWith(
-                    color: Colors.white.withOpacity(0.9),
+                    color: AppColors.white.withValues(alpha: 0.9),
                   ),
                   textAlign: TextAlign.center,
                 )
@@ -110,7 +111,7 @@ class GameJoinResultOverlay extends StatelessWidget {
                   child: Text(
                     '닫기',
                     style: AppTextStyles.body3.copyWith(
-                      color: Colors.white.withOpacity(0.7),
+                      color: AppColors.white.withValues(alpha: 0.7),
                     ),
                   ),
                 )
@@ -148,7 +149,7 @@ class GameJoinResultOverlay extends StatelessWidget {
                 height: 20,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withOpacity(0.3),
+                  color: AppColors.white.withValues(alpha: 0.3),
                 ),
               ),
             )
@@ -167,10 +168,10 @@ class GameJoinResultOverlay extends StatelessWidget {
             height: 120,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white,
+              color: AppColors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.white.withOpacity(0.3),
+                  color: AppColors.white.withValues(alpha: 0.3),
                   blurRadius: 30,
                   spreadRadius: 10,
                 ),
@@ -200,10 +201,10 @@ class GameJoinResultOverlay extends StatelessWidget {
         height: 120,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.white,
+          color: AppColors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.white.withOpacity(0.3),
+              color: AppColors.white.withValues(alpha: 0.3),
               blurRadius: 30,
               spreadRadius: 10,
             ),
@@ -232,10 +233,10 @@ class GameJoinResultOverlay extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.15),
-        borderRadius: BorderRadius.circular(20),
+        color: AppColors.white.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
         border: Border.all(
-          color: Colors.white.withOpacity(0.3),
+          color: AppColors.white.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -281,7 +282,7 @@ class GameJoinResultOverlay extends StatelessWidget {
       children: [
         Icon(
           icon,
-          color: Colors.white.withOpacity(0.8),
+          color: AppColors.white.withValues(alpha: 0.8),
           size: 20,
         ),
         SizedBox(width: 12),
@@ -292,14 +293,14 @@ class GameJoinResultOverlay extends StatelessWidget {
               Text(
                 label,
                 style: AppTextStyles.body4.copyWith(
-                  color: Colors.white.withOpacity(0.7),
+                  color: AppColors.white.withValues(alpha: 0.7),
                 ),
               ),
               SizedBox(height: 4),
               Text(
                 value,
                 style: AppTextStyles.body3.copyWith(
-                  color: Colors.white,
+                  color: AppColors.white,
                   fontFamily: 'monospace',
                 ),
               ),
@@ -320,7 +321,7 @@ class GameJoinResultOverlay extends StatelessWidget {
             },
             icon: Icon(
               LucideIcons.copy,
-              color: Colors.white.withOpacity(0.7),
+              color: AppColors.white.withValues(alpha: 0.7),
               size: 20,
             ),
           ),
@@ -336,11 +337,11 @@ class GameJoinResultOverlay extends StatelessWidget {
           onConfirm?.call();
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.white,
           foregroundColor: AppColors.green500,
           padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(AppConstants.radiusFull),
           ),
           elevation: 8,
         ),
@@ -374,11 +375,11 @@ class GameJoinResultOverlay extends StatelessWidget {
               onRetry?.call();
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.white,
               foregroundColor: AppColors.red,
               padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
+                borderRadius: BorderRadius.circular(AppConstants.radiusFull),
               ),
               elevation: 8,
             ),
