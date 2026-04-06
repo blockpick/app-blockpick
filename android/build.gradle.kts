@@ -2,10 +2,10 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        // Unity libs
-        flatDir {
-            dirs(project(":unityLibrary").projectDir.resolve("libs"))
-        }
+        // Unity libs (비활성화)
+        // flatDir {
+        //     dirs(project(":unityLibrary").projectDir.resolve("libs"))
+        // }
     }
 }
 

@@ -366,46 +366,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.5.2"
-  flutter_embed_unity:
-    dependency: "direct main"
-    description:
-      name: flutter_embed_unity
-      sha256: "8f1220ccb1dcc2d2d3c4803638473fabe2bf955b8c18ba197613fb4a11c9ca6c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.4.0"
-  flutter_embed_unity_2022_3_android:
-    dependency: transitive
-    description:
-      name: flutter_embed_unity_2022_3_android
-      sha256: "6dbef64937b308783a292fcd759b930b1585f212e524bcaff2000dec21cde1d2"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.5"
-  flutter_embed_unity_2022_3_ios:
-    dependency: transitive
-    description:
-      name: flutter_embed_unity_2022_3_ios
-      sha256: "654ed70cf0fd678715e52ee2fa22b2babe540a42d1e663b9a3891fb0654201b4"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.2"
-  flutter_embed_unity_6000_0_android:
-    dependency: "direct main"
-    description:
-      name: flutter_embed_unity_6000_0_android
-      sha256: "30b42c54ddb189cf40a59af1f79d8a836d5287b8f41bc3a80938ca0adddb58b1"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.3"
-  flutter_embed_unity_platform_interface:
-    dependency: transitive
-    description:
-      name: flutter_embed_unity_platform_interface
-      sha256: f6c51507623af383dc78fb0a6957b139f6b1d0cc5ef368f507551beac21d33c4
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1"
   flutter_hooks:
     dependency: transitive
     description:
@@ -486,6 +446,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.3"
+  flutter_staggered_grid_view:
+    dependency: "direct main"
+    description:
+      name: flutter_staggered_grid_view
+      sha256: "19e7abb550c96fbfeb546b23f3ff356ee7c59a019a651f8f102a4ba9b7349395"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.0"
   flutter_svg:
     dependency: "direct main"
     description:

@@ -27,5 +27,5 @@ plugins {
 }
 
 include(":app")
-include(":unityLibrary")
-project(":unityLibrary").projectDir = file("./unityLibrary")
+// include(":unityLibrary")  // Unity 연동 비활성화 (NDK 경로 문제로 빌드 제외)
+// project(":unityLibrary").projectDir = file("./unityLibrary")

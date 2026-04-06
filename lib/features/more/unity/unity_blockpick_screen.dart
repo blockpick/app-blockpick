@@ -1,7 +1,8 @@
 import 'dart:convert';
 import '../../../core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_embed_unity/flutter_embed_unity.dart';
+// TODO: flutter_embed_unity 비활성화 — Unity NDK 경로 문제 해결 후 재활성화
+// import 'package:flutter_embed_unity/flutter_embed_unity.dart';
 import '../../../core/theme/app_colors.dart';
 
 /// Unity BlockPick 게임 화면
@@ -52,6 +53,8 @@ class _UnityBlockpickScreenState extends State<UnityBlockpickScreen> {
   }
 
   /// Unity에서 메시지를 받았을 때 호출
+  /// TODO: flutter_embed_unity 재활성화 후 EmbedUnity.onMessageFromUnity에 연결
+  // ignore: unused_element
   void _onMessageFromUnity(String message) {
     debugPrint('[UnityBlockpick] Message from Unity: $message');
 
@@ -529,12 +532,12 @@ class _UnityBlockpickScreenState extends State<UnityBlockpickScreen> {
     final jsonMessage = jsonEncode(data);
     debugPrint('[UnityBlockpick] Sending to Unity: $jsonMessage');
 
-    // flutter_embed_unity API 사용
-    sendToUnity(
-      'FlutterBridge',     // GameObject 이름
-      'ReceiveMessage',    // 메서드 이름
-      jsonMessage,         // 메시지 (string)
-    );
+    // TODO: flutter_embed_unity 재활성화 후 아래 코드 복원
+    // sendToUnity(
+    //   'FlutterBridge',     // GameObject 이름
+    //   'ReceiveMessage',    // 메서드 이름
+    //   jsonMessage,         // 메시지 (string)
+    // );
   }
 
   /// 결과 다이얼로그 표시
@@ -657,9 +660,15 @@ class _UnityBlockpickScreenState extends State<UnityBlockpickScreen> {
       ),
       body: Stack(
         children: [
-          // Unity Widget (flutter_embed_unity)
-          EmbedUnity(
-            onMessageFromUnity: _onMessageFromUnity,
+          // TODO: flutter_embed_unity 재활성화 후 EmbedUnity 위젯 복원
+          // EmbedUnity(
+          //   onMessageFromUnity: _onMessageFromUnity,
+          // ),
+          const Center(
+            child: Text(
+              'Unity 연동 준비 중',
+              style: TextStyle(color: Colors.white54),
+            ),
           ),
 
           // 로딩 오버레이

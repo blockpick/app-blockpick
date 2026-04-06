@@ -47,5 +47,5 @@ flutter {
 }
 
 dependencies {
-    implementation(project(":unityLibrary"))
+    // implementation(project(":unityLibrary"))  // Unity 연동 비활성화 (NDK 경로 문제로 빌드 제외)
 }

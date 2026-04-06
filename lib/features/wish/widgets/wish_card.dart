@@ -4,373 +4,299 @@ import '../../../core/theme/app_text_styles.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../models/wish_model.dart';
 
-/// 소원 카드 위젯 — 위시 탭 그리드용
-class WishCard extends StatelessWidget {
+/// 소원 카드 — 업체/일반 동일 구조, 풀 너비 가로형
+class WishCard extends StatefulWidget {
   final Wish wish;
   final VoidCallback onTap;
   final VoidCallback onBuzzTap;
+  final bool showSwipeHint;
 
   const WishCard({
     super.key,
     required this.wish,
     required this.onTap,
     required this.onBuzzTap,
+    this.showSwipeHint = false,
   });
 
   @override
+  State<WishCard> createState() => _WishCardState();
+}
+
+class _WishCardState extends State<WishCard> with SingleTickerProviderStateMixin {
+  late final AnimationController _peekController;
+  late final Animation<Offset> _peekAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    _peekController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+    _peekAnim = TweenSequence<Offset>([
+      TweenSequenceItem(
+        tween: Tween(begin: Offset.zero, end: const Offset(-0.08, 0))
+            .chain(CurveTween(curve: Curves.easeOut)),
+        weight: 40,
+      ),
+      TweenSequenceItem(
+        tween: Tween(begin: const Offset(-0.08, 0), end: Offset.zero)
+            .chain(CurveTween(curve: Curves.easeInOut)),
+        weight: 60,
+      ),
+    ]).animate(_peekController);
+
+    if (widget.showSwipeHint) {
+      Future.delayed(const Duration(milliseconds: 800), () {
+        if (mounted) _peekController.forward();
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _peekController.dispose();
+    super.dispose();
+  }
+
+  Wish get wish => widget.wish;
+
+  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
+    return SlideTransition(
+      position: _peekAnim,
+      child: Dismissible(
+      key: ValueKey('wish_${wish.id}'),
+      direction: DismissDirection.endToStart,
+      confirmDismiss: (_) async {
+        widget.onBuzzTap();
+        return false;
+      },
+      background: Container(
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 24),
         decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
-          border: wish.isBusinessWish
-              ? Border.all(color: AppColors.primary.withValues(alpha: 0.3), width: 1.5)
-              : Border.all(color: AppColors.gray200.withValues(alpha: 0.6), width: 1),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.textBlack.withValues(alpha: 0.06),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-            BoxShadow(
-              color: AppColors.textBlack.withValues(alpha: 0.02),
-              blurRadius: 2,
-              offset: Offset(0, 1),
+          color: wish.isBusinessWish ? AppColors.primaryMain : AppColors.textBlack,
+          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.auto_awesome, size: 22, color: AppColors.white),
+            const SizedBox(height: 4),
+            Text(
+              '소문내기',
+              style: AppTextStyles.caption2.copyWith(color: AppColors.white, fontWeight: FontWeight.w700),
             ),
           ],
+        ),
+      ),
+      child: GestureDetector(
+      onTap: widget.onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
+          border: wish.isBusinessWish
+              ? Border.all(color: AppColors.primaryMain.withValues(alpha: 0.15), width: 1)
+              : null,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 상품 이미지
-            _buildImage(),
-            // 내용 — Expanded로 남은 공간 채움
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // 한줄평
-                    Text(
-                      wish.oneLiner,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.caption2.copyWith(color: AppColors.textBlack),
+            // 상단: 썸네일 + 정보
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildThumbnail(),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // 카테고리 + 업체 배지
+                      Row(
+                        children: [
+                          Text(
+                            '${wish.category.emoji} ${wish.category.label.split('/').first}',
+                            style: AppTextStyles.caption4.copyWith(color: AppColors.gray400),
+                          ),
+                          if (wish.isBusinessWish) ...[
+                            const SizedBox(width: 6),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: AppColors.primaryBg,
+                                borderRadius: BorderRadius.circular(AppConstants.radiusSm),
+                              ),
+                              child: Text(
+                                wish.businessName ?? 'AD',
+                                style: AppTextStyles.caption4.copyWith(
+                                  color: AppColors.primaryMain,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      // 한줄평
+                      Text(
+                        wish.oneLiner,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.title3.copyWith(
+                          color: AppColors.textBlack,
+                          height: 1.3,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      // 상품명
+                      Text(
+                        wish.productName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.caption1.copyWith(color: AppColors.gray400),
+                      ),
+                      const SizedBox(height: 6),
+                      // 가격
+                      Text(
+                        '${_formatPrice(wish.productPrice)}원',
+                        style: AppTextStyles.title2.copyWith(fontWeight: FontWeight.w800),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            // 하단: 통계 + CTA
+            Row(
+              children: [
+                // 공감
+                if (!wish.isBusinessWish) ...[
+                  Icon(Icons.favorite_rounded, size: 13, color: AppColors.red.withValues(alpha: 0.6)),
+                  const SizedBox(width: 3),
+                  Text('${wish.empathyCount}', style: AppTextStyles.caption4.copyWith(color: AppColors.gray400)),
+                  const SizedBox(width: 10),
+                ],
+                // 참여자
+                const Icon(Icons.people_outline_rounded, size: 13, color: AppColors.gray400),
+                const SizedBox(width: 3),
+                Text(_formatCount(wish.participantCount), style: AppTextStyles.caption4.copyWith(color: AppColors.gray400)),
+                // 업체: 경품
+                if (wish.isBusinessWish && wish.prizeDescription != null) ...[
+                  const SizedBox(width: 10),
+                  Text('🎁', style: AppTextStyles.caption4),
+                  const SizedBox(width: 2),
+                  Text(
+                    '${_formatPrice(wish.prizeValue ?? 0)}원',
+                    style: AppTextStyles.caption4.copyWith(color: AppColors.orange, fontWeight: FontWeight.w600),
+                  ),
+                ],
+                const Spacer(),
+                // CTA 버튼
+                GestureDetector(
+                  onTap: widget.onBuzzTap,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+                    decoration: BoxDecoration(
+                      color: wish.isBusinessWish ? AppColors.primaryMain : AppColors.textBlack,
+                      borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                     ),
-                    const SizedBox(height: 6),
-                    // 상품명
-                    Text(
-                      wish.productName,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.caption4.copyWith(color: AppColors.gray600),
-                    ),
-                    const SizedBox(height: 2),
-                    // 가격
-                    Text(
-                      '${_formatPrice(wish.productPrice)}원',
-                      style: AppTextStyles.title1.copyWith(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.textBlack,
+                    child: Text(
+                      wish.isBusinessWish ? '무료 소문내기' : '소문내기 10원',
+                      style: AppTextStyles.caption2.copyWith(
+                        color: AppColors.white,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    // 공감/참여 정보
-                    _buildStats(),
-                    // 업체 경품 + 프로그레스
-                    if (wish.isBusinessWish) ...[
-                      if (wish.prizeDescription != null) ...[
-                        const SizedBox(height: 8),
-                        _buildPrizeInfo(),
-                      ],
-                      const SizedBox(height: 8),
-                      _buildExposureProgress(),
-                    ],
-                    // Spacer로 CTA를 항상 하단에 배치
-                    const Spacer(),
-                    const SizedBox(height: 10),
-                    // CTA 버튼
-                    _buildCTA(),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
+            // 업체: 프로그레스 바
+            if (wish.isBusinessWish) ...[
+              const SizedBox(height: 12),
+              _buildProgress(),
+            ],
           ],
         ),
       ),
-    );
+    ),  // GestureDetector
+    ),  // Dismissible
+    );  // SlideTransition
   }
 
-  Widget _buildImage() {
-    return Stack(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.radiusXl - 1)),
-          child: AspectRatio(
-            aspectRatio: 1.1,
-            child: Image.network(
-              wish.productImageUrl,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => _buildImagePlaceholder(),
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return _buildImagePlaceholder(isLoading: true);
-              },
-            ),
-          ),
-        ),
-        // 카테고리 배지
-        Positioned(
-          right: 8,
-          bottom: 8,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: AppColors.textBlack.withValues(alpha: 0.55),
-              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
-              border: Border.all(color: AppColors.white.withValues(alpha: 0.15), width: 0.5),
-            ),
-            child: Text(
-              '${wish.category.emoji} ${wish.category.label.split('/').first}',
-              style: AppTextStyles.caption4.copyWith(color: AppColors.white),
-            ),
-          ),
-        ),
-        // 업체 배지
-        if (wish.isBusinessWish)
-          Positioned(
-            left: 8,
-            top: 8,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: BoxDecoration(
-                gradient: AppColors.gradientDarkPurple,
-                borderRadius: BorderRadius.circular(AppConstants.radiusMd),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.3),
-                    blurRadius: 6,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.campaign, size: 12, color: AppColors.white),
-                  const SizedBox(width: 4),
-                  Text(
-                    wish.businessName ?? 'BRAND',
-                    style: AppTextStyles.caption4.copyWith(
-                      color: AppColors.white,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-
-  /// 이미지 로딩/에러 시 그라데이션 플레이스홀더
-  Widget _buildImagePlaceholder({bool isLoading = false}) {
-    // 카테고리별 색상
-    final colors = _categoryColors;
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [colors[0].withValues(alpha: 0.15), colors[1].withValues(alpha: 0.08)],
+  Widget _buildThumbnail() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(AppConstants.radiusMd),
+      child: SizedBox(
+        width: 88,
+        height: 88,
+        child: Image.network(
+          wish.productImageUrl,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => _buildPlaceholder(),
+          loadingBuilder: (_, child, progress) {
+            if (progress == null) return child;
+            return _buildPlaceholder(isLoading: true);
+          },
         ),
       ),
+    );
+  }
+
+  Widget _buildPlaceholder({bool isLoading = false}) {
+    final colors = _categoryColors(wish.category);
+    return Container(
+      color: colors[1].withValues(alpha: 0.15),
       child: Center(
         child: isLoading
             ? SizedBox(
-                width: 24,
-                height: 24,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: colors[0].withValues(alpha: 0.4),
-                ),
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2, color: colors[0].withValues(alpha: 0.4)),
               )
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    wish.category.emoji,
-                    style: const TextStyle(fontSize: 32),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    wish.productName,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: AppTextStyles.caption4.copyWith(color: colors[0].withValues(alpha: 0.6)),
-                  ),
-                ],
-              ),
+            : Text(wish.category.emoji, style: const TextStyle(fontSize: 28)),
       ),
     );
   }
 
-  List<Color> get _categoryColors {
-    switch (wish.category) {
-      case WishCategory.food:
-        return [AppColors.orange, AppColors.yellow500];
-      case WishCategory.beauty:
-        return [AppColors.pink, AppColors.red200];
-      case WishCategory.fashion:
-        return [AppColors.primaryDark, AppColors.primaryLight];
-      case WishCategory.electronics:
-        return [AppColors.gray800, AppColors.gray600];
-      case WishCategory.figure:
-        return [AppColors.primaryMain, AppColors.primaryBg];
-      case WishCategory.travel:
-        return [AppColors.blue, AppColors.blue200];
-      case WishCategory.lifestyle:
-        return [AppColors.green500, AppColors.green200];
-      case WishCategory.etc:
-        return [AppColors.gray400, AppColors.gray200];
-    }
-  }
-
-  Widget _buildStats() {
+  Widget _buildProgress() {
+    final progress = wish.exposureProgress;
     return Row(
       children: [
-        if (!wish.isBusinessWish) ...[
-          Icon(Icons.favorite, size: 12, color: AppColors.red200),
-          SizedBox(width: 3),
-          Text(
-            '${wish.empathyCount}',
-            style: AppTextStyles.caption4.copyWith(color: AppColors.gray600, fontWeight: FontWeight.w500),
-          ),
-          const SizedBox(width: 10),
-        ],
-        const Icon(Icons.people_outline, size: 12, color: AppColors.gray400),
-        SizedBox(width: 3),
         Text(
-          _formatCount(wish.participantCount),
-          style: AppTextStyles.caption4.copyWith(color: AppColors.gray600, fontWeight: FontWeight.w500),
-        ),
-        const Spacer(),
-        Text(
-          '@${wish.userName ?? ''}',
+          '달성률',
           style: AppTextStyles.caption4.copyWith(color: AppColors.gray400),
         ),
-      ],
-    );
-  }
-
-  Widget _buildPrizeInfo() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-      decoration: BoxDecoration(
-        color: AppColors.yellow200,
-        borderRadius: BorderRadius.circular(AppConstants.radiusMd),
-        border: Border.all(color: AppColors.yellow500.withValues(alpha: 0.5), width: 0.5),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text('🎁', style: AppTextStyles.caption4.copyWith(fontSize: 11)),
-          SizedBox(width: 4),
-          Flexible(
-            child: Text(
-              '경품: ${_formatPrice(wish.prizeValue ?? 0)}원 상당',
-              style: AppTextStyles.caption4.copyWith(color: AppColors.orange),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildExposureProgress() {
-    final progress = wish.exposureProgress;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            const Icon(Icons.people_outline, size: 11, color: AppColors.gray400),
-            const SizedBox(width: 4),
-            Text(
-              '${_formatCount(wish.currentExposures ?? 0)} / ${_formatCount(wish.maxExposures ?? 0)}명',
-              style: AppTextStyles.caption4.copyWith(color: AppColors.gray600),
-            ),
-            Spacer(),
-            Text(
-              '${(progress * 100).toInt()}%',
-              style: AppTextStyles.caption4.copyWith(color: AppColors.primary),
-            ),
-          ],
-        ),
-        const SizedBox(height: 4),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(AppConstants.radiusSm),
-          child: LinearProgressIndicator(
-            value: progress,
-            minHeight: 4,
-            backgroundColor: AppColors.gray200,
-            valueColor: AlwaysStoppedAnimation(
-              progress > 0.7 ? AppColors.primary : AppColors.primaryLight,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCTA() {
-    final isBusinessFree = wish.isBusinessWish;
-    return SizedBox(
-      width: double.infinity,
-      height: 38,
-      child: ElevatedButton(
-        onPressed: onBuzzTap,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          foregroundColor: AppColors.white,
-          padding: EdgeInsets.zero,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
-          ),
-          elevation: 0,
-          shadowColor: Colors.transparent,
-        ).copyWith(
-          backgroundColor: WidgetStateProperty.all(Colors.transparent),
-        ),
-        child: Ink(
-          decoration: BoxDecoration(
-            gradient: isBusinessFree
-                ? AppColors.gradientDarkPurple
-                : LinearGradient(
-                    colors: [AppColors.gray800, AppColors.textBlack],
-                  ),
-            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
-          ),
-          child: Container(
-            alignment: Alignment.center,
-            child: Text(
-              isBusinessFree ? '✨ 소문내기 무료' : '✨ 소문내기 10원',
-              style: AppTextStyles.button.copyWith(
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-                color: AppColors.white,
+        const SizedBox(width: 8),
+        Expanded(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(3),
+            child: LinearProgressIndicator(
+              value: progress,
+              minHeight: 4,
+              backgroundColor: AppColors.gray200,
+              valueColor: AlwaysStoppedAnimation(
+                progress > 0.7 ? AppColors.primaryMain : AppColors.primaryLight,
               ),
             ),
           ),
         ),
-      ),
+        const SizedBox(width: 8),
+        Text(
+          '${(progress * 100).toInt()}%',
+          style: AppTextStyles.caption2.copyWith(
+            color: AppColors.primaryMain,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ],
     );
   }
 
@@ -385,17 +311,34 @@ class WishCard extends StatelessWidget {
   }
 
   String _formatCount(int count) {
-    if (count >= 10000) {
-      return '${(count / 10000).toStringAsFixed(1)}만';
-    }
-    if (count >= 1000) {
-      return '${(count / 1000).toStringAsFixed(1)}K';
-    }
+    if (count >= 10000) return '${(count / 10000).toStringAsFixed(1)}만';
+    if (count >= 1000) return '${(count / 1000).toStringAsFixed(1)}K';
     return '$count';
   }
 
   String _numberWithComma(int n) {
     return n.toString().replaceAllMapped(
         RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]},');
+  }
+}
+
+List<Color> _categoryColors(WishCategory category) {
+  switch (category) {
+    case WishCategory.food:
+      return [AppColors.orange, AppColors.yellow500];
+    case WishCategory.beauty:
+      return [AppColors.pink, AppColors.red200];
+    case WishCategory.fashion:
+      return [AppColors.primaryDark, AppColors.primaryLight];
+    case WishCategory.electronics:
+      return [AppColors.gray800, AppColors.gray600];
+    case WishCategory.figure:
+      return [AppColors.primaryMain, AppColors.primaryBg];
+    case WishCategory.travel:
+      return [AppColors.blue, AppColors.blue200];
+    case WishCategory.lifestyle:
+      return [AppColors.green500, AppColors.green200];
+    case WishCategory.etc:
+      return [AppColors.gray400, AppColors.gray200];
   }
 }

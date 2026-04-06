@@ -59,11 +59,17 @@ class _FilterChip extends StatelessWidget {
       padding: const EdgeInsets.only(right: 8),
       child: GestureDetector(
         onTap: onTap,
-        child: Container(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.primary : AppColors.gray100,
-            borderRadius: BorderRadius.circular(AppConstants.radiusBottomSheet),
+            color: isSelected ? AppColors.primaryMain : AppColors.white,
+            borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
+            border: Border.all(
+              color: isSelected ? AppColors.primaryMain : AppColors.gray200,
+              width: 1,
+            ),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
