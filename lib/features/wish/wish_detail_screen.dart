@@ -7,6 +7,7 @@ import '../../models/wish_model.dart';
 import '../../providers/wish_provider.dart';
 import 'widgets/empathy_progress.dart';
 import 'widgets/empathy_comment_list.dart';
+import 'buzz_game_screen.dart';
 
 /// 소원 상세 화면
 class WishDetailScreen extends ConsumerWidget {
@@ -53,8 +54,27 @@ class WishDetailScreen extends ConsumerWidget {
                 wish.productImageUrl,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) => Container(
-                  color: AppColors.gray100,
-                  child: const Icon(Icons.image_outlined, size: 60, color: AppColors.gray400),
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [AppColors.gray100, AppColors.gray200],
+                    ),
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(wish.category.emoji, style: const TextStyle(fontSize: 48)),
+                        const SizedBox(height: 8),
+                        Text(
+                          wish.productName,
+                          style: AppTextStyles.caption2.copyWith(color: AppColors.gray400),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -92,7 +112,7 @@ class WishDetailScreen extends ConsumerWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Icon(Icons.campaign, size: 14, color: AppColors.white),
-                          SizedBox(width: 4),
+                          const SizedBox(width: 4),
                           Text(
                             wish.businessName ?? 'BRAND',
                             style: AppTextStyles.caption2.copyWith(color: AppColors.white),
@@ -104,142 +124,165 @@ class WishDetailScreen extends ConsumerWidget {
                   const SizedBox(height: 16),
                   // 한줄평
                   Text(
-                    '"${wish.oneLiner}"',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
+                    wish.oneLiner,
+                    style: AppTextStyles.heading3.copyWith(
                       color: AppColors.textBlack,
                       height: 1.4,
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // 상품 정보 섹션
-                  _SectionTitle(title: '상품 정보'),
-                  const SizedBox(height: 8),
-                  Text(
-                    wish.productName,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      color: AppColors.textBlack,
+                  // 상품 정보 카드
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppColors.gray100,
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '💰 ${_formatPrice(wish.productPrice)}원',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  // 쇼핑몰 링크
-                  GestureDetector(
-                    onTap: () {
-                      // TODO: 인앱 웹뷰로 구매 URL 열기
-                    },
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Icons.shopping_cart_outlined, size: 14, color: AppColors.primary),
-                        SizedBox(width: 4),
+                        Text(wish.productName, style: AppTextStyles.title3),
+                        const SizedBox(height: 8),
                         Text(
-                          '쇼핑몰에서 보기 →',
-                          style: AppTextStyles.body4.copyWith(color: AppColors.primary),
+                          '${_formatPrice(wish.productPrice)}원',
+                          style: AppTextStyles.heading2.copyWith(fontWeight: FontWeight.w800),
+                        ),
+                        const SizedBox(height: 10),
+                        GestureDetector(
+                          onTap: () {
+                            // TODO: 인앱 웹뷰로 구매 URL 열기
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: AppColors.white,
+                              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.open_in_new_rounded, size: 14, color: AppColors.primaryMain),
+                                const SizedBox(width: 4),
+                                Text(
+                                  '쇼핑몰에서 보기',
+                                  style: AppTextStyles.caption2.copyWith(color: AppColors.primaryMain),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  // 소원 현황 섹션
-                  _SectionTitle(title: '소원 현황'),
-                  const SizedBox(height: 8),
-                  // 등록자 + 등록일
-                  Row(
-                    children: [
-                      const Icon(Icons.person_outline, size: 14, color: AppColors.gray400),
-                      const SizedBox(width: 4),
-                      Text(
-                        '등록자: @${wish.userName ?? '알 수 없음'}',
-                        style: const TextStyle(fontSize: 13, color: AppColors.gray600),
-                      ),
-                      const Spacer(),
-                      Text(
-                        _formatDate(wish.createdAt),
-                        style: const TextStyle(fontSize: 12, color: AppColors.gray400),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  // 공감 프로그레스
-                  EmpathyProgress(wish: wish),
-                  const SizedBox(height: 8),
-                  // 참여자 수
-                  if (wish.participantCount > 0)
-                    Row(
-                      children: [
-                        const Icon(Icons.people_outline, size: 14, color: AppColors.gray400),
-                        const SizedBox(width: 4),
-                        Text(
-                          '${_formatCount(wish.participantCount)}명 소문내기 참여',
-                          style: const TextStyle(fontSize: 13, color: AppColors.gray600),
-                        ),
-                      ],
+                  const SizedBox(height: 16),
+                  // 소원 현황 카드
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppColors.gray100,
+                      borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                     ),
-                  // 업체 경품
-                  if (wish.isBusinessWish && wish.prizeDescription != null) ...[
-                    SizedBox(height: 16),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryBg,
-                        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '🎁 경품 안내',
-                            style: AppTextStyles.title3.copyWith(color: AppColors.primary),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            wish.prizeDescription!,
-                            style: const TextStyle(fontSize: 13, color: AppColors.gray600),
-                          ),
-                          const SizedBox(height: 4),
-                          const Text(
-                            '당첨 시 운영사가 대신 구매!',
-                            style: TextStyle(fontSize: 12, color: AppColors.gray400),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // 등록자 + 등록일
+                        Row(
+                          children: [
+                            const Icon(Icons.person_outline_rounded, size: 15, color: AppColors.gray400),
+                            const SizedBox(width: 4),
+                            Text(
+                              '@${wish.userName ?? '알 수 없음'}',
+                              style: AppTextStyles.caption2.copyWith(color: AppColors.gray600),
+                            ),
+                            const Spacer(),
+                            Text(
+                              _formatDate(wish.createdAt),
+                              style: AppTextStyles.caption4.copyWith(color: AppColors.gray400),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        // 공감 프로그레스
+                        EmpathyProgress(wish: wish),
+                        if (wish.participantCount > 0) ...[
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              const Icon(Icons.people_outline_rounded, size: 15, color: AppColors.gray400),
+                              const SizedBox(width: 4),
+                              Text(
+                                '${_formatCount(wish.participantCount)}명 참여',
+                                style: AppTextStyles.caption2.copyWith(color: AppColors.gray600),
+                              ),
+                            ],
                           ),
                         ],
-                      ),
-                    ),
-                  ],
-                  // 업체 노출 진행률
-                  if (wish.isBusinessWish) ...[
-                    const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        const Icon(Icons.people_outline, size: 14, color: AppColors.gray400),
-                        const SizedBox(width: 4),
-                        Text(
-                          '${_formatCount(wish.currentExposures ?? 0)} / ${_formatCount(wish.maxExposures ?? 0)}명',
-                          style: const TextStyle(fontSize: 13, color: AppColors.gray600),
-                        ),
+                        // 업체 경품
+                        if (wish.isBusinessWish && wish.prizeDescription != null) ...[
+                          const SizedBox(height: 16),
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(14),
+                            decoration: BoxDecoration(
+                              color: AppColors.primaryBg,
+                              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '🎁 경품 안내',
+                                  style: AppTextStyles.title3.copyWith(color: AppColors.primary),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  wish.prizeDescription!,
+                                  style: const TextStyle(fontSize: 13, color: AppColors.gray600),
+                                ),
+                                const SizedBox(height: 4),
+                                const Text(
+                                  '당첨 시 운영사가 대신 구매!',
+                                  style: TextStyle(fontSize: 12, color: AppColors.gray400),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                        // 업체 노출 진행률
+                        if (wish.isBusinessWish) ...[
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              Text(
+                                '소문 달성률',
+                                style: AppTextStyles.caption2.copyWith(color: AppColors.gray600),
+                              ),
+                              const Spacer(),
+                              Text(
+                                '${(wish.exposureProgress * 100).toInt()}%',
+                                style: AppTextStyles.caption2.copyWith(
+                                  color: AppColors.primaryMain,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(3),
+                            child: LinearProgressIndicator(
+                              value: wish.exposureProgress,
+                              minHeight: 5,
+                              backgroundColor: AppColors.gray200,
+                              valueColor: const AlwaysStoppedAnimation(AppColors.primaryMain),
+                            ),
+                          ),
+                        ],
                       ],
                     ),
-                    const SizedBox(height: 6),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(3),
-                      child: LinearProgressIndicator(
-                        value: wish.exposureProgress,
-                        minHeight: 4,
-                        backgroundColor: AppColors.gray200,
-                        valueColor: const AlwaysStoppedAnimation(AppColors.primary),
-                      ),
-                    ),
-                  ],
+                  ),
                   const SizedBox(height: 24),
                   // 댓글 섹션
                   _SectionTitle(title: '댓글 (${empathies.length}개)'),
@@ -271,7 +314,7 @@ class WishDetailScreen extends ConsumerWidget {
   Widget _buildBottomCTA(BuildContext context, WidgetRef ref, Wish wish) {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppColors.white,
         border: Border(top: BorderSide(color: AppColors.gray200, width: 1)),
       ),
@@ -327,9 +370,10 @@ class WishDetailScreen extends ConsumerWidget {
         final isFree = wish.isBusinessWish;
         return ElevatedButton(
           onPressed: () {
-            // TODO: 소문내기 게임 진입 (Phase 5)
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('소문내기 게임은 Phase 5에서 연동됩니다')),
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => BuzzGameScreen(wish: wish),
+              ),
             );
           },
           style: _ctaStyle(AppColors.primary),
@@ -364,8 +408,9 @@ class WishDetailScreen extends ConsumerWidget {
   ButtonStyle _ctaStyle(Color bg) {
     return ElevatedButton.styleFrom(
       backgroundColor: bg,
+      foregroundColor: AppColors.white,
       padding: const EdgeInsets.symmetric(vertical: 16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusXl)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radius2Xl)),
       elevation: 0,
     );
   }
@@ -420,7 +465,7 @@ class _EmpathyButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Icon(Icons.favorite_outline, size: 20, color: AppColors.red),
-            SizedBox(height: 2),
+            const SizedBox(height: 2),
             Text(
               '${wish.empathyCount}',
               style: AppTextStyles.caption4.copyWith(color: AppColors.red, fontWeight: FontWeight.w600),
