@@ -14,16 +14,16 @@ import '../../providers/current_tab_provider.dart';
 import '../../providers/wish_provider.dart';
 
 /// 데일리 게임 화면 — 위시 스타일 UI/UX
-class HomeScreen extends ConsumerStatefulWidget {
-  const HomeScreen({super.key});
+class DailyLegacyScreen extends ConsumerStatefulWidget {
+  const DailyLegacyScreen({super.key});
 
   @override
-  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<DailyLegacyScreen> createState() => _DailyLegacyScreenState();
 }
 
 enum GameViewMode { swipe, list, gallery }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> {
+class _DailyLegacyScreenState extends ConsumerState<DailyLegacyScreen> {
   GameViewMode _viewMode = GameViewMode.swipe;
 
   void _setViewMode(GameViewMode mode) {
@@ -526,7 +526,7 @@ class _GameSwipeCard extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  _HomeScreenState._gameImage(game),
+                  _DailyLegacyScreenState._gameImage(game),
                   // 타입 배지
                   Positioned(
                     top: 16,
@@ -592,7 +592,7 @@ class _GameSwipeCard extends StatelessWidget {
                     children: [
                       // 가격
                       Text(
-                        '${_HomeScreenState._formatPrice(game.currentPrice)}P',
+                        '${_DailyLegacyScreenState._formatPrice(game.currentPrice)}P',
                         style: AppTextStyles.heading3.copyWith(fontWeight: FontWeight.w800),
                       ),
                       const Spacer(),
@@ -667,7 +667,7 @@ class _GameListCard extends StatelessWidget {
               child: SizedBox(
                 width: 100,
                 height: 100,
-                child: _HomeScreenState._gameImage(game),
+                child: _DailyLegacyScreenState._gameImage(game),
               ),
             ),
             const SizedBox(width: 14),
@@ -684,7 +684,7 @@ class _GameListCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '${_HomeScreenState._formatPrice(game.currentPrice)}P',
+                    '${_DailyLegacyScreenState._formatPrice(game.currentPrice)}P',
                     style: AppTextStyles.title2.copyWith(fontWeight: FontWeight.w800),
                   ),
                   const SizedBox(height: 8),

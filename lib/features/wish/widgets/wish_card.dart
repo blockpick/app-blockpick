@@ -97,11 +97,13 @@ class _WishCardState extends State<WishCard> with SingleTickerProviderStateMixin
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: wish.isEmpathyReached ? const Color(0xFFF8F6FF) : AppColors.white,
           borderRadius: BorderRadius.circular(AppConstants.radiusLg),
-          border: wish.isBusinessWish
-              ? Border.all(color: AppColors.primaryMain.withValues(alpha: 0.15), width: 1)
-              : null,
+          border: wish.isEmpathyReached
+              ? Border.all(color: AppColors.primaryMain.withValues(alpha: 0.3), width: 1.5)
+              : wish.isBusinessWish
+                  ? Border.all(color: AppColors.primaryMain.withValues(alpha: 0.15), width: 1)
+                  : null,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -200,15 +202,23 @@ class _WishCardState extends State<WishCard> with SingleTickerProviderStateMixin
                 const Spacer(),
                 // CTA 버튼
                 GestureDetector(
-                  onTap: widget.onBuzzTap,
+                  onTap: wish.isEmpathyReached ? widget.onTap : widget.onBuzzTap,
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
                     decoration: BoxDecoration(
-                      color: wish.isBusinessWish ? AppColors.primaryMain : AppColors.textBlack,
+                      color: wish.isEmpathyReached
+                          ? AppColors.primaryMain
+                          : wish.isBusinessWish
+                              ? AppColors.primaryMain
+                              : AppColors.textBlack,
                       borderRadius: BorderRadius.circular(AppConstants.radius2Xl),
                     ),
                     child: Text(
-                      wish.isBusinessWish ? '무료 소문내기' : '소문내기 10원',
+                      wish.isEmpathyReached
+                          ? '게임 참여하기'
+                          : wish.isBusinessWish
+                              ? '무료 소문내기'
+                              : '소문내기 10원',
                       style: AppTextStyles.caption2.copyWith(
                         color: AppColors.white,
                         fontWeight: FontWeight.w600,
@@ -232,21 +242,41 @@ class _WishCardState extends State<WishCard> with SingleTickerProviderStateMixin
   }
 
   Widget _buildThumbnail() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(AppConstants.radiusMd),
-      child: SizedBox(
-        width: 88,
-        height: 88,
-        child: Image.network(
-          wish.productImageUrl,
-          fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => _buildPlaceholder(),
-          loadingBuilder: (_, child, progress) {
-            if (progress == null) return child;
-            return _buildPlaceholder(isLoading: true);
-          },
+    return Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(AppConstants.radiusMd),
+          child: SizedBox(
+            width: 88,
+            height: 88,
+            child: Image.network(
+              wish.productImageUrl,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => _buildPlaceholder(),
+              loadingBuilder: (_, child, progress) {
+                if (progress == null) return child;
+                return _buildPlaceholder(isLoading: true);
+              },
+            ),
+          ),
         ),
-      ),
+        if (wish.isEmpathyReached)
+          Positioned(
+            top: 4,
+            left: 4,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+              decoration: BoxDecoration(
+                color: AppColors.primaryMain,
+                borderRadius: BorderRadius.circular(AppConstants.radiusSm),
+              ),
+              child: const Text(
+                '달성',
+                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: AppColors.white),
+              ),
+            ),
+          ),
+      ],
     );
   }
 

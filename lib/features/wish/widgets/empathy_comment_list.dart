@@ -4,7 +4,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../models/wish_model.dart';
 
-/// 소원 공감 댓글 리스트
+/// 소원쓰기 리스트
 class EmpathyCommentList extends StatefulWidget {
   final List<WishEmpathy> empathies;
 
@@ -33,14 +33,14 @@ class _EmpathyCommentListState extends State<EmpathyCommentList> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // 댓글 입력
+        // 소원쓰기 입력
         Row(
           children: [
             Expanded(
               child: TextField(
                 controller: _commentController,
                 decoration: InputDecoration(
-                  hintText: '나도 갖고 싶어요! 댓글을 남겨주세요',
+                  hintText: '나도 이거 갖고 싶어요! 소원을 남겨주세요 ✨',
                   hintStyle: const TextStyle(fontSize: 13, color: AppColors.gray400),
                   filled: true,
                   fillColor: AppColors.gray100,
@@ -58,10 +58,10 @@ class _EmpathyCommentListState extends State<EmpathyCommentList> {
             GestureDetector(
               onTap: () {
                 if (_commentController.text.trim().isNotEmpty) {
-                  // TODO: 댓글 등록 API 호출
+                  // TODO: 소원쓰기 등록 API 호출
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('❤️ 공감 + 댓글이 등록되었어요!'),
+                      content: Text('✨ 소원이 등록되었어요!'),
                       duration: Duration(seconds: 1),
                     ),
                   );
@@ -80,13 +80,13 @@ class _EmpathyCommentListState extends State<EmpathyCommentList> {
           ],
         ),
         const SizedBox(height: 16),
-        // 댓글 목록
+        // 소원 목록
         if (widget.empathies.isEmpty)
           Padding(
             padding: EdgeInsets.symmetric(vertical: 20),
             child: Center(
               child: Text(
-                '아직 댓글이 없어요. 첫 댓글을 남겨보세요!',
+                '아직 소원이 없어요. 첫 소원을 남겨보세요!',
                 style: TextStyle(fontSize: 13, color: AppColors.gray400),
               ),
             ),
@@ -110,7 +110,7 @@ class _EmpathyCommentListState extends State<EmpathyCommentList> {
   }
 }
 
-/// 댓글 카드
+/// 소원쓰기 카드
 class _CommentCard extends StatelessWidget {
   final WishEmpathy empathy;
   const _CommentCard({required this.empathy});
@@ -162,7 +162,7 @@ class _CommentCard extends StatelessWidget {
                 ] else ...[
                   const SizedBox(height: 4),
                   const Text(
-                    '❤️ 공감',
+                    '🙏 나도 갖고 싶어요!',
                     style: TextStyle(fontSize: 12, color: AppColors.gray400),
                   ),
                 ],

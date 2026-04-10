@@ -60,13 +60,12 @@ class GameDispatcherScreen extends ConsumerWidget {
         }
 
         switch (game.gameType?.toUpperCase()) {
-          case 'SELECT':
-            return GameScreen(gameId: gameId);
           case 'VIBE':
             return GachaGameScreen(gameId: gameId);
           case 'DAILY':
+          case 'SELECT':
           default:
-            return GachaGameScreen(gameId: gameId);
+            return GameScreen(gameId: gameId);
         }
       },
     );

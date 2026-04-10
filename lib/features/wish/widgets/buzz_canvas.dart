@@ -14,6 +14,7 @@ class BuzzCanvas extends StatefulWidget {
   final Set<(int, int)> selectedBlocks;
   final String? backgroundImageUrl;
   final void Function(int x, int y) onBlockTap;
+  final VoidCallback? onViewChanged;
 
   const BuzzCanvas({
     super.key,
@@ -21,6 +22,7 @@ class BuzzCanvas extends StatefulWidget {
     this.selectedBlocks = const {},
     this.backgroundImageUrl,
     required this.onBlockTap,
+    this.onViewChanged,
   });
 
   @override
@@ -134,6 +136,7 @@ class BuzzCanvasState extends State<BuzzCanvas> with SingleTickerProviderStateMi
             _zoom = _zoomAnim!.value;
             _pan = _panAnim!.value;
           });
+          widget.onViewChanged?.call();
         }
       });
   }
@@ -193,6 +196,7 @@ class BuzzCanvasState extends State<BuzzCanvas> with SingleTickerProviderStateMi
         _pan = _gestureStartPan! + delta;
       }
     });
+    widget.onViewChanged?.call();
   }
 
   void _onScaleEnd(ScaleEndDetails details) {

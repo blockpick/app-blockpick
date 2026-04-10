@@ -131,12 +131,11 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
     );
   }
 
-  /// ① 상단 배너 (노란색 브랜딩 배너)
+  /// ① 상단 배너 (프리미엄 다크 브랜딩 배너)
   Widget _buildBrandingBanner() {
     return SliverToBoxAdapter(
       child: GestureDetector(
         onTap: () {
-          // Blockpick 브랜딩 페이지로 이동 (Web view)
           context.push('/webview', extra: {
             'url': 'https://blockpick.io',
             'title': 'Blockpick 서비스 알아보기',
@@ -144,22 +143,19 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
         },
         child: Container(
           margin: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(22),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                AppColors.yellow500.withValues(alpha: 0.35),
-                AppColors.yellow500.withValues(alpha: 0.6),
-              ],
+            gradient: const LinearGradient(
+              colors: [Color(0xFF1B1145), Color(0xFF2D1B69)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             borderRadius: BorderRadius.circular(AppConstants.radiusXl),
             boxShadow: [
               BoxShadow(
-                color: AppColors.yellow500.withValues(alpha: 0.3),
-                blurRadius: 12,
-                offset: Offset(0, 4),
+                color: const Color(0xFF1B1145).withValues(alpha: 0.35),
+                blurRadius: 16,
+                offset: const Offset(0, 6),
               ),
             ],
           ),
@@ -171,46 +167,50 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                   children: [
                     Text(
                       '전 세계 어디서나,',
-                      style: AppTextStyles.title3.copyWith(color: const Color(0xFF664D03), height: 1.4), // 브랜드 배너 전용 색상
+                      style: AppTextStyles.title3.copyWith(
+                        color: AppColors.white.withValues(alpha: 0.7),
+                        height: 1.4,
+                      ),
                     ),
                     Text(
                       '나를 위한 맞춤 경품 Event',
                       style: AppTextStyles.title1.copyWith(
                         fontWeight: FontWeight.w800,
-                        color: const Color(0xFF664D03), // 브랜드 배너 전용 색상
+                        color: AppColors.white,
                         height: 1.4,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 10),
                     Row(
                       children: [
                         Text(
                           'Blockpick 서비스 알아보기',
-                          style: AppTextStyles.caption2.copyWith(color: const Color(0xFF664D03).withValues(alpha: 0.7)), // 브랜드 배너 전용 색상
+                          style: AppTextStyles.caption2.copyWith(
+                            color: AppColors.white.withValues(alpha: 0.55),
+                          ),
                         ),
                         const SizedBox(width: 4),
                         Icon(
                           Icons.arrow_forward_rounded,
                           size: 14,
-                          color: const Color(0xFF664D03).withValues(alpha: 0.7), // 브랜드 배너 전용 색상
+                          color: AppColors.white.withValues(alpha: 0.55),
                         ),
                       ],
                     ),
                   ],
                 ),
               ),
-              // 아이콘
               Container(
-                width: 56,
-                height: 56,
+                width: 52,
+                height: 52,
                 decoration: BoxDecoration(
-                  color: AppColors.white.withValues(alpha: 0.6),
+                  color: AppColors.white.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(AppConstants.radiusLg),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.card_giftcard_rounded,
-                  size: 28,
-                  color: Color(0xFF664D03), // 브랜드 배너 전용 색상
+                  size: 26,
+                  color: AppColors.white.withValues(alpha: 0.8),
                 ),
               ),
             ],
@@ -325,15 +325,11 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
           margin: const EdgeInsets.fromLTRB(20, 12, 20, 0),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [AppColors.yellow500.withValues(alpha: 0.15), AppColors.yellow500.withValues(alpha: 0.35)],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-            ),
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             boxShadow: [
               BoxShadow(
-                color: AppColors.yellow500.withValues(alpha: 0.2),
+                color: AppColors.black.withValues(alpha: 0.05),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -348,40 +344,43 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                     width: 32,
                     height: 32,
                     decoration: BoxDecoration(
-                      color: AppColors.yellow500,
+                      color: AppColors.primaryBg,
                       borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.calendar_today_rounded,
                       size: 18,
-                      color: Color(0xFF664D03),
+                      color: AppColors.primaryMain,
                     ),
                   ),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         '출석체크',
-                        style: AppTextStyles.title2.copyWith(color: const Color(0xFF664D03)), // 브랜드 배너 전용 색상
+                        style: AppTextStyles.title2.copyWith(color: AppColors.darkBlue),
                       ),
                       Text(
                         '매일 10P 적립',
-                        style: AppTextStyles.caption1.copyWith(color: const Color(0xFF664D03).withValues(alpha: 0.7)), // 브랜드 배너 전용 색상
+                        style: AppTextStyles.caption1.copyWith(color: AppColors.gray500),
                       ),
                     ],
                   ),
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF664D03), // 브랜드 배너 전용 색상
+                  color: AppColors.primaryMain,
                   borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                 ),
                 child: Text(
                   'CHECK-IN',
-                  style: AppTextStyles.caption3.copyWith(color: AppColors.white),
+                  style: AppTextStyles.caption3.copyWith(
+                    color: AppColors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ],
@@ -627,12 +626,12 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
-                          color: AppColors.yellow500,
+                          color: AppColors.textBlack,
                           borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                         ),
-                        child: const Text(
+                        child: Text(
                           'PRIME',
-                          style: AppTextStyles.caption4, // fontSize:11/semibold, 가장 가까운 토큰
+                          style: AppTextStyles.caption4.copyWith(color: AppColors.white),
                         ),
                       ),
                       if (_isNew(game)) ...[

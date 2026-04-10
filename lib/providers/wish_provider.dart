@@ -23,6 +23,12 @@ final wishListProvider = Provider<List<Wish>>((ref) {
   return MockWishData.getSorted(filtered, sort);
 });
 
+/// 위시 스와이프 모드 여부 (바텀바 숨김 제어용)
+final wishSwipeModeProvider = StateProvider<bool>((ref) => true);
+
+/// 게임 스와이프 모드 여부 (바텀바 숨김 제어용)
+final gameSwipeModeProvider = StateProvider<bool>((ref) => true);
+
 /// 업체 소원 배너 목록
 final businessWishBannersProvider = Provider<List<Wish>>((ref) {
   return MockWishData.businessWishes;

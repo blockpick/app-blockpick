@@ -3,24 +3,33 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/constants/app_constants.dart';
-import '../../models/wish_model.dart';
-import 'buzz_complete_screen.dart';
-import 'widgets/buzz_canvas.dart';
+import '../../models/game_round_model.dart';
+import '../wish/widgets/buzz_canvas.dart';
+import 'daily_buzz_complete_screen.dart';
 
-/// 소문내기 게임 화면 — 10x10 그리드에서 블록 하나 선택
-class BuzzGameScreen extends StatefulWidget {
-  final Wish wish;
-  const BuzzGameScreen({super.key, required this.wish});
+/// 데일리 게임 블록선택 화면 — 위시 BuzzGameScreen 완전 복제
+class DailyBuzzGameScreen extends StatefulWidget {
+  final GameRound game;
+  const DailyBuzzGameScreen({super.key, required this.game});
 
   @override
-  State<BuzzGameScreen> createState() => _BuzzGameScreenState();
+  State<DailyBuzzGameScreen> createState() => _DailyBuzzGameScreenState();
 }
 
-class _BuzzGameScreenState extends State<BuzzGameScreen> {
+class _DailyBuzzGameScreenState extends State<DailyBuzzGameScreen> {
+  @override
+  void dispose() {
+    _minimapNotifier.dispose();
+    super.dispose();
+  }
+
   Set<(int, int)> _selectedBlocks = {};
   bool _isSubmitting = false;
   final _canvasKey = GlobalKey<BuzzCanvasState>();
   final _minimapNotifier = ValueNotifier<int>(0);
+
+  // 최대 선택 개수
+  int get _pickMax => 5;
 
   Widget _buildMinimap() {
     const minimapSize = 100.0;
@@ -49,7 +58,7 @@ class _BuzzGameScreenState extends State<BuzzGameScreen> {
           size: const Size(minimapSize, minimapSize),
           painter: _MinimapPainter(
             canvasState: _canvasKey.currentState,
-            gridSize: 1000,
+            gridSize: widget.game.actualGridWidth,
             selectedBlocks: _selectedBlocks,
             backgroundImage: _canvasKey.currentState?.bgImage,
           ),
@@ -74,25 +83,19 @@ class _BuzzGameScreenState extends State<BuzzGameScreen> {
     );
   }
 
-  @override
-  void dispose() {
-    _minimapNotifier.dispose();
-    super.dispose();
-  }
-
   void _onSubmit() async {
     if (_selectedBlocks.isEmpty || _isSubmitting) return;
     setState(() => _isSubmitting = true);
 
+    // TODO: 실제 게임 참여 API 연동 (game_participation_provider)
     await Future.delayed(const Duration(milliseconds: 800));
 
     if (!mounted) return;
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (_) => BuzzCompleteScreen(
-          wish: widget.wish,
-          gridX: _selectedBlocks.first.$1,
-          gridY: _selectedBlocks.first.$2,
+        builder: (_) => DailyBuzzCompleteScreen(
+          game: widget.game,
+          selectedBlocks: _selectedBlocks,
         ),
       ),
     );
@@ -115,14 +118,14 @@ class _BuzzGameScreenState extends State<BuzzGameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isFree = widget.wish.isBusinessWish;
     final hasSelection = _selectedBlocks.isNotEmpty;
+    final gridSize = widget.game.actualGridWidth;
 
     return Scaffold(
       backgroundColor: AppColors.gray100,
       body: Column(
         children: [
-          // 1. 상단 바
+          // 1. 상단 바 (위시와 동일)
           Container(
             color: AppColors.white,
             child: SafeArea(
@@ -136,7 +139,7 @@ class _BuzzGameScreenState extends State<BuzzGameScreen> {
                   ),
                   const Expanded(
                     child: Text(
-                      '소문내기',
+                      '데일리 복제',
                       textAlign: TextAlign.center,
                       style: AppTextStyles.title1,
                     ),
@@ -147,18 +150,15 @@ class _BuzzGameScreenState extends State<BuzzGameScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
-                        color: isFree
-                            ? AppColors.primaryBg
-                            : AppColors.gray100,
+                        color: AppColors.gray100,
                         borderRadius: BorderRadius.circular(
                             AppConstants.radiusFull),
                       ),
                       child: Text(
-                        isFree ? '무료' : '10원',
+                        '${widget.game.currentPrice}P',
                         style: AppTextStyles.caption2.copyWith(
-                          color: isFree
-                              ? AppColors.primaryMain
-                              : AppColors.gray600,
+                          color: AppColors.gray600,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -168,7 +168,7 @@ class _BuzzGameScreenState extends State<BuzzGameScreen> {
             ),
           ),
 
-          // 2. 상품 정보 카드
+          // 2. 상품 정보 카드 (위시와 동일)
           Container(
             color: AppColors.white,
             margin: const EdgeInsets.only(top: 8),
@@ -178,23 +178,25 @@ class _BuzzGameScreenState extends State<BuzzGameScreen> {
                 ClipRRect(
                   borderRadius:
                       BorderRadius.circular(AppConstants.radiusMd),
-                  child: Image.network(
-                    widget.wish.productImageUrl,
-                    width: 56,
-                    height: 56,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      width: 56,
-                      height: 56,
-                      color: AppColors.gray200,
-                      child: Center(
-                        child: Text(
-                          widget.wish.category.emoji,
-                          style: const TextStyle(fontSize: 22),
+                  child: widget.game.imageUrl.isNotEmpty
+                      ? Image.network(
+                          widget.game.imageUrl.replaceAll(' ', '%20'),
+                          width: 56,
+                          height: 56,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Container(
+                            width: 56,
+                            height: 56,
+                            color: AppColors.gray200,
+                            child: const Icon(Icons.image_rounded, size: 22, color: AppColors.gray400),
+                          ),
+                        )
+                      : Container(
+                          width: 56,
+                          height: 56,
+                          color: AppColors.gray200,
+                          child: const Icon(Icons.image_rounded, size: 22, color: AppColors.gray400),
                         ),
-                      ),
-                    ),
-                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -202,23 +204,25 @@ class _BuzzGameScreenState extends State<BuzzGameScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.wish.oneLiner,
+                        widget.game.title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: AppTextStyles.title3.copyWith(
                             color: AppColors.textBlack),
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        widget.wish.productName,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppTextStyles.caption1.copyWith(
-                            color: AppColors.gray600),
-                      ),
+                      if (widget.game.description.isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          widget.game.description,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyles.caption1.copyWith(
+                              color: AppColors.gray600),
+                        ),
+                      ],
                       const SizedBox(height: 2),
                       Text(
-                        '${_formatPrice(widget.wish.productPrice)}원',
+                        '${_formatPrice(widget.game.currentPrice)}P',
                         style: AppTextStyles.title2.copyWith(
                             fontWeight: FontWeight.w800),
                       ),
@@ -229,17 +233,19 @@ class _BuzzGameScreenState extends State<BuzzGameScreen> {
             ),
           ),
 
-          // 3. 캔버스 그리드 영역 (1000x1000, 줌/팬 지원)
+          // 3. 캔버스 그리드 영역 (위시와 동일한 BuzzCanvas)
           Expanded(
             child: ClipRect(
               child: Stack(
                 children: [
-                  // 캔버스 그리드
+                  // BuzzCanvas 그리드
                   BuzzCanvas(
                     key: _canvasKey,
-                    gridSize: 1000,
+                    gridSize: gridSize,
                     selectedBlocks: _selectedBlocks,
-                    backgroundImageUrl: widget.wish.productImageUrl,
+                    backgroundImageUrl: widget.game.imageUrl.isNotEmpty
+                        ? widget.game.imageUrl.replaceAll(' ', '%20')
+                        : null,
                     onViewChanged: () => _minimapNotifier.value++,
                     onBlockTap: (x, y) {
                       final coord = (x, y);
@@ -247,9 +253,18 @@ class _BuzzGameScreenState extends State<BuzzGameScreen> {
                         if (_selectedBlocks.contains(coord)) {
                           _selectedBlocks.remove(coord);
                         } else {
+                          if (_selectedBlocks.length >= _pickMax) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('최대 $_pickMax개까지 선택할 수 있습니다'),
+                                behavior: SnackBarBehavior.floating,
+                                duration: const Duration(seconds: 1),
+                              ),
+                            );
+                            return;
+                          }
                           _selectedBlocks.add(coord);
                         }
-                        // 새 Set으로 교체하여 repaint 트리거
                         _selectedBlocks = Set.from(_selectedBlocks);
                       });
                     },
@@ -268,7 +283,7 @@ class _BuzzGameScreenState extends State<BuzzGameScreen> {
                         ),
                         child: Text(
                           hasSelection
-                              ? '${_selectedBlocks.length}개 선택됨 · 탭하여 추가/해제'
+                              ? '${_selectedBlocks.length}/$_pickMax개 선택됨 · 탭하여 추가/해제'
                               : '확대하고 블록을 탭하세요',
                           style: AppTextStyles.caption2.copyWith(
                             color: hasSelection ? AppColors.primaryLight : const Color(0xFF8B8F96),
@@ -277,7 +292,7 @@ class _BuzzGameScreenState extends State<BuzzGameScreen> {
                       ),
                     ),
                   ),
-                  // 미니맵 (좌하단)
+                  // 미니맵 (좌하단) — ValueListenableBuilder로 캔버스 변경 시만 리빌드
                   Positioned(
                     left: 14,
                     bottom: 14,
@@ -303,7 +318,7 @@ class _BuzzGameScreenState extends State<BuzzGameScreen> {
             ),
           ),
 
-          // 4. 하단: 선택 칩 + CTA
+          // 4. 하단: 선택 칩 + CTA (위시와 동일)
           Container(
             color: AppColors.white,
             child: SafeArea(
@@ -326,10 +341,9 @@ class _BuzzGameScreenState extends State<BuzzGameScreen> {
                               padding: const EdgeInsets.only(right: 6),
                               child: GestureDetector(
                                 onTap: () {
-                                  // 해당 블록으로 이동
                                   _canvasKey.currentState?.navigateTo(
-                                    block.$1 / 1000,
-                                    block.$2 / 1000,
+                                    block.$1 / gridSize,
+                                    block.$2 / gridSize,
                                   );
                                 },
                                 child: Container(
@@ -401,7 +415,7 @@ class _BuzzGameScreenState extends State<BuzzGameScreen> {
                               )
                             : Text(
                                 hasSelection
-                                    ? '${_selectedBlocks.length}개 선택 완료'
+                                    ? '${_selectedBlocks.length}/$_pickMax개 선택 완료'
                                     : '블록을 선택하세요',
                                 style: AppTextStyles.button.copyWith(
                                   color: hasSelection
@@ -422,7 +436,7 @@ class _BuzzGameScreenState extends State<BuzzGameScreen> {
   }
 }
 
-/// 미니맵 페인터
+/// 미니맵 페인터 (위시와 동일)
 class _MinimapPainter extends CustomPainter {
   final BuzzCanvasState? canvasState;
   final int gridSize;
@@ -438,28 +452,20 @@ class _MinimapPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // 배경 그리드 표시
     final gridPaint = Paint()
       ..color = const Color(0xFF2A2D33)
       ..style = PaintingStyle.fill;
     canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), gridPaint);
 
-    // 배경 이미지
     if (backgroundImage != null) {
       final img = backgroundImage!;
       final srcRect = Rect.fromLTWH(0, 0, img.width.toDouble(), img.height.toDouble());
       final dstRect = Rect.fromLTWH(0, 0, size.width, size.height);
-      canvas.drawImageRect(
-        img,
-        srcRect,
-        dstRect,
-        Paint()
-          ..filterQuality = FilterQuality.low
-          ..color = const Color(0xBBFFFFFF), // 약간 어둡게
+      canvas.drawImageRect(img, srcRect, dstRect,
+        Paint()..filterQuality = FilterQuality.low..color = const Color(0xBBFFFFFF),
       );
     }
 
-    // 그리드 경계 표시
     final borderPaint = Paint()
       ..color = const Color(0xFF3E4149)
       ..style = PaintingStyle.stroke
@@ -473,7 +479,6 @@ class _MinimapPainter extends CustomPainter {
     final step = canvasState!.gridStepValue;
     final totalGrid = gridSize * step;
 
-    // 뷰포트 영역 계산
     final ctxSize = canvasState!.context.size;
     if (ctxSize == null) return;
 
@@ -482,33 +487,22 @@ class _MinimapPainter extends CustomPainter {
     final vpWidth = ctxSize.width / (totalGrid * zoom);
     final vpHeight = ctxSize.height / (totalGrid * zoom);
 
-    // 뷰포트 사각형
     final vpRect = Rect.fromLTWH(
-      vpLeft * size.width,
-      vpTop * size.height,
-      vpWidth * size.width,
-      vpHeight * size.height,
+      vpLeft * size.width, vpTop * size.height,
+      vpWidth * size.width, vpHeight * size.height,
     );
 
-    // 뷰포트 표시
-    final vpFill = Paint()
-      ..color = AppColors.primaryMain.withValues(alpha: 0.15);
-    final vpBorder = Paint()
+    canvas.drawRect(vpRect, Paint()..color = AppColors.primaryMain.withValues(alpha: 0.15));
+    canvas.drawRect(vpRect, Paint()
       ..color = AppColors.primaryMain.withValues(alpha: 0.6)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
-    canvas.drawRect(vpRect, vpFill);
-    canvas.drawRect(vpRect, vpBorder);
+      ..strokeWidth = 1.5,
+    );
 
-    // 선택된 블록들 표시
     for (final block in selectedBlocks) {
       final dotX = (block.$1 / gridSize) * size.width;
       final dotY = (block.$2 / gridSize) * size.height;
-      canvas.drawCircle(
-        Offset(dotX, dotY),
-        2.5,
-        Paint()..color = AppColors.primaryMain,
-      );
+      canvas.drawCircle(Offset(dotX, dotY), 2.5, Paint()..color = AppColors.primaryMain);
     }
   }
 

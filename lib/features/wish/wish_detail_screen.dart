@@ -1,3 +1,4 @@
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import '../../core/constants/app_constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,14 +11,93 @@ import 'widgets/empathy_comment_list.dart';
 import 'buzz_game_screen.dart';
 
 /// 소원 상세 화면
-class WishDetailScreen extends ConsumerWidget {
+class WishDetailScreen extends ConsumerStatefulWidget {
   final String wishId;
 
   const WishDetailScreen({super.key, required this.wishId});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final wish = ref.watch(wishDetailProvider(wishId));
+  ConsumerState<WishDetailScreen> createState() => _WishDetailScreenState();
+}
+
+class _WishDetailScreenState extends ConsumerState<WishDetailScreen> {
+  bool _isDarkImage = true; // 기본값: 어두운 이미지 가정
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _detectImageBrightness();
+    });
+  }
+
+  /// 이미지 상단 영역 밝기 감지
+  void _detectImageBrightness() {
+    final wish = ref.read(wishDetailProvider(widget.wishId));
+    if (wish == null) return;
+
+    final imageProvider = NetworkImage(wish.productImageUrl);
+    final stream = imageProvider.resolve(ImageConfiguration.empty);
+    stream.addListener(ImageStreamListener((info, _) {
+      info.image.toByteData(format: ui.ImageByteFormat.rawRgba).then((data) {
+        if (data == null || !mounted) return;
+        final pixels = data.buffer.asUint8List();
+        final width = info.image.width;
+        // 상단 20% 영역만 샘플링
+        final sampleHeight = (info.image.height * 0.2).toInt();
+        double totalBrightness = 0;
+        int sampleCount = 0;
+        // 10px 간격으로 샘플링 (성능)
+        for (int y = 0; y < sampleHeight; y += 10) {
+          for (int x = 0; x < width; x += 10) {
+            final idx = (y * width + x) * 4;
+            if (idx + 2 < pixels.length) {
+              final r = pixels[idx];
+              final g = pixels[idx + 1];
+              final b = pixels[idx + 2];
+              totalBrightness += (0.299 * r + 0.587 * g + 0.114 * b);
+              sampleCount++;
+            }
+          }
+        }
+        if (sampleCount > 0 && mounted) {
+          final avgBrightness = totalBrightness / sampleCount;
+          setState(() {
+            _isDarkImage = avgBrightness < 128;
+          });
+        }
+      });
+    }, onError: (_, __) {}));
+  }
+
+  /// 이미지 위 플로팅 버튼
+  Widget _buildOverlayButton({
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 38,
+        height: 38,
+        decoration: BoxDecoration(
+          color: _isDarkImage
+              ? AppColors.white.withValues(alpha: 0.9)
+              : AppColors.textBlack.withValues(alpha: 0.6),
+          shape: BoxShape.circle,
+        ),
+        child: Icon(
+          icon,
+          size: 20,
+          color: _isDarkImage ? AppColors.textBlack : AppColors.white,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final wish = ref.watch(wishDetailProvider(widget.wishId));
 
     if (wish == null) {
       return Scaffold(
@@ -29,7 +109,7 @@ class WishDetailScreen extends ConsumerWidget {
       );
     }
 
-    final empathies = ref.watch(wishEmpathiesProvider(wishId));
+    final empathies = ref.watch(wishEmpathiesProvider(widget.wishId));
 
     return Scaffold(
       backgroundColor: AppColors.white,
@@ -41,12 +121,22 @@ class WishDetailScreen extends ConsumerWidget {
             pinned: true,
             backgroundColor: AppColors.white,
             foregroundColor: AppColors.textBlack,
+            leading: Padding(
+              padding: const EdgeInsets.all(8),
+              child: _buildOverlayButton(
+                icon: Icons.arrow_back_ios_new_rounded,
+                onTap: () => Navigator.of(context).pop(),
+              ),
+            ),
             actions: [
-              IconButton(
-                onPressed: () {
-                  // TODO: 공유
-                },
-                icon: const Icon(Icons.share_outlined),
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: _buildOverlayButton(
+                  icon: Icons.share_outlined,
+                  onTap: () {
+                    // TODO: 공유
+                  },
+                ),
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
@@ -284,15 +374,15 @@ class WishDetailScreen extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  // 댓글 섹션
-                  _SectionTitle(title: '댓글 (${empathies.length}개)'),
+                  // 소원쓰기 섹션
+                  _SectionTitle(title: '소원쓰기 (${empathies.length}개)'),
                   const SizedBox(height: 8),
                 ],
               ),
             ),
           ),
 
-          // 댓글 리스트
+          // 소원쓰기 리스트
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -329,7 +419,7 @@ class WishDetailScreen extends ConsumerWidget {
                 wish: wish,
                 onTap: () async {
                   final messenger = ScaffoldMessenger.of(context);
-                  await ref.read(empathizeWishProvider.notifier).empathize(wishId);
+                  await ref.read(empathizeWishProvider.notifier).empathize(widget.wishId);
                   messenger.showSnackBar(
                     const SnackBar(
                       content: Text('❤️ 공감했어요!'),
