@@ -6,16 +6,13 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../models/game_model.dart';
 import '../../providers/game_provider.dart';
-import 'gacha_game_screen.dart';
 import 'game_screen.dart';
 import 'widgets/game_result_view.dart';
 
 /// 게임 타입에 따라 적절한 게임 화면으로 분기하는 디스패처
 ///
 /// - 종료된 게임 → GameResultScreen (결과 화면)
-/// - DAILY  → GachaGameScreen (가차방식)
-/// - SELECT → GameScreen (블록선택)
-/// - VIBE   → GachaGameScreen (가차방식)
+/// - 그 외 (DAILY/SELECT/VIBE)  → GameScreen (블록선택)
 class GameDispatcherScreen extends ConsumerWidget {
   final String gameId;
 
@@ -59,14 +56,7 @@ class GameDispatcherScreen extends ConsumerWidget {
           return _GameResultScreen(game: game);
         }
 
-        switch (game.gameType?.toUpperCase()) {
-          case 'VIBE':
-            return GachaGameScreen(gameId: gameId);
-          case 'DAILY':
-          case 'SELECT':
-          default:
-            return GameScreen(gameId: gameId);
-        }
+        return GameScreen(gameId: gameId);
       },
     );
   }
