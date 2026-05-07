@@ -5,7 +5,6 @@ import '../../core/theme/app_text_styles.dart';
 import '../../data/mock_game_data.dart';
 import '../../models/game_round_model.dart';
 import '../../models/block_model.dart';
-import '../../providers/grid_state_provider.dart';
 import '../grid/game_grid_widget.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../core/constants/app_constants.dart';
@@ -49,7 +48,7 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
     });
   }
 
-  void _handleBlockTap(BlockModel block) {
+  bool _handleBlockTap(BlockModel block) {
     setState(() {
       final index = _selectedBlocks.indexWhere((b) => b.id == block.id);
       if (index >= 0) {
@@ -60,6 +59,7 @@ class _GameDetailScreenV2State extends ConsumerState<GameDetailScreenV2> {
         _selectedBlocks.add(block);
       }
     });
+    return true;
   }
 
   void _handleRemoveBlock(BlockModel block) {
