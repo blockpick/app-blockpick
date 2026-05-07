@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:share_plus/share_plus.dart';
+import '../../core/analytics/analytics_service.dart';
 import '../../data/blockpick/blockpick_models.dart';
 import '../../providers/blockpick_provider.dart';
 import 'widgets/prize_list.dart';
@@ -115,8 +117,13 @@ class _DetailBody extends StatelessWidget {
                 icon: const Icon(Icons.share_outlined),
                 tooltip: '공유',
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('공유 기능은 준비 중입니다.')),
+                  AnalyticsService.track(
+                    'blockpick_share_clicked',
+                    {'blockpick_id': detail.id, 'channel': 'share_plus'},
+                  );
+                  Share.share(
+                    '${detail.title}\n블록픽에서 지금 참여해보세요!\nhttps://blockpick.app/blockpick/${detail.id}',
+                    subject: detail.title,
                   );
                 },
               ),
@@ -290,7 +297,58 @@ class _DetailBody extends StatelessWidget {
                     ),
                     const Divider(),
 
-                    // 9. 파트너 정보 아코디언
+                    // 9. 글로벌 배송 안내 섹션
+                    const SizedBox(height: 8),
+                    ExpansionTile(
+                      tilePadding: EdgeInsets.zero,
+                      title: Text(
+                        '글로벌 배송 안내',
+                        style: tt.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.w700),
+                      ),
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 4, 0, 12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _InfoRow(
+                                label: '배송 가능 국가',
+                                value: 'KR, US, JP (일부 국가 제한)',
+                              ),
+                              _InfoRow(
+                                label: '배송비',
+                                value: '파트너 부담',
+                              ),
+                              _InfoRow(
+                                label: '관세/통관',
+                                value: '당첨자 부담',
+                              ),
+                              const SizedBox(height: 8),
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: cs.surfaceContainerHighest,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  '• 배송지 입력은 당첨 확정 후 진행합니다\n'
+                                  '• 해외 배송 시 통관 절차로 인해 지연될 수 있습니다\n'
+                                  '• 일부 국가는 배송이 제한될 수 있으며, 제한 국가로 당첨 시 상품 교체 또는 환불 처리됩니다',
+                                  style: tt.bodySmall?.copyWith(
+                                    color: cs.onSurfaceVariant,
+                                    height: 1.6,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Divider(),
+
+                    // 10. 파트너 정보 아코디언
                     ExpansionTile(
                       tilePadding: EdgeInsets.zero,
                       title: Text(

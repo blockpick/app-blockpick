@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../../core/analytics/analytics_service.dart';
 import '../../data/entry/entry_models.dart';
 import '../../data/blockpick/blockpick_models.dart';
 
@@ -33,12 +35,21 @@ class EntryResultScreen extends StatelessWidget {
               _StatusSection(entry: entry, colorScheme: colorScheme),
               const SizedBox(height: 24),
               _InfoCard(entry: entry, colorScheme: colorScheme),
-              if (entry.status == BlockpickEntryStatus.lost) ...[
+              // 당첨 시 보상 안내 카드
+              if (entry.status == BlockpickEntryStatus.won) ...[
                 const SizedBox(height: 20),
-                _MoreChanceSection(context: context),
+                _RewardInfoCard(colorScheme: colorScheme),
+              ],
+              // 미당첨 / 대기 시 추가 참여 방법
+              if (entry.status != BlockpickEntryStatus.won) ...[
+                const SizedBox(height: 20),
+                _MoreChanceSection(
+                  blockpickId: detail.id,
+                  isPending: entry.status != BlockpickEntryStatus.lost,
+                ),
               ],
               const SizedBox(height: 40),
-              _CtaButtons(entry: entry),
+              _CtaButtons(entry: entry, detail: detail),
             ],
           ),
         ),
@@ -186,37 +197,149 @@ class _InfoRow extends StatelessWidget {
   }
 }
 
-class _MoreChanceSection extends StatelessWidget {
-  final BuildContext context;
+class _RewardInfoCard extends StatelessWidget {
+  final ColorScheme colorScheme;
 
-  const _MoreChanceSection({required this.context});
+  const _RewardInfoCard({required this.colorScheme});
 
   @override
   Widget build(BuildContext context) {
-    const items = [
-      (Icons.group_add, '친구초대'),
-      (Icons.play_circle_outline, '광고 시청'),
-      (Icons.assignment_turned_in, '미션 참여'),
+    final tt = Theme.of(context).textTheme;
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.amber.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.amber.withValues(alpha: 0.4)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.emoji_events, size: 18, color: Colors.amber),
+              const SizedBox(width: 8),
+              Text(
+                '보상 안내',
+                style: tt.labelLarge?.copyWith(fontWeight: FontWeight.w700),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            '• 당첨 내역에서 배송지를 입력해주세요\n'
+            '• 배송지 입력 후 파트너가 발송합니다\n'
+            '• 문의사항은 당첨 상세 화면에서 고객센터로 연락해주세요',
+            style: tt.bodySmall?.copyWith(
+              color: colorScheme.onSurface,
+              height: 1.7,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MoreChanceSection extends StatelessWidget {
+  final String blockpickId;
+  final bool isPending;
+
+  const _MoreChanceSection({
+    required this.blockpickId,
+    this.isPending = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final tt = Theme.of(context).textTheme;
+
+    final items = [
+      (
+        icon: Icons.group_add,
+        label: '친구 초대',
+        subtitle: '초대 성공 시 참여권 1개',
+        action: 'invite_friends',
+        onTap: () {
+          AnalyticsService.track(
+            'result_screen_cta_clicked',
+            {'action': 'invite_friends'},
+          );
+          context.push('/referral');
+        },
+      ),
+      (
+        icon: Icons.play_circle_outline,
+        label: '광고 시청',
+        subtitle: '광고 1회로 참여권 획득',
+        action: 'watch_ad',
+        onTap: () {
+          AnalyticsService.track(
+            'result_screen_cta_clicked',
+            {'action': 'watch_ad'},
+          );
+          context.push('/ad-reward/$blockpickId');
+        },
+      ),
+      (
+        icon: Icons.assignment_turned_in_outlined,
+        label: '미션 참여',
+        subtitle: '미션 완료로 참여권 지급',
+        action: 'mission',
+        onTap: () {
+          AnalyticsService.track(
+            'result_screen_cta_clicked',
+            {'action': 'mission'},
+          );
+          context.push('/mission?blockpickId=$blockpickId');
+        },
+      ),
     ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          '추가 참여 방법',
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+        Text(
+          isPending ? '추가 참여 기회 얻기' : '다시 도전해볼까요?',
+          style: tt.titleSmall?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 10),
-        ...items.map((item) => ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: Icon(item.$1, color: Theme.of(context).colorScheme.primary),
-              title: Text(item.$2),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('${item.$2} 화면으로 진입 — 준비 중')),
-                );
-              },
+        ...items.map((item) => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: InkWell(
+                onTap: item.onTap,
+                borderRadius: BorderRadius.circular(10),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 14, vertical: 12),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: cs.outlineVariant),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(item.icon, color: cs.primary, size: 20),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(item.label,
+                                style: tt.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w600)),
+                            Text(item.subtitle,
+                                style: tt.bodySmall?.copyWith(
+                                    color: cs.onSurfaceVariant)),
+                          ],
+                        ),
+                      ),
+                      Icon(Icons.chevron_right,
+                          color: cs.onSurfaceVariant, size: 18),
+                    ],
+                  ),
+                ),
+              ),
             )),
       ],
     );
@@ -225,8 +348,9 @@ class _MoreChanceSection extends StatelessWidget {
 
 class _CtaButtons extends StatelessWidget {
   final BlockpickEntry entry;
+  final BlockpickDetail detail;
 
-  const _CtaButtons({required this.entry});
+  const _CtaButtons({required this.entry, required this.detail});
 
   @override
   Widget build(BuildContext context) {
@@ -235,18 +359,12 @@ class _CtaButtons extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FilledButton(
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('당첨 정보 확인 — 준비 중')),
-              );
-            },
-            child: const Text('당첨 정보 확인'),
+            onPressed: () => context.push('/winnings'),
+            child: const Text('당첨 내역 확인'),
           ),
           const SizedBox(height: 10),
           OutlinedButton(
-            onPressed: () {
-              Navigator.of(context).popUntil((route) => route.isFirst);
-            },
+            onPressed: () => context.go('/participation'),
             child: const Text('내 참여내역 보기'),
           ),
         ],
@@ -257,15 +375,17 @@ class _CtaButtons extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         FilledButton(
-          onPressed: () {
-            Navigator.of(context).popUntil((route) => route.isFirst);
-          },
+          onPressed: () => context.go('/participation'),
           child: const Text('내 참여내역 보기'),
         ),
         const SizedBox(height: 10),
         OutlinedButton(
           onPressed: () {
-            Navigator.of(context).popUntil((route) => route.isFirst);
+            AnalyticsService.track(
+              'result_screen_cta_clicked',
+              {'action': 'browse_other_blockpicks'},
+            );
+            context.go('/blockpicks');
           },
           child: const Text('다른 블록픽 보러가기'),
         ),

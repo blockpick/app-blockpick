@@ -320,19 +320,29 @@ class _NotificationScreenState extends State<NotificationScreen> {
       notification['isRead'] = true;
     });
 
-    // TODO: 알림 타입에 따라 적절한 화면으로 이동
+    // 알림 타입에 따라 딥링크 라우팅
     final type = notification['type'] as String;
     switch (type) {
       case 'winner':
-        // 당첨 내역으로 이동
+        context.push('/winnings');
         break;
       case 'event':
-        // 이벤트 상세로 이동
+        context.push('/blockpicks');
         break;
       case 'shopping':
-        // 주문 내역으로 이동
+        context.push('/my/order-history');
+        break;
+      case 'point':
+        context.push('/my/transactions');
+        break;
+      case 'invite':
+        context.push('/referral');
+        break;
+      case 'mission':
+        context.push('/mission');
         break;
       default:
+        // 공지 등 기타 알림은 별도 처리 없음
         break;
     }
   }

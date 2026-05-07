@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../providers/referral_provider.dart';
 import 'widgets/referral_item_tile.dart';
@@ -30,6 +31,10 @@ class _ReferralHistoryScreenState extends ConsumerState<ReferralHistoryScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('초대 링크가 복사되었어요')),
     );
+  }
+
+  void _showGuideSheet() {
+    context.push('/referral/guide');
   }
 
   void _shareInvite() {
@@ -120,6 +125,18 @@ class _ReferralHistoryScreenState extends ConsumerState<ReferralHistoryScreen> {
                             textAlign: TextAlign.center,
                             style: tt.bodyMedium
                                 ?.copyWith(color: cs.outline),
+                          ),
+                          const SizedBox(height: 20),
+                          FilledButton.icon(
+                            onPressed: _shareInvite,
+                            icon: const Icon(Icons.share),
+                            label: const Text('지금 초대하기'),
+                          ),
+                          const SizedBox(height: 8),
+                          TextButton.icon(
+                            onPressed: _showGuideSheet,
+                            icon: const Icon(Icons.menu_book_outlined, size: 16),
+                            label: const Text('초대 가이드 보기'),
                           ),
                         ],
                       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../data/entry/entry_models.dart';
 import '../../providers/entry_provider.dart';
 import 'widgets/entry_card.dart';
@@ -172,6 +173,8 @@ class _EmptyState extends StatelessWidget {
       _Segment.won => ('아직 당첨된 내역이 없어요', '지금 바로 참여해 보세요'),
       _Segment.lost => ('미당첨 내역이 없어요', '재참여로 다음 기회를 노려 보세요'),
     };
+    final showBlockpickCta = segment == _Segment.all || segment == _Segment.ongoing;
+
     return ListView(
       padding: const EdgeInsets.all(40),
       children: [
@@ -189,8 +192,19 @@ class _EmptyState extends StatelessWidget {
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
+            textAlign: TextAlign.center,
           ),
         ),
+        if (showBlockpickCta) ...[
+          const SizedBox(height: 24),
+          Center(
+            child: FilledButton.icon(
+              onPressed: () => context.go('/blockpicks'),
+              icon: const Icon(Icons.grid_view_outlined, size: 18),
+              label: const Text('블록픽 보러가기'),
+            ),
+          ),
+        ],
       ],
     );
   }

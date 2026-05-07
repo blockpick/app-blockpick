@@ -7,6 +7,7 @@ import 'referral_history_screen.dart';
 import 'widgets/invite_summary_card.dart';
 import 'widgets/invite_link_card.dart';
 import 'widgets/referral_item_tile.dart';
+import '../../core/analytics/analytics_service.dart';
 
 /// 친구초대 메인 화면 (기획서 8-1)
 class ReferralMainScreen extends ConsumerWidget {
@@ -70,7 +71,48 @@ class _MainBody extends StatelessWidget {
         // 2. 내 초대 링크 카드
         InviteLinkCard(inviteCode: codeInfo.inviteCode),
 
-        // 3. 보상 조건 안내 섹션
+        // 3. 가이드/FAQ 진입 카드
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          child: Row(
+            children: [
+              Expanded(
+                child: _QuickLinkCard(
+                  icon: Icons.menu_book_outlined,
+                  label: '초대 가이드',
+                  subtitle: '3단계로 알아보기',
+                  onTap: () {
+                    AnalyticsService.track('referral_guide_viewed');
+                    context.push('/referral/guide');
+                  },
+                  colorScheme: cs,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _QuickLinkCard(
+                  icon: Icons.help_outline,
+                  label: 'FAQ',
+                  subtitle: '자주 묻는 질문',
+                  onTap: () => context.push('/referral/faq'),
+                  colorScheme: cs,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _QuickLinkCard(
+                  icon: Icons.card_giftcard_outlined,
+                  label: '보상 조건',
+                  subtitle: '지급 조건 확인',
+                  onTap: () => context.push('/referral/guide'),
+                  colorScheme: cs,
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        // 4. 보상 조건 안내 섹션
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Card(
@@ -94,7 +136,7 @@ class _MainBody extends StatelessWidget {
           ),
         ),
 
-        // 4. 최근 초대 실적 (최대 3건)
+        // 5. 최근 초대 실적 (최대 3건)
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
           child: Row(
@@ -177,7 +219,68 @@ class _EmptyState extends StatelessWidget {
             icon: const Icon(Icons.share),
             label: const Text('지금 친구 초대하기'),
           ),
+          const SizedBox(height: 10),
+          TextButton.icon(
+            onPressed: () => context.push('/referral/guide'),
+            icon: const Icon(Icons.menu_book_outlined, size: 16),
+            label: const Text('초대 가이드 보기'),
+          ),
         ],
+      ),
+    );
+  }
+}
+
+// ===================== 빠른 링크 카드 =====================
+
+class _QuickLinkCard extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String subtitle;
+  final VoidCallback onTap;
+  final ColorScheme colorScheme;
+
+  const _QuickLinkCard({
+    required this.icon,
+    required this.label,
+    required this.subtitle,
+    required this.onTap,
+    required this.colorScheme,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final tt = Theme.of(context).textTheme;
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+        decoration: BoxDecoration(
+          color: colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: colorScheme.outlineVariant),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 24, color: colorScheme.primary),
+            const SizedBox(height: 6),
+            Text(
+              label,
+              style: tt.labelMedium?.copyWith(fontWeight: FontWeight.w700),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 2),
+            Text(
+              subtitle,
+              style: tt.labelSmall?.copyWith(color: colorScheme.onSurfaceVariant),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
       ),
     );
   }

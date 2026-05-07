@@ -62,7 +62,7 @@ class _BlockpickListScreenState extends ConsumerState<BlockpickListScreen> {
           _SearchBar(controller: _searchCtrl, onSubmit: () => setState(() {})),
           categoriesAsync.when(
             loading: () => const SizedBox(height: 44),
-            error: (_, __) => const SizedBox(height: 44),
+            error: (e, st) => const SizedBox(height: 44),
             data: (cats) => _CategoryChips(
               categories: cats,
               selectedCode: _categoryCode,
@@ -89,7 +89,17 @@ class _BlockpickListScreenState extends ConsumerState<BlockpickListScreen> {
                 ),
                 data: (page) {
                   if (page.items.isEmpty) {
-                    return const _EmptyState();
+                    return _EmptyState(
+                      hasActiveFilter: _searchCtrl.text.isNotEmpty ||
+                          _categoryCode != null ||
+                          !_onlyOngoing,
+                      onResetFilter: () => setState(() {
+                        _searchCtrl.clear();
+                        _categoryCode = null;
+                        _onlyOngoing = true;
+                        _sortBy = BlockpickSortBy.popular;
+                      }),
+                    );
                   }
                   return ListView.builder(
                     padding: const EdgeInsets.symmetric(vertical: 8),
@@ -261,7 +271,13 @@ class _SortAndFilter extends StatelessWidget {
 }
 
 class _EmptyState extends StatelessWidget {
-  const _EmptyState();
+  final bool hasActiveFilter;
+  final VoidCallback? onResetFilter;
+
+  const _EmptyState({
+    this.hasActiveFilter = false,
+    this.onResetFilter,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -283,8 +299,19 @@ class _EmptyState extends StatelessWidget {
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
+            textAlign: TextAlign.center,
           ),
         ),
+        if (hasActiveFilter && onResetFilter != null) ...[
+          const SizedBox(height: 24),
+          Center(
+            child: OutlinedButton.icon(
+              onPressed: onResetFilter,
+              icon: const Icon(Icons.filter_alt_off_outlined, size: 16),
+              label: const Text('필터 초기화'),
+            ),
+          ),
+        ],
       ],
     );
   }
