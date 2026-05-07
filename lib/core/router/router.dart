@@ -52,6 +52,8 @@ import '../../features/entry_flow/block_select_screen.dart';
 import '../../features/entry_flow/entry_result_screen.dart';
 import '../../features/referral/referral_main_screen.dart';
 import '../../features/referral/referral_history_screen.dart';
+import '../../features/referral/referral_guide_screen.dart';
+import '../../features/referral/referral_faq_screen.dart';
 import '../../features/mission/mission_list_screen.dart';
 import '../../features/mission/mission_complete_screen.dart';
 import '../../features/ad_reward/ad_reward_screen.dart';
@@ -80,6 +82,8 @@ import '../../features/notification/notification_screen.dart';
 import '../../features/winners/winners_screen.dart';
 import '../../features/winners/winner_detail_screen.dart';
 import '../../features/home/widgets/daily_checkin_modal.dart';
+import '../../features/point/point_wallet_screen.dart';
+import '../../features/mini_game/mini_game_screen.dart';
 import '../../features/common/webview_screen.dart';
 import '../auth/domain/providers/auth_provider.dart';
 // More modes
@@ -576,6 +580,14 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/referral/history',
         builder: (context, state) => const ReferralHistoryScreen(),
       ),
+      GoRoute(
+        path: '/referral/guide',
+        builder: (context, state) => const ReferralGuideScreen(),
+      ),
+      GoRoute(
+        path: '/referral/faq',
+        builder: (context, state) => const ReferralFaqScreen(),
+      ),
 
       // ============ 새 IA: 미션 ============
       GoRoute(
@@ -689,6 +701,20 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/checkin',
         builder: (context, state) => const DailyCheckinScreen(),
+      ),
+
+      // ============ 포인트 도메인 ============
+      GoRoute(
+        path: '/point/wallet',
+        builder: (context, state) => const PointWalletScreen(),
+      ),
+      GoRoute(
+        path: '/point/check-in',
+        builder: (context, state) => const DailyCheckinScreen(),
+      ),
+      GoRoute(
+        path: '/point/mini-game',
+        builder: (context, state) => const MiniGameScreen(),
       ),
 
       // ============ WebView ============

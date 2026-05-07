@@ -61,6 +61,12 @@ class MyScreen extends ConsumerWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: _buildStatsCards(context, user),
                       ),
+                      const SizedBox(height: 12),
+                      // 포인트 지갑 진입 카드
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: _buildPointWalletCard(context),
+                      ),
                       const SizedBox(height: 24),
                     ],
 
@@ -311,6 +317,65 @@ class MyScreen extends ConsumerWidget {
                     color: AppColors.gray400,
                   ),
                 ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// 포인트 지갑 진입 카드
+  Widget _buildPointWalletCard(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => context.push('/point/wallet'),
+        borderRadius: BorderRadius.circular(AppConstants.radiusLg),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            gradient: AppColors.gradientDarkPurple,
+            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: AppColors.white.withValues(alpha: 0.2),
+                  shape: BoxShape.circle,
+                ),
+                child: const Center(
+                  child: Text('🪙', style: TextStyle(fontSize: 20)),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '포인트 지갑',
+                      style: AppTextStyles.body3.copyWith(
+                        color: AppColors.white,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Text(
+                      '출석체크·미니게임으로 포인트 적립',
+                      style: AppTextStyles.caption2.copyWith(
+                        color: AppColors.white.withValues(alpha: 0.75),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 14,
+                color: AppColors.white,
               ),
             ],
           ),

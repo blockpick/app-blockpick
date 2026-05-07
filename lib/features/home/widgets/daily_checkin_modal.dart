@@ -1,81 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_constants.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/analytics/analytics_service.dart';
+import '../../../providers/point_provider.dart';
 
-/// SC-008-02 출석체크 페이지
-class DailyCheckinScreen extends StatefulWidget {
-  final int currentStreak;
-  final bool todayChecked;
-  final VoidCallback? onCheckIn;
-  final VoidCallback? onWatchAd;
-
-  const DailyCheckinScreen({
-    super.key,
-    this.currentStreak = 2,
-    this.todayChecked = false,
-    this.onCheckIn,
-    this.onWatchAd,
-  });
+/// SC-008-02 출석체크 화면
+/// - claimDailyCheckIn GraphQL 뮤테이션 실제 호출
+/// - 중복 체크인 시 친절한 안내 메시지
+/// - 성공 시 +10P 보상 화면 → 광고 2배 옵션
+class DailyCheckinScreen extends ConsumerStatefulWidget {
+  const DailyCheckinScreen({super.key});
 
   /// 페이지로 이동
   static void show(BuildContext context) {
-    context.push('/checkin');
+    context.push('/point/check-in');
   }
 
   @override
-  State<DailyCheckinScreen> createState() => _DailyCheckinScreenState();
+  ConsumerState<DailyCheckinScreen> createState() =>
+      _DailyCheckinScreenState();
 }
 
-class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
-  bool _showRewardDialog = false;
-  int _earnedPoints = 10;
-
-  void _handleCheckIn() {
-    setState(() {
-      _showRewardDialog = true;
-      _earnedPoints = 10;
-    });
-    widget.onCheckIn?.call();
-  }
-
-  void _handleWatchAd() {
-    widget.onWatchAd?.call();
-    context.pop();
-  }
-
-  void _handleSkipAd() {
-    context.pop();
-  }
-
-  void _handleClose() {
-    context.pop();
-  }
+class _DailyCheckinScreenState extends ConsumerState<DailyCheckinScreen> {
+  bool _adWatched = false;
 
   @override
   Widget build(BuildContext context) {
+    final checkInState = ref.watch(checkInProvider);
+
     return Scaffold(
       backgroundColor: AppColors.gray100,
       body: SafeArea(
-        child: _showRewardDialog ? _buildRewardDialog() : _buildCheckinContent(),
+        child: _buildBody(checkInState),
       ),
     );
   }
 
-  /// 출석체크 메인 화면
-  Widget _buildCheckinContent() {
+  Widget _buildBody(CheckInState state) {
+    if (state.result != null) {
+      return _buildRewardContent(state.result!.pointsEarned);
+    }
+    if (state.errorMessage != null) {
+      return _buildAlreadyCheckedIn(state.errorMessage!);
+    }
+    return _buildCheckinContent(state.isLoading);
+  }
+
+  // ──────────────────────────────────────────
+  // 출석체크 메인 화면
+  // ──────────────────────────────────────────
+  Widget _buildCheckinContent(bool isLoading) {
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 상단: 닫기 버튼
           _buildCloseButton(),
-
           const SizedBox(height: 24),
-
-          // 제목
           const Text(
             'Daily Check-in',
             style: TextStyle(
@@ -85,10 +69,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
               letterSpacing: -0.5,
             ),
           ),
-
-          SizedBox(height: 8),
-
-          // 설명
+          const SizedBox(height: 8),
           RichText(
             text: TextSpan(
               style: AppTextStyles.body3.copyWith(color: AppColors.gray600),
@@ -96,7 +77,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
                 const TextSpan(text: '1일 출석 체크하면 '),
                 TextSpan(
                   text: '10P',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.w700,
                     color: AppColors.darkBlue,
                   ),
@@ -104,7 +85,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
                 const TextSpan(text: ' 적립!\n7일 동안 연속으로 출석 체크하면 '),
                 TextSpan(
                   text: '500P',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.w700,
                     color: AppColors.darkBlue,
                   ),
@@ -113,47 +94,151 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
               ],
             ),
           ),
-
           const SizedBox(height: 32),
-
-          // 7일 출석 체크 그리드
           _buildCheckinGrid(),
-
           const SizedBox(height: 24),
-
-          // DAY 7 보너스 카드
           _buildDay7BonusCard(),
-
           const Spacer(),
-
-          // CHECK-IN NOW 버튼
-          _buildCheckInButton(),
+          _buildCheckInButton(isLoading),
         ],
       ),
     );
   }
 
-  /// 닫기 버튼
-  Widget _buildCloseButton() {
-    return GestureDetector(
-      onTap: _handleClose,
-      child: Container(
-        width: 32,
-        height: 32,
-        decoration: BoxDecoration(
-          color: AppColors.gray300,
-          shape: BoxShape.circle,
-        ),
-        child: const Icon(
-          Icons.close_rounded,
-          size: 18,
-          color: AppColors.white,
-        ),
+  // ──────────────────────────────────────────
+  // 이미 체크인 안내
+  // ──────────────────────────────────────────
+  Widget _buildAlreadyCheckedIn(String message) {
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildCloseButton(),
+          const Spacer(),
+          Center(
+            child: Column(
+              children: [
+                const Text('✅', style: TextStyle(fontSize: 64)),
+                const SizedBox(height: 24),
+                Text(
+                  '오늘 출석 완료!',
+                  style: AppTextStyles.heading2.copyWith(
+                    color: AppColors.textBlack,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.body3.copyWith(color: AppColors.gray600),
+                ),
+              ],
+            ),
+          ),
+          const Spacer(),
+          _buildOutlineButton(label: '닫기', onTap: () => context.pop()),
+        ],
       ),
     );
   }
 
-  /// 7일 출석 체크 그리드
+  // ──────────────────────────────────────────
+  // 포인트 획득 보상 화면
+  // ──────────────────────────────────────────
+  Widget _buildRewardContent(int points) {
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: _buildCloseButton(),
+          ),
+          const Spacer(),
+          Container(
+            width: 120,
+            height: 120,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [AppColors.yellow500, Color(0xFFFFAA00)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.yellow500.withValues(alpha: 0.5),
+                  blurRadius: 30,
+                  offset: const Offset(0, 10),
+                ),
+              ],
+            ),
+            child: const Center(
+              child: Text(
+                'P',
+                style: TextStyle(
+                  fontSize: 56,
+                  fontWeight: FontWeight.w900,
+                  color: AppColors.white,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 32),
+          Text(
+            '${points}P',
+            style: const TextStyle(
+              fontSize: 48,
+              fontWeight: FontWeight.w900,
+              color: AppColors.darkBlue,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '출석 포인트 적립 완료!',
+            style: AppTextStyles.heading3.copyWith(color: AppColors.textBlack),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            '광고를 시청하면 포인트를 2배로 받을 수 있어요!',
+            textAlign: TextAlign.center,
+            style: AppTextStyles.body3.copyWith(color: AppColors.gray600),
+          ),
+          const Spacer(),
+          if (!_adWatched) ...[
+            _buildPrimaryButton(
+              label: '포인트 2배로 받기',
+              onTap: _handleWatchAd,
+            ),
+            const SizedBox(height: 16),
+            GestureDetector(
+              onTap: () => context.pop(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(
+                  '오늘은 괜찮아요',
+                  style: AppTextStyles.body3.copyWith(
+                    color: AppColors.gray500,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+            ),
+          ] else
+            _buildPrimaryButton(
+              label: '완료',
+              onTap: () => context.pop(),
+              color: AppColors.green500,
+            ),
+        ],
+      ),
+    );
+  }
+
+  // ──────────────────────────────────────────
+  // 7일 체크인 그리드
+  // ──────────────────────────────────────────
   Widget _buildCheckinGrid() {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -170,86 +255,44 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
       ),
       child: Column(
         children: [
-          // 첫 번째 줄: DAY 1, 2, 3
           Row(
-            children: [
-              Expanded(child: _buildDayItem(1)),
-              const SizedBox(width: 12),
-              Expanded(child: _buildDayItem(2)),
-              const SizedBox(width: 12),
-              Expanded(child: _buildDayItem(3)),
-            ],
+            children: List.generate(3, (i) => i + 1).expand((day) {
+              final widgets = <Widget>[Expanded(child: _buildDayItem(day))];
+              if (day < 3) widgets.add(const SizedBox(width: 12));
+              return widgets;
+            }).toList(),
           ),
           const SizedBox(height: 12),
-          // 두 번째 줄: DAY 4, 5, 6
           Row(
-            children: [
-              Expanded(child: _buildDayItem(4)),
-              const SizedBox(width: 12),
-              Expanded(child: _buildDayItem(5)),
-              const SizedBox(width: 12),
-              Expanded(child: _buildDayItem(6)),
-            ],
+            children: List.generate(3, (i) => i + 4).expand((day) {
+              final widgets = <Widget>[Expanded(child: _buildDayItem(day))];
+              if (day < 6) widgets.add(const SizedBox(width: 12));
+              return widgets;
+            }).toList(),
           ),
         ],
       ),
     );
   }
 
-  /// 개별 날짜 아이템
   Widget _buildDayItem(int day) {
-    final isCompleted = day <= widget.currentStreak;
-    final isToday = day == widget.currentStreak + 1 && !widget.todayChecked;
-
     return Container(
       height: 80,
       decoration: BoxDecoration(
-        color: isToday
-            ? AppColors.yellow500.withValues(alpha: 0.15)
-            : AppColors.gray100,
+        color: AppColors.gray100,
         borderRadius: BorderRadius.circular(AppConstants.radiusLg),
-        border: isToday
-            ? Border.all(color: AppColors.yellow500, width: 2)
-            : null,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            'DAY $day',
-            style: AppTextStyles.caption4,
-          ),
-          SizedBox(height: 8),
-          if (isCompleted)
-            Icon(
-              Icons.check_rounded,
-              size: 24,
-              color: AppColors.gray500,
-            )
-          else if (isToday)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: AppColors.yellow500,
-                borderRadius: BorderRadius.circular(AppConstants.radiusMd),
-              ),
-              child: Text(
-                '+10P',
-                style: AppTextStyles.caption3.copyWith(color: Color(0xFF664D03)),
-              ),
-            )
-          else
-            Icon(
-              Icons.lock_rounded,
-              size: 24,
-              color: AppColors.gray300,
-            ),
+          Text('DAY $day', style: AppTextStyles.caption4),
+          const SizedBox(height: 8),
+          const Icon(Icons.lock_rounded, size: 20, color: AppColors.gray300),
         ],
       ),
     );
   }
 
-  /// DAY 7 보너스 카드
   Widget _buildDay7BonusCard() {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -260,7 +303,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
           BoxShadow(
             color: AppColors.black.withValues(alpha: 0.05),
             blurRadius: 10,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -286,13 +329,12 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
               ],
             ),
           ),
-          // 코인 아이콘
           Container(
             width: 56,
             height: 56,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [AppColors.yellow500, AppColors.yellow500.withValues(alpha: 0.7)],
+              gradient: const LinearGradient(
+                colors: [AppColors.yellow500, Color(0xFFFFAA00)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -305,20 +347,13 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
                 ),
               ],
             ),
-            child: Center(
+            child: const Center(
               child: Text(
                 'P',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w900,
                   color: AppColors.white,
-                  shadows: [
-                    Shadow(
-                      color: Colors.orange.shade700,
-                      offset: Offset(0, 2),
-                      blurRadius: 4,
-                    ),
-                  ],
                 ),
               ),
             ),
@@ -328,22 +363,72 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
     );
   }
 
-  /// CHECK-IN NOW 버튼
-  Widget _buildCheckInButton() {
-    final canCheckIn = !widget.todayChecked;
-
+  // ──────────────────────────────────────────
+  // 공통 위젯
+  // ──────────────────────────────────────────
+  Widget _buildCloseButton() {
     return GestureDetector(
-      onTap: canCheckIn ? _handleCheckIn : null,
+      onTap: () => context.pop(),
+      child: Container(
+        width: 32,
+        height: 32,
+        decoration: const BoxDecoration(
+          color: AppColors.gray300,
+          shape: BoxShape.circle,
+        ),
+        child: const Icon(Icons.close_rounded, size: 18, color: AppColors.white),
+      ),
+    );
+  }
+
+  Widget _buildCheckInButton(bool isLoading) {
+    return GestureDetector(
+      onTap: isLoading ? null : _handleCheckIn,
       child: Container(
         width: double.infinity,
         height: 56,
         decoration: BoxDecoration(
-          color: canCheckIn ? AppColors.darkBlue : AppColors.gray300,
+          color: isLoading ? AppColors.gray300 : AppColors.darkBlue,
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
+        ),
+        child: Center(
+          child: isLoading
+              ? const SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(
+                    color: AppColors.white,
+                    strokeWidth: 2.5,
+                  ),
+                )
+              : Text(
+                  'CHECK-IN NOW',
+                  style: AppTextStyles.buttonLarge.copyWith(
+                    color: AppColors.white,
+                  ),
+                ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPrimaryButton({
+    required String label,
+    required VoidCallback onTap,
+    Color color = AppColors.darkBlue,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        height: 56,
+        decoration: BoxDecoration(
+          color: color,
           borderRadius: BorderRadius.circular(AppConstants.radiusXl),
         ),
         child: Center(
           child: Text(
-            canCheckIn ? 'CHECK-IN NOW' : 'CHECKED IN',
+            label,
             style: AppTextStyles.buttonLarge.copyWith(color: AppColors.white),
           ),
         ),
@@ -351,136 +436,47 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen> {
     );
   }
 
-  /// 포인트 획득 다이얼로그
-  Widget _buildRewardDialog() {
-    return Padding(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        children: [
-          // 상단: 닫기 버튼
-          Align(
-            alignment: Alignment.centerLeft,
-            child: _buildCloseButton(),
+  Widget _buildOutlineButton({
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        height: 56,
+        decoration: BoxDecoration(
+          color: AppColors.gray200,
+          borderRadius: BorderRadius.circular(AppConstants.radiusXl),
+        ),
+        child: Center(
+          child: Text(
+            label,
+            style: AppTextStyles.buttonLarge.copyWith(color: AppColors.gray800),
           ),
-
-          const Spacer(),
-
-          // 코인 이미지
-          Container(
-            width: 120,
-            height: 120,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [AppColors.yellow500, AppColors.yellow500.withValues(alpha: 0.7)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.yellow500.withValues(alpha: 0.5),
-                  blurRadius: 30,
-                  offset: const Offset(0, 10),
-                ),
-              ],
-            ),
-            child: Center(
-              child: Text(
-                'P',
-                style: TextStyle(
-                  fontSize: 56,
-                  fontWeight: FontWeight.w900,
-                  color: AppColors.white,
-                  shadows: [
-                    Shadow(
-                      color: Colors.orange.shade700,
-                      offset: const Offset(0, 3),
-                      blurRadius: 6,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 32),
-
-          // 포인트 텍스트
-          Text(
-            '${_earnedPoints}P',
-            style: const TextStyle(
-              fontSize: 48,
-              fontWeight: FontWeight.w900,
-              color: AppColors.darkBlue,
-            ),
-          ),
-
-          SizedBox(height: 24),
-
-          // 설명 텍스트
-          Text(
-            '오늘의 포인트 도착! 2배로 더 채워볼까요?\n광고 시청하고 포인트 2배 혜택을 누려보세요.',
-            textAlign: TextAlign.center,
-            style: AppTextStyles.body3.copyWith(color: AppColors.gray600),
-          ),
-
-          const Spacer(),
-
-          // 포인트 2배로 받기 버튼
-          GestureDetector(
-            onTap: _handleWatchAd,
-            child: Container(
-              width: double.infinity,
-              height: 56,
-              decoration: BoxDecoration(
-                color: AppColors.darkBlue,
-                borderRadius: BorderRadius.circular(AppConstants.radiusXl),
-              ),
-              child: Center(
-                child: Text(
-                  '포인트 2배로 받기',
-                  style: AppTextStyles.buttonLarge.copyWith(color: AppColors.white),
-                ),
-              ),
-            ),
-          ),
-
-          SizedBox(height: 16),
-
-          // 오늘은 괜찮아요 텍스트 버튼
-          GestureDetector(
-            onTap: _handleSkipAd,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '오늘은 괜찮아요.',
-                    style: AppTextStyles.title3.copyWith(color: AppColors.gray500),
-                  ),
-                  SizedBox(width: 4),
-                  Container(
-                    width: 20,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      color: AppColors.gray300,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Text(
-                        '6',
-                        style: AppTextStyles.caption4.copyWith(color: AppColors.gray600),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
+  }
+
+  // ──────────────────────────────────────────
+  // 핸들러
+  // ──────────────────────────────────────────
+  Future<void> _handleCheckIn() async {
+    await ref.read(checkInProvider.notifier).claimCheckIn();
+    final state = ref.read(checkInProvider);
+    if (state.result != null) {
+      AnalyticsService.track('point_check_in_claimed', {
+        'amount': state.result!.pointsEarned,
+        'streak': state.result!.currentStreak,
+        'bonus_awarded': state.result!.bonusAwarded,
+      });
+    }
+  }
+
+  void _handleWatchAd() {
+    // AdMob 미연동 시점 — 광고 시청 시뮬레이션
+    setState(() => _adWatched = true);
   }
 }
 
