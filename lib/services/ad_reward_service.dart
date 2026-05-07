@@ -1,4 +1,5 @@
-// ⚠️ DEPRECATED: 새 GraphQL 스키마(blockpicks/joinBlockpick/claimAdReward) 사용. blockpick_provider/entry_provider/ad_reward_provider_v2로 마이그레이션 예정.
+// 책임: AdMob RewardedAd 로드/표시 + 백엔드 보상 청구를 한 흐름으로 묶는 서비스.
+// AdMob SDK 통합이 빠진 ad_reward_provider_v2를 단독으로 쓸 수 없을 때 사용.
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';

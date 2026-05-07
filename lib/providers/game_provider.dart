@@ -1,4 +1,6 @@
-// ⚠️ DEPRECATED: 새 GraphQL 스키마(blockpicks/joinBlockpick/claimAdReward) 사용. blockpick_provider/entry_provider/ad_reward_provider_v2로 마이그레이션 예정.
+// ⚠️ MIGRATION PENDING: 구 GraphQL 스키마(getGames/getGame) 기반.
+// 신규 blockpicks/blockpick 스키마(blockpick_provider)와 모델 구조가 달라 단순 치환 불가.
+// 이 provider에 의존하는 13곳 화면 마이그레이션은 별도 PR로 진행 예정 (백엔드 스키마 정합성 확인 + 화면별 검증 필요).
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

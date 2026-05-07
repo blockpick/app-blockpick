@@ -1,4 +1,5 @@
-// ⚠️ DEPRECATED: 새 GraphQL 스키마(blockpicks/joinBlockpick/claimAdReward) 사용. blockpick_provider/entry_provider/ad_reward_provider_v2로 마이그레이션 예정.
+// ⚠️ MIGRATION PENDING: 구 joinGame Mutation 기반. 신규 entry_provider.joinBlockpick으로 대체 예정.
+// 호출처: selected_blocks_sheet, daily_buzz_game_screen — game_provider 마이그레이션과 함께 별도 PR로 진행.
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

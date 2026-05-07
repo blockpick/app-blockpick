@@ -1,4 +1,5 @@
-// ⚠️ DEPRECATED: 새 GraphQL 스키마(blockpicks/joinBlockpick/claimAdReward) 사용. blockpick_provider/entry_provider/ad_reward_provider_v2로 마이그레이션 예정.
+// 책임: AdMob RewardedAd SDK 통합 + 백엔드 보상 청구 통합 흐름 (showAdAndGetReward).
+// ad_reward_provider_v2는 백엔드 claimAdReward Mutation만 추상화하므로 본 provider와 보완 관계임 (대체 아님).
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../core/graphql/graphql_client.dart';

@@ -1,4 +1,5 @@
-// ⚠️ DEPRECATED: 옛 game_participation_provider.joinGame() 사용. 새 entry_flow(BlockSelectScreen+joinBlockpick)로 마이그레이션 예정.
+// ⚠️ MIGRATION PENDING: game_participation_provider.joinGame() 사용 (GameScreen에서 호출).
+// game_provider 마이그레이션 PR에서 entry_flow로 전환 예정.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/block_model.dart';
