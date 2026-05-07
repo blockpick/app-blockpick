@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/ad_reward/ad_reward_models.dart';
 import '../../providers/ad_reward_provider_v2.dart';
+import '../../services/admob_service.dart';
 import 'ad_reward_complete_screen.dart';
 
 /// 9-1. 광고 시청 보상 화면
-/// TODO: AdMob RewardedAd 연결 — 현재 3초 대기 다이얼로그로 대체
+///
+/// 흐름:
+///   1. 화면 진입 시 AdMobService.preloadRewardedAd() 호출
+///   2. "광고 보기" 버튼 → AdRewardController.showAdAndClaim()
+///   3. 시청 완료 → claimAdReward GraphQL 호출 → 완료 화면으로 이동
+///   4. 광고 미준비 / 실패 시 안내 메시지 표시
 class AdRewardScreen extends ConsumerStatefulWidget {
   const AdRewardScreen({super.key, required this.blockpickId});
 
@@ -16,7 +22,50 @@ class AdRewardScreen extends ConsumerStatefulWidget {
 }
 
 class _AdRewardScreenState extends ConsumerState<AdRewardScreen> {
+  /// 광고 준비 상태 (preload 완료 여부)
+  bool _adReady = false;
+
+  /// 광고 로드 중 여부
+  bool _adLoading = true;
+
+  /// 보상 청구 처리 중 여부
   bool _isClaiming = false;
+
+  /// 광고 로드 실패 메시지 (null 이면 정상)
+  String? _adLoadError;
+
+  @override
+  void initState() {
+    super.initState();
+    _preloadAd();
+  }
+
+  /// 광고 미리 로드
+  void _preloadAd() {
+    setState(() {
+      _adLoading = true;
+      _adLoadError = null;
+    });
+
+    AdMobService().preloadRewardedAd(
+      onAdLoaded: () {
+        if (!mounted) return;
+        setState(() {
+          _adReady = true;
+          _adLoading = false;
+          _adLoadError = null;
+        });
+      },
+      onAdFailedToLoad: (error) {
+        if (!mounted) return;
+        setState(() {
+          _adReady = false;
+          _adLoading = false;
+          _adLoadError = error;
+        });
+      },
+    );
+  }
 
   /// 오늘 시청한 로그 수 계산
   int _countToday(List<AdRewardLog> logs) {
@@ -33,43 +82,87 @@ class _AdRewardScreenState extends ConsumerState<AdRewardScreen> {
     }).length;
   }
 
+  /// 광고 보기 버튼 핸들러
   Future<void> _onWatchAd() async {
     if (_isClaiming) return;
 
-    // TODO: AdMob RewardedAd 연결 — 아래 dialog 를 실제 광고로 교체
-    final confirmed = await showDialog<bool>(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) => const _AdSimulationDialog(),
-    );
-    if (confirmed != true || !mounted) return;
-
-    setState(() => _isClaiming = true);
-    try {
-      final ds =
-          await ref.read(adRewardRemoteDataSourceProvider.future);
-      final result = await ds.claimAdReward(
-        blockpickId: widget.blockpickId,
-        externalNetworkRef: 'sim_${DateTime.now().millisecondsSinceEpoch}',
-      );
-
-      if (!mounted) return;
-      await Navigator.of(context).pushReplacement(
-        MaterialPageRoute<void>(
-          builder: (_) => AdRewardCompleteScreen(
-            log: result.log,
-            ticketId: result.ticketId,
+    // 광고 미준비 시 재시도 유도
+    if (!_adReady) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('광고를 준비 중이에요. 잠시 후 다시 시도해 주세요.'),
+          action: SnackBarAction(
+            label: '재시도',
+            onPressed: _preloadAd,
           ),
         ),
       );
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('보상 지급 실패: $e')),
-      );
-    } finally {
-      if (mounted) setState(() => _isClaiming = false);
+      return;
     }
+
+    setState(() => _isClaiming = true);
+
+    final controller = ref.read(adRewardControllerProvider);
+    final result = await controller.showAdAndClaim(
+      blockpickId: widget.blockpickId,
+      contextType: 'blockpick',
+    );
+
+    if (!mounted) return;
+
+    switch (result) {
+      case AdClaimSuccess(:final log, :final ticketId):
+        // 광고 시청 완료 + 보상 지급 성공
+        await Navigator.of(context).pushReplacement(
+          MaterialPageRoute<void>(
+            builder: (_) => AdRewardCompleteScreen(
+              log: log,
+              ticketId: ticketId,
+            ),
+          ),
+        );
+
+      case AdClaimAdFailed(:final reason):
+        // 광고 표시 실패 — 재시도 유도
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('광고를 불러오지 못했어요: $reason'),
+            action: SnackBarAction(
+              label: '재시도',
+              onPressed: () {
+                _preloadAd();
+              },
+            ),
+          ),
+        );
+        // 광고 상태 초기화 후 재로드
+        setState(() {
+          _adReady = false;
+        });
+        _preloadAd();
+
+      case AdClaimCancelled():
+        // 사용자가 광고를 끝까지 보지 않고 닫음
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('광고를 끝까지 시청해야 보상이 지급돼요.'),
+          ),
+        );
+        // 다음 광고 자동 preload (AdMobService 내부에서 처리되지만 상태 반영)
+        setState(() {
+          _adReady = AdMobService().isReady;
+        });
+
+      case AdClaimBackendFailed(:final error):
+        // 광고는 시청했지만 서버 청구 실패
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('보상 지급 처리 중 문제가 발생했어요. 잠시 후 다시 시도해 주세요.\n($error)'),
+          ),
+        );
+    }
+
+    if (mounted) setState(() => _isClaiming = false);
   }
 
   @override
@@ -90,6 +183,8 @@ class _AdRewardScreenState extends ConsumerState<AdRewardScreen> {
           theme: theme,
           logs: logs,
           todayWatchedCount: _countToday(logs),
+          adLoading: _adLoading,
+          adLoadError: _adLoadError,
         ),
       ),
       bottomNavigationBar: SafeArea(
@@ -98,11 +193,62 @@ class _AdRewardScreenState extends ConsumerState<AdRewardScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // 광고 로드 상태 안내
+              if (_adLoading)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(
+                        width: 14,
+                        height: 14,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        '광고 준비 중...',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              else if (_adLoadError != null && !_adReady)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.warning_amber_rounded,
+                          size: 14, color: theme.colorScheme.error),
+                      const SizedBox(width: 6),
+                      Text(
+                        '광고를 불러오지 못했어요.',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.error,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      GestureDetector(
+                        onTap: _preloadAd,
+                        child: Text(
+                          '재시도',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.primary,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               SizedBox(
                 width: double.infinity,
                 height: 52,
                 child: FilledButton(
-                  onPressed: _isClaiming ? null : _onWatchAd,
+                  onPressed: (_isClaiming || _adLoading) ? null : _onWatchAd,
                   child: _isClaiming
                       ? const SizedBox(
                           width: 22,
@@ -110,8 +256,10 @@ class _AdRewardScreenState extends ConsumerState<AdRewardScreen> {
                           child: CircularProgressIndicator(
                               strokeWidth: 2, color: Colors.white),
                         )
-                      : const Text('광고 보고 기회 받기',
-                          style: TextStyle(fontSize: 16)),
+                      : Text(
+                          _adReady ? '광고 보고 기회 받기' : '광고 준비 중...',
+                          style: const TextStyle(fontSize: 16),
+                        ),
                 ),
               ),
               const SizedBox(height: 8),
@@ -127,16 +275,22 @@ class _AdRewardScreenState extends ConsumerState<AdRewardScreen> {
   }
 }
 
+// ── Body ─────────────────────────────────────────────────────────────────────
+
 class _Body extends StatelessWidget {
   const _Body({
     required this.theme,
     required this.logs,
     required this.todayWatchedCount,
+    required this.adLoading,
+    this.adLoadError,
   });
 
   final ThemeData theme;
   final List<AdRewardLog> logs;
   final int todayWatchedCount;
+  final bool adLoading;
+  final String? adLoadError;
 
   @override
   Widget build(BuildContext context) {
@@ -220,6 +374,8 @@ class _Body extends StatelessWidget {
   }
 }
 
+// ── 공통 위젯 ─────────────────────────────────────────────────────────────────
+
 class _BulletText extends StatelessWidget {
   const _BulletText(this.text);
   final String text;
@@ -230,7 +386,8 @@ class _BulletText extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text('• '),
-        Expanded(child: Text(text, style: Theme.of(context).textTheme.bodySmall)),
+        Expanded(
+            child: Text(text, style: Theme.of(context).textTheme.bodySmall)),
       ],
     );
   }
@@ -259,8 +416,7 @@ class _LogTile extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       leading: Icon(Icons.play_circle_outline,
           color: theme.colorScheme.primary, size: 20),
-      title: Text(_formatTime(log.watchedAt),
-          style: theme.textTheme.bodySmall),
+      title: Text(_formatTime(log.watchedAt), style: theme.textTheme.bodySmall),
       trailing: Text(
         log.ticketIssued ? '참여권 지급됨' : '미지급',
         style: theme.textTheme.labelSmall?.copyWith(
@@ -268,40 +424,6 @@ class _LogTile extends StatelessWidget {
               ? theme.colorScheme.primary
               : theme.colorScheme.error,
         ),
-      ),
-    );
-  }
-}
-
-/// 광고 시뮬레이션 다이얼로그 (3초 대기 후 자동 닫힘)
-/// TODO: AdMob RewardedAd 연결 시 이 다이얼로그 제거
-class _AdSimulationDialog extends StatefulWidget {
-  const _AdSimulationDialog();
-
-  @override
-  State<_AdSimulationDialog> createState() => _AdSimulationDialogState();
-}
-
-class _AdSimulationDialogState extends State<_AdSimulationDialog> {
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
-      if (mounted) Navigator.of(context).pop(true);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('광고 시청 중'),
-      content: const Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          LinearProgressIndicator(),
-          SizedBox(height: 12),
-          Text('잠시만 기다려 주세요...'),
-        ],
       ),
     );
   }
