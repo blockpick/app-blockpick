@@ -1,22 +1,28 @@
+// ⚠️ DEPRECATED: 옛 game_participation_provider.joinGame() 사용. 새 entry_flow(BlockSelectScreen+joinBlockpick)로 마이그레이션 예정.
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/constants/app_constants.dart';
 import '../../models/game_round_model.dart';
+import '../../providers/game_participation_provider.dart';
+import '../../providers/game_provider.dart';
+import '../game/widgets/game_join_loading_overlay.dart';
+import '../game/widgets/game_join_result_overlay.dart';
 import '../wish/widgets/buzz_canvas.dart';
 import 'daily_buzz_complete_screen.dart';
 
 /// 데일리 게임 블록선택 화면 — 위시 BuzzGameScreen 완전 복제
-class DailyBuzzGameScreen extends StatefulWidget {
+class DailyBuzzGameScreen extends ConsumerStatefulWidget {
   final GameRound game;
   const DailyBuzzGameScreen({super.key, required this.game});
 
   @override
-  State<DailyBuzzGameScreen> createState() => _DailyBuzzGameScreenState();
+  ConsumerState<DailyBuzzGameScreen> createState() => _DailyBuzzGameScreenState();
 }
 
-class _DailyBuzzGameScreenState extends State<DailyBuzzGameScreen> {
+class _DailyBuzzGameScreenState extends ConsumerState<DailyBuzzGameScreen> {
   @override
   void dispose() {
     _minimapNotifier.dispose();
@@ -87,18 +93,84 @@ class _DailyBuzzGameScreenState extends State<DailyBuzzGameScreen> {
     if (_selectedBlocks.isEmpty || _isSubmitting) return;
     setState(() => _isSubmitting = true);
 
-    // TODO: 실제 게임 참여 API 연동 (game_participation_provider)
-    await Future.delayed(const Duration(milliseconds: 800));
+    // API에서 전체 게임 정보 조회 (블록체인 데이터 포함)
+    final fullGame = await ref.read(gameProvider(widget.game.id).future);
+    if (fullGame == null) {
+      setState(() => _isSubmitting = false);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('게임 정보를 불러올 수 없습니다')),
+      );
+      return;
+    }
 
-    if (!mounted) return;
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (_) => DailyBuzzCompleteScreen(
-          game: widget.game,
-          selectedBlocks: _selectedBlocks,
-        ),
-      ),
-    );
+    final contractAddress = fullGame.onchainContractAddr ?? '';
+    final productId = (fullGame.gameProducts != null && fullGame.gameProducts!.isNotEmpty)
+        ? fullGame.gameProducts!.first.id
+        : null;
+
+    if (productId == null) {
+      setState(() => _isSubmitting = false);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('게임 상품 정보가 없습니다')),
+      );
+      return;
+    }
+
+    // 첫 번째 선택 블록으로 참여 (row, col)
+    final firstBlock = _selectedBlocks.first;
+    final row = firstBlock.$2 + 1; // 0-based → 1-based
+    final col = firstBlock.$1 + 1;
+
+    try {
+      // 로딩 오버레이 표시
+      if (!mounted) return;
+      GameJoinLoadingOverlay.show(context);
+
+      // 게임 참여 실행 (블록체인 포함)
+      final result = await ref
+          .read(gameParticipationProvider.notifier)
+          .joinGame(
+            gameId: widget.game.id,
+            selectedGameProductId: productId,
+            row: row,
+            col: col,
+            contractAddress: contractAddress,
+          );
+
+      // 로딩 숨김
+      if (!mounted) return;
+      GameJoinLoadingOverlay.hide(context);
+      await Future.delayed(const Duration(milliseconds: 300));
+
+      if (!mounted) return;
+
+      if (result.success) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => DailyBuzzCompleteScreen(
+              game: widget.game,
+              selectedBlocks: _selectedBlocks,
+            ),
+          ),
+        );
+      } else {
+        setState(() => _isSubmitting = false);
+        GameJoinResultOverlay.showError(
+          context,
+          errorMessage: result.message,
+          onRetry: () => _onSubmit(),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      GameJoinLoadingOverlay.hide(context);
+      setState(() => _isSubmitting = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('참여 실패: $e')),
+      );
+    }
   }
 
   String _formatPrice(int price) {

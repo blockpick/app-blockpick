@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/blockpick/blockpick_screen.dart';
@@ -37,13 +38,39 @@ import '../../features/settings/pages/withdrawal_screen.dart';
 import '../../features/settings/pages/terms_screen.dart';
 import '../../features/settings/pages/privacy_policy_screen.dart';
 import '../../features/settings/pages/customer_service_screen.dart';
-import '../../features/my/pages/participation_history_screen.dart';
+import '../../features/my/pages/participation_history_screen.dart' as legacy_my;
 import '../../features/my/pages/event_points_screen.dart';
 import '../../features/my/pages/review_management_screen.dart';
 import '../../features/my/pages/review_write_screen.dart';
 import '../../features/my/pages/shipping_address_screen.dart';
 import '../../features/my/pages/order_history_screen.dart';
-import '../../features/my/pages/winning_history_screen.dart';
+import '../../features/my/pages/winning_history_screen.dart' as legacy_my_winning;
+// 새 5탭 IA 화면들
+import '../../features/blockpick_detail/blockpick_detail_screen.dart';
+import '../../features/blockpick_list/blockpick_list_screen.dart';
+import '../../features/participation/participation_history_screen.dart';
+import '../../features/entry_flow/block_select_screen.dart';
+import '../../features/entry_flow/entry_result_screen.dart';
+import '../../features/referral/referral_main_screen.dart';
+import '../../features/referral/referral_history_screen.dart';
+import '../../features/mission/mission_list_screen.dart';
+import '../../features/mission/mission_complete_screen.dart';
+import '../../features/ad_reward/ad_reward_screen.dart';
+import '../../features/ad_reward/ad_reward_complete_screen.dart';
+import '../../features/winning/winning_list_screen.dart';
+import '../../features/winning/winning_detail_screen.dart';
+import '../../features/winning/delivery_address_form_screen.dart';
+import '../../features/settings/notification_settings_screen.dart';
+import '../../data/blockpick/blockpick_models.dart';
+import '../../data/entry/entry_models.dart';
+import '../../data/winning/winning_models.dart';
+import '../../data/delivery_address/delivery_address_models.dart';
+import '../../data/ad_reward/ad_reward_models.dart';
+import '../../data/mission/mission_models.dart';
+// 별도 라우트 분리: 데일리/위시/프라임 (5탭에서 빠진 옛 게임 모드)
+import '../../features/daily/daily_screen.dart';
+import '../../features/wish/wish_screen.dart';
+import '../../features/prime/prime_screen.dart';
 import '../../features/my/pages/transaction_screen.dart';
 import '../../features/my/pages/charge_screen.dart';
 import '../../features/my/pages/refund_screen.dart';
@@ -389,11 +416,21 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
 
       // ============ MY 서브 페이지 ============
+      // 새 IA: /participation 으로 통합. 옛 /my/game-history 는 호환을 위해 새 화면으로 리다이렉트
       GoRoute(
         path: '/my/game-history',
+        builder: (context, state) => const ParticipationHistoryScreen(),
+      ),
+      GoRoute(
+        path: '/participation',
+        builder: (context, state) => const ParticipationHistoryScreen(),
+      ),
+      // 옛 화면이 필요하면 직접 진입
+      GoRoute(
+        path: '/legacy/my/game-history',
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>?;
-          return ParticipationHistoryScreen(
+          return legacy_my.ParticipationHistoryScreen(
             initialTab: extra?['tab'] as int? ?? 0,
           );
         },
@@ -406,9 +443,14 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/my/order-history',
         builder: (context, state) => const OrderHistoryScreen(),
       ),
+      // 새 IA: /winnings 사용. /my/winning-history 는 호환 진입로
       GoRoute(
         path: '/my/winning-history',
-        builder: (context, state) => const WinningHistoryScreen(),
+        builder: (context, state) => const WinningListScreen(),
+      ),
+      GoRoute(
+        path: '/legacy/my/winning-history',
+        builder: (context, state) => const legacy_my_winning.WinningHistoryScreen(),
       ),
       GoRoute(
         path: '/my/transactions',
@@ -478,6 +520,157 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/notifications',
         builder: (context, state) => const NotificationScreen(),
+      ),
+      GoRoute(
+        path: '/settings/notifications',
+        builder: (context, state) => const NotificationSettingsScreen(),
+      ),
+
+      // ============ 새 IA: 블록픽 ============
+      GoRoute(
+        path: '/blockpicks',
+        builder: (context, state) => const BlockpickListScreen(),
+      ),
+      GoRoute(
+        path: '/blockpick/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return BlockpickDetailScreen(blockpickId: id);
+        },
+      ),
+
+      // ============ 새 IA: 참여 흐름 (블록 선택 → 결과) ============
+      GoRoute(
+        path: '/entry/select',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final detail = extra?['detail'] as BlockpickDetail?;
+          if (detail == null) {
+            return const Scaffold(
+              body: Center(child: Text('블록픽 정보가 없습니다.')),
+            );
+          }
+          return BlockSelectScreen(detail: detail);
+        },
+      ),
+      GoRoute(
+        path: '/entry/result',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final entry = extra?['entry'] as BlockpickEntry?;
+          final detail = extra?['detail'] as BlockpickDetail?;
+          if (entry == null || detail == null) {
+            return const Scaffold(
+              body: Center(child: Text('참여 결과 정보가 없습니다.')),
+            );
+          }
+          return EntryResultScreen(entry: entry, detail: detail);
+        },
+      ),
+
+      // ============ 새 IA: 친구초대 ============
+      GoRoute(
+        path: '/referral',
+        builder: (context, state) => const ReferralMainScreen(),
+      ),
+      GoRoute(
+        path: '/referral/history',
+        builder: (context, state) => const ReferralHistoryScreen(),
+      ),
+
+      // ============ 새 IA: 미션 ============
+      GoRoute(
+        path: '/mission',
+        builder: (context, state) {
+          final blockpickId = state.uri.queryParameters['blockpickId'];
+          return MissionListScreen(blockpickId: blockpickId);
+        },
+      ),
+      GoRoute(
+        path: '/mission/complete',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final mission = extra?['mission'] as Mission?;
+          final ticketsIssued = extra?['ticketsIssued'] as int? ?? 0;
+          if (mission == null) {
+            return const Scaffold(
+              body: Center(child: Text('미션 정보가 없습니다.')),
+            );
+          }
+          return MissionCompleteScreen(
+            mission: mission,
+            ticketsIssued: ticketsIssued,
+          );
+        },
+      ),
+
+      // ============ 새 IA: 광고 보상 ============
+      GoRoute(
+        path: '/ad-reward/:blockpickId',
+        builder: (context, state) {
+          final blockpickId = state.pathParameters['blockpickId']!;
+          return AdRewardScreen(blockpickId: blockpickId);
+        },
+      ),
+      GoRoute(
+        path: '/ad-reward/complete',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final log = extra?['log'] as AdRewardLog?;
+          final ticketId = extra?['ticketId'] as String?;
+          if (log == null) {
+            return const Scaffold(
+              body: Center(child: Text('보상 정보가 없습니다.')),
+            );
+          }
+          return AdRewardCompleteScreen(log: log, ticketId: ticketId);
+        },
+      ),
+
+      // ============ 새 IA: 당첨/배송지 ============
+      GoRoute(
+        path: '/winnings',
+        builder: (context, state) => const WinningListScreen(),
+      ),
+      GoRoute(
+        path: '/winning/detail',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final winning = extra?['winning'] as WinningRecord?;
+          if (winning == null) {
+            return const Scaffold(
+              body: Center(child: Text('당첨 정보가 없습니다.')),
+            );
+          }
+          return WinningDetailScreen(winning: winning);
+        },
+      ),
+      GoRoute(
+        path: '/delivery-address/new',
+        builder: (context, state) =>
+            const DeliveryAddressFormScreen(),
+      ),
+      GoRoute(
+        path: '/delivery-address/edit',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final initial = extra?['initial'] as DeliveryAddress?;
+          return DeliveryAddressFormScreen(initial: initial);
+        },
+      ),
+
+      // ============ 옛 게임 모드 별도 진입로 (BottomNav에서 빠짐) ============
+      GoRoute(
+        path: '/daily',
+        builder: (context, state) => const DailyScreen(),
+      ),
+      GoRoute(
+        path: '/wish',
+        builder: (context, state) => const WishScreen(),
+      ),
+      GoRoute(
+        path: '/prime',
+        builder: (context, state) => const PrimeScreen(),
       ),
 
       // ============ 당첨자 ============
