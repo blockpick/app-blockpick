@@ -27,7 +27,6 @@ import '../../features/auth/presentation/pages/find_email_result_screen.dart';
 import '../../features/auth/presentation/pages/find_password_screen.dart';
 import '../../features/game/game_screen.dart';
 import '../../features/game/game_dispatcher_screen.dart';
-import '../../features/game/screens/game_join_test_screen.dart';
 import '../../features/optimal/optimal_game_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../features/settings/pages/profile_edit_screen.dart';
@@ -702,12 +701,6 @@ final routerProvider = Provider<GoRouter>((ref) {
             title: extra?['title'] as String?,
           );
         },
-      ),
-
-      // ============ E2E 테스트 ============
-      GoRoute(
-        path: '/test/game-join',
-        builder: (context, state) => const GameJoinTestScreen(),
       ),
 
       // ============ More 모드들 ============
