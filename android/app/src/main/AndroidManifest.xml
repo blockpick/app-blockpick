@@ -33,7 +33,39 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
+            <!-- BlockPick 커스텀 딥링크 scheme (blockpick://) -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="blockpick"/>
+            </intent-filter>
+
+            <!-- App Links (HTTPS Universal Links) -->
+            <!-- TODO (S20): blockpick.app 도메인 소유권 인증 후 android:autoVerify="true" 추가 -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:scheme="https"
+                    android:host="blockpick.app"/>
+            </intent-filter>
         </activity>
+
+        <!-- FCM 메시지 서비스 (firebase_messaging 플러그인이 자동 등록하지만 명시적 선언) -->
+        <!-- firebase_messaging 패키지가 자동으로 처리; 커스텀 서비스 필요 시 아래 주석 해제 -->
+        <!--
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        -->
+
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
@@ -45,6 +77,7 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713"/>
     </application>
+
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
          https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
@@ -55,5 +88,7 @@
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
+        <!-- Kakao SDK: 카카오톡 앱 설치 여부 확인 -->
+        <package android:name="com.kakao.talk"/>
     </queries>
 </manifest>

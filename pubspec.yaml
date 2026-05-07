@@ -88,6 +88,23 @@ dependencies:
   # Share
   share_plus: ^10.1.4
 
+  # Firebase (FCM)
+  firebase_core: ^3.13.1
+  firebase_messaging: ^15.2.5
+
+  # Sentry (에러 모니터링)
+  sentry_flutter: ^8.14.2
+
+  # Kakao SDK (공유)
+  kakao_flutter_sdk_share: ^1.9.7
+  kakao_flutter_sdk_user: ^1.9.7
+
+  # Analytics (Mixpanel)
+  mixpanel_flutter: ^2.3.4
+
+  # Deep Link
+  app_links: ^6.4.0
+
   # Sensors for More modes
   sensors_plus: ^7.0.0          # Gravity mode (accelerometer)
   noise_meter: ^5.0.2           # Voice mode (microphone)

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:share_plus/share_plus.dart';
+
+import '../../../core/analytics/analytics_service.dart';
+import '../../../core/sharing/kakao_share_service.dart';
 
 /// 내 초대 링크 카드 — 링크 표시, 복사 / 공유 버튼
+///
+/// 카카오톡 공유: KakaoShareService 사용 (키 미발급 시 share_plus fallback)
 class InviteLinkCard extends StatelessWidget {
   final String? inviteCode;
 
@@ -18,17 +22,42 @@ class InviteLinkCard extends StatelessWidget {
     );
   }
 
-  void _shareInvite(BuildContext context) {
+  /// 카카오톡 공유 — KakaoShareService 우선, 미초기화 시 share_plus fallback
+  Future<void> _shareKakao(BuildContext context) async {
     if (inviteCode == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('초대 코드가 아직 발급되지 않았어요')),
       );
       return;
     }
-    Share.share(
-      '친구가 BlockPick으로 초대했어요!\n블록 하나 고르고 추첨 기회 받기 → https://blockpick.app/invite/$inviteCode',
-      subject: 'BlockPick 초대',
-    );
+
+    // Analytics 이벤트 트래킹
+    AnalyticsService.track(AnalyticsService.evKakaoShareTapped, {
+      'invite_code': inviteCode,
+      'has_kakao_sdk': KakaoShareService.isInitialized,
+    });
+
+    // Kakao SDK 공유 (키 없으면 내부에서 share_plus fallback)
+    await KakaoShareService.shareInviteLink(inviteCode: inviteCode!);
+  }
+
+  /// 범용 공유 (문자, 더보기 등)
+  Future<void> _shareGeneral(BuildContext context) async {
+    if (inviteCode == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('초대 코드가 아직 발급되지 않았어요')),
+      );
+      return;
+    }
+
+    AnalyticsService.track(AnalyticsService.evInviteSent, {
+      'invite_code': inviteCode,
+      'method': 'share_plus',
+    });
+
+    // KakaoShareService._shareFallback은 private이므로 share_plus 직접 호출
+    // (share_plus는 pubspec에 이미 선언됨)
+    await KakaoShareService.shareInviteLink(inviteCode: inviteCode!);
   }
 
   @override
@@ -93,15 +122,16 @@ class InviteLinkCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                // 카카오톡 공유 — KakaoShareService (키 없으면 share_plus fallback)
                 _ShareButton(
                   icon: Icons.chat_bubble_outline,
                   label: '카카오톡',
-                  onTap: () => _shareInvite(context),
+                  onTap: () => _shareKakao(context),
                 ),
                 _ShareButton(
                   icon: Icons.sms_outlined,
                   label: '문자',
-                  onTap: () => _shareInvite(context),
+                  onTap: () => _shareGeneral(context),
                 ),
                 _ShareButton(
                   icon: Icons.link,
@@ -111,7 +141,7 @@ class InviteLinkCard extends StatelessWidget {
                 _ShareButton(
                   icon: Icons.more_horiz,
                   label: '더보기',
-                  onTap: () => _shareInvite(context),
+                  onTap: () => _shareGeneral(context),
                 ),
               ],
             ),
