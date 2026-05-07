@@ -6,7 +6,7 @@ import '../../core/theme/app_text_styles.dart';
 import '../../core/theme/app_constants.dart';
 import '../../core/auth/domain/providers/auth_provider.dart';
 import '../../models/game_round_model.dart';
-import '../../providers/game_provider.dart';
+import '../../providers/blockpick_provider.dart';
 import '../../providers/current_tab_provider.dart';
 import '../../components/common/common_app_bar.dart';
 import '../../components/cards/promotion_card.dart';
@@ -392,7 +392,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
 
   /// ③ 프로모션 리스트 섹션 (LIVE/DAILY 이벤트)
   Widget _buildPromotionListSection() {
-    final dailyGamesAsync = ref.watch(gamesByTypeProvider(GameType.daily));
+    final dailyGamesAsync = ref.watch(blockpicksByGameTypeProvider(GameType.daily));
 
     return SliverToBoxAdapter(
       child: Column(
@@ -431,7 +431,7 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
 
   /// ③-1 Coming Soon 이벤트 섹션
   Widget _buildComingSoonSection() {
-    final dailyGamesAsync = ref.watch(gamesByTypeProvider(GameType.daily));
+    final dailyGamesAsync = ref.watch(blockpicksByGameTypeProvider(GameType.daily));
 
     return SliverToBoxAdapter(
       child: Column(
@@ -518,9 +518,9 @@ class _NewHomeScreenState extends ConsumerState<NewHomeScreen> {
 
   /// ⑤ 마감임박 이벤트 섹션 (DAILY/SELECT/VIBE/PRIME 모두 포함)
   Widget _buildClosingSoonEventsSection() {
-    final dailyGamesAsync = ref.watch(gamesByTypeProvider(GameType.daily));
-    final selectGamesAsync = ref.watch(gamesByTypeProvider(GameType.select));
-    final primeGamesAsync = ref.watch(gamesByTypeProvider(GameType.prime));
+    final dailyGamesAsync = ref.watch(blockpicksByGameTypeProvider(GameType.daily));
+    final selectGamesAsync = ref.watch(blockpicksByGameTypeProvider(GameType.select));
+    final primeGamesAsync = ref.watch(blockpicksByGameTypeProvider(GameType.prime));
 
     return SliverToBoxAdapter(
       child: Column(

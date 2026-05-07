@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../models/game_round_model.dart';
-import '../../providers/game_provider.dart';
+import '../../providers/blockpick_provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../core/constants/app_constants.dart';
 
@@ -102,7 +102,8 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
 
   /// 콘텐츠
   Widget _buildContent() {
-    final gamesAsync = ref.watch(gamesByTypeProvider(GameType.vibe));
+    // game_provider → blockpick_provider 마이그레이션 (S22)
+    final gamesAsync = ref.watch(blockpicksByGameTypeProvider(GameType.vibe));
 
     return gamesAsync.when(
       data: (games) {
@@ -397,7 +398,7 @@ class _VibeGameListScreenState extends ConsumerState<VibeGameListScreen> {
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
-              ref.invalidate(gamesByTypeProvider);
+              ref.invalidate(blockpicksByGameTypeProvider);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.red,

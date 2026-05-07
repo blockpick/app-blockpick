@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../models/game_round_model.dart';
-import '../../providers/game_provider.dart';
+import '../../providers/blockpick_provider.dart';
+// sortedGamesProvider는 순수 정렬 함수로 game_provider에서만 유지
+import '../../providers/game_provider.dart' show sortedGamesProvider;
 import '../../widgets/toss_game_card.dart';
 import '../../core/constants/app_constants.dart';
 
@@ -118,7 +120,8 @@ class _TossGameListScreenState extends ConsumerState<TossGameListScreen> {
               children: [
                 Consumer(
                   builder: (context, ref, child) {
-                    final gamesAsync = ref.watch(gamesByTypeProvider(widget.gameType));
+                    // game_provider → blockpick_provider 마이그레이션 (S22)
+                    final gamesAsync = ref.watch(blockpicksByGameTypeProvider(widget.gameType));
                     final count = gamesAsync.when(
                       data: (games) {
                         if (_selectedCategory == 'ALL') {
@@ -213,7 +216,8 @@ class _TossGameListScreenState extends ConsumerState<TossGameListScreen> {
 
   /// 콘텐츠
   Widget _buildContent() {
-    final gamesAsync = ref.watch(gamesByTypeProvider(widget.gameType));
+    // game_provider → blockpick_provider 마이그레이션 (S22)
+    final gamesAsync = ref.watch(blockpicksByGameTypeProvider(widget.gameType));
 
     return gamesAsync.when(
       data: (games) {
@@ -344,7 +348,7 @@ class _TossGameListScreenState extends ConsumerState<TossGameListScreen> {
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
-              ref.invalidate(gamesByTypeProvider);
+              ref.invalidate(blockpicksByGameTypeProvider);
             },
             style: ElevatedButton.styleFrom(
               foregroundColor: AppColors.white,

@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../models/game_round_model.dart';
-import '../../providers/game_provider.dart';
+import '../../providers/blockpick_provider.dart';
+// sortedGamesProvider는 순수 정렬 함수로 game_provider에서만 유지
+import '../../providers/game_provider.dart' show sortedGamesProvider;
 import '../../widgets/game_card.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../core/constants/app_constants.dart';
@@ -126,7 +128,8 @@ class _GameListScreenState extends ConsumerState<GameListScreen> {
             children: [
               Consumer(
                 builder: (context, ref, child) {
-                  final gamesAsync = ref.watch(gamesByTypeProvider(widget.gameType));
+                  // game_provider → blockpick_provider 마이그레이션 (S22)
+                  final gamesAsync = ref.watch(blockpicksByGameTypeProvider(widget.gameType));
                   final count = gamesAsync.when(
                     data: (games) {
                       if (_selectedCategory == 'ALL') {
@@ -196,7 +199,8 @@ class _GameListScreenState extends ConsumerState<GameListScreen> {
 
   /// 콘텐츠
   Widget _buildContent() {
-    final gamesAsync = ref.watch(gamesByTypeProvider(widget.gameType));
+    // game_provider → blockpick_provider 마이그레이션 (S22)
+    final gamesAsync = ref.watch(blockpicksByGameTypeProvider(widget.gameType));
 
     return gamesAsync.when(
       data: (games) {
@@ -230,7 +234,7 @@ class _GameListScreenState extends ConsumerState<GameListScreen> {
         message: '게임을 불러올 수 없습니다',
         buttonText: '다시 시도',
         onButtonPressed: () {
-          ref.invalidate(gamesByTypeProvider);
+          ref.invalidate(blockpicksByGameTypeProvider);
         },
       ),
     );

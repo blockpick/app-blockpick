@@ -5,7 +5,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/constants/app_constants.dart';
 import '../../models/game_round_model.dart';
-import '../../providers/game_provider.dart';
+import '../../providers/blockpick_provider.dart';
 import 'daily_buzz_game_screen.dart';
 
 /// 데일리 탭 — 위시 화면 완전 복제 (GameRound 데이터 사용)
@@ -27,7 +27,8 @@ class _DailyScreenState extends ConsumerState<DailyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final gamesAsync = ref.watch(gamesByTypeProvider(GameType.daily));
+    // game_provider → blockpick_provider 마이그레이션 (S22)
+    final gamesAsync = ref.watch(blockpicksByGameTypeProvider(GameType.daily));
     return Scaffold(
       backgroundColor: AppColors.gray100,
       body: gamesAsync.when(
@@ -51,7 +52,7 @@ class _DailyScreenState extends ConsumerState<DailyScreen> {
               Text('오류가 발생했습니다', style: AppTextStyles.title2.copyWith(color: AppColors.gray700)),
               const SizedBox(height: 8),
               TextButton(
-                onPressed: () => ref.invalidate(gamesByTypeProvider),
+                onPressed: () => ref.invalidate(blockpicksByGameTypeProvider),
                 child: Text('다시 시도', style: TextStyle(color: AppColors.blue)),
               ),
             ],

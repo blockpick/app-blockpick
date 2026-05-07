@@ -3,8 +3,9 @@ import '../../../core/constants/app_constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../providers/game_provider.dart';
-import '../../../models/game_model.dart';
+// game_provider → blockpick_provider 마이그레이션 (S22)
+// TODO: 백엔드에 maxEntries/participants/gameType 추가 후 재검증
+import '../../../providers/blockpick_provider.dart';
 import '../../../models/game_round_model.dart';
 
 /// Unity 3D 블록 게임 선택 화면
@@ -14,8 +15,9 @@ class UnityGameSelectScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // gamesProvider 사용 (activeGamesProvider가 빈 배열 반환하는 이슈)
-    final gamesAsync = ref.watch(gamesProvider);
+    // game_provider → blockpick_provider 마이그레이션 (S22)
+    // TODO: 백엔드에 maxEntries/participants 추가 후 재검증
+    final gamesAsync = ref.watch(allBlockpicksAsGameRoundsProvider);
 
     return Scaffold(
       backgroundColor: AppColors.textBlack,
@@ -66,9 +68,8 @@ class UnityGameSelectScreen extends ConsumerWidget {
           Expanded(
             child: gamesAsync.when(
               data: (games) {
-                // Game -> GameRound 변환
-                final gameRounds = games.map((g) => g.toGameRound()).toList();
-                return _buildGameList(context, gameRounds);
+                // blockpick_provider는 이미 GameRound 타입으로 반환
+                return _buildGameList(context, games);
               },
               loading: () => const Center(
                 child: CircularProgressIndicator(color: AppColors.yellow500),
@@ -85,7 +86,7 @@ class UnityGameSelectScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 8),
                     TextButton(
-                      onPressed: () => ref.invalidate(gamesProvider),
+                      onPressed: () => ref.invalidate(allBlockpicksAsGameRoundsProvider),
                       child: const Text('다시 시도'),
                     ),
                   ],

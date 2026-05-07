@@ -8,7 +8,7 @@ import '../../core/theme/app_text_styles.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/auth/domain/providers/auth_provider.dart';
 import '../../models/game_round_model.dart';
-import '../../providers/game_provider.dart';
+import '../../providers/blockpick_provider.dart';
 import '../../providers/ad_reward_provider.dart';
 import '../../providers/current_tab_provider.dart';
 import '../../providers/wish_provider.dart';
@@ -41,7 +41,9 @@ class _DailyLegacyScreenState extends ConsumerState<DailyLegacyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final gamesAsync = ref.watch(gamesByTypeProvider(GameType.daily));
+    // game_provider → blockpick_provider 마이그레이션 (S22)
+    // TODO: 백엔드에 maxParticipants/participants 필드 추가 후 재검증
+    final gamesAsync = ref.watch(blockpicksByGameTypeProvider(GameType.daily));
 
     return Scaffold(
       backgroundColor: AppColors.gray100,
@@ -313,7 +315,7 @@ class _DailyLegacyScreenState extends ConsumerState<DailyLegacyScreen> {
           ),
           const SizedBox(height: 8),
           TextButton(
-            onPressed: () => ref.invalidate(gamesByTypeProvider),
+            onPressed: () => ref.invalidate(blockpicksByGameTypeProvider),
             child: Text('다시 시도', style: TextStyle(color: AppColors.blue)),
           ),
         ],

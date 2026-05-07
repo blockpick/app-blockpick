@@ -1,6 +1,16 @@
-// ⚠️ MIGRATION PENDING: 구 GraphQL 스키마(getGames/getGame) 기반.
-// 신규 blockpicks/blockpick 스키마(blockpick_provider)와 모델 구조가 달라 단순 치환 불가.
-// 이 provider에 의존하는 13곳 화면 마이그레이션은 별도 PR로 진행 예정 (백엔드 스키마 정합성 확인 + 화면별 검증 필요).
+// ⚠️ DEPRECATED: 구 GraphQL 스키마(getGames/getGame) 기반.
+//
+// 마이그레이션 완료 현황 (S22):
+//   - daily_screen, daily_legacy_screen, game_list_screen, toss_game_list_screen,
+//     vibe_game_list_screen, home_screen, new_home_screen, unity_game_select_screen
+//     → blockpick_provider (blockpicksByGameTypeProvider / allBlockpicksAsGameRoundsProvider) 로 이전 완료.
+//
+// 잔존 의존처:
+//   - sortedGamesProvider: 순수 정렬 함수, game_list_screen/toss_game_list_screen에서 show import 유지.
+//   - game_screen, game_detail_screen, game_dispatcher_screen 등 상세/참여 화면 — 다음 PR에서 처리.
+//
+// 이 파일은 sortedGamesProvider 의존처 정리 완료 후 삭제 예정.
+// docs/blockpick_summary_field_request.md 참조.
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
