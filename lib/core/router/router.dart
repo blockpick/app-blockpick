@@ -106,6 +106,7 @@ import '../../features/more/unity/unity_game_select_screen.dart';
 import '../../features/wish/wish_create_screen.dart';
 import '../../features/wish/wish_detail_screen.dart';
 import '../../features/wish/my_wishes_screen.dart';
+import '../../features/offerwall/offerwall_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final isAuthenticated = ref.watch(isAuthenticatedProvider);
@@ -701,6 +702,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/checkin',
         builder: (context, state) => const DailyCheckinScreen(),
+      ),
+
+      // ============ 오퍼월 ============
+      GoRoute(
+        path: '/offerwall',
+        builder: (context, state) => const OfferwallScreen(),
       ),
 
       // ============ 포인트 도메인 ============

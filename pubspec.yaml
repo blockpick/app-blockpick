@@ -134,6 +134,11 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
 
+  # E2E 통합 테스트 (Patrol)
+  patrol: ^3.15.2
+  integration_test:
+    sdk: flutter
+
   # App Icon
   flutter_launcher_icons: ^0.14.3
 
