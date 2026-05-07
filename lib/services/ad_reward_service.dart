@@ -1,3 +1,4 @@
+// ⚠️ DEPRECATED: 새 GraphQL 스키마(blockpicks/joinBlockpick/claimAdReward) 사용. blockpick_provider/entry_provider/ad_reward_provider_v2로 마이그레이션 예정.
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';

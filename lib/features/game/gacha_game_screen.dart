@@ -1,3 +1,4 @@
+// ⚠️ DEPRECATED: 옛 game_participation_provider.joinGame() 사용. 새 entry_flow(BlockSelectScreen+joinBlockpick)로 마이그레이션 예정.
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
