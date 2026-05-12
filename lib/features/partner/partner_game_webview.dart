@@ -29,7 +29,10 @@ class _PartnerGameWebViewState extends ConsumerState<PartnerGameWebView> {
 
   // TODO: 환경별 URL 분기
   // TODO: 환경별 URL 분기 (production: https://web-blockpick.vercel.app)
-  static const String _baseUrl = 'http://192.168.0.11:4000';
+  static const String _baseUrl = String.fromEnvironment(
+    'PARTNER_WEB_BASE_URL',
+    defaultValue: 'https://web-blockpick.vercel.app',
+  );
 
   @override
   void initState() {

@@ -103,7 +103,10 @@ class DioHttpClient extends http.BaseClient {
 }
 
 class GraphQLClientService {
-  static const String _endpoint = 'https://api-dev.blockpick.net/graphql';
+  static const String _endpoint = String.fromEnvironment(
+    'BLOCKPICK_GRAPHQL_ENDPOINT',
+    defaultValue: 'https://api-dev.blockpick.net/graphql',
+  );
   final TokenLocalDataSource? tokenDataSource;
 
   GraphQLClientService({this.tokenDataSource});
